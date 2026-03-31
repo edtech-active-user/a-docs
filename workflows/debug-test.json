@@ -1,0 +1,2604 @@
+{
+  "updatedAt": "2026-03-31T09:40:21.334Z",
+  "createdAt": "2025-09-04T06:58:53.773Z",
+  "id": "L2MFLBVRIYuaZ84O",
+  "name": "debug-test",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://87.228.96.77:8080/start",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer A_kuGCg5acmxre_2Xe5v_yxeq8zqim"
+            },
+            {
+              "name": "Content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        416,
+        -656
+      ],
+      "id": "524a38ef-ce31-406a-b4b3-03824280374e",
+      "name": "HTTP Request",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -80,
+        -576
+      ],
+      "id": "6ead5a84-fde3-4da2-8246-cd6072d4ac2b",
+      "name": "Telegram Trigger",
+      "webhookId": "cb455db9-53d9-4f62-b051-9adefed7cdc2",
+      "credentials": {
+        "telegramApi": {
+          "id": "nGoUrfYXGemRgfnO",
+          "name": "Платон"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cb1bfc7b-68f2-4282-8077-0ca9fcc25bd3",
+              "leftValue": "={{ $json.message.chat.id }}",
+              "rightValue": "=-4930865998",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "6104a3a4-68ee-48b7-8e90-fd847822143b",
+              "leftValue": "={{ $json.message.text }}",
+              "rightValue": "/autopublication_start",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        96,
+        -576
+      ],
+      "id": "619432a1-2051-4c9a-81e2-199e1662ded8",
+      "name": "If",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================\n//     🎯 ГЛАВНАЯ КОНФИГУРАЦИЯ AUTODOCK\n//     Все настройки системы в одном месте\n// ===============================================\n\n// ========== 1. НАЗВАНИЯ ЛИСТОВ ==========\nconst SHEETS = {\n  REGISTRY: \"Реестр заявок\",\n  LAYOUTS: \"Макеты документов\",\n  SYSTEM_SETTINGS: \"Системные настройки\",\n  TEMPLATES: \"Шаблоны\",\n  EMPLOYEES: \"Сотрудники\",\n  FIS_FRDO: \"ФИС ФРДО\",\n  LOGS: \"Логи системы\"\n};\n\n// ========== 2. НАЗВАНИЯ СТОЛБЦОВ ==========\nconst COLUMNS = {\n  // === ОБЩИЕ ДЛЯ ОБОИХ ЛИСТОВ ===\n  ID: \"ID\",\n  FULL_NAME: \"Фамилия Имя Отчество\",\n  \n  // === СТОЛБЦЫ РЕЕСТРА ЗАЯВОК ===\n  REGISTRY: {\n    STATUS: \"Статус заявки\",\n    CREATED_DATE: \"Дата создания\",\n    ISSUE_DATE: \"Дата выдачи\",\n    FULL_NAME_DECLINED: \"Фамилия Имя Отчество в склонении\",\n    PROGRAM: \"Программа\",\n    QUALIFICATION: \"Квалификация\",\n    SPECIALIZATION: \"Специализация\",\n    HOURS: \"Часы\",\n    CITY: \"Город не Москва\",\n    SCENARIO: \"Сценарий\",\n    EDUCATION_DOC: \"Документ об образовании\",\n    SNILS: \"СНИЛС\",\n    BIRTH_DATE: \"Дата рождения получателя\",\n    GENDER: \"Пол получателя\",\n    FOLDER_LINK: \"Ссылка на готовые макеты\",  // Переименовали\n    HASH_DATA: \"Хеш данных\",  // Переименовали\n    LAST_UPDATE: \"Дата последнего изменения\"\n  },\n  \n  // === СТОЛБЦЫ МАКЕТОВ ДОКУМЕНТОВ ===\n  LAYOUTS: {\n    CHECKBOX: \"Чекбокс\",  // Добавили\n    SCENARIO: \"Сценарий\",\n    DOCUMENT_TYPE: \"Документ\",\n    STATUS: \"Статус\",\n    EMPLOYEE: \"Сотрудник\",\n    DOCUMENT_LINK: \"Ссылка на доки\"\n  },\n  \n  // === СТОЛБЦЫ ЛИСТА ШАБЛОНЫ ===\n  TEMPLATES: {\n    SCENARIO: \"Сценарий\",\n    DOCUMENT: \"Документ\",\n    TYPE: \"Тип\",  // docs или sheets\n    FORMAT: \"Формат\",  // с подложкой/без подложки\n    TEMPLATE_LINK: \"Ссылка на шаблон\"\n  }\n  \n};\n\n// ========== 3. ОБЯЗАТЕЛЬНЫЕ ПОЛЯ ==========\nconst REQUIRED_FIELDS = {\n  // Базовые - для ВСЕХ документов\n  base: [\n    \"Фамилия Имя Отчество\",\n    \"Фамилия Имя Отчество в склонении\",\n    \"Программа\",\n    \"Часы\",\n    \"Сценарий\",\n    \"Документ об образовании\"\n  ],\n  \n  // Дополнительные для диплома с квалификацией\n  diploma_qualified: [\n    \"Квалификация\"\n  ],\n  \n  // Для ФИС ФРДО (будет позже)\n  fis_frdo: [\n    \"СНИЛС\",\n    \"Дата рождения получателя\",\n    \"Пол получателя\"\n  ]\n};\n\n// ========== 4. ДОПУСТИМЫЕ ЧАСЫ ==========\nconst VALID_HOURS = [\n  16, 36, 72, 144, 256, 512, 520, 576, 720, 800, 1000, 1600, 2000\n];\n\n// Добавьте в конфигурацию\nconst STATUSES = {\n  REGISTRY: {\n    EMPTY: \"\",\n    INCOMPLETE: \"Неполные данные\",\n    READY: \"Готов к обработке\",\n    IN_LAYOUTS: \"Передано в макеты\",\n    NEEDS_REWORK: \"Требует правок\",\n    DOCUMENTS_READY: \"Документы готовы\",\n    READY_FOR_FIS: \"Готов к подаче в ФИС ФРДО\",\n    IN_FIS_BATCH: \"В пакете ФИС ФРДО\",\n    SUBMITTED_TO_FIS: \"Подано в ФИС ФРДО\",\n    ISSUED: \"Выдано\",\n    SENT_BY_MAIL: \"Отправлено почтой\",\n    URGENT: \"🔴 СРОЧНО\"\n  },\n  \n  LAYOUTS: {\n    WAITING: \"Ожидает генерации\",\n    URGENT: \"🔴 СРОЧНО\",\n    IN_QUEUE: \"В очереди\",\n    NEEDS_REWORK: \"Требует правок\",\n    CREATED: \"Макет создан\",\n    ERROR: \"Ошибка генерации\"\n  }\n};\n\n\n// ========== 6. СЦЕНАРИИ И ПАКЕТЫ ==========\nconst SCENARIOS = {\n  \"Удостоверение\": {\n    documents: [\"Удостоверение\"],\n    count: 1\n  },\n  \"Диплом простой\": {\n    documents: [\"Диплом простой\", \"Приложение к диплому\", \"Диплом на подложке\"],\n    count: 3\n  },\n  \"Диплом с квалификацией\": {\n    documents: [\"Диплом с квалификацией\", \"Приложение к диплому\", \"Диплом на подложке\", \"Выписка\"],\n    count: 4\n  },\n  \"Охрана труда\": {\n    documents: [\"Удостоверение ОТ\", \"Выписка\"],\n    count: 2\n  },\n  \"Рабочие специальности\": {\n    documents: [\"Удостоверение РС\", \"Свидетельство\", \"Выписка\"],\n    count: 3\n  }\n};\n\n// ========== 7. СЧЕТЧИК ID (ИЗМЕНЕНО) ==========\n// В N8n счетчик обрабатываем отдельно\nfunction getNextId(currentId) {\n  const nextNumber = (currentId || 0) + 1;\n  return `REQ-${String(nextNumber).padStart(5, '0')}`;\n}\n\n// ========== 8. СОТРУДНИКИ ==========\nconst EMPLOYEES = {\n  \"Полянская М.В.\": {\n    telegramId: 123456789,\n    folderId: \"1RuDqHlHDfU5aChhpv1r4zNQRDIzzBh4K\"\n  }\n};\n\n// ========== 9. ФУНКЦИИ ДЛЯ РАБОТЫ С СОТРУДНИКАМИ ==========\nfunction getEmployeeByName(name) {\n  if (EMPLOYEES[name]) {\n    return {\n      name: name,\n      ...EMPLOYEES[name]\n    };\n  }\n  return null;\n}\n\n// ===============================================\n//     📋 МАППИНГ ПОЛЕЙ И ПЕРЕМЕННЫХ\n//     Соответствие полей таблицы и переменных в шаблонах\n// ===============================================\n\nconst FIELD_MAPPING = {\n  // ========== ХРАНИМЫЕ В РЕЕСТРЕ ==========\n  stored: {\n    \"Фамилия Имя Отчество\": {\n      source: \"Реестр\",\n      provides: {\n        \"<<Фамилия>>\": \"split()[0]\",\n        \"<<Имя>>\": \"split()[1]\",\n        \"<<Отчество>>\": \"split()[2]\"\n      }\n    },\n    \n    \"Фамилия Имя Отчество в склонении\": {\n      source: \"Реестр\",\n      provides: {\n        \"<<Фамилия получателя>>\": \"split()[0]\",\n        \"<<Имя получателя>>\": \"split()[1]\",\n        \"<<Отчество получателя>>\": \"split()[2]\"\n      }\n    },\n    \n    \"СНИЛС\": \"<<СНИЛС>>\",\n    \"Город не Москва\": \"<<Город>>\",\n    \"Программа\": \"<<Программа>>\",\n    \"Квалификация\": \"<<Квалификация>>\",\n    \"Специализация\": \"<<Специализация>>\",\n    \"Часы\": \"<<Часов>>\",\n    \"Документ об образовании\": \"<<Документ об образовании>>\",\n    \"Дата рождения получателя\": \"системное поле для ФИС ФРДО\",\n    \"Пол получателя\": \"системное поле для ФИС ФРДО\"\n  },\n  \n  // ========== ВЫЧИСЛЯЕМЫЕ ПОЛЯ ==========\n  computed: {\n    \"ID\": {\n      variable: \"<<ID>>\",\n      generator: \"getNextId()\"\n    },\n    \n    \"Дата выдачи\": {\n      variable: \"<<Дата>>\",\n      formula: \"formatDate(issueDate)\"\n    },\n    \n    \"Окончание обучения\": {\n      variable: \"<<Окончание обучения>>\",\n      formula: \"calculateStudyPeriod().endDate\"\n    },\n    \n    \"Период обучения (компоненты)\": {\n      source: \"calculateStudyPeriod()\",\n      provides: {\n        \"<<Число от>>\": \"startDay\",\n        \"<<Месяц от>>\": \"startMonth\",\n        \"<<Число до>>\": \"endDay\",\n        \"<<Месяц до>>\": \"endMonth\"\n      }\n    },\n    \n    // Регистрационные номера - для каждого типа своя переменная\n    \"Регистрационные номера\": {\n      \"Удостоверение\": \"<<Рег-УПК>>\",\n      \"Диплом простой\": \"<<Рег-ПП>>\",\n      \"Диплом с квалификацией\": \"<<Рег-ПП>>\",\n      \"Удостоверение ОТ\": \"<<Рег-ОТ>>\",\n      \"Свидетельство\": \"<<Рег-РС-Н>>\",\n      \"Удостоверение РС\": \"<<Рег-РС-АН>>\"\n    }\n  }\n};\n\n// Функция получения переменной регномера для документа\nfunction getRegVariable(documentType) {\n  return FIELD_MAPPING.computed[\"Регистрационные номера\"][documentType] || \"<<Рег-УПК>>\";\n}\n\n// ===============================================\n//     📋 ГЕНЕРАТОР РЕГИСТРАЦИОННЫХ НОМЕРОВ\n//     Форматы и логика генерации\n// ===============================================\n\n// ========== СЛОВАРЬ ФОРМАТОВ ==========\nconst REG_NUMBER_FORMATS = {\n  \"Удостоверение\": {\n    prefix: \"ПК\",\n    format: \"{number}-{month}/{prefix}\",\n    counter_name: \"upk_counter\",\n    startFrom: 730\n  },\n  \"Диплом простой\": {\n    prefix: \"П\",\n    format: \"{number}-{yy}{month}{prefix}\",\n    counter_name: \"diploma_counter\",\n    startFrom: 770\n  },\n  \"Диплом с квалификацией\": {\n    prefix: \"П\",\n    format: \"{number}-{yy}{month}{prefix}\",\n    counter_name: \"diploma_counter\",\n    startFrom: 770\n  },\n  \"Удостоверение ОТ\": {\n    prefix: \"\",\n    format: \"{month}{yy}-{number}\",\n    counter_name: \"ot_counter\",\n    startFrom: 189\n  },\n  \"Свидетельство\": {\n    prefix: \"Н\",\n    format: \"{number}-{prefix}\",\n    counter_name: \"rs_counter\",\n    startFrom: 24216,\n    sameNumber: true  // ВАЖНО: используем тот же номер!\n  },\n  \"Удостоверение РС\": {\n    prefix: \"АН\",\n    format: \"{number}-{prefix}\",\n    counter_name: \"rs_counter\",\n    startFrom: 24216,\n    sameNumber: true  // ВАЖНО: используем тот же номер!\n  }\n};\n\n// АДАПТИРОВАННАЯ функция для N8n\nfunction generateRegNumber(documentType, staticData, packageId) {\n  const config = REG_NUMBER_FORMATS[documentType];\n  \n  if (!config) {\n    return \"000-00\";  // Дефолтный номер\n  }\n  \n  // Инициализация счетчиков если их нет\n  if (!staticData.regCounters) {\n    staticData.regCounters = {\n      upk_counter: 730,\n      diploma_counter: 770,\n      ot_counter: 189,\n      rs_counter: 24216,\n      last_rs_number: null\n    };\n  }\n  \n  let currentNumber;\n  \n  // Особая логика для РС документов\n  if (config.sameNumber && packageId) {\n    if (staticData.currentPackage === packageId && \n        staticData.regCounters.last_rs_number) {\n      currentNumber = staticData.regCounters.last_rs_number;\n    } else {\n      currentNumber = ++staticData.regCounters[config.counter_name];\n      staticData.regCounters.last_rs_number = currentNumber;\n      staticData.currentPackage = packageId;\n    }\n  } else {\n    currentNumber = ++staticData.regCounters[config.counter_name];\n  }\n  \n  // Форматирование\n  const now = new Date();\n  const month = String(now.getMonth() + 1).padStart(2, '0');\n  const yy = String(now.getFullYear()).slice(-2);\n  \n  return config.format\n    .replace('{number}', currentNumber)\n    .replace('{prefix}', config.prefix)\n    .replace('{yy}', yy)\n    .replace('{month}', month);\n}\n\n// Удалите текущий return и замените на:\nreturn [{\n  json: {\n    config: {\n      SHEETS,\n      COLUMNS,\n      REQUIRED_FIELDS,\n      VALID_HOURS,\n      STATUSES,\n      SCENARIOS,\n      EMPLOYEES,\n      FIELD_MAPPING,\n      REG_NUMBER_FORMATS\n    },\n    functions: {\n      getNextId,\n      getEmployeeByName,\n      getRegVariable,\n      generateRegNumber  // ДОБАВИЛИ\n    }\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -80,
+        -768
+      ],
+      "id": "c27d04eb-f7e9-4853-beb1-e8592b3a46cd",
+      "name": "config",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1fiARL64zddU0qji_HAgoEK3PkgVV-gfzpEGPD5L8SL8",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 445497189,
+          "mode": "list",
+          "cachedResultName": "Реестр заявок",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1fiARL64zddU0qji_HAgoEK3PkgVV-gfzpEGPD5L8SL8/edit#gid=445497189"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        112,
+        -768
+      ],
+      "id": "55b6ffb2-ea1c-445c-90b0-9fba8f356835",
+      "name": "readTable",
+      "credentials": {
+        "googleApi": {
+          "id": "86ekhh3rUWlEgF4Y",
+          "name": "with.edtech@gmail.com"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================\n//     НОДА 4: ПРОВЕРКА СТРОК И ПРИСВОЕНИЕ ID\n// ===============================================\n\n// Получаем конфигурацию из ноды 2\nconst config = $('config').first().json.config;\n\n// Получаем все строки из Google Sheets (нода 3)\nconst allRows = $input.all();\n\n// РАБОТА СО СЧЕТЧИКОМ ID\nlet staticData = $getWorkflowStaticData('global');\nif (!staticData.lastId) {\n  staticData.lastId = 0;  // Начинаем с 0 если первый запуск\n}\n\n// Результат для обработки\nconst toProcess = [];\n\n// Проверяем каждую строку\nallRows.forEach((item, index) => {\n  const row = item.json;\n  const rowNumber = index + 2; // +2 т.к. первая строка - заголовки\n  \n  // Пропускаем если уже есть ID\n  if (row[config.COLUMNS.ID] && row[config.COLUMNS.ID].toString().trim() !== '') {\n    return;\n  }\n  \n  // Проверяем обязательные поля\n  const missing = [];\n  config.REQUIRED_FIELDS.base.forEach(field => {\n    if (!row[field] || row[field].toString().trim() === '') {\n      missing.push(field);\n    }\n  });\n  \n  // Дополнительная проверка для диплома с квалификацией\n  if (row[config.COLUMNS.REGISTRY.SCENARIO] === 'Диплом с квалификацией') {\n    if (!row[config.COLUMNS.REGISTRY.QUALIFICATION] || \n        row[config.COLUMNS.REGISTRY.QUALIFICATION].trim() === '') {\n      missing.push('Квалификация');\n    }\n  }\n  \n  // Если все поля заполнены - ПРИСВАИВАЕМ ID\n  if (missing.length === 0) {\n    // ГЕНЕРИРУЕМ НОВЫЙ ID\n    staticData.lastId++;  // Увеличиваем счетчик\n    const newId = `REQ-${String(staticData.lastId).padStart(5, '0')}`;\n    \n    toProcess.push({\n      json: {\n        rowNumber: rowNumber,\n        action: 'assign_id',\n        newId: newId,\n        fullName: row[config.COLUMNS.FULL_NAME],\n        scenario: row[config.COLUMNS.REGISTRY.SCENARIO],\n        updates: {\n          [config.COLUMNS.ID]: newId,\n          [config.COLUMNS.REGISTRY.STATUS]: config.STATUSES.REGISTRY.READY,\n          [config.COLUMNS.REGISTRY.LAST_UPDATE]: new Date().toLocaleString('ru-RU')\n        }\n      }\n    });\n    \n  } else {\n    // Есть пустые поля\n    toProcess.push({\n      json: {\n        rowNumber: rowNumber,\n        action: 'incomplete',\n        updates: {\n          [config.COLUMNS.REGISTRY.STATUS]: config.STATUSES.REGISTRY.INCOMPLETE,\n          [config.COLUMNS.REGISTRY.LAST_UPDATE]: `Не заполнены: ${missing.join(', ')}`\n        }\n      }\n    });\n  }\n});\n\n// СОХРАНЯЕМ СЧЕТЧИК для следующего запуска\n$getWorkflowStaticData('global').lastId = staticData.lastId;\n\nreturn toProcess;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        320,
+        -768
+      ],
+      "id": "65064cd5-d170-4a48-86e0-5055dcd2739a",
+      "name": "checkNewStroke",
+      "alwaysOutputData": false,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "e061a046-170d-43a7-89a7-a0a336e79b88",
+              "leftValue": "={{ $json }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1200,
+        -752
+      ],
+      "id": "78e56238-9875-4893-8de4-be8056767d1c",
+      "name": "areEmptyStrokes",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "assign_id",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "54846b1e-88a3-4bcf-b0a0-921aa581ca1d"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "d3e1abed-de23-40b5-98ab-1586bbca912e",
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "=incomplete",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        960,
+        -624
+      ],
+      "id": "4b71f09f-ab2c-4e76-ba65-50f98c2738e2",
+      "name": "filter",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "documentURL": "={{ $json[\"Ссылка на док (без подложки)\"].replace('https://docs.google.com/document/d/','') }}",
+        "simple": false
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        2432,
+        -1408
+      ],
+      "id": "9a3af1bb-5f9d-4019-9b7f-96c3a6447698",
+      "name": "Get a document",
+      "executeOnce": false,
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Функция для извлечения текста из одной ячейки таблицы\nfunction extractCellText(cell) {\n  if (!cell || !cell.content) return '';\n  \n  let text = '';\n  for (const element of cell.content) {\n    if (element.paragraph && element.paragraph.elements) {\n      for (const paragraphElement of element.paragraph.elements) {\n        if (paragraphElement.textRun && paragraphElement.textRun.content) {\n          text += paragraphElement.textRun.content;\n        }\n      }\n    }\n  }\n  \n  return text.trim();\n}\n\n// Функция для извлечения данных из одной таблицы\nfunction extractTableData(table) {\n  if (!table || !table.tableRows) return [];\n  \n  const tableData = [];\n  \n  for (const row of table.tableRows) {\n    const rowData = [];\n    \n    if (row.tableCells) {\n      for (const cell of row.tableCells) {\n        const cellText = extractCellText(cell);\n        rowData.push(cellText);\n      }\n    }\n    \n    tableData.push(rowData);\n  }\n  \n  return tableData;\n}\n\n// Функция для обработки одного документа\nfunction processDocument(doc) {\n  const tables = [];\n  \n  if (!doc.body || !doc.body.content) {\n    return tables;\n  }\n  \n  for (const element of doc.body.content) {\n    if (element.table) {\n      const tableData = extractTableData(element.table);\n      tables.push({\n        documentId: doc.documentId || 'unknown',\n        documentTitle: doc.title || 'untitled',\n        tableIndex: tables.length,\n        rowCount: tableData.length,\n        columnCount: tableData.length > 0 ? tableData[0].length : 0,\n        data: tableData\n      });\n    }\n  }\n  \n  return tables;\n}\n\n// Основной код для n8n\nconst inputItems = $input.all();\nconst outputItems = [];\n\nfor (const item of inputItems) {\n  const doc = item.json;\n  \n  // Обрабатываем документ\n  const tables = processDocument(doc);\n  \n  // Создаём отдельный выходной элемент для каждой таблицы\n  for (const table of tables) {\n    outputItems.push({\n      json: {\n        documentId: table.documentId,\n        documentTitle: table.documentTitle,\n        tableIndex: table.tableIndex,\n        rowCount: table.rowCount,\n        columnCount: table.columnCount,\n        tableData: table.data,\n        // Дополнительно: плоский массив всех ячеек\n        allCells: table.data.flat(),\n        // Дополнительно: первая строка как заголовки\n        headers: table.data.length > 0 ? table.data[0] : [],\n        // Дополнительно: данные без первой строки\n        rows: table.data.length > 1 ? table.data.slice(1) : []\n      }\n    });\n  }\n}\n\nreturn outputItems;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2672,
+        -1408
+      ],
+      "id": "6c0672f4-9026-4f1c-88b3-e548b9d4270f",
+      "name": "Code in JavaScript",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const all_docs = $('Code in JavaScript').all();\nconst res = [];\n\nall_docs.forEach(item => {\n  // Проверяем, что tableData есть и содержит хотя бы 9 таблиц (8-я = индекс 8)\n  if (item.json.tableData && item.json.tableData.length > 8) {\n    const table8 = item.json.tableData[8];\n\n    // Убираем пустые значения\n    const flatData = (table8 || []).filter(v => v && v.trim() !== '');\n\n    // Группируем по 3 элемента\n    const dates = [];\n    for (let i = 0; i < flatData.length; i += 3) {\n      dates.push(flatData.slice(i, i + 3).join(' '));\n    }\n\n    res.push({ dates });\n  } else {\n    res.push({ dates: [] }); // если таблицы меньше 9, возвращаем пустой массив\n  }\n});\n\nreturn res.map(r => ({ json: r }));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2864,
+        -1408
+      ],
+      "id": "d729e51c-b3aa-4ca2-b73a-04ba4bb4b831",
+      "name": "Code in JavaScript1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1STxoSpnXaoq4YS9AVBNjcMD7mw0qzPVeNVTgECHXDkY",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1825232161,
+          "mode": "list",
+          "cachedResultName": "Макеты документов",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1STxoSpnXaoq4YS9AVBNjcMD7mw0qzPVeNVTgECHXDkY/edit#gid=1825232161"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1696,
+        -1040
+      ],
+      "id": "718a1a32-3b37-4baa-9e95-8f22b14832e7",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8ef6b863-afef-4319-ac66-3bf288d3aa50",
+              "leftValue": "={{ $json[\"Ссылка на док (без подложки)\"] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1920,
+        -1040
+      ],
+      "id": "380c6b4f-e9f5-4e60-892a-5487e0235ac3",
+      "name": "If1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json[\"Документ\"] }}",
+                    "rightValue": "Приложение",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "6de584e8-c252-40f3-859d-b79347e9054d"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "a177570b-2c33-4880-9416-5ce9aa28b676",
+                    "leftValue": "={{ $json[\"Документ\"] }}",
+                    "rightValue": "Сертификат",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "f07f245a-8670-4286-855d-a30d2a292aa0",
+                    "leftValue": "={{ $json[\"Документ\"] }}",
+                    "rightValue": "Удостоверение ПК",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        2192,
+        -1120
+      ],
+      "id": "ab9510fd-6628-415a-bc73-60abfeb7f7ae",
+      "name": "Switch",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const doc = $('Get a document').all();\nconst content = doc.body?.content || [];\n\nconst tables = [];\n\nfor (const block of content) {\n  if (block.table) {\n    const table = block.table;\n    const rows = [];\n\n    for (const row of table.tableRows || []) {\n      const cells = [];\n\n      for (const cell of row.tableCells || []) {\n        let text = '';\n\n        for (const item of cell.content || []) {\n          if (item.paragraph) {\n            for (const el of item.paragraph.elements || []) {\n              const run = el.textRun;\n              if (run && run.content) {\n                text += run.content;\n              }\n            }\n          }\n        }\n\n        cells.push(text.trim());\n      }\n\n      rows.push(cells);\n    }\n\n    tables.push(rows);\n  }\n}\n\nreturn tables.map(t => ({ json: { table: t } }));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        688,
+        -1088
+      ],
+      "id": "d22e3fb7-a2fb-4711-a475-33baa0abc150",
+      "name": "Code in JavaScript2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1STxoSpnXaoq4YS9AVBNjcMD7mw0qzPVeNVTgECHXDkY",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1825232161,
+          "mode": "list",
+          "cachedResultName": "Макеты документов",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1STxoSpnXaoq4YS9AVBNjcMD7mw0qzPVeNVTgECHXDkY/edit#gid=1825232161"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $('Switch').item.json.row_number }}",
+            "Дата от": "={{ $('Code in JavaScript1').item.json.dates[0] }}",
+            "Дата до": "={{ $('Code in JavaScript1').item.json.dates[1] }}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "СТАРТ",
+              "displayName": "СТАРТ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Фамилия Имя Отчество",
+              "displayName": "Фамилия Имя Отчество",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Сценарий",
+              "displayName": "Сценарий",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Документ",
+              "displayName": "Документ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Сотрудник",
+              "displayName": "Сотрудник",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Статус",
+              "displayName": "Статус",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Ссылка на док (без подложки)",
+              "displayName": "Ссылка на док (без подложки)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Ссылка на док (с подложкой)",
+              "displayName": "Ссылка на док (с подложкой)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Рег-номер",
+              "displayName": "Рег-номер",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Дата от",
+              "displayName": "Дата от",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Дата до",
+              "displayName": "Дата до",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3072,
+        -1408
+      ],
+      "id": "d8b2a19e-d2f9-4c36-a2e1-d02336fa2578",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "documentURL": "={{ $json[\"Ссылка на док (без подложки)\"].replace('https://docs.google.com/document/d/','') }}",
+        "simple": false
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        2512,
+        -1136
+      ],
+      "id": "de8efaec-c4bc-442d-826b-0d0376397a4f",
+      "name": "Get a document1",
+      "executeOnce": false,
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const all_docs = $('Code in JavaScript3').all();\nconst res = [];\n\nall_docs.forEach(item => {\n  const tables = item.json.tables || [];\n\n  if (tables.length > 1) { // проверяем, что есть хотя бы 2 таблицы\n    const table2 = tables[1]; \n\n    if (table2.length > 6) { // проверяем, что есть 7-я строка (индекс 6)\n      const row6 = table2[5] || [];\n\n      // убираем пустые значения и лишние слова\n      const dates = row6\n        .filter(v => v && v.trim() !== '')\n        .map(v => v\n          .replace(/в период с/gi, '')\n          .replace(/по/gi, '')\n          .replace(/г\\./gi, '')\n          .replace(/«|»/g, '')\n          .trim()\n        );\n\n      res.push({ dates });\n    } else {\n      res.push({ dates: [] }); // если строки меньше 7\n    }\n  } else {\n    res.push({ dates: [] }); // если таблиц меньше 2\n  }\n});\n\nreturn res.map(r => ({ json: r }));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2896,
+        -1136
+      ],
+      "id": "1716eefd-f3bb-45ab-ab61-f8f3017a97e9",
+      "name": "Code in JavaScript4",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Функция для извлечения текста из одной ячейки таблицы\nfunction extractCellText(cell) {\n  if (!cell || !cell.content) return '';\n  let text = '';\n  for (const element of cell.content) {\n    if (element.paragraph && element.paragraph.elements) {\n      for (const paragraphElement of element.paragraph.elements) {\n        if (paragraphElement.textRun && paragraphElement.textRun.content) {\n          text += paragraphElement.textRun.content;\n        }\n      }\n    }\n  }\n  return text.trim();\n}\n\n// Функция для извлечения данных из одной таблицы\nfunction extractTableData(table) {\n  if (!table || !table.tableRows) return [];\n  const tableData = [];\n  for (const row of table.tableRows) {\n    const rowData = [];\n    if (row.tableCells) {\n      for (const cell of row.tableCells) {\n        rowData.push(extractCellText(cell));\n      }\n    }\n    tableData.push(rowData);\n  }\n  return tableData;\n}\n\n// Основной код для n8n\nconst inputItems = $input.all();\nconst outputItems = [];\n\nfor (const item of inputItems) {\n  const doc = item.json;\n  const allTables = [];\n\n  if (doc.body && doc.body.content) {\n    for (const element of doc.body.content) {\n      if (element.table) {\n        const tableData = extractTableData(element.table);\n        allTables.push(tableData);\n      }\n    }\n  }\n\n  outputItems.push({\n    json: {\n      documentId: doc.documentId,\n      documentTitle: doc.title || 'untitled',\n      tables: allTables\n    }\n  });\n}\n\nreturn outputItems;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2704,
+        -1136
+      ],
+      "id": "1eff9af4-8140-4e44-a6a8-05e89505d063",
+      "name": "Code in JavaScript3",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1STxoSpnXaoq4YS9AVBNjcMD7mw0qzPVeNVTgECHXDkY",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1825232161,
+          "mode": "list",
+          "cachedResultName": "Макеты документов",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1STxoSpnXaoq4YS9AVBNjcMD7mw0qzPVeNVTgECHXDkY/edit#gid=1825232161"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $('Switch').item.json.row_number }}",
+            "Дата от": "={{ $('Code in JavaScript4').item.json.dates[0].split('   ')[0] }}",
+            "Дата до": "={{ $('Code in JavaScript4').item.json.dates[0].split('   ')[1] }}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "СТАРТ",
+              "displayName": "СТАРТ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Фамилия Имя Отчество",
+              "displayName": "Фамилия Имя Отчество",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Сценарий",
+              "displayName": "Сценарий",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Документ",
+              "displayName": "Документ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Сотрудник",
+              "displayName": "Сотрудник",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Статус",
+              "displayName": "Статус",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Ссылка на док (без подложки)",
+              "displayName": "Ссылка на док (без подложки)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Ссылка на док (с подложкой)",
+              "displayName": "Ссылка на док (с подложкой)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Рег-номер",
+              "displayName": "Рег-номер",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Дата от",
+              "displayName": "Дата от",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Дата до",
+              "displayName": "Дата до",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3120,
+        -1136
+      ],
+      "id": "61960493-5258-4409-b9a5-e8b404d03990",
+      "name": "Update row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "documentURL": "={{ $json[\"Ссылка на док (без подложки)\"].replace('https://docs.google.com/document/d/','') }}",
+        "simple": false
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        2384,
+        -880
+      ],
+      "id": "1f1cb26c-223f-4bcf-8786-beb2a1e228e2",
+      "name": "Get a document2",
+      "executeOnce": false,
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Функция для извлечения текста из одной ячейки таблицы\nfunction extractCellText(cell) {\n  if (!cell || !cell.content) return '';\n  \n  let text = '';\n  for (const element of cell.content) {\n    if (element.paragraph && element.paragraph.elements) {\n      for (const paragraphElement of element.paragraph.elements) {\n        if (paragraphElement.textRun && paragraphElement.textRun.content) {\n          text += paragraphElement.textRun.content;\n        }\n      }\n    }\n  }\n  \n  return text.trim();\n}\n\n// Функция для извлечения данных из одной таблицы\nfunction extractTableData(table) {\n  if (!table || !table.tableRows) return [];\n  \n  const tableData = [];\n  \n  for (const row of table.tableRows) {\n    const rowData = [];\n    \n    if (row.tableCells) {\n      for (const cell of row.tableCells) {\n        const cellText = extractCellText(cell);\n        rowData.push(cellText);\n      }\n    }\n    \n    tableData.push(rowData);\n  }\n  \n  return tableData;\n}\n\n// Функция для обработки одного документа\nfunction processDocument(doc) {\n  const tables = [];\n  \n  if (!doc.body || !doc.body.content) {\n    return tables;\n  }\n  \n  for (const element of doc.body.content) {\n    if (element.table) {\n      const tableData = extractTableData(element.table);\n      tables.push({\n        documentId: doc.documentId || 'unknown',\n        documentTitle: doc.title || 'untitled',\n        tableIndex: tables.length,\n        rowCount: tableData.length,\n        columnCount: tableData.length > 0 ? tableData[0].length : 0,\n        data: tableData\n      });\n    }\n  }\n  \n  return tables;\n}\n\n// Основной код для n8n\nconst inputItems = $input.all();\nconst outputItems = [];\n\nfor (const item of inputItems) {\n  const doc = item.json;\n  \n  // Обрабатываем документ\n  const tables = processDocument(doc);\n  \n  // Создаём отдельный выходной элемент для каждой таблицы\n  for (const table of tables) {\n    outputItems.push({\n      json: {\n        documentId: table.documentId,\n        documentTitle: table.documentTitle,\n        tableIndex: table.tableIndex,\n        rowCount: table.rowCount,\n        columnCount: table.columnCount,\n        tableData: table.data,\n        // Дополнительно: плоский массив всех ячеек\n        allCells: table.data.flat(),\n        // Дополнительно: первая строка как заголовки\n        headers: table.data.length > 0 ? table.data[0] : [],\n        // Дополнительно: данные без первой строки\n        rows: table.data.length > 1 ? table.data.slice(1) : []\n      }\n    });\n  }\n}\n\nreturn outputItems;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2624,
+        -880
+      ],
+      "id": "f44dcb25-b2a2-4239-ab57-9db23c21bec8",
+      "name": "Code in JavaScript5",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const all_docs = $('Code in JavaScript5').all();\nconst res = [];\n\nall_docs.forEach(item => {\n  // Проверяем, что tableData есть и содержит хотя бы 9 таблиц (8-я = индекс 8)\n  if (item.json.tableData && item.json.tableData.length > 8) {\n    const table8 = item.json.tableData[3];\n\n    // Убираем пустые значения\n    const flatData = (table8 || []).filter(v => v && v.trim() !== '');\n\n    // Группируем по 3 элемента\n    const dates = [];\n    for (let i = 0; i < flatData.length; i += 3) {\n      dates.push(flatData.slice(i, i + 3).join(' '));\n    }\n\n    res.push({ dates });\n  } else {\n    res.push({ dates: [] }); // если таблицы меньше 9, возвращаем пустой массив\n  }\n});\n\nreturn res.map(r => ({ json: r }));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2816,
+        -880
+      ],
+      "id": "ada3b7d1-9bb6-41cb-81e8-d0d6c4d0dce4",
+      "name": "Code in JavaScript6",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1STxoSpnXaoq4YS9AVBNjcMD7mw0qzPVeNVTgECHXDkY",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1825232161,
+          "mode": "list",
+          "cachedResultName": "Макеты документов",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1STxoSpnXaoq4YS9AVBNjcMD7mw0qzPVeNVTgECHXDkY/edit#gid=1825232161"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $('Switch').item.json.row_number }}",
+            "Дата от": "={{ $('Code in JavaScript6').item.json.dates[0] }}",
+            "Дата до": "={{ $('Code in JavaScript6').item.json.dates[1] }}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "СТАРТ",
+              "displayName": "СТАРТ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Фамилия Имя Отчество",
+              "displayName": "Фамилия Имя Отчество",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Сценарий",
+              "displayName": "Сценарий",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Документ",
+              "displayName": "Документ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Сотрудник",
+              "displayName": "Сотрудник",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Статус",
+              "displayName": "Статус",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Ссылка на док (без подложки)",
+              "displayName": "Ссылка на док (без подложки)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Ссылка на док (с подложкой)",
+              "displayName": "Ссылка на док (с подложкой)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Рег-номер",
+              "displayName": "Рег-номер",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Дата от",
+              "displayName": "Дата от",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Дата до",
+              "displayName": "Дата до",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3024,
+        -880
+      ],
+      "id": "f9a74ae1-2d27-480c-9595-a95cd01b0a9a",
+      "name": "Update row in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1STxoSpnXaoq4YS9AVBNjcMD7mw0qzPVeNVTgECHXDkY",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Реестр заявок",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1STxoSpnXaoq4YS9AVBNjcMD7mw0qzPVeNVTgECHXDkY/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2208,
+        -144
+      ],
+      "id": "9692668f-346f-40d1-8235-98edacd7fa51",
+      "name": "readReestr",
+      "executeOnce": true,
+      "credentials": {
+        "googleApi": {
+          "id": "86ekhh3rUWlEgF4Y",
+          "name": "with.edtech@gmail.com"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1STxoSpnXaoq4YS9AVBNjcMD7mw0qzPVeNVTgECHXDkY",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 260707127,
+          "mode": "list",
+          "cachedResultName": "Счетчики",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1STxoSpnXaoq4YS9AVBNjcMD7mw0qzPVeNVTgECHXDkY/edit#gid=260707127"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2016,
+        -144
+      ],
+      "id": "8baee0fb-cad8-4c8d-b721-c4dc6fe81f7e",
+      "name": "readCounters",
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "credentials": {
+        "googleApi": {
+          "id": "86ekhh3rUWlEgF4Y",
+          "name": "with.edtech@gmail.com"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1STxoSpnXaoq4YS9AVBNjcMD7mw0qzPVeNVTgECHXDkY",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 458074767,
+          "mode": "list",
+          "cachedResultName": "Шаблоны",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1STxoSpnXaoq4YS9AVBNjcMD7mw0qzPVeNVTgECHXDkY/edit#gid=458074767"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1824,
+        -144
+      ],
+      "id": "87258bea-ad5e-4fd6-a99b-eb4cbb2bd24a",
+      "name": "readTemplates",
+      "executeOnce": true,
+      "credentials": {
+        "googleApi": {
+          "id": "86ekhh3rUWlEgF4Y",
+          "name": "with.edtech@gmail.com"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1STxoSpnXaoq4YS9AVBNjcMD7mw0qzPVeNVTgECHXDkY",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1825232161,
+          "mode": "list",
+          "cachedResultName": "Макеты документов",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1STxoSpnXaoq4YS9AVBNjcMD7mw0qzPVeNVTgECHXDkY/edit#gid=1825232161"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2416,
+        -144
+      ],
+      "id": "dc6bd9bf-78c1-4702-9e99-afb68125092f",
+      "name": "readLayouts1",
+      "executeOnce": true,
+      "credentials": {
+        "googleApi": {
+          "id": "86ekhh3rUWlEgF4Y",
+          "name": "with.edtech@gmail.com"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================\n//     🎯 КОНФИГУРАЦИЯ AUTODOCK v3.0 ФИНАЛЬНАЯ\n//     Обновлено с учетом рабочей версии\n// ===============================================\n\nconst AUTODOCK_CONFIG = {\n  // ========== НАЗВАНИЯ ЛИСТОВ ==========\n  \"SHEETS\": {\n    \"REGISTRY\": \"Реестр заявок\",\n    \"LAYOUTS\": \"Макеты документов\", \n    \"SYSTEM_SETTINGS\": \"Системные настройки\",\n    \"TEMPLATES\": \"Шаблоны\",\n    \"EMPLOYEES\": \"Сотрудники\",\n    \"FIS_FRDO\": \"ФИС ФРДО\",\n    \"LOGS\": \"Логи системы\",\n    \"COUNTERS\": \"Счётчики\" // ДОБАВЛЕНО: для хранения счетчиков регномеров\n  },\n\n  // ========== НАЗВАНИЯ СТОЛБЦОВ ==========\n  \"COLUMNS\": {\n    \"ID\": \"ID\",\n    \"FULL_NAME\": \"Фамилия Имя Отчество\",\n    \n    \"REGISTRY\": {\n      \"STATUS\": \"Статус заявки\",\n      \"FULL_NAME_DECLINED\": \"Фамилия Имя Отчество в склонении\",\n      \"PROGRAM\": \"Программа\",\n      \"QUALIFICATION\": \"Квалификация\",\n      \"SPECIALIZATION\": \"Специализация\", \n      \"HOURS\": \"Часов\",\n      \"COMPANY\": \"Компания\",\n      \"CITY\": \"Город не Москва\",\n      \"SCENARIO\": \"Сценарий\",\n      \"EDUCATION_DOC\": \"Документ об образовании\",\n      \"SNILS\": \"СНИЛС\",\n      \"BIRTH_DATE\": \"Дата рождения получателя\",\n      \"GENDER\": \"Пол получателя\",\n      \"FOLDER_LINK\": \"Ссылка на готовые макеты\",\n      \"CREATED_DATE\": \"Дата создания\",\n      \"ISSUE_DATE\": \"Дата выдачи\",\n      \"START_DATE\": \"Дата начала (фикс)\",\n      \"END_DATE\": \"Дата окончания (фикс)\",\n      \"CUSTOM_TERM\": \"Срок обучения (дн.)\",\n      \"LAST_UPDATE\": \"Дата последнего изменения\",\n      \"MISFIELDS\": \"Незаполненные поля\"\n    },\n\n    \"LAYOUTS\": {\n      \"GENERATION_TRIGGER\": \"СТАРТ\", // ИЗМЕНЕНО: было CHECKBOX\n      \"SCENARIO\": \"Сценарий\", \n      \"DOCUMENT_TYPE\": \"Документ\",\n      \"STATUS\": \"Статус\",\n      \"EMPLOYEE\": \"Сотрудник\",\n      \"DOCUMENT_LINK\": \"Ссылка на док (без подложки)\",\n      \"DOCUMENT_LINK_UNDERLAY\": \"Ссылка на док (с подложкой)\",\n      \"REG_NUMBER\": \"Регистрационный номер\", // ДОБАВЛЕНО\n      \"UNDERLAY\": \"С подложкой\" // ДОБАВЛЕНО\n    },\n\n    \"TEMPLATES\": {\n      \"SCENARIO\": \"Сценарий\",\n      \"DOCUMENT\": \"Документ\",\n      \"TYPE\": \"Тип\",\n      \"TEMPLATE_LINK\": \"Ссылка на шаблон\",\n      \"UNDERLAY\": \"С подложкой\", // ДОБАВЛЕНО\n      \"REG_VARIABLE\": \"РегНомер\" // ДОБАВЛЕНО\n    },\n    \n    \"COUNTERS\": { // ДОБАВЛЕНО: новая секция\n      \"COUNTER_TYPE\": \"Тип счётчика\",\n      \"CURRENT_VALUE\": \"Текущее значение\", \n      \"LAST_USED\": \"Последнее использование\",\n      \"LOCKED\": \"Заблокирован\"\n    }\n  },\n\n  // ========== ТРИГГЕРЫ ГЕНЕРАЦИИ ========== \n  \"GENERATION_TRIGGERS\": { // ДОБАВЛЕНО: новая секция\n    \"NEW\": \"новая\",     // lowercase как в рабочей версии\n    \"START\": \"запуск\",  \n    \"DONE\": \"готово\"\n  },\n\n  // ========== ОБЯЗАТЕЛЬНЫЕ ПОЛЯ ==========\n  \"REQUIRED_FIELDS\": {\n    \"base\": [\n      \"Дата создания\",\n      \"Фамилия Имя Отчество\",\n      \"Фамилия Имя Отчество в склонении\", \n      \"Программа\",\n      \"Часов\",\n      \"Сценарий\",\n      \"Документ об образовании\"\n    ],\n    \"diploma_qualified\": [\n      \"Квалификация\"\n    ],\n    \"fis_frdo\": [\n      \"СНИЛС\",\n      \"Дата рождения получателя\",\n      \"Пол получателя\"\n    ]\n  },\n\n  // ========== ДОПУСТИМЫЕ ЧАСЫ ==========\n  \"VALID_HOURS\": [16, 36, 40, 48, 72, 104, 108, 120, 144, 160, 162, 178, 180, 250, 256, 350, 400, 450, 320, 500, 512, 520, 576, 600, 720, 800, 1000, 1100, 1600, 2000, 1024, 1002, 980, 263, 530, 1240 ],\n\n  // ========== СТАТУСЫ ==========\n  \"STATUSES\": {\n    \"REGISTRY\": {\n      \"EMPTY\": \"\",\n      \"INCOMPLETE\": \"Неполные данные\",\n      \"READY\": \"Готов к обработке\",\n      \"IN_LAYOUTS\": \"Передано в макеты\",\n      \"CHANGED\": \"Изменены данные\",\n      \"DOCUMENTS_READY\": \"Документы готовы\",\n      \"READY_FOR_FIS\": \"Готов к подаче в ФИС ФРДО\",\n      \"IN_FIS_BATCH\": \"В пакете ФИС ФРДО\",\n      \"SUBMITTED_TO_FIS\": \"Подано в ФИС ФРДО\",\n      \"ISSUED\": \"Выдано\",\n      \"SENT_BY_MAIL\": \"Отправлено почтой\",\n      \"URGENT\": \"🔴 СРОЧНО\"\n    },\n    \"LAYOUTS\": {\n      \"WAITING\": \"Ожидает к генерации\",\n      \"NEEDS_REGEN\": \"Требует перегенерации\",\n      \"URGENT\": \"🔴 СРОЧНО\",\n      \"IN_QUEUE\": \"В очереди\",\n      \"GENERATING\": \"Генерируется\", // ДОБАВЛЕНО\n      \"CREATED\": \"Макет создан\",\n      \"ERROR\": \"Ошибка генерации\",\n      \"LOCKED\": \"Заблокировано\" // ДОБАВЛЕНО\n    }\n  },\n\n  // ========== СЦЕНАРИИ И ПАКЕТЫ ==========\n  \"SCENARIOS\": {\n    \"Диплом простой\": {\n      \"documents\": [\"Диплом простой\", \"Приложение\",\"Предметы\",\"Выписка ПП\"],\n      \"count\": 4\n    },\n    \"Диплом с квалификацией\": {\n      \"documents\": [\"Диплом с квалификацией\", \"Приложение\", \"Предметы\",\"Выписка ПП\"],\n      \"count\": 4\n    },\n    \"Диплом с квалификацией + УД\": {\n      \"documents\": [\"Диплом с квалификацией\", \"Приложение\", \"Предметы\",\"Выписка ПП\",\"Корочка ПП\"],\n      \"count\": 5\n    }, \n    \"Диплом простой + УД\": {\n      \"documents\": [\"Диплом простой\", \"Приложение\", \"Предметы\",\"Выписка ПП\",\"Корочка ПП\"],\n      \"count\": 5\n    }, \n    \"Удостоверение ПК\" : {\n      \"documents\": [\"Удостоверение ПК\",\"Выписка ПК\"],\n      \"count\": 2\n    },\n    \"Удостоверение ПК + УД фото\" : {\n      \"documents\": [\"Удостоверение ПК\",\"Выписка ПК\", \"Корочка ПК фото\"],\n      \"count\": 3\n    },\n    \"Удостоверение ДО\" : {\n      \"documents\": [\"Удостоверение ДО\"],\n      \"count\": 1\n    },\n    \"Сертификат\" : {\n      \"documents\": [\"Сертификат\"],\n      \"count\": 1\n    },\n    \"Удостоверение ПК + УД\" : {\n      \"documents\": [\"Удостоверение ПК\",\"Выписка ПК\",\"Корочка ПК\"],\n      \"count\": 3\n    },\n    \"ОТ\": {\n      \"documents\": [\"ОТ\"],\n      \"count\": 1\n    },\n    \"ОТ высота\": {\n      \"documents\": [\"ОТ высота\"],\n      \"count\": 1\n    }\n    \n  },\n\n  // ========== СОТРУДНИКИ ==========\n  \"EMPLOYEES\": {\n    \"Полянская М.В.\": {\n      \"folderId\": \"1RuDqHlHDfU5aChhpv1r4zNQRDIzzBh4K\"\n    },\n    \"Черненко М.\": {\n      \"folderId\": \"1z-CIaI1vLSrnWOWD3wvT0l1kTSpTWyDD\"\n    },\n    \"Федорова М.\": {\n      \"folderId\": \"1dXORm1U-sq5B52denaK59YtFv7K_A_9A\"\n    },\n    \"Стажер 2\": {\n      \"folderId\": \"1cwiQBaxLS9hsJJum3GmUj24BLhzzkNku\"\n    },\n    \"Стажер 1\": {\n      \"folderId\": \"1_dgBt_La_swpVkVPf36IelYUwLA4g_0e\"\n    },\n    \"Сохарева К.\": {\n      \"folderId\": \"1KzUyMHqYptilYbFG2C569ltEtSZ73PKq\"\n    },\n    \"Рамазанова А.\": {\n      \"folderId\": \"1FUR2g2gR9bz_F4wl--SHkqrRZoVV4INI\"\n    },\n    \"Леднева О.\": {\n      \"folderId\": \"19ZEzJRNV_iDyDvJ4dBFTxH6lAmik57sm\"\n    },\n    \"Басана\": {\n      \"folderId\": \"10a6JgPpzFZvt19Lp6QSm70h1C_8O81KY\"\n    }\n  },\n\n  // ========== КРИТИЧНЫЕ ПОЛЯ ДЛЯ ХЭША ==========\n  \"CRITICAL_FIELDS\": [\n    \"Фамилия Имя Отчество\",\n    \"Фамилия Имя Отчество в склонении\",\n    \"Программа\", \n    \"Квалификация\",\n    \"Специализация\",\n    \"Часов\",\n    \"Дата выдачи\",\n    \"Дата начала (фикс)\",\n    \"Дата окончания (фикс)\",\n    \"Срок обучения (дн.)\"\n  ],\n\n  // ========== ФОРМАТЫ РЕГИСТРАЦИОННЫХ НОМЕРОВ ==========\n  \"REG_NUMBER_FORMATS\": {\n    \"Диплом простой\": {\n      \"prefix\": \"П\", \n      \"format\": \"{number}-{yy}{month}{prefix}\",\n      \"counter_name\": \"diploma_counter\",\n      \"startFrom\": 98,\n      \"variable\": \"Рег-ПП\",\n      \"shared\": true // ДОБАВЛЕНО: общий счетчик с квалификацией\n    },\n    \"Диплом с квалификацией\": {\n      \"prefix\": \"П\", \n      \"format\": \"{number}-{yy}{month}{prefix}\",\n      \"counter_name\": \"diploma_counter\",\n      \"startFrom\": 98,\n      \"variable\": \"Рег-ПП\",\n      \"shared\": true // ДОБАВЛЕНО: общий счетчик с квалификацией\n    },\n    \"Удостоверение ПК\": {\n      \"prefix\": \"ПК\",\n      \"format\": \"{number}-{month}/{prefix}\",\n      \"counter_name\": \"pk_counter\",\n      \"startFrom\": 29,\n      \"variable\": \"Рег-ПК\",\n      \"shared\": true\n    },\n    \"Сертификат\": {\n      \"prefix\": \"ПК\",\n      \"format\": \"{number}-{month}/{prefix}\",\n      \"counter_name\": \"pk_counter\",\n      \"startFrom\": 29,\n      \"variable\": \"Рег-ПК\"\n    },\n    \"Удостоверение ДО\": {\n      \"prefix\": \"ПК\",\n      \"format\": \"{number}-{month}/{prefix}\",\n      \"counter_name\": \"pk_counter\",\n      \"startFrom\": 29,\n      \"variable\": \"Рег-ПК\"\n    },\n    \"Удостоверение РС\": {\n      \"prefix\": \"АН\",\n      \"format\": \"{number}-{prefix}\",\n      \"counter_name\": \"rs_counter\",\n      \"startFrom\": 24216,\n      \"variable\": \"Рег-РС-АН\",\n      \"shared\": true\n    },\n    \"Выписка ПП\": { // ДОБАВЛЕНО\n      \"prefix\": \"ПП\",\n      \"format\": \"{prefix}-{month}{yy}-{number}\",\n      \"counter_name\": \"vypiska_counter_pp\",\n      \"startFrom\": 95,\n      \"variable\": \"Рег-ВПП\",\n      \"parentVariable\": \"Рег-ПП\"\n    },\n    \"Выписка ПК\": { // ДОБАВЛЕНО\n      \"prefix\": \"ПК\",\n      \"format\": \"{prefix}-{month}{yy}-{number}\",\n      \"counter_name\": \"vypiska_counter_pk\",\n      \"startFrom\": 95,\n      \"variable\": \"Рег-ВПК\",\n      \"parentVariable\": \"Рег-ПК\"\n    },\n    \"Предметы\": { // ДОБАВЛЕНО\n      \"useParent\": true\n    },\n    \"Приложение\": { // ДОБАВЛЕНО\n      \"useParent\": true\n    },\n    \"Корочка ПП\": { // ДОБАВЛЕНО\n      \"useParent\": true\n    },\n    \"Корочка ПК\": { // ДОБАВЛЕНО\n      \"useParent\": true\n    },\n  },\n\n  // ========== КОНСТАНТЫ ДЛЯ РАСЧЕТА ПЕРИОДОВ ==========\n  \"HOURS_TO_PERIOD\": {\n    \"16\": { \"value\": 3, \"unit\": \"дней\" },\n    \"36\": { \"value\": 5, \"unit\": \"дней\" },\n    \"48\": { \"value\": 6, \"unit\": \"дней\" },\n    \"40\": { \"value\": 5, \"unit\": \"дней\" },\n    \"72\": { \"value\": 10, \"unit\": \"дней\" },\n    \"104\": { \"value\": 14, \"unit\": \"дней\" },\n    \"108\": { \"value\": 14, \"unit\": \"дней\" },\n    \"120\": { \"value\": 17, \"unit\": \"дней\" },\n    \"144\": { \"value\": 20, \"unit\": \"дней\" },\n    \"162\": { \"value\": 21, \"unit\": \"дней\" },\n    \"180\": { \"value\": 23, \"unit\": \"дней\" },\n    \"178\": { \"value\": 23, \"unit\": \"дней\" },\n    \"256\": { \"value\": 53, \"unit\": \"дней\" },\n    \"263\": { \"value\": 53, \"unit\": \"дней\" },\n    \"250\": { \"value\": 40, \"unit\": \"дней\" },\n    \"320\": { \"value\": 40, \"unit\": \"дней\" },\n    \"350\": { \"value\": 103, \"unit\": \"дней\" },\n    \"400\": { \"value\": 103, \"unit\": \"дней\" },\n    \"450\": { \"value\": 103, \"unit\": \"дней\" },\n    \"500\": { \"value\": 103, \"unit\": \"дней\" },\n    \"512\": { \"value\": 103, \"unit\": \"дней\" },\n    \"520\": { \"value\": 103, \"unit\": \"дней\" },\n    \"530\": { \"value\": 103, \"unit\": \"дней\" },\n    \"576\": { \"value\": 103, \"unit\": \"дней\" },\n    \"600\": { \"value\": 151, \"unit\": \"дней\" },\n    \"720\": { \"value\": 151, \"unit\": \"дней\" },\n    \"800\": { \"value\": 163, \"unit\": \"дней\" },\n    \"1000\": { \"value\": 200, \"unit\": \"дней\" },\n    \"1024\": { \"value\": 200, \"unit\": \"дней\" },\n    \"1002\": { \"value\": 200, \"unit\": \"дней\" },\n    \"980\": { \"value\": 200, \"unit\": \"дней\" },\n    \"1100\": { \"value\": 200, \"unit\": \"дней\" },\n    \"1240\": { \"value\": 155, \"unit\": \"дней\" },\n    \"1600\": { \"value\": 309, \"unit\": \"дней\" },\n    \"2000\": { \"value\": 414, \"unit\": \"дней\" }\n  },\n\n  // ========== СИСТЕМНЫЕ НАСТРОЙКИ ========== \n  \"SYSTEM\": { // ДОБАВЛЕНО: новая секция\n    \"LOCK_TIMEOUT_MINUTES\": 5,\n    \"MAX_RETRIES\": 3,\n    \"BATCH_SIZE\": 50,\n    \"LOG_RETENTION_DAYS\": 90,\n    \"ID_PREFIX\": \"REQ\",\n    \"ID_PAD_LENGTH\": 5\n  },\n\n  // ========== ПРАЗДНИЧНЫЕ ДНИ 2025 ==========\n\"HOLIDAYS\": [\n  // 2024 год\n  \"2024-01-01\",\"2024-01-02\",\"2024-01-03\",\"2024-01-04\",\"2024-01-05\",\n  \"2024-01-06\",\"2024-01-07\",\"2024-01-08\",\n  \"2024-02-23\",\n  \"2024-03-08\",\n  \"2024-04-29\",\"2024-04-30\",\n  \"2024-05-01\",\"2024-05-09\",\"2024-05-10\",\n  \"2024-06-12\",\n  \"2024-11-04\",\n  \"2024-12-30\",\"2024-12-31\",\n  \n  // 2025 год\n  \"2025-01-01\",\"2025-01-02\",\"2025-01-03\",\"2025-01-04\",\"2025-01-05\",\n  \"2025-01-06\",\"2025-01-07\",\"2025-01-08\",\n  \"2025-02-23\",\"2025-02-24\",\n  \"2025-03-08\",\"2025-03-09\",\"2025-03-10\",\n  \"2025-05-01\",\"2025-05-02\",\"2025-05-03\",\"2025-05-04\",\n  \"2025-05-09\",\"2025-05-10\",\"2025-05-11\",\"2025-05-12\",\n  \"2025-06-12\",\"2025-06-13\",\n  \"2025-11-03\",\"2025-11-04\",\n  \"2025-12-31\",\n  \n  // 2026 год (предварительно, официальный календарь ещё не утверждён)\n  \"2026-01-01\",\"2026-01-02\",\"2026-01-03\",\"2026-01-04\",\"2026-01-05\",\n  \"2026-01-06\",\"2026-01-07\",\"2026-01-08\",\"2026-01-09\",\n  \"2026-02-23\",\n  \"2026-03-08\",\"2026-03-09\",\n  \"2026-05-01\",\"2026-05-04\",\n  \"2026-05-09\",\"2026-05-11\",\n  \"2026-06-12\",\n  \"2026-11-04\"\n],\n\n  // ========== НАЗВАНИЯ МЕСЯЦЕВ ==========\n  \"MONTH_NAMES\": {\n    \"genitive\": [\n      \"января\",\"февраля\",\"марта\",\"апреля\",\"мая\",\"июня\",\n      \"июля\",\"августа\",\"сентября\",\"октября\",\"ноября\",\"декабря\"\n    ]\n  }\n};\n\n\n\nreturn [{ \n  json: {config: AUTODOCK_CONFIG}\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2608,
+        -144
+      ],
+      "id": "f24511ff-6d5e-42aa-8eea-6c86f96d3724",
+      "name": "config2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================\n//     ПОДГОТОВКА ЗАДАЧ ДЛЯ ГЕНЕРАЦИИ ДОКУМЕНТОВ\n// ===============================================\n\n// Получаем конфигурацию\nconst config = $('config2').first().json.config;\n\n// Получаем данные\nconst layoutsRows = $('readLayouts1').all();\nconst registryRows = $('readReestr').all() || [];\nconst templateRows = $('readTemplates').all() || [];\nconst countersData = $('readCounters').all() || [];\n\nconsole.log(`Получено макетов для генерации: ${layoutsRows.length}`);\n\n// Инлайн функции\nfunction splitFIO(fullName) {\n  const parts = (fullName || \"\").trim().split(/\\s+/);\n  return {\n    surname: parts[0] || \"\",\n    name: parts[1] || \"\",\n    patronymic: parts[2] || \"\"\n  };\n}\n\nfunction calculateStudyPeriod(regData) {\n  const C = config.COLUMNS.REGISTRY;\n  \n  // =============================================\n  // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ДЛЯ РАБОТЫ С ДАТАМИ\n  // =============================================\n  \n  function isValidDate(date) {\n    return date instanceof Date && !isNaN(date.getTime());\n  }\n\n  function parseDate(dateValue) {\n    if (!dateValue) return null;\n    \n    // Обработка формата DD.MM.YYYY (русский формат)\n    if (typeof dateValue === 'string') {\n      const ddmmyyyyPattern = /^(\\d{2})\\.(\\d{2})\\.(\\d{4})$/;\n      const match = dateValue.match(ddmmyyyyPattern);\n      \n      if (match) {\n        const [, day, month, year] = match;\n        const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));\n        return isValidDate(date) ? date : null;\n      }\n    }\n    \n    // Для других форматов (ISO, timestamp, объекты Date)\n    const date = new Date(dateValue);\n    return isValidDate(date) ? date : null;\n  }\n\n  function isWeekend(date) {\n    const day = date.getDay();\n    return day === 0 || day === 6;\n  }\n\n  function isHoliday(date) {\n    const dateStr = date.toISOString().split('T')[0];\n    return config.HOLIDAYS.includes(dateStr);\n  }\n\n  function isWorkingDay(date) {\n    return !isWeekend(date) && !isHoliday(date);\n  }\n\n  function subtractWorkingDays(endDate, daysToSubtract) {\n    let currentDate = new Date(endDate);\n    let workingDaysCount = 0;\n    \n    // 🆕 ИЗМЕНЕНИЕ: Включаем конечную дату в подсчёт\n    if (isWorkingDay(currentDate)) {\n      workingDaysCount = 1;\n    }\n    \n    // Вычитаем оставшиеся дни\n    while (workingDaysCount < daysToSubtract) {\n      currentDate.setDate(currentDate.getDate() - 1);\n      if (isWorkingDay(currentDate)) {\n        workingDaysCount++;\n      }\n    }\n    \n    return currentDate;\n  }\n\n  function formatDateRussian(date) {\n    const d = new Date(date);\n    const day = String(d.getDate()).padStart(2, '0');\n    const month = config.MONTH_NAMES.genitive[d.getMonth()];\n    const year = d.getFullYear();\n    return `«${day}» ${month} ${year} года`;\n  }\n\n  function formatShortRussian(date) {\n    const d = new Date(date);\n    const day = String(d.getDate()).padStart(2, '0');\n    const month = config.MONTH_NAMES.genitive[d.getMonth()];\n    return `«${day}» ${month}`;\n  }\n\n  function formatDateDDMMYYYY(date) {\n    const d = new Date(date);\n    return `${String(d.getDate()).padStart(2,\"0\")}.${String(d.getMonth()+1).padStart(2,\"0\")}.${d.getFullYear()}`;\n  }\n\n  function getDefaultPeriod() {\n    const endDate = new Date();\n    const startDate = new Date();\n    startDate.setDate(endDate.getDate() - 30);\n    return formatPeriodResult(startDate, endDate);\n  }\n\n  function formatPeriodResult(startDate, endDate) {\n    return {\n      startDate,\n      endDate,\n      startDay: String(startDate.getDate()).padStart(2, '0'),\n      startMonth: config.MONTH_NAMES.genitive[startDate.getMonth()],\n      startYear: startDate.getFullYear(),\n      startYearShort: String(startDate.getFullYear()).slice(-2), \n      endDay: String(endDate.getDate()).padStart(2, '0'),\n      endMonth: config.MONTH_NAMES.genitive[endDate.getMonth()],\n      endYear: endDate.getFullYear(),\n      endYearShort: String(endDate.getFullYear()).slice(-2),\n      startDateFormatted: formatDateRussian(startDate),\n      endDateFormatted: formatDateRussian(endDate),\n      shortEnd: formatShortRussian(endDate),\n      dateFull: formatDateDDMMYYYY(endDate)\n    };\n  }\n\n  // =============================================\n  // ЛОГИКА ОПРЕДЕЛЕНИЯ ПЕРИОДА (5 ВАРИАНТОВ)\n  // =============================================\n\n  // Парсим все возможные даты заранее\n  const startDateValue = parseDate(regData[C.START_DATE]);\n  const endDateValue = parseDate(regData[C.END_DATE]);\n  const issueDateValue = parseDate(regData[C.ISSUE_DATE]);\n  const createdDateValue = parseDate(regData[C.CREATED_DATE]);\n  const customTerm = regData[C.CUSTOM_TERM] ? parseInt(regData[C.CUSTOM_TERM]) : null;\n  const hours = regData[C.HOURS] ? parseInt(regData[C.HOURS]) : null;\n\n  // 1️⃣ ВАРИАНТ 1: START_DATE + END_DATE\n  if (startDateValue && endDateValue) {\n    console.log(\"Вариант 1: Используем фиксированные START_DATE и END_DATE\");\n    return formatPeriodResult(startDateValue, endDateValue);\n  }\n\n  // 2️⃣ ВАРИАНТ 2: ISSUE_DATE + CUSTOM_TERM\n  if (issueDateValue && customTerm && !isNaN(customTerm)) {\n    console.log(\"Вариант 2: Используем ISSUE_DATE + CUSTOM_TERM\");\n    const endDate = issueDateValue;\n    const startDate = subtractWorkingDays(endDate, customTerm);\n    return formatPeriodResult(startDate, endDate);\n  }\n\n  // 3️⃣ ВАРИАНТ 3: Только ISSUE_DATE (+ часы для расчета)\n  if (issueDateValue && hours && !isNaN(hours)) {\n    console.log(\"Вариант 3: Используем только ISSUE_DATE (+ часы для расчета периода)\");\n    const period = config.HOURS_TO_PERIOD[String(hours)];\n    \n    if (!period) {\n      console.warn(`Неизвестное количество часов: ${hours}`);\n      return getDefaultPeriod();\n    }\n    \n    const endDate = issueDateValue;\n    const startDate = subtractWorkingDays(endDate, period.value);\n    return formatPeriodResult(startDate, endDate);\n  }\n\n  // 4️⃣ ВАРИАНТ 4: Только CUSTOM_TERM + CREATED_DATE\n  if (customTerm && !isNaN(customTerm) && createdDateValue) {\n    console.log(\"Вариант 4: Используем только CUSTOM_TERM + CREATED_DATE\");\n    const endDate = createdDateValue;\n    const startDate = subtractWorkingDays(endDate, customTerm);\n    return formatPeriodResult(startDate, endDate);\n  }\n\n  // 5️⃣ ВАРИАНТ 5: Только CREATED_DATE (+ часы для расчета)\n  if (createdDateValue && hours && !isNaN(hours)) {\n    console.log(\"Вариант 5: Используем только CREATED_DATE (+ часы для расчета периода)\");\n    const period = config.HOURS_TO_PERIOD[String(hours)];\n    \n    if (!period) {\n      console.warn(`Неизвестное количество часов: ${hours}`);\n      return getDefaultPeriod();\n    }\n    \n    const endDate = createdDateValue;\n    const startDate = subtractWorkingDays(endDate, period.value);\n    return formatPeriodResult(startDate, endDate);\n  }\n\n  // 🔄 FALLBACK: Если ничего не подошло\n  console.warn(\"Не найдены необходимые данные для расчета периода, используем default\");\n  return getDefaultPeriod();\n}\n\nif (layoutsRows.length === 0) {\n  return [{ json: { log: \"⚠️ Нет строк для генерации\" } }];\n}\n\n// Создаем индексы для быстрого поиска\nconst regById = new Map(registryRows.map(r => [r.json[config.COLUMNS.ID], r.json]));\nconst templatesByDoc = new Map(\n  templateRows.map(t => {\n    const scenario = t.json[config.COLUMNS.TEMPLATES.SCENARIO];\n    const document = t.json[config.COLUMNS.TEMPLATES.DOCUMENT];\n    const key = `${scenario}|${document}`;  // Комбинированный ключ\n    return [key, t.json];\n  })\n);\n\n// Функция генерации регистрационного номера\nfunction generateRegNumber(documentType, counters) {\n  const format = config.REG_NUMBER_FORMATS[documentType];\n  if (!format) return { regNumber: \"\", counterUpdate: null };\n  \n  if (format.useParent) return { regNumber: \"\", counterUpdate: null };\n  \n  const counter = counters.find(c => \n    c.json[config.COLUMNS.COUNTERS.COUNTER_TYPE] === format.counter_name\n  );\n  \n  let currentValue = counter ? \n    parseInt(counter.json[config.COLUMNS.COUNTERS.CURRENT_VALUE]) : \n    format.startFrom;\n  \n  currentValue += 1;\n  \n  const now = new Date();\n  const month = String(now.getMonth() + 1).padStart(2, \"0\");\n  const year = String(now.getFullYear());\n  const yy = year.slice(-2);\n  \n  let regNumber = format.format\n    .replace(\"{number}\", currentValue)\n    .replace(\"{month}\", month)\n    .replace(\"{yy}\", yy)\n    .replace(\"{prefix}\", format.prefix);\n  \n  return { \n    regNumber, \n    counterUpdate: { \n      name: format.counter_name, \n      value: currentValue \n    }\n  };\n}\n\n// Готовим задачи\nconst tasks = [];\nconst counterUpdates = new Map();\nconst regNumbersByScenario = new Map();\n\nlayoutsRows.forEach(item => {\n  const layout = item.json;\n  \n  const rowNumber = layout.row_number;\n  const id = layout[\"ID\"];\n  const documentType = layout[\"Документ\"];\n  const scenario = layout[\"Сценарий\"];\n  const fullName = layout[\"Фамилия Имя Отчество\"].split(' ')[0];\n  const employee = layout[\"Сотрудник\"];\n  const existingLinkRegular = layout[\"Ссылка на док (без подложки)\"];\n  const existingLinkUnderlay = layout[\"Ссылка на док (с подложкой)\"];\n\n  if (!id || !documentType) {\n    console.log(`Пропускаем item без ID или типа документа`);\n    return;\n  }\n\n  console.log(`Обрабатываем: ${id} - ${documentType}`);\n\n  const reg = regById.get(id);\n  if (!reg) {\n    tasks.push({ \n      json: { \n        error: `❌ В реестре нет ID=${id}`,\n        rowNumber,\n        action: \"error\"\n      } \n    });\n    return;\n  }\n\nconst templateKey = `${scenario}|${documentType}`;\nconst template = templatesByDoc.get(templateKey);\n  if (!template) {\n    tasks.push({ \n      json: { \n        error: `❌ Нет шаблона для документа: ${documentType}`,\n        rowNumber,\n        action: \"error\"\n      } \n    });\n    return;\n  }\n\n  // Функция для создания задачи документа (чтобы избежать дублирования кода)\n  const createTask = (docType, tmpl, isUnderlayVersion = false) => {\n\n    const existingLink = isUnderlayVersion ? existingLinkUnderlay : existingLinkRegular;\n    \n    const underlay = tmpl[config.COLUMNS.TEMPLATES.UNDERLAY] === \"Y\";\n    const folderType = underlay ? \"С подложкой\" : \"Без подложки\";\n\n    let regNumber = \"\";\n    const regVariable = tmpl[config.COLUMNS.TEMPLATES.REG_VARIABLE];\n\n    const isNewDocument = !existingLink || existingLink.trim() === \"\";\n    \n    console.log(`Для документа ${docType}:`);\n    console.log(`  - existingLink: \"${existingLink}\"`);\n    console.log(`  - isNewDocument: ${isNewDocument}`);\n    \n    if (regVariable && isNewDocument) {\n      const format = config.REG_NUMBER_FORMATS[documentType]; // Используем формат основного документа\n      console.log(`  - format найден:`, !!format);\n      \n      if (format?.useParent) {\n        console.log(`  - использует родительский номер`);\n        const scenarioKey = `${id}_${scenario}`;\n        regNumber = regNumbersByScenario.get(scenarioKey) || \"\";\n        console.log(`  - найден родительский номер: \"${regNumber}\"`);\n        \n        if (!regNumber) {\n          console.warn(`  - родительский номер не найден для ${scenarioKey}`);\n        }\n      } else if (format?.shared) {\n        console.log(`  - shared номер для сценария ${scenario}`);\n        const scenarioKey = `${id}_${scenario}`;\n        if (!regNumbersByScenario.has(scenarioKey)) {\n          const result = generateRegNumber(documentType, countersData);\n          console.log(`  - сгенерирован shared номер: ${result.regNumber}`);\n          regNumbersByScenario.set(scenarioKey, result.regNumber);\n          if (result.counterUpdate) {\n            counterUpdates.set(result.counterUpdate.name, result.counterUpdate.value);\n            \n            const counterToUpdate = countersData.find(c => \n              c.json[config.COLUMNS.COUNTERS.COUNTER_TYPE] === result.counterUpdate.name\n            );\n            if (counterToUpdate) {\n              counterToUpdate.json[config.COLUMNS.COUNTERS.CURRENT_VALUE] = result.counterUpdate.value;\n              console.log(`  - обновлен счетчик ${result.counterUpdate.name}: ${result.counterUpdate.value}`);\n            }\n          }\n        }\n        regNumber = regNumbersByScenario.get(scenarioKey);\n        } else if (format) {\n        const individualKey = `${id}_${scenario}_${documentType}_individual`;\n        \n        if (isUnderlayVersion) {\n          // Подложка берет уже сгенерированный номер основного документа\n          regNumber = regNumbersByScenario.get(individualKey) || \"\";\n          console.log(`  - подложка использует номер основного документа: \"${regNumber}\"`);\n        } else {\n          // Основной документ генерирует новый номер\n          console.log(`  - индивидуальный номер`);\n          const result = generateRegNumber(documentType, countersData);\n          console.log(`  - сгенерирован номер: ${result.regNumber}`);\n          regNumber = result.regNumber;\n          \n          // Сохраняем номер для подложки\n          regNumbersByScenario.set(individualKey, regNumber);\n          \n          if (result.counterUpdate) {\n            counterUpdates.set(result.counterUpdate.name, result.counterUpdate.value);\n            \n            const counterToUpdate = countersData.find(c => \n              c.json[config.COLUMNS.COUNTERS.COUNTER_TYPE] === result.counterUpdate.name\n            );\n            if (counterToUpdate) {\n              counterToUpdate.json[config.COLUMNS.COUNTERS.CURRENT_VALUE] = result.counterUpdate.value;\n              console.log(`  - обновлен счетчик ${result.counterUpdate.name}: ${result.counterUpdate.value}`);\n            }\n          }\n        }\n      } else {\n        console.log(`  - format не найден в REG_NUMBER_FORMATS`);\n      }\n  } else if (regVariable && !isNewDocument) {\n    console.log(`  - документ существует, номер не генерируется`);\n  } else {\n    console.log(`  - regVariable пустая, номер не генерируется`);\n  }\n\n    const period = calculateStudyPeriod(reg);\n    const fio = splitFIO(reg[config.COLUMNS.FULL_NAME] || \"\");\n    const fioDeclined = splitFIO(reg[config.COLUMNS.REGISTRY.FULL_NAME_DECLINED] || \"\");\n\n    const variables = {\n      \"<<ID>>\": id,\n      \"<<Фамилия>>\": fio.surname,\n      \"<<Имя>>\": fio.name,\n      \"<<Отчество>>\": fio.patronymic,\n      \"<<Фамилия в склонении>>\": fioDeclined.surname,\n      \"<<Имя в склонении>>\": fioDeclined.name,\n      \"<<Отчество в склонении>>\": fioDeclined.patronymic,\n      \"<<Программа>>\": reg[config.COLUMNS.REGISTRY.PROGRAM] || \"\",\n      \"<<Квалификация>>\": reg[config.COLUMNS.REGISTRY.QUALIFICATION] || \"\",\n      \"<<Специализация>>\": reg[config.COLUMNS.REGISTRY.SPECIALIZATION] || \"\",\n      \"<<Часов>>\": reg[config.COLUMNS.REGISTRY.HOURS] || \"\",\n      \"<<СНИЛС>>\": reg[config.COLUMNS.REGISTRY.SNILS] || \"\",\n      \"<<Город>>\": reg[config.COLUMNS.REGISTRY.CITY] || \"Москва\",\n      \"<<Компания>>\": reg[config.COLUMNS.REGISTRY.COMPANY] || \"-\",\n      \"<<Документ об образовании>>\": reg[config.COLUMNS.REGISTRY.EDUCATION_DOC] || \"\",\n      \"<<Дата>>\": period.dateFull,\n      \"<<Окончание обучения>>\": period.shortEnd,\n      \"<<от>>\": period.startDay,\n      \"<<м-от>>\": period.startMonth,\n      \"<<г-от>>\": period.startYear,\n      \"<<до>>\": period.endDay,\n      \"<<м-до>>\": period.endMonth,\n      \"<<г-до>>\": period.endYear,\n      \"<<г-о>>\": period.startYearShort,\n      \"<<г-д>>\": period.endYearShort\n    };\n\n    const format = config.REG_NUMBER_FORMATS[documentType];\n    if (format?.parentVariable) {\n      const scenarioKey = `${id}_${scenario}`;\n      const mainDocRegNumber = regNumbersByScenario.get(scenarioKey);\n      \n      if (mainDocRegNumber) {\n        variables[`<<${format.parentVariable}>>`] = mainDocRegNumber;\n        console.log(`  - добавлена переменная родительского документа: <<${format.parentVariable}>> = ${mainDocRegNumber}`);\n      } else {\n        console.warn(`  - родительский номер не найден для переменной <<${format.parentVariable}>>`);\n      }\n    }\n\n\n    if (regVariable && regNumber) {\n      variables[`<<${regVariable}>>`] = regNumber;\n    }\n\n    const existingDocument = existingLink && existingLink.trim() !== \"\" ? existingLink : null;\n\n    // Для версии с подложкой добавляем суффикс к targetName\n    const targetNameSuffix = isUnderlayVersion ? \" (подложка)\" : \"\";\n\n    tasks.push({\n      json: {\n        id,\n        rowNumber,\n        employee: employee || \"не указан\",\n        scenario,\n        documentType: docType,\n        templateId: tmpl[config.COLUMNS.TEMPLATES.TEMPLATE_LINK],\n        templateType: tmpl[config.COLUMNS.TEMPLATES.TYPE],\n        folderType,\n        underlay,\n        variables,\n        regNumber,\n        targetName: `${id}_${fullName}_${docType}`,//${targetNameSuffix}`,\n        existingDocument: existingDocument,\n        action: existingDocument ? \"update_document\" : \"create_document\"\n      }\n    });\n  };\n\n  // Создаем основной документ\n  createTask(documentType, template, false);\n\n  // Проверяем и создаем документ с подложкой\nconst underlayDocumentType = `${documentType} (подложка)`;\nconst underlayTemplateKey = `${scenario}|${underlayDocumentType}`;\nconst underlayTemplate = templatesByDoc.get(underlayTemplateKey);\n  \n  if (underlayTemplate) {\n    console.log(`Найден шаблон с подложкой: ${underlayDocumentType}`);\n    createTask(underlayDocumentType, underlayTemplate, true);\n  }\n});\n\nif (counterUpdates.size > 0) {\n  tasks.push({\n    json: {\n      action: \"update_counters\",\n      counters: Array.from(counterUpdates.entries()).map(([name, value]) => ({\n        name,\n        value\n      }))\n    }\n  });\n}\n\nconsole.log(`Подготовлено задач: ${tasks.length}`);\nconsole.log(`- Создать документов: ${tasks.filter(t => t.json.action === \"create_document\").length}`);\nconsole.log(`- Обновить документов: ${tasks.filter(t => t.json.action === \"update_document\").length}`);\nconsole.log(`- Обновить счетчиков: ${counterUpdates.size}`);\n\n// ===============================================\n//     ГРУППИРОВКА ПО ЗАЯВКАМ\n// ===============================================\n\n// Отделяем служебные задачи\nconst serviceTasks = tasks.filter(task => {\n  const data = task.json;\n  return data.action === \"update_counters\" || data.action === \"error\";\n});\n\n// Получаем только задачи создания документов\nconst documentTasks = tasks.filter(task => {\n  const data = task.json;\n  return data.action === \"create_document\" || data.action === \"update_document\";\n});\n\nconsole.log(`Группировка: ${documentTasks.length} документов, ${serviceTasks.length} служебных`);\n\n// Группируем по ID заявки\nconst requestGroups = new Map();\n\ndocumentTasks.forEach(task => {\n  const data = task.json;\n  const requestId = data.id;\n  \n  if (!requestGroups.has(requestId)) {\n    requestGroups.set(requestId, {\n      id: requestId,\n      employee: data.employee,\n      employee_folder: data.employee_folder,\n      scenario: data.scenario,\n      fullName: data.variables[\"<<Фамилия>>\"] + \" \" + data.variables[\"<<Имя>>\"] + \" \" + data.variables[\"<<Отчество>>\"],\n      regNumber: data.regNumber,\n      documents: [],\n      totalDocuments: 0,\n      createdCount: 0,\n      updatedCount: 0\n    });\n  }\n  \n  const group = requestGroups.get(requestId);\n  \n  // Добавляем документ в группу\n  group.documents.push({\n    rowNumber: data.rowNumber,\n    documentType: data.documentType,\n    templateId: data.templateId,\n    templateType: data.templateType,\n    folderType: data.folderType,\n    underlay: data.underlay,\n    variables: data.variables,\n    targetName: data.targetName,\n    existingDocument: data.existingDocument,\n    action: data.action\n  });\n  \n  // Увеличиваем счетчики\n  group.totalDocuments++;\n  if (data.action === \"create_document\") {\n    group.createdCount++;\n  } else if (data.action === \"update_document\") {\n    group.updatedCount++;\n  }\n});\n\n// Преобразуем группы в массив пакетов\nconst requestPackets = Array.from(requestGroups.values()).map(group => ({\n  json: {\n    requestId: group.id,\n    employee: group.employee,\n    employee_folder: group.employee_folder,\n    scenario: group.scenario,\n    fullName: group.fullName,\n    regNumber: group.regNumber,\n    \n    // Статистика пакета\n    summary: {\n      totalDocuments: group.totalDocuments,\n      toCreate: group.createdCount,\n      toUpdate: group.updatedCount\n    },\n    \n    // Список документов для генерации\n    documents: group.documents,\n    \n    // Метаданные\n    processingType: \"batch\",\n    createdAt: new Date().toISOString()\n  }\n}));\n\n// Объединяем пакеты и служебные задачи\nconst result = [...requestPackets, ...serviceTasks];\n\nconsole.log(`Результат группировки:`);\nconsole.log(`- Пакетов заявок: ${requestPackets.length}`);\nrequestPackets.forEach(packet => {\n  const data = packet.json;\n  console.log(`  ${data.requestId}: ${data.summary.totalDocuments} документов (${data.summary.toCreate} создать, ${data.summary.toUpdate} обновить)`);\n});\n\nreturn result;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2816,
+        -144
+      ],
+      "id": "87bb600b-61fa-4ab2-bae4-8de09a429c73",
+      "name": "dataForGenerating",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "fe60ea70-2b62-45f7-8843-8f6120938da0",
+              "leftValue": "={{ $json.requestId }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        3024,
+        -144
+      ],
+      "id": "a86921a7-63de-4cf9-9c5c-5778d696f529",
+      "name": "ID_documents_data",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $('ID_documents_data').all().map(item => item.json);\n\nconst allDocuments = input.flatMap(req =>\n  (req.documents || []).map(doc => ({\n    ...doc,\n    requestId: req.requestId\n  }))\n);\n\nreturn allDocuments.map(doc => ({ json: doc }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3264,
+        -144
+      ],
+      "id": "63e0f74b-18da-456c-b4f1-0666d02d83ba",
+      "name": "decomposeDocs",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ed1782db-2b73-4b46-acba-eab90f1a041e",
+              "leftValue": "={{ $json.documentType }}",
+              "rightValue": "(подложка)",
+              "operator": {
+                "type": "string",
+                "operation": "notContains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        3472,
+        -144
+      ],
+      "id": "ffaf9d0f-265b-4298-a069-ba412136f035",
+      "name": "Filter",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1STxoSpnXaoq4YS9AVBNjcMD7mw0qzPVeNVTgECHXDkY",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1825232161,
+          "mode": "list",
+          "cachedResultName": "Макеты документов",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1STxoSpnXaoq4YS9AVBNjcMD7mw0qzPVeNVTgECHXDkY/edit#gid=1825232161"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $json.rowNumber }}",
+            "Дата от(new)": "={{$('Filter').item.json.variables['<<от>>']}} {{$('Filter').item.json.variables['<<м-от>>']}} {{$('Filter').item.json.variables['<<г-от>>']}}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "СТАРТ",
+              "displayName": "СТАРТ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Фамилия Имя Отчество",
+              "displayName": "Фамилия Имя Отчество",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Сценарий",
+              "displayName": "Сценарий",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Документ",
+              "displayName": "Документ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Сотрудник",
+              "displayName": "Сотрудник",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Статус",
+              "displayName": "Статус",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Ссылка на док (без подложки)",
+              "displayName": "Ссылка на док (без подложки)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Ссылка на док (с подложкой)",
+              "displayName": "Ссылка на док (с подложкой)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Рег-номер",
+              "displayName": "Рег-номер",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Дата от",
+              "displayName": "Дата от",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Дата до",
+              "displayName": "Дата до",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Часов",
+              "displayName": "Часов",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Дата от(new)",
+              "displayName": "Дата от(new)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3680,
+        -144
+      ],
+      "id": "ee2d8200-ec52-4cae-88c9-de07046f2668",
+      "name": "Update row in sheet3",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/drive/v3/files",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDriveOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "'1MsZ2_juKaXR73GOHflXY3AJ7AwDTTI9J' in parents and trashed = false"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1760,
+        -480
+      ],
+      "id": "e43f05a1-0557-4445-bcb3-a8b7c536b2ec",
+      "name": "GetFolderFiles",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "jzAxR4XiEVWwbE9z",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Входные данные из предыдущего нода\nconst input = $(\"GetFolderFiles\").first().json;\n\n// Извлекаем массив файлов\nconst files = input.files;\n\n// Превращаем каждый файл в отдельный item\nreturn files.map(file => ({ json: file }));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1968,
+        -480
+      ],
+      "id": "976082d7-8088-463d-b278-1d76c64685ee",
+      "name": "splitFilesIDtoDelete"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.text.ru/post",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "text",
+              "value": "=Текст"
+            },
+            {
+              "name": "userkey",
+              "value": "126256d75d7019ae0f9094395be7865d"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1232,
+        -1168
+      ],
+      "id": "470d00b9-a15d-4d24-91c8-d054d6a77980",
+      "name": "SentTextToTextru1",
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.ftp",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        -160
+      ],
+      "id": "a8882eb9-47b6-43a4-826f-8e4cf7013c20",
+      "name": "FTP",
+      "credentials": {
+        "ftp": {
+          "id": "SDg3zqwqkMhCPN2u",
+          "name": "FTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1264,
+        -16
+      ],
+      "id": "10bcfe56-d646-4277-9f94-106a891cf012",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "url": "https://cloud.roistat.com/api/v1/project/health/indicator/list",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "project",
+              "value": "262475"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Api-key",
+              "value": "441d88311e7921aebe0e0cb762232250"
+            },
+            {
+              "name": "Content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1008,
+        -1264
+      ],
+      "id": "e2773f07-b558-4d3d-a346-af441b810d3c",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "documentURL": "1nVbVkVoasnRgOZ9rqlLJDc9eQWNht5P2iVdU1e3bKm4",
+        "simple": false
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        -336,
+        -1728
+      ],
+      "id": "d32bad98-00f9-47e1-a5bd-19a9b7c132ad",
+      "name": "Get a document3",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1024,
+        -1520
+      ],
+      "id": "3c2eb1fb-4ebd-49ea-b63b-ca943a17d30f",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "const content_data = $(\"Get a document3\").first().json.content.split(\"\\n\");\nconst new_mass = content_data.filter(item => item.includes(\"Выписка из Протокола\"));\nreturn {reg: new_mass[0].split('№')[1]}\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        -1376
+      ],
+      "id": "2f49fc53-d161-4c10-9fe4-79fd04a6b451",
+      "name": "Code in JavaScript7"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "filter": {},
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        752,
+        -1376
+      ],
+      "id": "fc755fc8-8330-461b-af0a-610036b352ab",
+      "name": "Search files and folders",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "jzAxR4XiEVWwbE9z",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://docs.googleapis.com/v1/documents/1aZ4RRAYFdb-xIIxixwuqp50AQiNMA_eKKBQoWcBAr64:batchUpdate",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDocsOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1696,
+        -1648
+      ],
+      "id": "08d4b653-3a0d-4efa-bb4b-cac3e838ce61",
+      "name": "HTTP Request2",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const doc = $input.first().json;\n\nconst content = doc.body.content;\nconst table = content\n  .find(el => el.table && el.table.columns === 9)?.table;\n\nif (!table) throw new Error(\"Таблица не найдена\");\n\nconst updates = [];\nfor (let i = table.tableRows.length - 1; i >= 1; i--) {\n  const cell = table.tableRows[i].tableCells[0];\n  const textRun = cell.content[0].paragraph.elements\n    .find(el => el.textRun && el.textRun.content !== \"\\n\");\n\n  const newText = String(i);\n\n  if (textRun) {\n    updates.push({\n      startIndex: textRun.startIndex,\n      endIndex: textRun.endIndex - 1, // убираем \\n из диапазона\n      text: newText,\n      hasContent: true\n    });\n  } else {\n    const insertIndex = cell.content[0].paragraph.elements[0].startIndex;\n    updates.push({\n      startIndex: insertIndex,\n      endIndex: null,\n      text: newText,\n      hasContent: false\n    });\n  }\n}\n\nconst requests = updates.flatMap(({ startIndex, endIndex, text, hasContent }) => {\n  const ops = [];\n  if (hasContent) {\n    ops.push({\n      deleteContentRange: {\n        range: { startIndex, endIndex }\n      }\n    });\n  }\n  ops.push({\n    insertText: {\n      location: { index: startIndex },\n      text\n    }\n  });\n  return ops;\n});\n\nreturn [{ json: { requests } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1488,
+        -1648
+      ],
+      "id": "3a642f48-ab2a-44f2-b960-82a721d27e64",
+      "name": "NumberingVypiska"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentURL": "1bR7EEUJ2Uxjq4eemobV7qEsXkOPhhqazKu8Yf2x8HXI",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "object": "tableRow",
+              "action": "delete",
+              "index": "={{ $json.tableIndex }}",
+              "rowIndex": "={{ $json.rowIndex }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        1648,
+        -1408
+      ],
+      "id": "21100e7d-129d-40ca-af84-1598cd05bc58",
+      "name": "Update a document",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function findRowInDoc(docContent, searchValue) {\n  let tableIndex = 0;\n  \n  for (const element of docContent) {\n    if (!element.table) continue;\n    \n    const table = element.table;\n    const rows = table.tableRows || [];\n    \n    for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {\n      const cells = rows[rowIndex].tableCells || [];\n      \n      if (cells.length < 2) continue;\n      \n      const secondCell = cells[1];\n      let cellText = \"\";\n      \n      for (const contentItem of secondCell.content || []) {\n        for (const el of contentItem.paragraph?.elements || []) {\n          cellText += el.textRun?.content || \"\";\n        }\n      }\n      \n      if (cellText.trim() === searchValue.trim()) {\n        return {\n          found: true,\n          tableIndex,\n          rowIndex,\n          tableStartIndex: element.startIndex // startIndex таблицы в документе\n        };\n      }\n    }\n    \n    tableIndex++;\n  }\n  \n  return { found: false };\n}\n\nconst docContent = $input.first().json.body.content;\nconst searchValue = \"Брюзгин Евгений Аркадьевич\";\n\nreturn [{ json: findRowInDoc(docContent, searchValue) }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        928,
+        -1488
+      ],
+      "id": "1ef790f2-b6ff-46a6-bf09-8c14983ffbe3",
+      "name": "Code in JavaScript8"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://docs.googleapis.com/v1/documents/1C9QJN_S67K01kjDzNFe1fALtIl-FsRoi-C2VFDyiF9k:batchUpdate",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDocsOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"requests\": [\n    {\n      \"deleteTableRow\": {\n        \"tableCellLocation\": {\n          \"tableStartLocation\": {\n            \"index\": {{ $json.tableStartIndex }}\n          },\n          \"rowIndex\": {{ $json.rowIndex }}\n        }\n      }\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1088,
+        -1488
+      ],
+      "id": "3ed30ec1-452b-4e7c-a353-c4da9767f957",
+      "name": "HTTP Request3",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Получаем входящие данные\nconst doc = $input.first().json;\n\n// Функция для поиска таблицы с 9 столбцами\nfunction findNineColumnTable(doc) {\n  const content = doc[0]?.body?.content || doc?.body?.content || [];\n  \n  for (const element of content) {\n    if (element.table && element.table.columns === 9) {\n      return element.table;\n    }\n  }\n  return null;\n}\n\nconst table = findNineColumnTable(doc);\n\nif (!table) {\n  return [{ json: { error: 'Таблица с 9 столбцами не найдена' } }];\n}\n\nconst rowCount = table.rows;\n\nif (rowCount <= 2) {\n  // Две строки и меньше — удалить весь документ\n  return [{ json: { delete: 'doc' } }];\n} else {\n  // Больше двух строк — удалить строку\n  return [{ json: { delete: 'stroke' } }];\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        912,
+        -1632
+      ],
+      "id": "81b4d18f-49a5-462f-8415-fe597a352a54",
+      "name": "CheckCountStrokes"
+    },
+    {
+      "parameters": {
+        "jsCode": "const doc = $input.first().json;\nconst content = doc.body.content;\n\nconst targetName = \"Бессараб Виталий Александрович\";\n\nconst table9 = content.find(el => el.table && el.table.columns === 9);\nif (!table9) throw new Error(\"Таблица с 9 колонками не найдена\");\n\nfor (const row of table9.table.tableRows) {\n  const cells = row.tableCells;\n  const nameText = cells[1]?.content\n    ?.flatMap(p => p.paragraph?.elements ?? [])\n    ?.map(e => e.textRun?.content ?? \"\")\n    ?.join(\"\")\n    ?.trim();\n\n  if (nameText === targetName) {\n     return [{ json: { insertIndex: cells[6].content[0].startIndex } }];;\n  }\n}\n\nthrow new Error(`ФИО \"${targetName}\" не найдено`);"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        -1600
+      ],
+      "id": "e351fa85-1ba2-4794-8f20-eb52fde4f171",
+      "name": "Code in JavaScript9"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://docs.googleapis.com/v1/documents/1jhKOXPMEggyvGGTwrfWIxGCTS-0-66bNXup_7pwgSKo:batchUpdate",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDocsOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"requests\": [\n    {\n      \"insertText\": {\n        \"location\": {\n          \"index\": {{ $json.insertIndex-1 }}\n        },\n        \"text\": \"1234567\"\n      }\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        688,
+        -1600
+      ],
+      "id": "0485bb18-3db5-45d2-bbb7-ac99aebd68d9",
+      "name": "HTTP Request4",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const filials = $(\"GetReviewData\").first().json['platforms'];\nreturn filials;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        304,
+        -1968
+      ],
+      "id": "a4587c0a-e01f-4a4a-816a-a9514dcce58d",
+      "name": "filials"
+    },
+    {
+      "parameters": {
+        "jsCode": "const reviews = $(\"GetReviewData\").first().json['reviews'];\nreturn reviews;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        496,
+        -1968
+      ],
+      "id": "af0de2f0-c756-41b3-bb05-12a156534133",
+      "name": "reviews"
+    },
+    {
+      "parameters": {
+        "jsCode": "const filials_dict = $('filials').first().json;\nconst reviews = $('reviews').all();\nconst result = [];\n\nfor (let review of reviews) {\n  result.push({\n    name: review.json.user.name,\n    rate: review.json.rate,\n    review_text: review.json.text,\n    review_date: new Date(review.json.date * 1000).toISOString().slice(0,10),\n    platform_name: filials_dict[review.json.platform].type,\n    filial_link: filials_dict[review.json.platform].link,\n    filial_name: filials_dict[review.json.platform].filials[0],\n  })\n}\n\nreturn result;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        704,
+        -1968
+      ],
+      "id": "55fc5ad0-ffa6-467d-bc4d-cc894bdb635c",
+      "name": "makeItems"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://panel.getloyalty.io/api/v1/monitoring/reviews",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "auth",
+              "value": "K8AFiZZPbpZNPXydfFXxZ50q0f2OglCX"
+            },
+            {
+              "name": "key",
+              "value": "fQDBQ5gKYn9v7mdSzilqe2ef8"
+            },
+            {
+              "name": "date_from",
+              "value": "2026-03-23"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        80,
+        -1968
+      ],
+      "id": "a86e3447-5e8a-43fd-9887-94ade026c241",
+      "name": "GetReviewData"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        912,
+        -1968
+      ],
+      "id": "f06eccc6-2f26-4ce5-80b1-9ef16ea0576f",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://docs.googleapis.com/v1/documents/1nVbVkVoasnRgOZ9rqlLJDc9eQWNht5P2iVdU1e3bKm4:batchUpdate",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDocsOAuth2Api",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "requests",
+              "value": "={{ $json.requests }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        96,
+        -1728
+      ],
+      "id": "87f11243-f273-457e-9ddf-5563115e68bc",
+      "name": "HTTP Request5",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const doc = $input.first().json;\nconst body = doc.body;\nconst documentId = doc.documentId;\n\nconst SCALE = 0.75;\nconst MIN_SIZE = 5;\n\nconst START_MARKER = 'Решением аттестационной комиссии';\nconst END_MARKER = 'Основание:';\n\nconst requests = [];\n\nfunction findMarkerIndex(content, marker) {\n  for (const element of content || []) {\n    if (element.table) {\n      for (const row of element.table.tableRows || []) {\n        for (const cell of row.tableCells || []) {\n          const result = findMarkerIndex(cell.content, marker);\n          if (result) return result;\n        }\n      }\n    }\n    if (element.paragraph) {\n      const fullText = element.paragraph.elements\n        .map(pe => pe.textRun?.content || '')\n        .join('');\n      \n      if (fullText.includes(marker)) {\n        const elements = element.paragraph.elements;\n        const lastEl = elements[elements.length - 1];\n        return {\n          startIndex: elements[0].startIndex,\n          endIndex: lastEl.endIndex\n        };\n      }\n    }\n  }\n  return null;\n}\n\nfunction processContent(content, rangeStart, rangeEnd) {\n  for (const element of content || []) {\n    if (element.table) {\n      for (const row of element.table.tableRows || []) {\n        for (const cell of row.tableCells || []) {\n          processContent(cell.content, rangeStart, rangeEnd);\n        }\n      }\n    }\n    if (element.paragraph) {\n      for (const pe of element.paragraph.elements || []) {\n        if (!pe.textRun) continue;\n        \n        const currentSize = pe.textRun.textStyle?.fontSize?.magnitude;\n        if (!currentSize) continue;\n        \n        // только элементы внутри диапазона\n        if (pe.startIndex >= rangeStart && pe.endIndex <= rangeEnd) {\n          const newSize = Math.max(Math.round(currentSize * SCALE), MIN_SIZE);\n          \n          requests.push({\n            updateTextStyle: {\n              range: {\n                startIndex: pe.startIndex,\n                endIndex: pe.endIndex\n              },\n              textStyle: {\n                fontSize: {\n                  magnitude: newSize,\n                  unit: 'PT'\n                }\n              },\n              fields: 'fontSize'\n            }\n          });\n        }\n      }\n    }\n  }\n}\n\nconst startEl = findMarkerIndex(body.content, START_MARKER);\nconst endEl = findMarkerIndex(body.content, END_MARKER);\n\nif (!startEl || !endEl) {\n  throw new Error('Маркеры не найдены в документе');\n}\n\nprocessContent(body.content, startEl.endIndex, endEl.startIndex);\n\nreturn [{\n  json: {\n    documentId,\n    requests\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -832,
+        -1808
+      ],
+      "id": "8fcdb6b0-fa04-43e3-a2c7-cb8cb6f8df6a",
+      "name": "OTV_SCALE"
+    },
+    {
+      "parameters": {
+        "jsCode": "const doc = $input.first().json;\nconst body = doc.body;\nconst documentId = doc.documentId;\n\nconst SCALE = 0.85;\nconst MIN_SIZE = 5;\nconst MIN_LENGTH = 160;\nconst MARKER = 'Протокол';\n\nconst requests = [];\n\nfunction getCellText(cellContent) {\n  let text = '';\n  for (const element of cellContent || []) {\n    if (element.table) {\n      for (const row of element.table.tableRows || []) {\n        for (const cell of row.tableCells || []) {\n          text += getCellText(cell.content);\n        }\n      }\n    }\n    if (element.paragraph) {\n      for (const pe of element.paragraph.elements || []) {\n        text += pe.textRun?.content || '';\n      }\n    }\n  }\n  return text;\n}\n\nfunction processCell(cellContent) {\n  let markerStartIndex = null;\n\n  for (const element of cellContent || []) {\n    if (element.paragraph) {\n      const fullText = element.paragraph.elements\n        .map(pe => pe.textRun?.content || '')\n        .join('');\n      if (fullText.includes(MARKER)) {\n        markerStartIndex = element.paragraph.elements[0].startIndex;\n        break;\n      }\n    }\n  }\n\n  if (markerStartIndex === null) return;\n\n  let rangeText = '';\n  for (const element of cellContent || []) {\n    if (element.paragraph) {\n      for (const pe of element.paragraph.elements || []) {\n        if (!pe.textRun) continue;\n        if (pe.endIndex <= markerStartIndex) {\n          rangeText += pe.textRun.content || '';\n        }\n      }\n    }\n  }\n\n  const textLength = rangeText.replace(/\\s/g, '').length;\n  if (textLength < MIN_LENGTH) return;\n\n  for (const element of cellContent || []) {\n    if (element.paragraph) {\n      for (const pe of element.paragraph.elements || []) {\n        if (!pe.textRun) continue;\n        const currentSize = pe.textRun.textStyle?.fontSize?.magnitude;\n        if (!currentSize) continue;\n        if (pe.endIndex <= markerStartIndex) {\n          const newSize = Math.max(Math.round(currentSize * SCALE), MIN_SIZE);\n          requests.push({\n            updateTextStyle: {\n              range: {\n                startIndex: pe.startIndex,\n                endIndex: pe.endIndex\n              },\n              textStyle: {\n                fontSize: { magnitude: newSize, unit: 'PT' }\n              },\n              fields: 'fontSize'\n            }\n          });\n        }\n      }\n    }\n  }\n}\n\nfunction traverseContent(content) {\n  for (const element of content || []) {\n    if (element.table) {\n      for (const row of element.table.tableRows || []) {\n        for (const cell of row.tableCells || []) {\n          const cellText = getCellText(cell.content);\n          if (cellText.includes(MARKER)) {\n            processCell(cell.content);\n          } else {\n            traverseContent(cell.content);\n          }\n        }\n      }\n    }\n  }\n}\n\ntraverseContent(body.content);\n\nif (requests.length === 0) {\n  return [{ json: { documentId, requests: [] } }];\n}\n\nreturn [{\n  json: {\n    documentId,\n    requests\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -128,
+        -1728
+      ],
+      "id": "a2481ddb-c1ab-4713-be67-b1ff28074f6c",
+      "name": "Code in JavaScript10"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{hello: \"world\"}]"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -336,
+        -1344
+      ],
+      "id": "49e2fbe8-8d38-4a42-8c47-58e0e596f6a8",
+      "name": "Code in JavaScript11"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{hello: \"world\"}]"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -336,
+        -1184
+      ],
+      "id": "67fbae9d-c1dc-4daf-a264-6c82f9cf70c2",
+      "name": "Code in JavaScript12"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "return [{hello:\"world\"}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -832,
+        -1520
+      ],
+      "id": "e9e152b0-69f0-462e-bd3f-2e2fecab40f6",
+      "name": "Code in JavaScript13"
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "config": {
+      "main": [
+        [
+          {
+            "node": "readTable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "readTable": {
+      "main": [
+        [
+          {
+            "node": "checkNewStroke",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "checkNewStroke": {
+      "main": [
+        []
+      ]
+    },
+    "filter": {
+      "main": [
+        [
+          {
+            "node": "areEmptyStrokes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a document": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Get a document",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get a document1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get a document2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a document1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript3": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript4": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript5": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript6": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a document2": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "readReestr": {
+      "main": [
+        [
+          {
+            "node": "readLayouts1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "readCounters": {
+      "main": [
+        [
+          {
+            "node": "readReestr",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "readTemplates": {
+      "main": [
+        [
+          {
+            "node": "readCounters",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "readLayouts1": {
+      "main": [
+        [
+          {
+            "node": "config2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "config2": {
+      "main": [
+        [
+          {
+            "node": "dataForGenerating",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "dataForGenerating": {
+      "main": [
+        [
+          {
+            "node": "ID_documents_data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ID_documents_data": {
+      "main": [
+        [
+          {
+            "node": "decomposeDocs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "decomposeDocs": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetFolderFiles": {
+      "main": [
+        [
+          {
+            "node": "splitFilesIDtoDelete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SentTextToTextru1": {
+      "main": [
+        []
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a document3": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "NumberingVypiska": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript8": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript9": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "filials": {
+      "main": [
+        [
+          {
+            "node": "reviews",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "reviews": {
+      "main": [
+        [
+          {
+            "node": "makeItems",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetReviewData": {
+      "main": [
+        [
+          {
+            "node": "filials",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "makeItems": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OTV_SCALE": {
+      "main": [
+        []
+      ]
+    },
+    "Code in JavaScript10": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript11": {
+      "main": [
+        []
+      ]
+    },
+    "Code in JavaScript12": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "hX15tKh83Gq3N9El",
+    "callerPolicy": "workflowsFromSameOwner",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "versionId": "f31d9168-b137-430e-8ae3-b52d01a1d4fc",
+  "activeVersionId": null,
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2025-09-04T06:58:53.773Z",
+      "createdAt": "2025-09-04T06:58:53.773Z",
+      "role": "workflow:owner",
+      "workflowId": "L2MFLBVRIYuaZ84O",
+      "projectId": "OC8FWCQSkQb0Erkk"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
