@@ -1,0 +1,140 @@
+{
+  "updatedAt": "2026-03-31T09:40:02.891Z",
+  "createdAt": "2026-03-27T12:29:10.722Z",
+  "id": "hX15tKh83Gq3N9El",
+  "name": "errors-handler",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -416,
+        16
+      ],
+      "id": "4b42eddf-8217-4d58-b58b-ed65476a5802",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "chatId": "-5230660630",
+        "text": "=Дата: {{$now.format('dd-MM-yyyy')}}\n\n❌ Ошибка в workflow {{ $json.workflow.name }} \n\n🔎 Произошла в ноде {{ $json.execution.lastNodeExecuted }}\n\n▶️ Посмотреть детальнее \n{{ $json.execution.url }}\n",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -224,
+        16
+      ],
+      "id": "a73ab9a7-fa09-4e93-bfaa-e65667fd5c7c",
+      "name": "Send a text message",
+      "webhookId": "f124b941-6600-4794-9289-a68e9accb09a",
+      "credentials": {
+        "telegramApi": {
+          "id": "nGoUrfYXGemRgfnO",
+          "name": "Платон"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "versionId": "c78fc13a-309f-4968-abef-187ebb954919",
+  "activeVersionId": "c78fc13a-309f-4968-abef-187ebb954919",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-03-27T12:29:10.722Z",
+      "createdAt": "2026-03-27T12:29:10.722Z",
+      "role": "workflow:owner",
+      "workflowId": "hX15tKh83Gq3N9El",
+      "projectId": "OC8FWCQSkQb0Erkk"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-03-30T05:11:54.904Z",
+    "createdAt": "2026-03-30T05:11:42.187Z",
+    "versionId": "c78fc13a-309f-4968-abef-187ebb954919",
+    "workflowId": "hX15tKh83Gq3N9El",
+    "nodes": [
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.errorTrigger",
+        "typeVersion": 1,
+        "position": [
+          -416,
+          16
+        ],
+        "id": "4b42eddf-8217-4d58-b58b-ed65476a5802",
+        "name": "Error Trigger"
+      },
+      {
+        "parameters": {
+          "chatId": "-5230660630",
+          "text": "=Дата: {{$now.format('dd-MM-yyyy')}}\n\n❌ Ошибка в workflow {{ $json.workflow.name }} \n\n🔎 Произошла в ноде {{ $json.execution.lastNodeExecuted }}\n\n▶️ Посмотреть детальнее \n{{ $json.execution.url }}\n",
+          "additionalFields": {
+            "appendAttribution": false
+          }
+        },
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          -224,
+          16
+        ],
+        "id": "a73ab9a7-fa09-4e93-bfaa-e65667fd5c7c",
+        "name": "Send a text message",
+        "webhookId": "f124b941-6600-4794-9289-a68e9accb09a",
+        "credentials": {
+          "telegramApi": {
+            "id": "nGoUrfYXGemRgfnO",
+            "name": "Платон"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Error Trigger": {
+        "main": [
+          [
+            {
+              "node": "Send a text message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Active User",
+    "name": "Version c78fc13a",
+    "description": "",
+    "autosaved": false
+  },
+  "tags": []
+}
