@@ -1,0 +1,2468 @@
+{
+  "updatedAt": "2026-03-31T09:53:29.994Z",
+  "createdAt": "2026-03-12T09:55:26.934Z",
+  "id": "qEjEz3ATzDQY0Y25",
+  "name": "autodoc-OT-add-loop",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "=ВЫПИСКА {{$json.data.key}} {{ $json.data.company.replace('\"','«').replace('\"','»')}} {{ $json.data.person.variables[\"<<Дата>>\"].replaceAll(\".\",\"-\") }}",
+        "returnAll": true,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $json.data.folder }}",
+            "mode": "id"
+          },
+          "whatToSearch": "files",
+          "fileTypes": [
+            "application/vnd.google-apps.document"
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -2112,
+        -96
+      ],
+      "id": "7f7cfac8-2e1d-40f8-8d59-9c07dbbe7dc1",
+      "name": "SearchExistingVyp",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "jzAxR4XiEVWwbE9z",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "f4ab7801-5bb7-442b-8b86-45df7443459d",
+              "leftValue": "={{ $json }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1776,
+        -96
+      ],
+      "id": "80c6e2b1-6057-4fc2-9c99-45de3157b23c",
+      "name": "IfVypExist"
+    },
+    {
+      "parameters": {
+        "operation": "copy",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('InputData').item.json.data.vyp_template }}",
+          "mode": "id"
+        },
+        "name": "=ВЫПИСКА {{ $('InputData').item.json.data.key}} {{ $('InputData').item.json.data.company.replace('\"','«').replace('\"','»')}} {{ $('InputData').item.json.data.person.variables[\"<<Дата>>\"].replaceAll(\".\",\"-\") }}",
+        "sameFolder": false,
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('InputData').item.json.data.folder }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -560,
+        -80
+      ],
+      "id": "2384bffd-93bf-4508-b8a0-9ef7bffeb696",
+      "name": "CopyNewVypTemplate",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "jzAxR4XiEVWwbE9z",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const config      = $('InputData').first().json.config\nconst countersData = $('readCounters').all() || [];\n \nconst CC = config.COLUMNS.COUNTERS;\n \nconst counterName = \"vypiska_ot_counter\";\nconst format      = Object.values(config.REG_NUMBER_FORMATS)\n  .find(f => f.counter_name === counterName);\n \nif (!format) {\n  throw new Error(`Формат для счётчика \"${counterName}\" не найден в конфиге`);\n}\n \nconst counter = countersData.find(c =>\n  c.json[CC.COUNTER_TYPE] === counterName\n);\n \nlet current = counter\n  ? (parseInt(counter.json[CC.CURRENT_VALUE]) || 0)\n  : 0;\n \ncurrent += 1;\n \nconst now   = new Date();\nconst month = String(now.getMonth() + 1).padStart(2, \"0\");\nconst yy    = String(now.getFullYear()).slice(-2);\n \nconst regNumber = format.format\n  .replace(\"{number}\", current)\n  .replace(\"{month}\",  month)\n  .replace(\"{yy}\",     yy)\n  .replace(\"{prefix}\", format.prefix || \"\");\n \nconsole.log(`🔢 Новый рег-номер выписки: ${regNumber} (счётчик: ${current})`);\n \nreturn [\n  {\n    json: {\n      regNumber,\n      counterName,\n      counterValue: current,\n      variable: `<<${format.variable}>>`\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -64,
+        -416
+      ],
+      "id": "9eb91edb-9249-44e9-a274-4ae2d82ab3a0",
+      "name": "GenerateNewRegNumberForVyp"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://docs.googleapis.com/v1/documents/{{ $('CopyNewVypTemplate').item.json.id }}:batchUpdate",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDocsOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"requests\": [\n    {\n      \"replaceAllText\": {\n        \"containsText\": {\n          \"text\": \"<<РегНомерВып>>\",\n          \"matchCase\": true\n        },\n        \"replaceText\": \"{{$('GenerateNewRegNumberForVyp').item.json.regNumber.replaceAll('\\\"', '\\'').replaceAll('\\n', ' ').replaceAll('\\r', ' ').replaceAll('\\t', ' ')}}\"\n      }\n  },\n  {\n      \"replaceAllText\": {\n        \"containsText\": {\n          \"text\": \"<<Программа>>\",\n          \"matchCase\": true\n        },\n        \"replaceText\": \"{{$('InputData').first().json.data.person.variables[\"<<Программа>>\"].replaceAll('\\\"', '\\'').replaceAll('\\n', ' ').replaceAll('\\r', ' ').replaceAll('\\t', ' ')}}\"\n      }\n  },\n  {\n      \"replaceAllText\": {\n        \"containsText\": {\n          \"text\": \"<<Часов>>\",\n          \"matchCase\": true\n        },\n        \"replaceText\": \"{{$('InputData').first().json.data.person.variables[\"<<Часов>>\"].replaceAll('\\\"', '\\'').replaceAll('\\n', ' ').replaceAll('\\r', ' ').replaceAll('\\t', ' ')}}\"\n      }\n   },\n    {\n        \"replaceAllText\": {\n          \"containsText\": {\n            \"text\": \"<<Шаблон группы>>\",\n            \"matchCase\": true\n          },\n          \"replaceText\": \"{{\n  $('InputData').first().json.data.person.variables[\"<<Шаблон группы>>\"]\n    && $('InputData').first().json.data.person.variables[\"<<Шаблон группы>>\"].trim()\n      ? ' ' + $('InputData').first().json.data.person.variables[\"<<Шаблон группы>>\"]\n          .replaceAll('\\\"', '\\'')\n          .replaceAll('\\n', ' ')\n          .replaceAll('\\r', ' ')\n          .replaceAll('\\t', ' ')\n        + ' '\n      : \"\"\n}}\"\n        }\n   },\n    {\n      \"replaceAllText\": {\n      \"containsText\": {\n        \"text\": \"<<ОкончаниеОбучения>>\",\n        \"matchCase\": true\n      },\n      \"replaceText\": \"{{$('InputData').first().json.data.person.variables[\"<<ОкончаниеОбучения>>\"].replaceAll('\\\"', '\\'').replaceAll('\\n', ' ').replaceAll('\\r', ' ').replaceAll('\\t', ' ')}}\"\n    }\n     },\n    {\n      \"replaceAllText\": {\n      \"containsText\": {\n        \"text\": \"<<г-до>>\",\n        \"matchCase\": true\n      },\n      \"replaceText\": \"{{$('InputData').first().json.data.person.variables[\"<<г-до>>\"].replaceAll('\\\"', '\\'').replaceAll('\\n', ' ').replaceAll('\\r', ' ').replaceAll('\\t', ' ')}}\"\n    }\n     }\n    \n  ]\n}\n",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 5,
+              "batchInterval": 10000
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        112,
+        -576
+      ],
+      "id": "716f2f90-23fe-46f8-b440-747a38b3c1a5",
+      "name": "UpdateBaseNewVypFields",
+      "retryOnFail": true,
+      "credentials": {
+        "googleApi": {
+          "id": "86ekhh3rUWlEgF4Y",
+          "name": "with.edtech@gmail.com"
+        },
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "14yQ49SqKiTlX5Ba02bb3bjLkVx7_q3XKpZhqagezbKY",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1701745430,
+          "mode": "list",
+          "cachedResultName": "Счетчики",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14yQ49SqKiTlX5Ba02bb3bjLkVx7_q3XKpZhqagezbKY/edit#gid=1701745430"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Тип счётчика": "={{ $json.counterName }}",
+            "Текущее значение": "={{ $json.counterValue }}"
+          },
+          "matchingColumns": [
+            "Тип счётчика"
+          ],
+          "schema": [
+            {
+              "id": "Тип счётчика",
+              "displayName": "Тип счётчика",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Текущее значение",
+              "displayName": "Текущее значение",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        112,
+        -416
+      ],
+      "id": "9ac4fac3-436a-4340-9f07-dc1ff2d8d4d7",
+      "name": "UpdateVypCounter",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "documentURL": "={{ $('CopyNewVypTemplate').item.json.id }}",
+        "simple": false
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        288,
+        -80
+      ],
+      "id": "70f1deb4-0f5e-4e98-a352-e6764b6e62be",
+      "name": "GetVypiskaWithNewStroke",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function findTableStartIndexByHashColumn(doc) {\n  const content = doc.body.content;\n\n  for (const block of content) {\n    if (!block.table) continue;\n\n    const rows = block.table.tableRows;\n    if (!rows || rows.length === 0) continue;\n\n    const firstRow = rows[0];\n    if (!firstRow.tableCells || firstRow.tableCells.length === 0) continue;\n\n    const firstCell = firstRow.tableCells[0];\n    const cellText = firstCell.content\n      ?.flatMap(p => p.paragraph?.elements ?? [])\n      ?.map(el => el.textRun?.content ?? \"\")\n      ?.join(\"\")\n      ?.trim();\n\n    if (cellText === \"№\") {\n      return [{ tableStartIndex: block.startIndex }];\n    }\n  }\n\n  return [{ tableStartIndex: null }];\n}\n\nreturn findTableStartIndexByHashColumn($input.first().json);"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -64,
+        -80
+      ],
+      "id": "8c4c8bf7-8b67-413c-86c2-22f47bb60666",
+      "name": "GetTableStartIndex"
+    },
+    {
+      "parameters": {
+        "jsCode": "function buildBatchRequests(doc, values) {\n  const content = doc.body.content;\n\n  for (const block of content) {\n    if (!block.table) continue;\n\n    const rows = block.table.tableRows;\n    if (!rows || rows.length === 0) continue;\n\n    const firstRow = rows[0];\n    if (!firstRow.tableCells || firstRow.tableCells.length === 0) continue;\n\n    const firstCell = firstRow.tableCells[0];\n    const cellText = firstCell.content\n      ?.flatMap(p => p.paragraph?.elements ?? [])\n      ?.map(el => el.textRun?.content ?? \"\")\n      ?.join(\"\")\n      ?.trim();\n\n    if (cellText !== \"№\") continue;\n\n    const newRow = rows[1];\n    if (!newRow?.tableCells) return [{ requests: null }];\n\n    // Собираем индексы и значения, затем разворачиваем для вставки с конца\n    const requests = [...newRow.tableCells]\n      .map((cell, i) => ({\n        index: cell.content?.[0]?.paragraph?.elements?.[0]?.startIndex ?? null,\n        value: values[i] ?? \"\"\n      }))\n      .filter(item => item.index !== null && item.value !== \"\")\n      .sort((a, b) => b.index - a.index) // с конца!\n      .map(item => ({\n        insertText: {\n          location: { index: item.index },\n          text: item.value\n        }\n      }));\n\n    return { requests };\n  }\n\n  return { requests: null };\n}\n\n\nconst person_data = $(\"InputData\").first().json.data.person;\nconst fio = `${person_data.fio.surname} ${person_data.fio.name} ${person_data.fio.patronymic}`;\nconst job_post = person_data.variables['<<Должность>>'];\nconst company = person_data.variables['<<Компания>>'];\nconst ud_reg_num = person_data.variables['<<РегНомерУд>>'];\nconst program_template = person_data.variables['<<Шаблон программы>>'];\nconst grp = $('InputData').first().json.data.key;\nconst OTV_ARRAY = [\"Б1\", \"Б2\", \"Б3 3-5\", \"Б3 3-1\", \"Б3 3-4\", \"Б3 3-3\", \"Б3 3-2\", \"Б3 3-6\", \"Б3 1-6\", \"ОТВ А\", \"А1\", \"А2\", \"А3 1-6\"];\n\n// Значения для 9 ячеек по порядку столбцов\nconst values = [\n  \"0\",                    // №\n  fio, // Ф.И.О.\n  job_post,            // Должность\n  company,    // Место работы\n  \"удовлетворительно\",    // Результат\n  ud_reg_num,              // № удостоверения\n  \"\",                     // Рег. номер\n  OTV_ARRAY.includes(grp) ? program_template : 'Первичная',     // Решение\n  \"\"                      // Подпись\n];\n\n\nreturn buildBatchRequests($input.first().json, values);"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        -80
+      ],
+      "id": "a976fd80-137b-49e6-8318-43fd4718da77",
+      "name": "PrepareBodyToAppend"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://docs.googleapis.com/v1/documents/{{ $('CopyNewVypTemplate').item.json.id }}:batchUpdate",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDocsOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"requests\": {{JSON.stringify($('PrepareBodyToAppend').first().json.requests)}}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        672,
+        -80
+      ],
+      "id": "6aeb4825-31bb-47cb-8c1d-04f14b41f6eb",
+      "name": "AppendDataToTable",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentURL": "={{ $('CopyNewVypTemplate').item.json.id }}",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "object": "tableRow",
+              "action": "insert",
+              "index": "={{ $json.tableStartIndex }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        112,
+        -80
+      ],
+      "id": "5689b602-23fa-41ac-a5d1-51efc401df5c",
+      "name": "AppendEmptyStroke",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "documentURL": "={{ $('CopyNewVypTemplate').item.json.id }}",
+        "simple": false
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        -80
+      ],
+      "id": "67868e01-b700-4030-9768-865082bfec08",
+      "name": "GetClearVpypiska",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const doc = $input.first().json;\n\nconst content = doc.body.content;\nconst table = content\n  .find(el => el.table && el.table.columns === 9)?.table;\n\nif (!table) throw new Error(\"Таблица не найдена\");\n\nconst updates = [];\nfor (let i = table.tableRows.length - 1; i >= 1; i--) {\n  const cell = table.tableRows[i].tableCells[0];\n  const textRun = cell.content[0].paragraph.elements\n    .find(el => el.textRun && el.textRun.content !== \"\\n\");\n\n  const newText = String(i);\n\n  if (textRun) {\n    updates.push({\n      startIndex: textRun.startIndex,\n      endIndex: textRun.endIndex - 1, // убираем \\n из диапазона\n      text: newText,\n      hasContent: true\n    });\n  } else {\n    const insertIndex = cell.content[0].paragraph.elements[0].startIndex;\n    updates.push({\n      startIndex: insertIndex,\n      endIndex: null,\n      text: newText,\n      hasContent: false\n    });\n  }\n}\n\nconst requests = updates.flatMap(({ startIndex, endIndex, text, hasContent }) => {\n  const ops = [];\n  if (hasContent) {\n    ops.push({\n      deleteContentRange: {\n        range: { startIndex, endIndex }\n      }\n    });\n  }\n  ops.push({\n    insertText: {\n      location: { index: startIndex },\n      text\n    }\n  });\n  return ops;\n});\n\nreturn [{ json: { requests } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -64,
+        112
+      ],
+      "id": "25f5db62-53b4-4558-90cb-ad726243ce5b",
+      "name": "NumberingVypiska"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "documentURL": "={{ $('CopyNewVypTemplate').item.json.id }}",
+        "simple": false
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        112
+      ],
+      "id": "562ced52-dc76-447d-b36b-06c84560e508",
+      "name": "GetFilledVyp",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://docs.googleapis.com/v1/documents/{{ $('CopyNewVypTemplate').item.json.id }}:batchUpdate",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDocsOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        112,
+        112
+      ],
+      "id": "4e088f2e-0d39-4e87-ba9e-dcf163121135",
+      "name": "CountingVypStrokesToOrder",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "lzHQzaZr2hW86iTZ",
+          "mode": "list",
+          "cachedResultName": "RegNumbersOT",
+          "cachedResultUrl": "/projects/OC8FWCQSkQb0Erkk/datatables/lzHQzaZr2hW86iTZ"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "RegNumsVyp": "={{ $json.RegNumsVyp ? `${$json.RegNumsVyp},${$('InputData').first().json.data.key}:${$('GenerateNewRegNumberForVyp').item.json.regNumber}` : `${$('InputData').first().json.data.key}:${$('GenerateNewRegNumberForVyp').item.json.regNumber}`}}",
+            "RegNumsUD": "={{ $json.RegNumsUD ? `${$json.RegNumsUD}, ${$('InputData').item.json.data.key}:${$('InputData').first().json.data.person.variables[\"<<РегНомерУд>>\"]}` :  `${$('InputData').item.json.data.key}:${$('InputData').first().json.data.person.variables[\"<<РегНомерУд>>\"]}`}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "RegNumsUD",
+              "displayName": "RegNumsUD",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "RegNumsVyp",
+              "displayName": "RegNumsVyp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        288,
+        -240
+      ],
+      "id": "59226261-f1db-4c99-99a5-cfe24a9c5573",
+      "name": "UpdateRegNums1"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "lzHQzaZr2hW86iTZ",
+          "mode": "list",
+          "cachedResultName": "RegNumbersOT",
+          "cachedResultUrl": "/projects/OC8FWCQSkQb0Erkk/datatables/lzHQzaZr2hW86iTZ"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "ID",
+              "keyValue": "={{ $('InputData').first().json.data.request_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        112,
+        -240
+      ],
+      "id": "fdd13c86-1ac4-40d3-9aa3-73ada70f231c",
+      "name": "GetCurrentNums1"
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "data",
+              "type": "object"
+            },
+            {
+              "name": "config",
+              "type": "object"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -2304,
+        -96
+      ],
+      "id": "ef19f2ec-96fb-4008-b64e-afff87e57d63",
+      "name": "InputData"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "14yQ49SqKiTlX5Ba02bb3bjLkVx7_q3XKpZhqagezbKY",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1701745430,
+          "mode": "list",
+          "cachedResultName": "Счетчики",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14yQ49SqKiTlX5Ba02bb3bjLkVx7_q3XKpZhqagezbKY/edit#gid=1701745430"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -240,
+        -416
+      ],
+      "id": "15f07702-3772-4f03-843f-99c811f50b5c",
+      "name": "readCounters",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const content_data = $(\"GetExistingVyp\").first().json.content.split(\"\\n\");\nconst new_mass = content_data.filter(item => item.includes(\"Выписка из Протокола\"));\nreturn {reg: new_mass[0].split('№')[1].trim()}\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1040,
+        -640
+      ],
+      "id": "604b6d17-fd27-466b-b696-d289b2c5b633",
+      "name": "getRegNumFromExistVyp"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "lzHQzaZr2hW86iTZ",
+          "mode": "list",
+          "cachedResultName": "RegNumbersOT",
+          "cachedResultUrl": "/projects/OC8FWCQSkQb0Erkk/datatables/lzHQzaZr2hW86iTZ"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "RegNumsVyp": "={{ $json.RegNumsVyp ? `${$json.RegNumsVyp},${$('InputData').first().json.data.key}:${$('getRegNumFromExistVyp').item.json.reg}`: `${$('InputData').first().json.data.key}:${$('getRegNumFromExistVyp').item.json.reg}` }}",
+            "RegNumsUD": "={{ $json.RegNumsUD ? `${$json.RegNumsUD}, ${$('InputData').item.json.data.key}:${$('InputData').first().json.data.person.variables[\"<<РегНомерУд>>\"]}` :  `${$('InputData').item.json.data.key}:${$('InputData').first().json.data.person.variables[\"<<РегНомерУд>>\"]}`}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "RegNumsUD",
+              "displayName": "RegNumsUD",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "RegNumsVyp",
+              "displayName": "RegNumsVyp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -688,
+        -640
+      ],
+      "id": "701c3c93-2fea-42f7-93f3-eb0d5d23b3bd",
+      "name": "UpdateRegNums"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "lzHQzaZr2hW86iTZ",
+          "mode": "list",
+          "cachedResultName": "RegNumbersOT",
+          "cachedResultUrl": "/projects/OC8FWCQSkQb0Erkk/datatables/lzHQzaZr2hW86iTZ"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "ID",
+              "keyValue": "={{ $('InputData').first().json.data.request_id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -864,
+        -640
+      ],
+      "id": "08996ec5-c91f-46d7-ad1f-13ed3f7587d7",
+      "name": "GetCurrentNums"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "documentURL": "={{ $('IfVypExist').item.json.id }}",
+        "simple": false
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        -688,
+        -832
+      ],
+      "id": "1878f79a-028d-45a1-9101-525cb0783001",
+      "name": "GetVypiskaWithNewStroke1",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function findTableStartIndexByHashColumn(doc) {\n  const content = doc.body.content;\n\n  for (const block of content) {\n    if (!block.table) continue;\n\n    const rows = block.table.tableRows;\n    if (!rows || rows.length === 0) continue;\n\n    const firstRow = rows[0];\n    if (!firstRow.tableCells || firstRow.tableCells.length === 0) continue;\n\n    const firstCell = firstRow.tableCells[0];\n    const cellText = firstCell.content\n      ?.flatMap(p => p.paragraph?.elements ?? [])\n      ?.map(el => el.textRun?.content ?? \"\")\n      ?.join(\"\")\n      ?.trim();\n\n    if (cellText === \"№\") {\n      return [{ tableStartIndex: block.startIndex }];\n    }\n  }\n\n  return [{ tableStartIndex: null }];\n}\n\nreturn findTableStartIndexByHashColumn($input.first().json);"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1056,
+        -832
+      ],
+      "id": "df201fdd-f83e-4ae4-86ae-8a2fb3554309",
+      "name": "GetTableStartIndex1"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "function buildBatchRequests(doc, values) {\n  const content = doc.body.content;\n\n  for (const block of content) {\n    if (!block.table) continue;\n\n    const rows = block.table.tableRows;\n    if (!rows || rows.length === 0) continue;\n\n    const firstRow = rows[0];\n    if (!firstRow.tableCells || firstRow.tableCells.length === 0) continue;\n\n    const firstCell = firstRow.tableCells[0];\n    const cellText = firstCell.content\n      ?.flatMap(p => p.paragraph?.elements ?? [])\n      ?.map(el => el.textRun?.content ?? \"\")\n      ?.join(\"\")\n      ?.trim();\n\n    if (cellText !== \"№\") continue;\n\n    const newRow = rows[1];\n    if (!newRow?.tableCells) return [{ requests: null }];\n\n    // Собираем индексы и значения, затем разворачиваем для вставки с конца\n    const requests = [...newRow.tableCells]\n      .map((cell, i) => ({\n        index: cell.content?.[0]?.paragraph?.elements?.[0]?.startIndex ?? null,\n        value: values[i] ?? \"\"\n      }))\n      .filter(item => item.index !== null && item.value !== \"\")\n      .sort((a, b) => b.index - a.index) // с конца!\n      .map(item => ({\n        insertText: {\n          location: { index: item.index },\n          text: item.value\n        }\n      }));\n\n    return { requests };\n  }\n\n  return { requests: null };\n}\n\n\nconst person_data = $(\"InputData\").first().json.data.person;\nconst fio = `${person_data.fio.surname} ${person_data.fio.name} ${person_data.fio.patronymic}`;\nconst job_post = person_data.variables['<<Должность>>'];\nconst company = person_data.variables['<<Компания>>'];\nconst ud_reg_num = person_data.variables['<<РегНомерУд>>'];\nconst program_template = person_data.variables['<<Шаблон программы>>'];\nconst grp = $('InputData').first().json.data.key;\nconst OTV_ARRAY = [\"Б1\", \"Б2\", \"Б3 3-5\", \"Б3 3-1\", \"Б3 3-4\", \"Б3 3-3\", \"Б3 3-2\", \"Б3 3-6\", \"Б3 1-6\", \"ОТВ А\", \"А1\", \"А2\", \"А3 1-6\"];\n\n// Значения для 9 ячеек по порядку столбцов\nconst values = [\n  \"0\",                    // №\n  fio, // Ф.И.О.\n  job_post,            // Должность\n  company,    // Место работы\n  \"удовлетворительно\",    // Результат\n  ud_reg_num,              // № удостоверения\n  \"\",                     // Рег. номер\n  OTV_ARRAY.includes(grp) ? program_template : 'Первичная',     // Решение\n  \"\"                      // Подпись\n];\n\n\nreturn buildBatchRequests($input.item.json, values);"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -496,
+        -832
+      ],
+      "id": "6dd38bc7-5889-4eab-b57d-69d9fe3a01ba",
+      "name": "PrepareBodyToAppend1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://docs.googleapis.com/v1/documents/{{ $('IfVypExist').item.json.id }}:batchUpdate",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDocsOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"requests\": {{JSON.stringify($('PrepareBodyToAppend1').first().json.requests)}}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -304,
+        -832
+      ],
+      "id": "754c59fa-4fd1-4289-b3f7-4cd717f624de",
+      "name": "AppendDataToTable1",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentURL": "={{ $('IfVypExist').item.json.id }}",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "object": "tableRow",
+              "action": "insert",
+              "index": "={{ $json.tableStartIndex }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        -880,
+        -832
+      ],
+      "id": "bbc7d801-f283-4df6-8c42-e242c9fa1b39",
+      "name": "AppendEmptyStroke1",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "documentURL": "={{ $json.id }}",
+        "simple": false
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        -1232,
+        -832
+      ],
+      "id": "95d3679d-cfe5-45f1-95c2-118b8d405209",
+      "name": "GetExistingVyp2",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const doc = $input.first().json;\n\nconst content = doc.body.content;\nconst table = content\n  .find(el => el.table && el.table.columns === 9)?.table;\n\nif (!table) throw new Error(\"Таблица не найдена\");\n\nconst updates = [];\nfor (let i = table.tableRows.length - 1; i >= 1; i--) {\n  const cell = table.tableRows[i].tableCells[0];\n  const textRun = cell.content[0].paragraph.elements\n    .find(el => el.textRun && el.textRun.content !== \"\\n\");\n\n  const newText = String(i);\n\n  if (textRun) {\n    updates.push({\n      startIndex: textRun.startIndex,\n      endIndex: textRun.endIndex - 1, // убираем \\n из диапазона\n      text: newText,\n      hasContent: true\n    });\n  } else {\n    const insertIndex = cell.content[0].paragraph.elements[0].startIndex;\n    updates.push({\n      startIndex: insertIndex,\n      endIndex: null,\n      text: newText,\n      hasContent: false\n    });\n  }\n}\n\nconst requests = updates.flatMap(({ startIndex, endIndex, text, hasContent }) => {\n  const ops = [];\n  if (hasContent) {\n    ops.push({\n      deleteContentRange: {\n        range: { startIndex, endIndex }\n      }\n    });\n  }\n  ops.push({\n    insertText: {\n      location: { index: startIndex },\n      text\n    }\n  });\n  return ops;\n});\n\nreturn [{ json: { requests } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -864,
+        -400
+      ],
+      "id": "ede47f7a-d34d-471b-a73e-9a22dcd64de1",
+      "name": "NumberingVypiska1"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "documentURL": "={{ $json.id }}",
+        "simple": false
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        -1040,
+        -400
+      ],
+      "id": "273aecc9-9416-498a-a214-bfde091ad96b",
+      "name": "GetFilledVyp1",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://docs.googleapis.com/v1/documents/{{ $('IfVypExist').item.json.id }}:batchUpdate",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDocsOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -688,
+        -400
+      ],
+      "id": "477333cd-306c-4d77-bd6a-4368fd314971",
+      "name": "CountingVypStrokesToOrder1",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const searchData = $('SearchExistingVyp').all();\nconst personData = $('InputData').first();\nconst searchKey = `ВЫПИСКА ${personData.json.data.key} ${personData.json.data.company.replace('\"','«').replace('\"','»')} ${personData.json.data.person.variables[\"<<Дата>>\"].replaceAll(\".\",\"-\")}`;\n\nlet rs;\n\nfor (let searchResult of searchData) {\n  if (searchResult.json.name.includes(searchKey)) {\n    rs = [searchResult];\n  }\n};\n\nif (rs) {\n  return rs; \n} else {\n  return [{}]\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1936,
+        -96
+      ],
+      "id": "4e497e17-1f1b-44a7-b8eb-9545dadd41e3",
+      "name": "FindDirectEntry"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "documentURL": "={{ $json.id }}"
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        -1232,
+        -640
+      ],
+      "id": "b4ec2873-867b-4f88-8311-073d41dfeec8",
+      "name": "GetExistingVyp",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "SearchExistingVyp": {
+      "main": [
+        [
+          {
+            "node": "FindDirectEntry",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IfVypExist": {
+      "main": [
+        [
+          {
+            "node": "GetExistingVyp2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GetFilledVyp1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GetExistingVyp",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "CopyNewVypTemplate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CopyNewVypTemplate": {
+      "main": [
+        [
+          {
+            "node": "GetClearVpypiska",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GetFilledVyp",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "readCounters",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GenerateNewRegNumberForVyp": {
+      "main": [
+        [
+          {
+            "node": "UpdateBaseNewVypFields",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "UpdateVypCounter",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GetCurrentNums1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetVypiskaWithNewStroke": {
+      "main": [
+        [
+          {
+            "node": "PrepareBodyToAppend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetTableStartIndex": {
+      "main": [
+        [
+          {
+            "node": "AppendEmptyStroke",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PrepareBodyToAppend": {
+      "main": [
+        [
+          {
+            "node": "AppendDataToTable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AppendEmptyStroke": {
+      "main": [
+        [
+          {
+            "node": "GetVypiskaWithNewStroke",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetClearVpypiska": {
+      "main": [
+        [
+          {
+            "node": "GetTableStartIndex",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "NumberingVypiska": {
+      "main": [
+        [
+          {
+            "node": "CountingVypStrokesToOrder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetFilledVyp": {
+      "main": [
+        [
+          {
+            "node": "NumberingVypiska",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetCurrentNums1": {
+      "main": [
+        [
+          {
+            "node": "UpdateRegNums1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "InputData": {
+      "main": [
+        [
+          {
+            "node": "SearchExistingVyp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "readCounters": {
+      "main": [
+        [
+          {
+            "node": "GenerateNewRegNumberForVyp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "getRegNumFromExistVyp": {
+      "main": [
+        [
+          {
+            "node": "GetCurrentNums",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetCurrentNums": {
+      "main": [
+        [
+          {
+            "node": "UpdateRegNums",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetVypiskaWithNewStroke1": {
+      "main": [
+        [
+          {
+            "node": "PrepareBodyToAppend1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetTableStartIndex1": {
+      "main": [
+        [
+          {
+            "node": "AppendEmptyStroke1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PrepareBodyToAppend1": {
+      "main": [
+        [
+          {
+            "node": "AppendDataToTable1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AppendEmptyStroke1": {
+      "main": [
+        [
+          {
+            "node": "GetVypiskaWithNewStroke1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetExistingVyp2": {
+      "main": [
+        [
+          {
+            "node": "GetTableStartIndex1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "NumberingVypiska1": {
+      "main": [
+        [
+          {
+            "node": "CountingVypStrokesToOrder1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetFilledVyp1": {
+      "main": [
+        [
+          {
+            "node": "NumberingVypiska1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FindDirectEntry": {
+      "main": [
+        [
+          {
+            "node": "IfVypExist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetExistingVyp": {
+      "main": [
+        [
+          {
+            "node": "getRegNumFromExistVyp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "versionId": "3f7e40f3-e564-4bc7-a819-44906b3325e2",
+  "activeVersionId": "3f7e40f3-e564-4bc7-a819-44906b3325e2",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-03-12T09:55:26.934Z",
+      "createdAt": "2026-03-12T09:55:26.934Z",
+      "role": "workflow:owner",
+      "workflowId": "qEjEz3ATzDQY0Y25",
+      "projectId": "OC8FWCQSkQb0Erkk"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-03-27T07:37:40.516Z",
+    "createdAt": "2026-03-27T07:37:31.152Z",
+    "versionId": "3f7e40f3-e564-4bc7-a819-44906b3325e2",
+    "workflowId": "qEjEz3ATzDQY0Y25",
+    "nodes": [
+      {
+        "parameters": {
+          "resource": "fileFolder",
+          "queryString": "=ВЫПИСКА {{$json.data.key}} {{ $json.data.company.replace('\"','«').replace('\"','»')}} {{ $json.data.person.variables[\"<<Дата>>\"].replaceAll(\".\",\"-\") }}",
+          "returnAll": true,
+          "filter": {
+            "folderId": {
+              "__rl": true,
+              "value": "={{ $json.data.folder }}",
+              "mode": "id"
+            },
+            "whatToSearch": "files",
+            "fileTypes": [
+              "application/vnd.google-apps.document"
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleDrive",
+        "typeVersion": 3,
+        "position": [
+          -2112,
+          -96
+        ],
+        "id": "7f7cfac8-2e1d-40f8-8d59-9c07dbbe7dc1",
+        "name": "SearchExistingVyp",
+        "alwaysOutputData": true,
+        "credentials": {
+          "googleDriveOAuth2Api": {
+            "id": "jzAxR4XiEVWwbE9z",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "f4ab7801-5bb7-442b-8b86-45df7443459d",
+                "leftValue": "={{ $json }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "object",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -1776,
+          -96
+        ],
+        "id": "80c6e2b1-6057-4fc2-9c99-45de3157b23c",
+        "name": "IfVypExist"
+      },
+      {
+        "parameters": {
+          "operation": "copy",
+          "fileId": {
+            "__rl": true,
+            "value": "={{ $('InputData').item.json.data.vyp_template }}",
+            "mode": "id"
+          },
+          "name": "=ВЫПИСКА {{ $('InputData').item.json.data.key}} {{ $('InputData').item.json.data.company.replace('\"','«').replace('\"','»')}} {{ $('InputData').item.json.data.person.variables[\"<<Дата>>\"].replaceAll(\".\",\"-\") }}",
+          "sameFolder": false,
+          "driveId": {
+            "__rl": true,
+            "mode": "list",
+            "value": "My Drive"
+          },
+          "folderId": {
+            "__rl": true,
+            "value": "={{ $('InputData').item.json.data.folder }}",
+            "mode": "id"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleDrive",
+        "typeVersion": 3,
+        "position": [
+          -560,
+          -80
+        ],
+        "id": "2384bffd-93bf-4508-b8a0-9ef7bffeb696",
+        "name": "CopyNewVypTemplate",
+        "credentials": {
+          "googleDriveOAuth2Api": {
+            "id": "jzAxR4XiEVWwbE9z",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const config      = $('InputData').first().json.config\nconst countersData = $('readCounters').all() || [];\n \nconst CC = config.COLUMNS.COUNTERS;\n \nconst counterName = \"vypiska_ot_counter\";\nconst format      = Object.values(config.REG_NUMBER_FORMATS)\n  .find(f => f.counter_name === counterName);\n \nif (!format) {\n  throw new Error(`Формат для счётчика \"${counterName}\" не найден в конфиге`);\n}\n \nconst counter = countersData.find(c =>\n  c.json[CC.COUNTER_TYPE] === counterName\n);\n \nlet current = counter\n  ? (parseInt(counter.json[CC.CURRENT_VALUE]) || 0)\n  : 0;\n \ncurrent += 1;\n \nconst now   = new Date();\nconst month = String(now.getMonth() + 1).padStart(2, \"0\");\nconst yy    = String(now.getFullYear()).slice(-2);\n \nconst regNumber = format.format\n  .replace(\"{number}\", current)\n  .replace(\"{month}\",  month)\n  .replace(\"{yy}\",     yy)\n  .replace(\"{prefix}\", format.prefix || \"\");\n \nconsole.log(`🔢 Новый рег-номер выписки: ${regNumber} (счётчик: ${current})`);\n \nreturn [\n  {\n    json: {\n      regNumber,\n      counterName,\n      counterValue: current,\n      variable: `<<${format.variable}>>`\n    }\n  }\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -64,
+          -416
+        ],
+        "id": "9eb91edb-9249-44e9-a274-4ae2d82ab3a0",
+        "name": "GenerateNewRegNumberForVyp"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://docs.googleapis.com/v1/documents/{{ $('CopyNewVypTemplate').item.json.id }}:batchUpdate",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "googleDocsOAuth2Api",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"requests\": [\n    {\n      \"replaceAllText\": {\n        \"containsText\": {\n          \"text\": \"<<РегНомерВып>>\",\n          \"matchCase\": true\n        },\n        \"replaceText\": \"{{$('GenerateNewRegNumberForVyp').item.json.regNumber.replaceAll('\\\"', '\\'').replaceAll('\\n', ' ').replaceAll('\\r', ' ').replaceAll('\\t', ' ')}}\"\n      }\n  },\n  {\n      \"replaceAllText\": {\n        \"containsText\": {\n          \"text\": \"<<Программа>>\",\n          \"matchCase\": true\n        },\n        \"replaceText\": \"{{$('InputData').first().json.data.person.variables[\"<<Программа>>\"].replaceAll('\\\"', '\\'').replaceAll('\\n', ' ').replaceAll('\\r', ' ').replaceAll('\\t', ' ')}}\"\n      }\n  },\n  {\n      \"replaceAllText\": {\n        \"containsText\": {\n          \"text\": \"<<Часов>>\",\n          \"matchCase\": true\n        },\n        \"replaceText\": \"{{$('InputData').first().json.data.person.variables[\"<<Часов>>\"].replaceAll('\\\"', '\\'').replaceAll('\\n', ' ').replaceAll('\\r', ' ').replaceAll('\\t', ' ')}}\"\n      }\n   },\n    {\n        \"replaceAllText\": {\n          \"containsText\": {\n            \"text\": \"<<Шаблон группы>>\",\n            \"matchCase\": true\n          },\n          \"replaceText\": \"{{\n  $('InputData').first().json.data.person.variables[\"<<Шаблон группы>>\"]\n    && $('InputData').first().json.data.person.variables[\"<<Шаблон группы>>\"].trim()\n      ? ' ' + $('InputData').first().json.data.person.variables[\"<<Шаблон группы>>\"]\n          .replaceAll('\\\"', '\\'')\n          .replaceAll('\\n', ' ')\n          .replaceAll('\\r', ' ')\n          .replaceAll('\\t', ' ')\n        + ' '\n      : \"\"\n}}\"\n        }\n   },\n    {\n      \"replaceAllText\": {\n      \"containsText\": {\n        \"text\": \"<<ОкончаниеОбучения>>\",\n        \"matchCase\": true\n      },\n      \"replaceText\": \"{{$('InputData').first().json.data.person.variables[\"<<ОкончаниеОбучения>>\"].replaceAll('\\\"', '\\'').replaceAll('\\n', ' ').replaceAll('\\r', ' ').replaceAll('\\t', ' ')}}\"\n    }\n     },\n    {\n      \"replaceAllText\": {\n      \"containsText\": {\n        \"text\": \"<<г-до>>\",\n        \"matchCase\": true\n      },\n      \"replaceText\": \"{{$('InputData').first().json.data.person.variables[\"<<г-до>>\"].replaceAll('\\\"', '\\'').replaceAll('\\n', ' ').replaceAll('\\r', ' ').replaceAll('\\t', ' ')}}\"\n    }\n     }\n    \n  ]\n}\n",
+          "options": {
+            "batching": {
+              "batch": {
+                "batchSize": 5,
+                "batchInterval": 10000
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          112,
+          -576
+        ],
+        "id": "716f2f90-23fe-46f8-b440-747a38b3c1a5",
+        "name": "UpdateBaseNewVypFields",
+        "retryOnFail": true,
+        "credentials": {
+          "googleApi": {
+            "id": "86ekhh3rUWlEgF4Y",
+            "name": "with.edtech@gmail.com"
+          },
+          "googleDocsOAuth2Api": {
+            "id": "5aALK5qPqcCIdTaQ",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "documentId": {
+            "__rl": true,
+            "value": "14yQ49SqKiTlX5Ba02bb3bjLkVx7_q3XKpZhqagezbKY",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 1701745430,
+            "mode": "list",
+            "cachedResultName": "Счетчики",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14yQ49SqKiTlX5Ba02bb3bjLkVx7_q3XKpZhqagezbKY/edit#gid=1701745430"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "Тип счётчика": "={{ $json.counterName }}",
+              "Текущее значение": "={{ $json.counterValue }}"
+            },
+            "matchingColumns": [
+              "Тип счётчика"
+            ],
+            "schema": [
+              {
+                "id": "Тип счётчика",
+                "displayName": "Тип счётчика",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Текущее значение",
+                "displayName": "Текущее значение",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "row_number",
+                "displayName": "row_number",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "readOnly": true,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          112,
+          -416
+        ],
+        "id": "9ac4fac3-436a-4340-9f07-dc1ff2d8d4d7",
+        "name": "UpdateVypCounter",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "Xpp4ndWQ84MtD53m",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "documentURL": "={{ $('CopyNewVypTemplate').item.json.id }}",
+          "simple": false
+        },
+        "type": "n8n-nodes-base.googleDocs",
+        "typeVersion": 2,
+        "position": [
+          288,
+          -80
+        ],
+        "id": "70f1deb4-0f5e-4e98-a352-e6764b6e62be",
+        "name": "GetVypiskaWithNewStroke",
+        "credentials": {
+          "googleDocsOAuth2Api": {
+            "id": "5aALK5qPqcCIdTaQ",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "function findTableStartIndexByHashColumn(doc) {\n  const content = doc.body.content;\n\n  for (const block of content) {\n    if (!block.table) continue;\n\n    const rows = block.table.tableRows;\n    if (!rows || rows.length === 0) continue;\n\n    const firstRow = rows[0];\n    if (!firstRow.tableCells || firstRow.tableCells.length === 0) continue;\n\n    const firstCell = firstRow.tableCells[0];\n    const cellText = firstCell.content\n      ?.flatMap(p => p.paragraph?.elements ?? [])\n      ?.map(el => el.textRun?.content ?? \"\")\n      ?.join(\"\")\n      ?.trim();\n\n    if (cellText === \"№\") {\n      return [{ tableStartIndex: block.startIndex }];\n    }\n  }\n\n  return [{ tableStartIndex: null }];\n}\n\nreturn findTableStartIndexByHashColumn($input.first().json);"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -64,
+          -80
+        ],
+        "id": "8c4c8bf7-8b67-413c-86c2-22f47bb60666",
+        "name": "GetTableStartIndex"
+      },
+      {
+        "parameters": {
+          "jsCode": "function buildBatchRequests(doc, values) {\n  const content = doc.body.content;\n\n  for (const block of content) {\n    if (!block.table) continue;\n\n    const rows = block.table.tableRows;\n    if (!rows || rows.length === 0) continue;\n\n    const firstRow = rows[0];\n    if (!firstRow.tableCells || firstRow.tableCells.length === 0) continue;\n\n    const firstCell = firstRow.tableCells[0];\n    const cellText = firstCell.content\n      ?.flatMap(p => p.paragraph?.elements ?? [])\n      ?.map(el => el.textRun?.content ?? \"\")\n      ?.join(\"\")\n      ?.trim();\n\n    if (cellText !== \"№\") continue;\n\n    const newRow = rows[1];\n    if (!newRow?.tableCells) return [{ requests: null }];\n\n    // Собираем индексы и значения, затем разворачиваем для вставки с конца\n    const requests = [...newRow.tableCells]\n      .map((cell, i) => ({\n        index: cell.content?.[0]?.paragraph?.elements?.[0]?.startIndex ?? null,\n        value: values[i] ?? \"\"\n      }))\n      .filter(item => item.index !== null && item.value !== \"\")\n      .sort((a, b) => b.index - a.index) // с конца!\n      .map(item => ({\n        insertText: {\n          location: { index: item.index },\n          text: item.value\n        }\n      }));\n\n    return { requests };\n  }\n\n  return { requests: null };\n}\n\n\nconst person_data = $(\"InputData\").first().json.data.person;\nconst fio = `${person_data.fio.surname} ${person_data.fio.name} ${person_data.fio.patronymic}`;\nconst job_post = person_data.variables['<<Должность>>'];\nconst company = person_data.variables['<<Компания>>'];\nconst ud_reg_num = person_data.variables['<<РегНомерУд>>'];\nconst program_template = person_data.variables['<<Шаблон программы>>'];\nconst grp = $('InputData').first().json.data.key;\nconst OTV_ARRAY = [\"Б1\", \"Б2\", \"Б3 3-5\", \"Б3 3-1\", \"Б3 3-4\", \"Б3 3-3\", \"Б3 3-2\", \"Б3 3-6\", \"Б3 1-6\", \"ОТВ А\", \"А1\", \"А2\", \"А3 1-6\"];\n\n// Значения для 9 ячеек по порядку столбцов\nconst values = [\n  \"0\",                    // №\n  fio, // Ф.И.О.\n  job_post,            // Должность\n  company,    // Место работы\n  \"удовлетворительно\",    // Результат\n  ud_reg_num,              // № удостоверения\n  \"\",                     // Рег. номер\n  OTV_ARRAY.includes(grp) ? program_template : 'Первичная',     // Решение\n  \"\"                      // Подпись\n];\n\n\nreturn buildBatchRequests($input.first().json, values);"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          480,
+          -80
+        ],
+        "id": "a976fd80-137b-49e6-8318-43fd4718da77",
+        "name": "PrepareBodyToAppend"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://docs.googleapis.com/v1/documents/{{ $('CopyNewVypTemplate').item.json.id }}:batchUpdate",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "googleDocsOAuth2Api",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"requests\": {{JSON.stringify($('PrepareBodyToAppend').first().json.requests)}}\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          672,
+          -80
+        ],
+        "id": "6aeb4825-31bb-47cb-8c1d-04f14b41f6eb",
+        "name": "AppendDataToTable",
+        "credentials": {
+          "googleDocsOAuth2Api": {
+            "id": "5aALK5qPqcCIdTaQ",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "documentURL": "={{ $('CopyNewVypTemplate').item.json.id }}",
+          "actionsUi": {
+            "actionFields": [
+              {
+                "object": "tableRow",
+                "action": "insert",
+                "index": "={{ $json.tableStartIndex }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.googleDocs",
+        "typeVersion": 2,
+        "position": [
+          112,
+          -80
+        ],
+        "id": "5689b602-23fa-41ac-a5d1-51efc401df5c",
+        "name": "AppendEmptyStroke",
+        "credentials": {
+          "googleDocsOAuth2Api": {
+            "id": "5aALK5qPqcCIdTaQ",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "documentURL": "={{ $('CopyNewVypTemplate').item.json.id }}",
+          "simple": false
+        },
+        "type": "n8n-nodes-base.googleDocs",
+        "typeVersion": 2,
+        "position": [
+          -240,
+          -80
+        ],
+        "id": "67868e01-b700-4030-9768-865082bfec08",
+        "name": "GetClearVpypiska",
+        "credentials": {
+          "googleDocsOAuth2Api": {
+            "id": "5aALK5qPqcCIdTaQ",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const doc = $input.first().json;\n\nconst content = doc.body.content;\nconst table = content\n  .find(el => el.table && el.table.columns === 9)?.table;\n\nif (!table) throw new Error(\"Таблица не найдена\");\n\nconst updates = [];\nfor (let i = table.tableRows.length - 1; i >= 1; i--) {\n  const cell = table.tableRows[i].tableCells[0];\n  const textRun = cell.content[0].paragraph.elements\n    .find(el => el.textRun && el.textRun.content !== \"\\n\");\n\n  const newText = String(i);\n\n  if (textRun) {\n    updates.push({\n      startIndex: textRun.startIndex,\n      endIndex: textRun.endIndex - 1, // убираем \\n из диапазона\n      text: newText,\n      hasContent: true\n    });\n  } else {\n    const insertIndex = cell.content[0].paragraph.elements[0].startIndex;\n    updates.push({\n      startIndex: insertIndex,\n      endIndex: null,\n      text: newText,\n      hasContent: false\n    });\n  }\n}\n\nconst requests = updates.flatMap(({ startIndex, endIndex, text, hasContent }) => {\n  const ops = [];\n  if (hasContent) {\n    ops.push({\n      deleteContentRange: {\n        range: { startIndex, endIndex }\n      }\n    });\n  }\n  ops.push({\n    insertText: {\n      location: { index: startIndex },\n      text\n    }\n  });\n  return ops;\n});\n\nreturn [{ json: { requests } }];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -64,
+          112
+        ],
+        "id": "25f5db62-53b4-4558-90cb-ad726243ce5b",
+        "name": "NumberingVypiska"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "documentURL": "={{ $('CopyNewVypTemplate').item.json.id }}",
+          "simple": false
+        },
+        "type": "n8n-nodes-base.googleDocs",
+        "typeVersion": 2,
+        "position": [
+          -240,
+          112
+        ],
+        "id": "562ced52-dc76-447d-b36b-06c84560e508",
+        "name": "GetFilledVyp",
+        "credentials": {
+          "googleDocsOAuth2Api": {
+            "id": "5aALK5qPqcCIdTaQ",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://docs.googleapis.com/v1/documents/{{ $('CopyNewVypTemplate').item.json.id }}:batchUpdate",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "googleDocsOAuth2Api",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ JSON.stringify($json) }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          112,
+          112
+        ],
+        "id": "4e088f2e-0d39-4e87-ba9e-dcf163121135",
+        "name": "CountingVypStrokesToOrder",
+        "credentials": {
+          "googleDocsOAuth2Api": {
+            "id": "5aALK5qPqcCIdTaQ",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "dataTableId": {
+            "__rl": true,
+            "value": "lzHQzaZr2hW86iTZ",
+            "mode": "list",
+            "cachedResultName": "RegNumbersOT",
+            "cachedResultUrl": "/projects/OC8FWCQSkQb0Erkk/datatables/lzHQzaZr2hW86iTZ"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyValue": "={{ $json.id }}"
+              }
+            ]
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "RegNumsVyp": "={{ $json.RegNumsVyp ? `${$json.RegNumsVyp},${$('InputData').first().json.data.key}:${$('GenerateNewRegNumberForVyp').item.json.regNumber}` : `${$('InputData').first().json.data.key}:${$('GenerateNewRegNumberForVyp').item.json.regNumber}`}}",
+              "RegNumsUD": "={{ $json.RegNumsUD ? `${$json.RegNumsUD}, ${$('InputData').item.json.data.key}:${$('InputData').first().json.data.person.variables[\"<<РегНомерУд>>\"]}` :  `${$('InputData').item.json.data.key}:${$('InputData').first().json.data.person.variables[\"<<РегНомерУд>>\"]}`}}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "ID",
+                "displayName": "ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "RegNumsUD",
+                "displayName": "RegNumsUD",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "RegNumsVyp",
+                "displayName": "RegNumsVyp",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          288,
+          -240
+        ],
+        "id": "59226261-f1db-4c99-99a5-cfe24a9c5573",
+        "name": "UpdateRegNums1"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "lzHQzaZr2hW86iTZ",
+            "mode": "list",
+            "cachedResultName": "RegNumbersOT",
+            "cachedResultUrl": "/projects/OC8FWCQSkQb0Erkk/datatables/lzHQzaZr2hW86iTZ"
+          },
+          "matchType": "allConditions",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "ID",
+                "keyValue": "={{ $('InputData').first().json.data.request_id }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          112,
+          -240
+        ],
+        "id": "fdd13c86-1ac4-40d3-9aa3-73ada70f231c",
+        "name": "GetCurrentNums1"
+      },
+      {
+        "parameters": {
+          "workflowInputs": {
+            "values": [
+              {
+                "name": "data",
+                "type": "object"
+              },
+              {
+                "name": "config",
+                "type": "object"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -2304,
+          -96
+        ],
+        "id": "ef19f2ec-96fb-4008-b64e-afff87e57d63",
+        "name": "InputData"
+      },
+      {
+        "parameters": {
+          "documentId": {
+            "__rl": true,
+            "value": "14yQ49SqKiTlX5Ba02bb3bjLkVx7_q3XKpZhqagezbKY",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 1701745430,
+            "mode": "list",
+            "cachedResultName": "Счетчики",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14yQ49SqKiTlX5Ba02bb3bjLkVx7_q3XKpZhqagezbKY/edit#gid=1701745430"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          -240,
+          -416
+        ],
+        "id": "15f07702-3772-4f03-843f-99c811f50b5c",
+        "name": "readCounters",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "Xpp4ndWQ84MtD53m",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const content_data = $(\"GetExistingVyp\").first().json.content.split(\"\\n\");\nconst new_mass = content_data.filter(item => item.includes(\"Выписка из Протокола\"));\nreturn {reg: new_mass[0].split('№')[1].trim()}\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -1040,
+          -640
+        ],
+        "id": "604b6d17-fd27-466b-b696-d289b2c5b633",
+        "name": "getRegNumFromExistVyp"
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "dataTableId": {
+            "__rl": true,
+            "value": "lzHQzaZr2hW86iTZ",
+            "mode": "list",
+            "cachedResultName": "RegNumbersOT",
+            "cachedResultUrl": "/projects/OC8FWCQSkQb0Erkk/datatables/lzHQzaZr2hW86iTZ"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyValue": "={{ $json.id }}"
+              }
+            ]
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "RegNumsVyp": "={{ $json.RegNumsVyp ? `${$json.RegNumsVyp},${$('InputData').first().json.data.key}:${$('getRegNumFromExistVyp').item.json.reg}`: `${$('InputData').first().json.data.key}:${$('getRegNumFromExistVyp').item.json.reg}` }}",
+              "RegNumsUD": "={{ $json.RegNumsUD ? `${$json.RegNumsUD}, ${$('InputData').item.json.data.key}:${$('InputData').first().json.data.person.variables[\"<<РегНомерУд>>\"]}` :  `${$('InputData').item.json.data.key}:${$('InputData').first().json.data.person.variables[\"<<РегНомерУд>>\"]}`}}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "ID",
+                "displayName": "ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": true
+              },
+              {
+                "id": "RegNumsUD",
+                "displayName": "RegNumsUD",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "RegNumsVyp",
+                "displayName": "RegNumsVyp",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          -688,
+          -640
+        ],
+        "id": "701c3c93-2fea-42f7-93f3-eb0d5d23b3bd",
+        "name": "UpdateRegNums"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "lzHQzaZr2hW86iTZ",
+            "mode": "list",
+            "cachedResultName": "RegNumbersOT",
+            "cachedResultUrl": "/projects/OC8FWCQSkQb0Erkk/datatables/lzHQzaZr2hW86iTZ"
+          },
+          "matchType": "allConditions",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "ID",
+                "keyValue": "={{ $('InputData').first().json.data.request_id }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          -864,
+          -640
+        ],
+        "id": "08996ec5-c91f-46d7-ad1f-13ed3f7587d7",
+        "name": "GetCurrentNums"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "documentURL": "={{ $('IfVypExist').item.json.id }}",
+          "simple": false
+        },
+        "type": "n8n-nodes-base.googleDocs",
+        "typeVersion": 2,
+        "position": [
+          -688,
+          -832
+        ],
+        "id": "1878f79a-028d-45a1-9101-525cb0783001",
+        "name": "GetVypiskaWithNewStroke1",
+        "credentials": {
+          "googleDocsOAuth2Api": {
+            "id": "5aALK5qPqcCIdTaQ",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "function findTableStartIndexByHashColumn(doc) {\n  const content = doc.body.content;\n\n  for (const block of content) {\n    if (!block.table) continue;\n\n    const rows = block.table.tableRows;\n    if (!rows || rows.length === 0) continue;\n\n    const firstRow = rows[0];\n    if (!firstRow.tableCells || firstRow.tableCells.length === 0) continue;\n\n    const firstCell = firstRow.tableCells[0];\n    const cellText = firstCell.content\n      ?.flatMap(p => p.paragraph?.elements ?? [])\n      ?.map(el => el.textRun?.content ?? \"\")\n      ?.join(\"\")\n      ?.trim();\n\n    if (cellText === \"№\") {\n      return [{ tableStartIndex: block.startIndex }];\n    }\n  }\n\n  return [{ tableStartIndex: null }];\n}\n\nreturn findTableStartIndexByHashColumn($input.first().json);"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -1056,
+          -832
+        ],
+        "id": "df201fdd-f83e-4ae4-86ae-8a2fb3554309",
+        "name": "GetTableStartIndex1"
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "function buildBatchRequests(doc, values) {\n  const content = doc.body.content;\n\n  for (const block of content) {\n    if (!block.table) continue;\n\n    const rows = block.table.tableRows;\n    if (!rows || rows.length === 0) continue;\n\n    const firstRow = rows[0];\n    if (!firstRow.tableCells || firstRow.tableCells.length === 0) continue;\n\n    const firstCell = firstRow.tableCells[0];\n    const cellText = firstCell.content\n      ?.flatMap(p => p.paragraph?.elements ?? [])\n      ?.map(el => el.textRun?.content ?? \"\")\n      ?.join(\"\")\n      ?.trim();\n\n    if (cellText !== \"№\") continue;\n\n    const newRow = rows[1];\n    if (!newRow?.tableCells) return [{ requests: null }];\n\n    // Собираем индексы и значения, затем разворачиваем для вставки с конца\n    const requests = [...newRow.tableCells]\n      .map((cell, i) => ({\n        index: cell.content?.[0]?.paragraph?.elements?.[0]?.startIndex ?? null,\n        value: values[i] ?? \"\"\n      }))\n      .filter(item => item.index !== null && item.value !== \"\")\n      .sort((a, b) => b.index - a.index) // с конца!\n      .map(item => ({\n        insertText: {\n          location: { index: item.index },\n          text: item.value\n        }\n      }));\n\n    return { requests };\n  }\n\n  return { requests: null };\n}\n\n\nconst person_data = $(\"InputData\").first().json.data.person;\nconst fio = `${person_data.fio.surname} ${person_data.fio.name} ${person_data.fio.patronymic}`;\nconst job_post = person_data.variables['<<Должность>>'];\nconst company = person_data.variables['<<Компания>>'];\nconst ud_reg_num = person_data.variables['<<РегНомерУд>>'];\nconst program_template = person_data.variables['<<Шаблон программы>>'];\nconst grp = $('InputData').first().json.data.key;\nconst OTV_ARRAY = [\"Б1\", \"Б2\", \"Б3 3-5\", \"Б3 3-1\", \"Б3 3-4\", \"Б3 3-3\", \"Б3 3-2\", \"Б3 3-6\", \"Б3 1-6\", \"ОТВ А\", \"А1\", \"А2\", \"А3 1-6\"];\n\n// Значения для 9 ячеек по порядку столбцов\nconst values = [\n  \"0\",                    // №\n  fio, // Ф.И.О.\n  job_post,            // Должность\n  company,    // Место работы\n  \"удовлетворительно\",    // Результат\n  ud_reg_num,              // № удостоверения\n  \"\",                     // Рег. номер\n  OTV_ARRAY.includes(grp) ? program_template : 'Первичная',     // Решение\n  \"\"                      // Подпись\n];\n\n\nreturn buildBatchRequests($input.item.json, values);"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -496,
+          -832
+        ],
+        "id": "6dd38bc7-5889-4eab-b57d-69d9fe3a01ba",
+        "name": "PrepareBodyToAppend1"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://docs.googleapis.com/v1/documents/{{ $('IfVypExist').item.json.id }}:batchUpdate",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "googleDocsOAuth2Api",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"requests\": {{JSON.stringify($('PrepareBodyToAppend1').first().json.requests)}}\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -304,
+          -832
+        ],
+        "id": "754c59fa-4fd1-4289-b3f7-4cd717f624de",
+        "name": "AppendDataToTable1",
+        "credentials": {
+          "googleDocsOAuth2Api": {
+            "id": "5aALK5qPqcCIdTaQ",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "documentURL": "={{ $('IfVypExist').item.json.id }}",
+          "actionsUi": {
+            "actionFields": [
+              {
+                "object": "tableRow",
+                "action": "insert",
+                "index": "={{ $json.tableStartIndex }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.googleDocs",
+        "typeVersion": 2,
+        "position": [
+          -880,
+          -832
+        ],
+        "id": "bbc7d801-f283-4df6-8c42-e242c9fa1b39",
+        "name": "AppendEmptyStroke1",
+        "credentials": {
+          "googleDocsOAuth2Api": {
+            "id": "5aALK5qPqcCIdTaQ",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "documentURL": "={{ $json.id }}",
+          "simple": false
+        },
+        "type": "n8n-nodes-base.googleDocs",
+        "typeVersion": 2,
+        "position": [
+          -1232,
+          -832
+        ],
+        "id": "95d3679d-cfe5-45f1-95c2-118b8d405209",
+        "name": "GetExistingVyp2",
+        "credentials": {
+          "googleDocsOAuth2Api": {
+            "id": "5aALK5qPqcCIdTaQ",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const doc = $input.first().json;\n\nconst content = doc.body.content;\nconst table = content\n  .find(el => el.table && el.table.columns === 9)?.table;\n\nif (!table) throw new Error(\"Таблица не найдена\");\n\nconst updates = [];\nfor (let i = table.tableRows.length - 1; i >= 1; i--) {\n  const cell = table.tableRows[i].tableCells[0];\n  const textRun = cell.content[0].paragraph.elements\n    .find(el => el.textRun && el.textRun.content !== \"\\n\");\n\n  const newText = String(i);\n\n  if (textRun) {\n    updates.push({\n      startIndex: textRun.startIndex,\n      endIndex: textRun.endIndex - 1, // убираем \\n из диапазона\n      text: newText,\n      hasContent: true\n    });\n  } else {\n    const insertIndex = cell.content[0].paragraph.elements[0].startIndex;\n    updates.push({\n      startIndex: insertIndex,\n      endIndex: null,\n      text: newText,\n      hasContent: false\n    });\n  }\n}\n\nconst requests = updates.flatMap(({ startIndex, endIndex, text, hasContent }) => {\n  const ops = [];\n  if (hasContent) {\n    ops.push({\n      deleteContentRange: {\n        range: { startIndex, endIndex }\n      }\n    });\n  }\n  ops.push({\n    insertText: {\n      location: { index: startIndex },\n      text\n    }\n  });\n  return ops;\n});\n\nreturn [{ json: { requests } }];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -864,
+          -400
+        ],
+        "id": "ede47f7a-d34d-471b-a73e-9a22dcd64de1",
+        "name": "NumberingVypiska1"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "documentURL": "={{ $json.id }}",
+          "simple": false
+        },
+        "type": "n8n-nodes-base.googleDocs",
+        "typeVersion": 2,
+        "position": [
+          -1040,
+          -400
+        ],
+        "id": "273aecc9-9416-498a-a214-bfde091ad96b",
+        "name": "GetFilledVyp1",
+        "credentials": {
+          "googleDocsOAuth2Api": {
+            "id": "5aALK5qPqcCIdTaQ",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://docs.googleapis.com/v1/documents/{{ $('IfVypExist').item.json.id }}:batchUpdate",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "googleDocsOAuth2Api",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ JSON.stringify($json) }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          -688,
+          -400
+        ],
+        "id": "477333cd-306c-4d77-bd6a-4368fd314971",
+        "name": "CountingVypStrokesToOrder1",
+        "credentials": {
+          "googleDocsOAuth2Api": {
+            "id": "5aALK5qPqcCIdTaQ",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const searchData = $('SearchExistingVyp').all();\nconst personData = $('InputData').first();\nconst searchKey = `ВЫПИСКА ${personData.json.data.key} ${personData.json.data.company.replace('\"','«').replace('\"','»')} ${personData.json.data.person.variables[\"<<Дата>>\"].replaceAll(\".\",\"-\")}`;\n\nlet rs;\n\nfor (let searchResult of searchData) {\n  if (searchResult.json.name.includes(searchKey)) {\n    rs = [searchResult];\n  }\n};\n\nif (rs) {\n  return rs; \n} else {\n  return [{}]\n}"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -1936,
+          -96
+        ],
+        "id": "4e497e17-1f1b-44a7-b8eb-9545dadd41e3",
+        "name": "FindDirectEntry"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "documentURL": "={{ $json.id }}"
+        },
+        "type": "n8n-nodes-base.googleDocs",
+        "typeVersion": 2,
+        "position": [
+          -1232,
+          -640
+        ],
+        "id": "b4ec2873-867b-4f88-8311-073d41dfeec8",
+        "name": "GetExistingVyp",
+        "credentials": {
+          "googleDocsOAuth2Api": {
+            "id": "5aALK5qPqcCIdTaQ",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "SearchExistingVyp": {
+        "main": [
+          [
+            {
+              "node": "FindDirectEntry",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "IfVypExist": {
+        "main": [
+          [
+            {
+              "node": "GetExistingVyp2",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "GetFilledVyp1",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "GetExistingVyp",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "CopyNewVypTemplate",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CopyNewVypTemplate": {
+        "main": [
+          [
+            {
+              "node": "GetClearVpypiska",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "GetFilledVyp",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "readCounters",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GenerateNewRegNumberForVyp": {
+        "main": [
+          [
+            {
+              "node": "UpdateBaseNewVypFields",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "UpdateVypCounter",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "GetCurrentNums1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GetVypiskaWithNewStroke": {
+        "main": [
+          [
+            {
+              "node": "PrepareBodyToAppend",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GetTableStartIndex": {
+        "main": [
+          [
+            {
+              "node": "AppendEmptyStroke",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "PrepareBodyToAppend": {
+        "main": [
+          [
+            {
+              "node": "AppendDataToTable",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AppendEmptyStroke": {
+        "main": [
+          [
+            {
+              "node": "GetVypiskaWithNewStroke",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GetClearVpypiska": {
+        "main": [
+          [
+            {
+              "node": "GetTableStartIndex",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "NumberingVypiska": {
+        "main": [
+          [
+            {
+              "node": "CountingVypStrokesToOrder",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GetFilledVyp": {
+        "main": [
+          [
+            {
+              "node": "NumberingVypiska",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GetCurrentNums1": {
+        "main": [
+          [
+            {
+              "node": "UpdateRegNums1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "InputData": {
+        "main": [
+          [
+            {
+              "node": "SearchExistingVyp",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "readCounters": {
+        "main": [
+          [
+            {
+              "node": "GenerateNewRegNumberForVyp",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "getRegNumFromExistVyp": {
+        "main": [
+          [
+            {
+              "node": "GetCurrentNums",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GetCurrentNums": {
+        "main": [
+          [
+            {
+              "node": "UpdateRegNums",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GetVypiskaWithNewStroke1": {
+        "main": [
+          [
+            {
+              "node": "PrepareBodyToAppend1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GetTableStartIndex1": {
+        "main": [
+          [
+            {
+              "node": "AppendEmptyStroke1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "PrepareBodyToAppend1": {
+        "main": [
+          [
+            {
+              "node": "AppendDataToTable1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AppendEmptyStroke1": {
+        "main": [
+          [
+            {
+              "node": "GetVypiskaWithNewStroke1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GetExistingVyp2": {
+        "main": [
+          [
+            {
+              "node": "GetTableStartIndex1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "NumberingVypiska1": {
+        "main": [
+          [
+            {
+              "node": "CountingVypStrokesToOrder1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GetFilledVyp1": {
+        "main": [
+          [
+            {
+              "node": "NumberingVypiska1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "FindDirectEntry": {
+        "main": [
+          [
+            {
+              "node": "IfVypExist",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GetExistingVyp": {
+        "main": [
+          [
+            {
+              "node": "getRegNumFromExistVyp",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Active User",
+    "name": "Version 3f7e40f3",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": []
+}
