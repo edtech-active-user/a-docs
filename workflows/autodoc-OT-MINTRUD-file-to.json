@@ -1,0 +1,1955 @@
+{
+  "updatedAt": "2026-03-31T09:51:57.191Z",
+  "createdAt": "2026-03-24T10:13:55.275Z",
+  "id": "dxm3YMctZqt3GOxy",
+  "name": "autodoc-OT-MINTRUD-file-to",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "14yQ49SqKiTlX5Ba02bb3bjLkVx7_q3XKpZhqagezbKY",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Реестр ОТ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14yQ49SqKiTlX5Ba02bb3bjLkVx7_q3XKpZhqagezbKY/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Статус заявки",
+              "lookupValue": "➡️ в Минтруд"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        752,
+        -144
+      ],
+      "id": "08e2d596-2111-4ce5-b3df-c5a33c4f3357",
+      "name": "GetReestr",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const reestr_data = $(\"GetReestr\").all();\nconst result = new Map();\n\nfor (let item of reestr_data) {\n  let date_key =\n    item.json['Дата окончания (фикс)'] ||\n    item.json['Дата выдачи'] ||\n    item.json['Дата создания'];\n\n  if (!result.has(date_key)) {\n    result.set(date_key, {\n      date: date_key,      // 👈 явное поле вместо ключа\n      requests: []\n    });\n  }\n\n  result.get(date_key).requests.push(item.json);\n}\n\nreturn Array.from(result.values()).map(group => ({\n  json: group\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        976,
+        -272
+      ],
+      "id": "10358060-3ce6-4a09-b58a-fa5514a3b100",
+      "name": "MakeGroupsByDate"
+    },
+    {
+      "parameters": {
+        "operation": "copy",
+        "fileId": {
+          "__rl": true,
+          "value": "1x9CuZbwogk7aq5Efzi2HjhHFmFt5gZycyoVy2c0ptk4",
+          "mode": "id"
+        },
+        "name": "={{ $json.date }}",
+        "sameFolder": false,
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1s6cQZ2s3BrBK1DmVC45sJjPMDOA4n4As",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1168,
+        -272
+      ],
+      "id": "e1eee650-ad95-4d80-800b-d132ab5329eb",
+      "name": "Copy file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "jzAxR4XiEVWwbE9z",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const folder_data = $(\"Copy file\").all();\nconst requests_data = $(\"MakeGroupsByDate\").all();\nconst grps = $('GroupDict').first().json.group_dict;\n\nconst results = [];\n\nfor (let i = 0; i < requests_data.length; i++) {\n  const file_id = folder_data[i].json.id;\n  const group = requests_data[i].json; // 👈 теперь просто объект\n  const requests = group.requests;\n\n  for (let request of requests) {\n    const regNumbers = request['Рег-номер (Выписка)'].split(',');\n\n    for (let rgnm of regNumbers) {\n      let [grp, rn] = rgnm.split(':');\n\n      results.push({\n        fio: request['Фамилия Имя Отчество'],\n        snils: request['СНИЛС'],\n        jobPost: request['Должность'],\n        INN: request['ИНН организации'],\n        company: request['Компания'],\n        progNum: grps[grp],\n        dt: request['Дата окончания (фикс)'] ||\n            request['Дата выдачи'] ||\n            request['Дата создания'],\n        protNum: rn,\n        file: file_id\n      });\n    }\n  }\n}\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1360,
+        -272
+      ],
+      "id": "8fdd58df-dbfe-4918-92d8-ba1f4fb68725",
+      "name": "PrepareRequestsToTable"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "14yQ49SqKiTlX5Ba02bb3bjLkVx7_q3XKpZhqagezbKY",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 434637116,
+          "mode": "list",
+          "cachedResultName": "Группы",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14yQ49SqKiTlX5Ba02bb3bjLkVx7_q3XKpZhqagezbKY/edit#gid=434637116"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        352,
+        -144
+      ],
+      "id": "55c4a3d8-a21a-4274-92e9-8144ebeef968",
+      "name": "GetGroups",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const groups = $('GetGroups').all();\nconst dictionary = {};\n\nfor (let obj of groups){\n  dictionary[obj.json['Группа']] = obj.json['Нумерация для Минтруда'];\n}\n\nreturn {group_dict: dictionary}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        -144
+      ],
+      "id": "8f4c81ca-5e55-404c-96d7-7695bdcaa729",
+      "name": "GroupDict"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $json.file }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Лист1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kjmVE2BS0hMbgcrQUoARoNacaJyjS9W0my_u5aWGEHw/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ФИО": "={{ $json.fio }}",
+            "СНИЛС": "={{ $json.snils }}",
+            "Должность": "={{ $json.jobPost }}",
+            "ИНН Заказчика": "={{ $json.INN }}",
+            "Наименование ЮЛ Заказчика": "={{ $json.company }}",
+            "ИНН УЦ": "9709092086",
+            "Наименование УЦ": "ОБЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ \"НАУЧНЫЙ ЦЕНТР ПРОФЕССИОНАЛЬНОГО ОБРАЗОВАНИЯ\"",
+            "Результат": "Удовлетворительно",
+            "№программы": "={{ $json.progNum }}",
+            "Дата и время": "={{ $json.dt }}",
+            "Номер протокола": "={{ $json.protNum }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ФИО",
+              "displayName": "ФИО",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "СНИЛС",
+              "displayName": "СНИЛС",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Должность",
+              "displayName": "Должность",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ИНН Заказчика",
+              "displayName": "ИНН Заказчика",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Наименование ЮЛ Заказчика",
+              "displayName": "Наименование ЮЛ Заказчика",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ИНН УЦ",
+              "displayName": "ИНН УЦ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Наименование УЦ",
+              "displayName": "Наименование УЦ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Результат",
+              "displayName": "Результат",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "№программы",
+              "displayName": "№программы",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Дата и время",
+              "displayName": "Дата и время",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Номер протокола",
+              "displayName": "Номер протокола",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1568,
+        -272
+      ],
+      "id": "a4934ce3-2b45-41f8-8af8-f9997dae3405",
+      "name": "AppendRowsToMintrudTable",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "14yQ49SqKiTlX5Ba02bb3bjLkVx7_q3XKpZhqagezbKY",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Реестр ОТ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14yQ49SqKiTlX5Ba02bb3bjLkVx7_q3XKpZhqagezbKY/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $json.row_number }}",
+            "Статус заявки": "✅ Реестр готов"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Макеты",
+              "displayName": "Макеты",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Печать",
+              "displayName": "Печать",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Дата создания",
+              "displayName": "Дата создания",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Ссылка на лид",
+              "displayName": "Ссылка на лид",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Статус заявки",
+              "displayName": "Статус заявки",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Статус работы",
+              "displayName": "Статус работы",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Комментарии",
+              "displayName": "Комментарии",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ПАПКА",
+              "displayName": "ПАПКА",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Фамилия Имя Отчество",
+              "displayName": "Фамилия Имя Отчество",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Фамилия Имя Отчество в склонении",
+              "displayName": "Фамилия Имя Отчество в склонении",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Группа ОТ",
+              "displayName": "Группа ОТ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Группа ОТВ",
+              "displayName": "Группа ОТВ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Должность",
+              "displayName": "Должность",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Компания",
+              "displayName": "Компания",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ИНН организации",
+              "displayName": "ИНН организации",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Дата выдачи",
+              "displayName": "Дата выдачи",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Дата начала (фикс)",
+              "displayName": "Дата начала (фикс)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Дата окончания (фикс)",
+              "displayName": "Дата окончания (фикс)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Срок обучения (дн.)",
+              "displayName": "Срок обучения (дн.)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Город не Москва",
+              "displayName": "Город не Москва",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Сценарий",
+              "displayName": "Сценарий",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Документ об образовании",
+              "displayName": "Документ об образовании",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "СНИЛС",
+              "displayName": "СНИЛС",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Дата рождения",
+              "displayName": "Дата рождения",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Адрес",
+              "displayName": "Адрес",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Пол",
+              "displayName": "Пол",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Гражданство",
+              "displayName": "Гражданство",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Название Минтруд",
+              "displayName": "Название Минтруд",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Дата Минтруд",
+              "displayName": "Дата Минтруд",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Дата последнего изменения",
+              "displayName": "Дата последнего изменения",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Незаполненные поля",
+              "displayName": "Незаполненные поля",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Рег-номер",
+              "displayName": "Рег-номер",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Рег-номер (Выписка)",
+              "displayName": "Рег-номер (Выписка)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        976,
+        -32
+      ],
+      "id": "13fcd23a-4656-4635-aadb-05d4e5b5e838",
+      "name": "UpdateStatuses",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "8d8e481f-dfc1-46f1-b82d-8c4c8c3774c2",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        128,
+        -144
+      ],
+      "id": "b82646a3-7232-44f8-8ee7-9e090c947fe5",
+      "name": "Webhook",
+      "webhookId": "8d8e481f-dfc1-46f1-b82d-8c4c8c3774c2"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        176,
+        -352
+      ],
+      "id": "57c7d547-71af-4c15-8bcf-b1e90995b65e",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "14yQ49SqKiTlX5Ba02bb3bjLkVx7_q3XKpZhqagezbKY",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 222657823,
+          "mode": "list",
+          "cachedResultName": "Статус минтруд",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14yQ49SqKiTlX5Ba02bb3bjLkVx7_q3XKpZhqagezbKY/edit#gid=222657823"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Операция",
+              "lookupValue": "Создание файла для Минтруд"
+            },
+            {
+              "lookupColumn": "Статус",
+              "lookupValue": "В процессе"
+            }
+          ]
+        },
+        "options": {
+          "returnFirstMatch": true
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        528,
+        96
+      ],
+      "id": "59e9cc0a-08c0-4d53-b84d-98393acb1175",
+      "name": "GetQueue",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "14yQ49SqKiTlX5Ba02bb3bjLkVx7_q3XKpZhqagezbKY",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 222657823,
+          "mode": "list",
+          "cachedResultName": "Статус минтруд",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14yQ49SqKiTlX5Ba02bb3bjLkVx7_q3XKpZhqagezbKY/edit#gid=222657823"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $json.row_number }}",
+            "Статус": "Готово",
+            "Дата": "={{ $now.format('yyyy-MM-dd hh:mm') }}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "Операция",
+              "displayName": "Операция",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Статус",
+              "displayName": "Статус",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Дата",
+              "displayName": "Дата",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        736,
+        96
+      ],
+      "id": "098090d1-4f73-463d-8fbf-87bf950bf36b",
+      "name": "UpdateStatusInQueue",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "GetReestr": {
+      "main": [
+        [
+          {
+            "node": "MakeGroupsByDate",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "UpdateStatuses",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MakeGroupsByDate": {
+      "main": [
+        [
+          {
+            "node": "Copy file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Copy file": {
+      "main": [
+        [
+          {
+            "node": "PrepareRequestsToTable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PrepareRequestsToTable": {
+      "main": [
+        [
+          {
+            "node": "AppendRowsToMintrudTable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetGroups": {
+      "main": [
+        [
+          {
+            "node": "GroupDict",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GetQueue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GroupDict": {
+      "main": [
+        [
+          {
+            "node": "GetReestr",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "GetGroups",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetQueue": {
+      "main": [
+        [
+          {
+            "node": "UpdateStatusInQueue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "hX15tKh83Gq3N9El",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "versionId": "4666561b-0bd1-4eac-aece-09c502303f3b",
+  "activeVersionId": "4666561b-0bd1-4eac-aece-09c502303f3b",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-03-24T10:13:55.275Z",
+      "createdAt": "2026-03-24T10:13:55.275Z",
+      "role": "workflow:owner",
+      "workflowId": "dxm3YMctZqt3GOxy",
+      "projectId": "OC8FWCQSkQb0Erkk"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-03-26T06:41:07.313Z",
+    "createdAt": "2026-03-26T06:39:52.195Z",
+    "versionId": "4666561b-0bd1-4eac-aece-09c502303f3b",
+    "workflowId": "dxm3YMctZqt3GOxy",
+    "nodes": [
+      {
+        "parameters": {
+          "documentId": {
+            "__rl": true,
+            "value": "14yQ49SqKiTlX5Ba02bb3bjLkVx7_q3XKpZhqagezbKY",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Реестр ОТ",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14yQ49SqKiTlX5Ba02bb3bjLkVx7_q3XKpZhqagezbKY/edit#gid=0"
+          },
+          "filtersUI": {
+            "values": [
+              {
+                "lookupColumn": "Статус заявки",
+                "lookupValue": "➡️ в Минтруд"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          752,
+          -144
+        ],
+        "id": "08e2d596-2111-4ce5-b3df-c5a33c4f3357",
+        "name": "GetReestr",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "Xpp4ndWQ84MtD53m",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const reestr_data = $(\"GetReestr\").all();\nconst result = new Map();\n\nfor (let item of reestr_data) {\n  let date_key =\n    item.json['Дата окончания (фикс)'] ||\n    item.json['Дата выдачи'] ||\n    item.json['Дата создания'];\n\n  if (!result.has(date_key)) {\n    result.set(date_key, {\n      date: date_key,      // 👈 явное поле вместо ключа\n      requests: []\n    });\n  }\n\n  result.get(date_key).requests.push(item.json);\n}\n\nreturn Array.from(result.values()).map(group => ({\n  json: group\n}));"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          976,
+          -272
+        ],
+        "id": "10358060-3ce6-4a09-b58a-fa5514a3b100",
+        "name": "MakeGroupsByDate"
+      },
+      {
+        "parameters": {
+          "operation": "copy",
+          "fileId": {
+            "__rl": true,
+            "value": "1x9CuZbwogk7aq5Efzi2HjhHFmFt5gZycyoVy2c0ptk4",
+            "mode": "id"
+          },
+          "name": "={{ $json.date }}",
+          "sameFolder": false,
+          "driveId": {
+            "__rl": true,
+            "mode": "list",
+            "value": "My Drive"
+          },
+          "folderId": {
+            "__rl": true,
+            "value": "1s6cQZ2s3BrBK1DmVC45sJjPMDOA4n4As",
+            "mode": "id"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleDrive",
+        "typeVersion": 3,
+        "position": [
+          1168,
+          -272
+        ],
+        "id": "e1eee650-ad95-4d80-800b-d132ab5329eb",
+        "name": "Copy file",
+        "credentials": {
+          "googleDriveOAuth2Api": {
+            "id": "jzAxR4XiEVWwbE9z",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const folder_data = $(\"Copy file\").all();\nconst requests_data = $(\"MakeGroupsByDate\").all();\nconst grps = $('GroupDict').first().json.group_dict;\n\nconst results = [];\n\nfor (let i = 0; i < requests_data.length; i++) {\n  const file_id = folder_data[i].json.id;\n  const group = requests_data[i].json; // 👈 теперь просто объект\n  const requests = group.requests;\n\n  for (let request of requests) {\n    const regNumbers = request['Рег-номер (Выписка)'].split(',');\n\n    for (let rgnm of regNumbers) {\n      let [grp, rn] = rgnm.split(':');\n\n      results.push({\n        fio: request['Фамилия Имя Отчество'],\n        snils: request['СНИЛС'],\n        jobPost: request['Должность'],\n        INN: request['ИНН организации'],\n        company: request['Компания'],\n        progNum: grps[grp],\n        dt: request['Дата окончания (фикс)'] ||\n            request['Дата выдачи'] ||\n            request['Дата создания'],\n        protNum: rn,\n        file: file_id\n      });\n    }\n  }\n}\n\nreturn results;"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1360,
+          -272
+        ],
+        "id": "8fdd58df-dbfe-4918-92d8-ba1f4fb68725",
+        "name": "PrepareRequestsToTable"
+      },
+      {
+        "parameters": {
+          "documentId": {
+            "__rl": true,
+            "value": "14yQ49SqKiTlX5Ba02bb3bjLkVx7_q3XKpZhqagezbKY",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 434637116,
+            "mode": "list",
+            "cachedResultName": "Группы",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14yQ49SqKiTlX5Ba02bb3bjLkVx7_q3XKpZhqagezbKY/edit#gid=434637116"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          352,
+          -144
+        ],
+        "id": "55c4a3d8-a21a-4274-92e9-8144ebeef968",
+        "name": "GetGroups",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "Xpp4ndWQ84MtD53m",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const groups = $('GetGroups').all();\nconst dictionary = {};\n\nfor (let obj of groups){\n  dictionary[obj.json['Группа']] = obj.json['Нумерация для Минтруда'];\n}\n\nreturn {group_dict: dictionary}"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          560,
+          -144
+        ],
+        "id": "8f4c81ca-5e55-404c-96d7-7695bdcaa729",
+        "name": "GroupDict"
+      },
+      {
+        "parameters": {
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "={{ $json.file }}",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Лист1",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kjmVE2BS0hMbgcrQUoARoNacaJyjS9W0my_u5aWGEHw/edit#gid=0"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "ФИО": "={{ $json.fio }}",
+              "СНИЛС": "={{ $json.snils }}",
+              "Должность": "={{ $json.jobPost }}",
+              "ИНН Заказчика": "={{ $json.INN }}",
+              "Наименование ЮЛ Заказчика": "={{ $json.company }}",
+              "ИНН УЦ": "9709092086",
+              "Наименование УЦ": "ОБЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ \"НАУЧНЫЙ ЦЕНТР ПРОФЕССИОНАЛЬНОГО ОБРАЗОВАНИЯ\"",
+              "Результат": "Удовлетворительно",
+              "№программы": "={{ $json.progNum }}",
+              "Дата и время": "={{ $json.dt }}",
+              "Номер протокола": "={{ $json.protNum }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "ФИО",
+                "displayName": "ФИО",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "СНИЛС",
+                "displayName": "СНИЛС",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Должность",
+                "displayName": "Должность",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "ИНН Заказчика",
+                "displayName": "ИНН Заказчика",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Наименование ЮЛ Заказчика",
+                "displayName": "Наименование ЮЛ Заказчика",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "ИНН УЦ",
+                "displayName": "ИНН УЦ",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Наименование УЦ",
+                "displayName": "Наименование УЦ",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Результат",
+                "displayName": "Результат",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "№программы",
+                "displayName": "№программы",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Дата и время",
+                "displayName": "Дата и время",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Номер протокола",
+                "displayName": "Номер протокола",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          1568,
+          -272
+        ],
+        "id": "a4934ce3-2b45-41f8-8af8-f9997dae3405",
+        "name": "AppendRowsToMintrudTable",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "Xpp4ndWQ84MtD53m",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "documentId": {
+            "__rl": true,
+            "value": "14yQ49SqKiTlX5Ba02bb3bjLkVx7_q3XKpZhqagezbKY",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Реестр ОТ",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14yQ49SqKiTlX5Ba02bb3bjLkVx7_q3XKpZhqagezbKY/edit#gid=0"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "row_number": "={{ $json.row_number }}",
+              "Статус заявки": "✅ Реестр готов"
+            },
+            "matchingColumns": [
+              "row_number"
+            ],
+            "schema": [
+              {
+                "id": "ID",
+                "displayName": "ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Макеты",
+                "displayName": "Макеты",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Печать",
+                "displayName": "Печать",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Дата создания",
+                "displayName": "Дата создания",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Ссылка на лид",
+                "displayName": "Ссылка на лид",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Статус заявки",
+                "displayName": "Статус заявки",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Статус работы",
+                "displayName": "Статус работы",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Комментарии",
+                "displayName": "Комментарии",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "ПАПКА",
+                "displayName": "ПАПКА",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Фамилия Имя Отчество",
+                "displayName": "Фамилия Имя Отчество",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Фамилия Имя Отчество в склонении",
+                "displayName": "Фамилия Имя Отчество в склонении",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Группа ОТ",
+                "displayName": "Группа ОТ",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Группа ОТВ",
+                "displayName": "Группа ОТВ",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Должность",
+                "displayName": "Должность",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Компания",
+                "displayName": "Компания",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "ИНН организации",
+                "displayName": "ИНН организации",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Дата выдачи",
+                "displayName": "Дата выдачи",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Дата начала (фикс)",
+                "displayName": "Дата начала (фикс)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Дата окончания (фикс)",
+                "displayName": "Дата окончания (фикс)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Срок обучения (дн.)",
+                "displayName": "Срок обучения (дн.)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Город не Москва",
+                "displayName": "Город не Москва",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Сценарий",
+                "displayName": "Сценарий",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Документ об образовании",
+                "displayName": "Документ об образовании",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "СНИЛС",
+                "displayName": "СНИЛС",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Дата рождения",
+                "displayName": "Дата рождения",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Адрес",
+                "displayName": "Адрес",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Пол",
+                "displayName": "Пол",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Гражданство",
+                "displayName": "Гражданство",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Название Минтруд",
+                "displayName": "Название Минтруд",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Дата Минтруд",
+                "displayName": "Дата Минтруд",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Дата последнего изменения",
+                "displayName": "Дата последнего изменения",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Незаполненные поля",
+                "displayName": "Незаполненные поля",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Рег-номер",
+                "displayName": "Рег-номер",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Рег-номер (Выписка)",
+                "displayName": "Рег-номер (Выписка)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "row_number",
+                "displayName": "row_number",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "readOnly": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          976,
+          -32
+        ],
+        "id": "13fcd23a-4656-4635-aadb-05d4e5b5e838",
+        "name": "UpdateStatuses",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "Xpp4ndWQ84MtD53m",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "8d8e481f-dfc1-46f1-b82d-8c4c8c3774c2",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          128,
+          -144
+        ],
+        "id": "b82646a3-7232-44f8-8ee7-9e090c947fe5",
+        "name": "Webhook",
+        "webhookId": "8d8e481f-dfc1-46f1-b82d-8c4c8c3774c2"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.manualTrigger",
+        "typeVersion": 1,
+        "position": [
+          176,
+          -352
+        ],
+        "id": "57c7d547-71af-4c15-8bcf-b1e90995b65e",
+        "name": "When clicking ‘Execute workflow’"
+      },
+      {
+        "parameters": {
+          "documentId": {
+            "__rl": true,
+            "value": "14yQ49SqKiTlX5Ba02bb3bjLkVx7_q3XKpZhqagezbKY",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 222657823,
+            "mode": "list",
+            "cachedResultName": "Статус минтруд",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14yQ49SqKiTlX5Ba02bb3bjLkVx7_q3XKpZhqagezbKY/edit#gid=222657823"
+          },
+          "filtersUI": {
+            "values": [
+              {
+                "lookupColumn": "Операция",
+                "lookupValue": "Создание файла для Минтруд"
+              },
+              {
+                "lookupColumn": "Статус",
+                "lookupValue": "В процессе"
+              }
+            ]
+          },
+          "options": {
+            "returnFirstMatch": true
+          }
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          528,
+          96
+        ],
+        "id": "59e9cc0a-08c0-4d53-b84d-98393acb1175",
+        "name": "GetQueue",
+        "executeOnce": true,
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "Xpp4ndWQ84MtD53m",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "documentId": {
+            "__rl": true,
+            "value": "14yQ49SqKiTlX5Ba02bb3bjLkVx7_q3XKpZhqagezbKY",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 222657823,
+            "mode": "list",
+            "cachedResultName": "Статус минтруд",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14yQ49SqKiTlX5Ba02bb3bjLkVx7_q3XKpZhqagezbKY/edit#gid=222657823"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "row_number": "={{ $json.row_number }}",
+              "Статус": "Готово",
+              "Дата": "={{ $now.format('yyyy-MM-dd hh:mm') }}"
+            },
+            "matchingColumns": [
+              "row_number"
+            ],
+            "schema": [
+              {
+                "id": "Операция",
+                "displayName": "Операция",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Статус",
+                "displayName": "Статус",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Дата",
+                "displayName": "Дата",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "row_number",
+                "displayName": "row_number",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "readOnly": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          736,
+          96
+        ],
+        "id": "098090d1-4f73-463d-8fbf-87bf950bf36b",
+        "name": "UpdateStatusInQueue",
+        "executeOnce": true,
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "Xpp4ndWQ84MtD53m",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "GetReestr": {
+        "main": [
+          [
+            {
+              "node": "MakeGroupsByDate",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "UpdateStatuses",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "MakeGroupsByDate": {
+        "main": [
+          [
+            {
+              "node": "Copy file",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Copy file": {
+        "main": [
+          [
+            {
+              "node": "PrepareRequestsToTable",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "PrepareRequestsToTable": {
+        "main": [
+          [
+            {
+              "node": "AppendRowsToMintrudTable",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GetGroups": {
+        "main": [
+          [
+            {
+              "node": "GroupDict",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "GetQueue",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GroupDict": {
+        "main": [
+          [
+            {
+              "node": "GetReestr",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "GetGroups",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GetQueue": {
+        "main": [
+          [
+            {
+              "node": "UpdateStatusInQueue",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Active User",
+    "name": "Version 4666561b",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": []
+}
