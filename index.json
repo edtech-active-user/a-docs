@@ -1,1 +1,82 @@
-{}
+{
+  "PWvm7ssLmLAV7lWT": {
+    "name": "autodoc-OT-vypiska-inner-loop",
+    "file_path": "workflows/autodoc-OT-vypiska-inner-loop.json"
+  },
+  "9IRG2pEZBGn7MonU": {
+    "name": "move-ready-strokes",
+    "file_path": "workflows/move-ready-strokes.json"
+  },
+  "ZA1aNYswbNygMsLe": {
+    "name": "review-bot",
+    "file_path": "workflows/review-bot.json"
+  },
+  "GH7moINZwDUlmWbK": {
+    "name": "autodoc-OT",
+    "file_path": "workflows/autodoc-OT.json"
+  },
+  "phRrUh556uvizS7T": {
+    "name": "autodoc-PK-PP-FRDO",
+    "file_path": "workflows/autodoc-PK-PP-FRDO.json"
+  },
+  "L2MFLBVRIYuaZ84O": {
+    "name": "debug-test",
+    "file_path": "workflows/debug-test.json"
+  },
+  "bW5C7J4327CR8Kkq": {
+    "name": "autodoc-PK-PP",
+    "file_path": "workflows/autodoc-PK-PP.json"
+  },
+  "SqPr4m6mASc1ILN8": {
+    "name": "autodoc-OT-MINTRUD-file-from",
+    "file_path": "workflows/autodoc-OT-MINTRUD-file-from.json"
+  },
+  "hj2Eq6rOJJBNOWLs": {
+    "name": "autodoc-OT-remove-loop",
+    "file_path": "workflows/autodoc-OT-remove-loop.json"
+  },
+  "PNwggetcKcsuEyBH": {
+    "name": "autodoc-OT-refresh-loop",
+    "file_path": "workflows/autodoc-OT-refresh-loop.json"
+  },
+  "rQgz3YcOV3BEXoXW": {
+    "name": "github-backup",
+    "file_path": "workflows/github-backup.json"
+  },
+  "LVDC6da2JfAxsblA": {
+    "name": "autodoc-RS-FRDO",
+    "file_path": "workflows/autodoc-RS-FRDO.json"
+  },
+  "WHZVlIfLFK9dyFUq": {
+    "name": "clear-queue",
+    "file_path": "workflows/clear-queue.json"
+  },
+  "q02qpzB5xGdlK6Od": {
+    "name": "autodoc-RS",
+    "file_path": "workflows/autodoc-RS.json"
+  },
+  "dxm3YMctZqt3GOxy": {
+    "name": "autodoc-OT-MINTRUD-file-to",
+    "file_path": "workflows/autodoc-OT-MINTRUD-file-to.json"
+  },
+  "hX15tKh83Gq3N9El": {
+    "name": "errors-handler",
+    "file_path": "workflows/errors-handler.json"
+  },
+  "eM592FBhShyLRim0": {
+    "name": "study-plans-rs",
+    "file_path": "workflows/study-plans-rs.json"
+  },
+  "UW7rVNtMXXQajD4T": {
+    "name": "study-plans-pp",
+    "file_path": "workflows/study-plans-pp.json"
+  },
+  "u8DK2pcysZZbW5vT": {
+    "name": "review-bot-garbage-collector",
+    "file_path": "workflows/review-bot-garbage-collector.json"
+  },
+  "qEjEz3ATzDQY0Y25": {
+    "name": "autodoc-OT-add-loop",
+    "file_path": "workflows/autodoc-OT-add-loop.json"
+  }
+}
