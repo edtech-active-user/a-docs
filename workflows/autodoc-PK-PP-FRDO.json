@@ -1,0 +1,4105 @@
+{
+  "updatedAt": "2026-03-31T09:49:43.010Z",
+  "createdAt": "2025-10-23T04:21:13.793Z",
+  "id": "phRrUh556uvizS7T",
+  "name": "autodoc-PK-PP-FRDO",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        128,
+        -96
+      ],
+      "id": "6b3588e6-db52-4a6a-a5be-a71ecfdce14c",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1EisJDIxaU-ua3RhLnanE_ZgnXFFY2ARkUsSuVj0pU4A",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Реестр заявок",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EisJDIxaU-ua3RhLnanE_ZgnXFFY2ARkUsSuVj0pU4A/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Статус работы",
+              "lookupValue": "✅ выдано"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1040,
+        64
+      ],
+      "id": "99fa59c0-4da6-4b8f-a85d-5492f50f39a3",
+      "name": "GetReestr",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1EisJDIxaU-ua3RhLnanE_ZgnXFFY2ARkUsSuVj0pU4A",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 326388555,
+          "mode": "list",
+          "cachedResultName": "Шаблоны",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EisJDIxaU-ua3RhLnanE_ZgnXFFY2ARkUsSuVj0pU4A/edit#gid=326388555"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "ФИС ФРДО основной документ",
+              "lookupValue": "Y"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1616,
+        64
+      ],
+      "id": "2b8d1d97-7085-4f51-8bda-d04e8d515e2e",
+      "name": "GetTemplates",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================\n//     🎯 КОНФИГУРАЦИЯ AUTODOCK v3.0 ФИНАЛЬНАЯ\n//     Обновлено с учетом рабочей версии\n// ===============================================\n\nconst AUTODOCK_CONFIG = {\n  // ========== НАЗВАНИЯ ЛИСТОВ ==========\n  \"SHEETS\": {\n    \"REGISTRY\": \"Реестр заявок\",\n    \"LAYOUTS\": \"Макеты документов\", \n    \"SYSTEM_SETTINGS\": \"Системные настройки\",\n    \"TEMPLATES\": \"Шаблоны\",\n    \"EMPLOYEES\": \"Сотрудники\",\n    \"FIS_FRDO\": \"ФИС ФРДО\",\n    \"LOGS\": \"Логи системы\",\n    \"COUNTERS\": \"Счётчики\" // ДОБАВЛЕНО: для хранения счетчиков регномеров\n  },\n\n  // ========== НАЗВАНИЯ СТОЛБЦОВ ==========\n  \"COLUMNS\": {\n    \"ID\": \"ID\",\n    \"FULL_NAME\": \"Фамилия Имя Отчество\",\n    \n    \"REGISTRY\": {\n      \"ID\": \"ID\",\n      \"REG_NUMBER\": \"Рег-номер\",\n      \"REG_NUMBER_VYPYSKA\": \"Рег-номер (Выписка)\",\n      \"FULL_NAME\": \"Фамилия Имя Отчество\",\n      \"EMPLOYEE\": \"Макеты\",\n      \"STATUS\": \"Статус заявки\",\n      \"FULL_NAME_DECLINED\": \"Фамилия Имя Отчество в склонении\",\n      \"PROGRAM\": \"Программа\",\n      \"QUALIFICATION\": \"Квалификация\",\n      \"SPECIALIZATION\": \"Специализация\", \n      \"HOURS\": \"Часов\",\n      \"COMPANY\": \"Компания\",\n      \"FRDO_DOC_NUM\": \"ФИС ФРДО: Номер документа\",\n      \"CITY\": \"Город не Москва\",\n      \"CITIZENSHIP\":\"Гражданство\",\n      \"SCENARIO\": \"Сценарий\",\n      \"EDUCATION_DOC\": \"Документ об образовании\",\n      \"SNILS\": \"СНИЛС\",\n      \"BIRTH_DATE\": \"Дата рождения\",\n      \"GENDER\": \"Пол\",\n      \"FOLDER\": \"ПАПКА\",\n      \"CREATED_DATE\": \"Дата создания\",\n      \"ISSUE_DATE\": \"Дата выдачи\",\n      \"START_DATE\": \"Дата начала (фикс)\",\n      \"END_DATE\": \"Дата окончания (фикс)\",\n      \"CUSTOM_TERM\": \"Срок обучения (дн.)\",\n      \"LAST_UPDATE\": \"Дата последнего изменения\",\n      \"MISFIELDS\": \"Незаполненные поля\"\n    },\n\n    \"LAYOUTS\": {\n      \"GENERATION_TRIGGER\": \"СТАРТ\", // ИЗМЕНЕНО: было CHECKBOX\n      \"SCENARIO\": \"Сценарий\", \n      \"DOCUMENT_TYPE\": \"Документ\",\n      \"STATUS\": \"Статус\",\n      \"EMPLOYEE\": \"Сотрудник\",\n      \"DOCUMENT_LINK\": \"Ссылка на док (без подложки)\",\n      \"DOCUMENT_LINK_UNDERLAY\": \"Ссылка на док (с подложкой)\",\n      \"REG_NUMBER\": \"Регистрационный номер\", // ДОБАВЛЕНО\n      \"UNDERLAY\": \"С подложкой\" // ДОБАВЛЕНО\n    },\n\n    \"TEMPLATES\": {\n      \"SCENARIO\": \"Сценарий\",\n      \"DOCUMENT\": \"Документ\",\n      \"TYPE\": \"Тип\",\n      \"TEMPLATE_LINK\": \"Ссылка на шаблон\",\n      \"UNDERLAY\": \"С подложкой\", // ДОБАВЛЕНО\n      \"REG_VARIABLE\": \"РегНомер\",// ДОБАВЛЕНО\n      \"FRDO_DOC_TYPE\": \"ФИС ФРДО: Вид документа\",\n      \"FRDO_EXTRA_PROGRAM\": \"ФИС ФРДО: Дополнительная профессиональная программа (повышение квалификации/ профессиональная переподготовка)\"\n    },\n    \n    \"COUNTERS\": { // ДОБАВЛЕНО: новая секция\n      \"COUNTER_TYPE\": \"Тип счётчика\",\n      \"CURRENT_VALUE\": \"Текущее значение\", \n      \"LAST_USED\": \"Последнее использование\",\n      \"LOCKED\": \"Заблокирован\"\n    }\n  },\n\n  // ========== ТРИГГЕРЫ ГЕНЕРАЦИИ ========== \n  \"GENERATION_TRIGGERS\": { // ДОБАВЛЕНО: новая секция\n    \"NEW\": \"новая\",     // lowercase как в рабочей версии\n    \"START\": \"запуск\",  \n    \"DONE\": \"готово\"\n  },\n\n  // ========== ОБЯЗАТЕЛЬНЫЕ ПОЛЯ ==========\n  \"REQUIRED_FIELDS\": {\n    \"base\": [\n      \"Дата создания\",\n      \"Фамилия Имя Отчество\",\n      \"Фамилия Имя Отчество в склонении\", \n      \"Программа\",\n      \"Часов\",\n      \"Сценарий\",\n      \"Документ об образовании\"\n    ],\n    \"diploma_qualified\": [\n      \"Квалификация\"\n    ],\n    \"fis_frdo\": [\n      \"СНИЛС\",\n      \"Дата рождения получателя\",\n      \"Пол получателя\"\n    ]\n  },\n\n\n\n  // ========== СТАТУСЫ ==========\n  \"STATUSES\": {\n    \"REGISTRY\": {\n      \"EMPTY\": \"\",\n      \"INCOMPLETE\": \"Неполные данные\",\n      \"READY\": \"Готов к обработке\",\n      \"IN_LAYOUTS\": \"Передано в макеты\",\n      \"CHANGED\": \"Изменены данные\",\n      \"DOCUMENTS_READY\": \"Документы готовы\",\n      \"READY_FOR_FIS\": \"Готов к подаче в ФИС ФРДО\",\n      \"IN_FIS_BATCH\": \"В пакете ФИС ФРДО\",\n      \"SUBMITTED_TO_FIS\": \"Подано в ФИС ФРДО\",\n      \"ISSUED\": \"Выдано\",\n      \"SENT_BY_MAIL\": \"Отправлено почтой\",\n      \"URGENT\": \"🔴 СРОЧНО\"\n    },\n    \"LAYOUTS\": {\n      \"WAITING\": \"Ожидает к генерации\",\n      \"NEEDS_REGEN\": \"Требует перегенерации\",\n      \"URGENT\": \"🔴 СРОЧНО\",\n      \"IN_QUEUE\": \"В очереди\",\n      \"GENERATING\": \"Генерируется\", // ДОБАВЛЕНО\n      \"CREATED\": \"Макет создан\",\n      \"ERROR\": \"Ошибка генерации\",\n      \"LOCKED\": \"Заблокировано\" // ДОБАВЛЕНО\n    }\n  },\n\n  // ========== СЦЕНАРИИ И ПАКЕТЫ ==========\n  \"SCENARIOS\": {\n    \"Диплом простой\": {\n      \"documents\": [\"Диплом простой\", \"Приложение\",\"Предметы\",\"Выписка ПП\",\"Диплом простой (подложка)\", \"Приложение (подложка)\",\"Предметы (подложка)\"],\n      \"count\": 8\n    },\n    \"Диплом с квалификацией\": {\n      \"documents\": [\"Диплом с квалификацией\", \"Приложение\", \"Предметы\",\"Выписка ПП\", \"Диплом с квалификацией (подложка)\", \"Приложение (подложка)\", \"Предметы (подложка)\"],\n      \"count\": 8\n    },\n    \"Диплом с квалификацией + УД\": {\n      \"documents\": [\"Диплом с квалификацией\", \"Приложение\", \"Предметы\",\"Выписка ПП\",\"Корочка ПП\",\"Диплом с квалификацией (подложка)\", \"Приложение (подложка)\", \"Предметы (подложка)\"],\n      \"count\": 10\n    }, \n    \"Диплом простой + УД\": {\n      \"documents\": [\"Диплом простой\", \"Приложение\", \"Предметы\",\"Выписка ПП\",\"Корочка ПП\",\"Диплом простой (подложка)\", \"Приложение (подложка)\", \"Предметы (подложка)\"],\n      \"count\": 10\n    }, \n    \"Удостоверение ПК\" : {\n      \"documents\": [\"Удостоверение ПК\",\"Выписка ПК\"],\n      \"count\": 4\n    },\n    \"Удостоверение ПК + УД фото\" : {\n      \"documents\": [\"Удостоверение ПК\",\"Выписка ПК\", \"Корочка ПК фото\"],\n      \"count\": 6\n    },\n    \"Удостоверение ПК + УД\" : {\n      \"documents\": [\"Удостоверение ПК\",\"Выписка ПК\",\"Корочка ПК\"],\n      \"count\": 6\n    },\n    \"БИГ Удостоверение ПК\" : {\n      \"documents\": [\"Удостоверение ПК\",\"Выписка ПК\"],\n      \"count\": 4\n    },\n    \"БИГ Удостоверение ПК + УД фото\" : {\n      \"documents\": [\"Удостоверение ПК\",\"Выписка ПК\", \"Корочка ПК фото\"],\n      \"count\": 5\n    },\n    \"БИГ Удостоверение ПК + УД\" : {\n      \"documents\": [\"Удостоверение ПК\",\"Выписка ПК\",\"Корочка ПК\"],\n      \"count\": 5\n    },\n    \"Удостоверение ДО\" : {\n      \"documents\": [\"Удостоверение ДО\"],\n      \"count\": 2\n    },\n    \"Сертификат\" : {\n      \"documents\": [\"Сертификат\"],\n      \"count\": 2\n    },\n    \"ОТ\": {\n      \"documents\": [\"ОТ\",\"Выписка ОТ\"],\n      \"count\": 2\n    },\n    \"ОТ высота\": {\n      \"documents\": [\"ОТ высота\",\"Выписка ОТ\"],\n      \"count\": 2\n    }\n    \n  },\n\n  // ========== СОТРУДНИКИ ==========\n  \"EMPLOYEES\": {\n    \"Полянская Мария\": {\n      \"folderId\": \"1RuDqHlHDfU5aChhpv1r4zNQRDIzzBh4K\"\n    },\n    \"Черненко Мария\": {\n      \"folderId\": \"1z-CIaI1vLSrnWOWD3wvT0l1kTSpTWyDD\"\n    },\n    \"Федорова Мария\": {\n      \"folderId\": \"1dXORm1U-sq5B52denaK59YtFv7K_A_9A\"\n    },\n    \"Настя\": {\n      \"folderId\": \"1cwiQBaxLS9hsJJum3GmUj24BLhzzkNku\"\n    },\n    \"Марина\": {\n      \"folderId\": \"1_dgBt_La_swpVkVPf36IelYUwLA4g_0e\"\n    },\n    \"Леднева Ольга\": {\n      \"folderId\": \"19ZEzJRNV_iDyDvJ4dBFTxH6lAmik57sm\"\n    },\n    \"Басана\": {\n      \"folderId\": \"10a6JgPpzFZvt19Lp6QSm70h1C_8O81KY\"\n    },\n    \"Крис\": {\n      \"folderId\": \"1E6aIiw2i598l7T5tu9Sy_TX9yEI0s08v\"\n    }  \n  },\n\n  // ========== КРИТИЧНЫЕ ПОЛЯ ДЛЯ ХЭША ==========\n  \"CRITICAL_FIELDS\": [\n    \"Фамилия Имя Отчество\",\n    \"Фамилия Имя Отчество в склонении\",\n    \"Программа\", \n    \"Квалификация\",\n    \"Специализация\",\n    \"Часов\",\n    \"Дата выдачи\",\n    \"Дата начала (фикс)\",\n    \"Дата окончания (фикс)\",\n    \"Срок обучения (дн.)\"\n  ],\n\n  // ========== ФОРМАТЫ РЕГИСТРАЦИОННЫХ НОМЕРОВ ==========\n  \"REG_NUMBER_FORMATS\": {\n    \"Диплом простой\": {\n      \"prefix\": \"П\", \n      \"format\": \"{number}-{yy}{month}{prefix}\",\n      \"counter_name\": \"diploma_counter\",\n      \"startFrom\": 98,\n      \"variable\": \"Рег-ПП\",\n      \"shared\": true // ДОБАВЛЕНО: общий счетчик с квалификацией\n    },\n    \"Диплом с квалификацией\": {\n      \"prefix\": \"П\", \n      \"format\": \"{number}-{yy}{month}{prefix}\",\n      \"counter_name\": \"diploma_counter\",\n      \"startFrom\": 98,\n      \"variable\": \"Рег-ПП\",\n      \"shared\": true // ДОБАВЛЕНО: общий счетчик с квалификацией\n    },\n    \"Удостоверение ПК\": {\n      \"prefix\": \"ПК\",\n      \"format\": \"{number}-{month}/{prefix}\",\n      \"counter_name\": \"pk_counter\",\n      \"startFrom\": 29,\n      \"variable\": \"Рег-ПК\",\n      \"shared\": true\n    },\n    \"Сертификат\": {\n      \"prefix\": \"ПК\",\n      \"format\": \"{number}-{month}/{prefix}\",\n      \"counter_name\": \"pk_counter\",\n      \"startFrom\": 29,\n      \"variable\": \"Рег-ПК\"\n    },\n    \"Удостоверение ДО\": {\n      \"prefix\": \"ПК\",\n      \"format\": \"{number}-{month}/{prefix}\",\n      \"counter_name\": \"pk_counter\",\n      \"startFrom\": 29,\n      \"variable\": \"Рег-ПК\"\n    },\n    \"Удостоверение РС\": {\n      \"prefix\": \"АН\",\n      \"format\": \"{number}-{prefix}\",\n      \"counter_name\": \"rs_counter\",\n      \"startFrom\": 24216,\n      \"variable\": \"Рег-РС-АН\",\n      \"shared\": true\n    },\n    \"Выписка ПП\": { // ДОБАВЛЕНО\n      \"prefix\": \"ПП\",\n      \"format\": \"{prefix}-{month}{yy}-{number}\",\n      \"counter_name\": \"vypiska_counter_pp\",\n      \"startFrom\": 95,\n      \"variable\": \"Рег-ВПП\",\n      \"parentVariable\": \"Рег-ПП\"\n    },\n    \"Выписка ПК\": { // ДОБАВЛЕНО\n      \"prefix\": \"ПК\",\n      \"format\": \"{prefix}-{month}{yy}-{number}\",\n      \"counter_name\": \"vypiska_counter_pk\",\n      \"startFrom\": 95,\n      \"variable\": \"Рег-ВПК\",\n      \"parentVariable\": \"Рег-ПК\"\n    },\n    \"Предметы\": { // ДОБАВЛЕНО\n      \"useParent\": true\n    },\n    \"Приложение\": { // ДОБАВЛЕНО\n      \"useParent\": true\n    },\n    \"Корочка ПП\": { // ДОБАВЛЕНО\n      \"useParent\": true\n    },\n    \"Корочка ПК\": { // ДОБАВЛЕНО\n      \"useParent\": true\n    },\n  },\n\n  // ========== ДОПУСТИМЫЕ ЧАСЫ ==========\n\"VALID_HOURS\": $('makeHoursFormat').first().json.VALID_HOURS,\n  // ========== КОНСТАНТЫ ДЛЯ РАСЧЕТА ПЕРИОДОВ ==========\n\"HOURS_TO_PERIOD\": $('makeHoursFormat').first().json.HOURS_TO_PERIOD,\n  // ========== СИСТЕМНЫЕ НАСТРОЙКИ ========== \n  \n  \"SYSTEM\": { // ДОБАВЛЕНО: новая секция\n    \"LOCK_TIMEOUT_MINUTES\": 5,\n    \"MAX_RETRIES\": 3,\n    \"BATCH_SIZE\": 50,\n    \"LOG_RETENTION_DAYS\": 90,\n    \"ID_PREFIX\": \"REQ\",\n    \"ID_PAD_LENGTH\": 5\n  },\n\n  // ========== ПРАЗДНИЧНЫЕ ДНИ 2025 ==========\n\"HOLIDAYS\": [\n  // 2024 год\n  \"2024-01-01\",\"2024-01-02\",\"2024-01-03\",\"2024-01-04\",\"2024-01-05\",\n  \"2024-01-06\",\"2024-01-07\",\"2024-01-08\",\n  \"2024-02-23\",\n  \"2024-03-08\",\n  \"2024-04-29\",\"2024-04-30\",\n  \"2024-05-01\",\"2024-05-09\",\"2024-05-10\",\n  \"2024-06-12\",\n  \"2024-11-04\",\n  \"2024-12-30\",\"2024-12-31\",\n  \n  // 2025 год\n  \"2025-01-01\",\"2025-01-02\",\"2025-01-03\",\"2025-01-04\",\"2025-01-05\",\n  \"2025-01-06\",\"2025-01-07\",\"2025-01-08\",\n  \"2025-02-23\",\"2025-02-24\",\n  \"2025-03-08\",\"2025-03-09\",\"2025-03-10\",\n  \"2025-05-01\",\"2025-05-02\",\"2025-05-03\",\"2025-05-04\",\n  \"2025-05-09\",\"2025-05-10\",\"2025-05-11\",\"2025-05-12\",\n  \"2025-06-12\",\"2025-06-13\",\n  \"2025-11-03\",\"2025-11-04\",\n  \"2025-12-31\",\n  \n  // 2026 год (предварительно, официальный календарь ещё не утверждён)\n  \"2026-01-01\",\"2026-01-02\",\"2026-01-03\",\"2026-01-04\",\"2026-01-05\",\n  \"2026-01-06\",\"2026-01-07\",\"2026-01-08\",\"2026-01-09\",\n  \"2026-02-23\",\n  \"2026-03-08\",\"2026-03-09\",\n  \"2026-05-01\",\"2026-05-04\",\n  \"2026-05-09\",\"2026-05-11\",\n  \"2026-06-12\",\n  \"2026-11-04\"\n],\n\n  // ========== НАЗВАНИЯ МЕСЯЦЕВ ==========\n  \"MONTH_NAMES\": {\n    \"genitive\": [\n      \"января\",\"февраля\",\"марта\",\"апреля\",\"мая\",\"июня\",\n      \"июля\",\"августа\",\"сентября\",\"октября\",\"ноября\",\"декабря\"\n    ]\n  }\n};\n\n\n\nreturn [{ \n  json: {config: AUTODOCK_CONFIG}\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        64
+      ],
+      "id": "af45b5b4-0299-4284-b673-1ca83039c743",
+      "name": "config"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1EisJDIxaU-ua3RhLnanE_ZgnXFFY2ARkUsSuVj0pU4A",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1910040249,
+          "mode": "list",
+          "cachedResultName": "Часы-дни",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EisJDIxaU-ua3RhLnanE_ZgnXFFY2ARkUsSuVj0pU4A/edit#gid=1910040249"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        304,
+        64
+      ],
+      "id": "c3e43e90-876b-4a32-bccc-1657f23e37dd",
+      "name": "GetHours",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Предположим, что твои данные приходят из предыдущего нода\n// в items[0].json, как массив объектов\nconst data = $input.all();\n\n// Извлекаем данные из каждого item.json\nconst hoursData = data.map(item => item.json);\n\n// Формируем массив VALID_HOURS\nconst VALID_HOURS = hoursData.map(el => el[\"ЧАСЫ\"]);\n\n// Формируем объект HOURS_TO_PERIOD\nconst HOURS_TO_PERIOD = {};\nfor (const el of hoursData) {\n  HOURS_TO_PERIOD[el[\"ЧАСЫ\"]] = {\n    value: el[\"ДНИ\"],\n    unit: \"дней\"\n  };\n}\n\n// Возвращаем результат как один item\nreturn [\n  {\n    json: {\n      VALID_HOURS,\n      HOURS_TO_PERIOD\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        496,
+        64
+      ],
+      "id": "a3429af8-714d-485d-af77-3ac38ca53b70",
+      "name": "makeHoursFormat"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================\n//     ПОДГОТОВКА ЗАДАЧ ДЛЯ ГЕНЕРАЦИИ ДОКУМЕНТОВ\n// ===============================================\n\n// Получаем конфигурацию\nconst config = $('config').first().json.config;\n\n// Получаем данные из реестра и шаблонов\nconst registryRows = $('Filter1').all() || [];\nconst templateRows = $('GetTemplates').all() || [];\n\nconsole.log(`Получено записей в реестре для обработки: ${registryRows.length}`);\nconsole.log(`Получено шаблонов: ${templateRows.length}`);\n\n// Функция разбора ФИО\nfunction splitFIO(fullName) {\n  const parts = (fullName || \"\").trim().split(/\\s+/);\n  return {\n    surname: parts[0] || \"\",\n    name: parts[1] || \"\",\n    patronymic: parts.slice(2).join(\" \") || \"\"\n  };\n}\n\n// Функция парсинга дат\nfunction parseDate(dateValue) {\n  if (!dateValue) return null;\n  \n  // Обработка формата DD.MM.YYYY (русский формат)\n  if (typeof dateValue === 'string') {\n    const ddmmyyyyPattern = /^(\\d{2})\\.(\\d{2})\\.(\\d{4})$/;\n    const match = dateValue.match(ddmmyyyyPattern);\n    \n    if (match) {\n      const [, day, month, year] = match;\n      const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));\n      return date instanceof Date && !isNaN(date.getTime()) ? date : null;\n    }\n  }\n  \n  // Для других форматов (ISO, timestamp, объекты Date)\n  const date = new Date(dateValue);\n  return date instanceof Date && !isNaN(date.getTime()) ? date : null;\n}\n\nfunction isWeekend(date) {\n  const day = date.getDay();\n  return day === 0 || day === 6;\n}\n\nfunction isHoliday(date) {\n  const dateStr = date.toISOString().split('T')[0];\n  return config.HOLIDAYS.includes(dateStr);\n}\n\nfunction isWorkingDay(date) {\n  return !isWeekend(date) && !isHoliday(date);\n}\n\nfunction subtractWorkingDays(endDate, daysToSubtract) {\n  let currentDate = new Date(endDate);\n  let workingDaysCount = 0;\n  \n  // Включаем конечную дату в подсчёт\n  if (isWorkingDay(currentDate)) {\n    workingDaysCount = 1;\n  }\n  \n  // Вычитаем оставшиеся дни\n  while (workingDaysCount < daysToSubtract) {\n    currentDate.setDate(currentDate.getDate() - 1);\n    if (isWorkingDay(currentDate)) {\n      workingDaysCount++;\n    }\n  }\n  \n  return currentDate;\n}\n\nfunction formatDateDDMMYYYY(date) {\n  const d = new Date(date);\n  return `${String(d.getDate()).padStart(2,\"0\")}.${String(d.getMonth()+1).padStart(2,\"0\")}.${d.getFullYear()}`;\n}\n\nfunction getDefaultPeriod() {\n  const endDate = new Date();\n  const startDate = new Date();\n  startDate.setDate(endDate.getDate() - 30);\n  return formatPeriodResult(startDate, endDate);\n}\n\nfunction formatPeriodResult(startDate, endDate) {\n  return {\n    startYear: startDate.getFullYear(),\n    endYear: endDate.getFullYear(),\n    dateFull: formatDateDDMMYYYY(endDate)\n  };\n}\n\n// Функция определения периода обучения\nfunction calculateStudyPeriod(regData) {\n  const C = config.COLUMNS.REGISTRY;\n  \n  // Парсим все возможные даты заранее\n  const startDateValue = parseDate(regData[C.START_DATE]);\n  const endDateValue = parseDate(regData[C.END_DATE]);\n  const issueDateValue = parseDate(regData[C.ISSUE_DATE]);\n  const createdDateValue = parseDate(regData[C.CREATED_DATE]);\n  const customTerm = regData[C.CUSTOM_TERM] ? parseInt(regData[C.CUSTOM_TERM]) : null;\n  const hours = regData[C.HOURS] ? parseInt(regData[C.HOURS]) : null;\n\n  // 1️⃣ ВАРИАНТ 1: START_DATE + END_DATE\n  if (startDateValue && endDateValue) {\n    console.log(\"Вариант 1: Используем фиксированные START_DATE и END_DATE\");\n    return formatPeriodResult(startDateValue, endDateValue);\n  }\n\n  // 2️⃣ ВАРИАНТ 2: ISSUE_DATE + CUSTOM_TERM\n  if (issueDateValue && customTerm && !isNaN(customTerm)) {\n    console.log(\"Вариант 2: Используем ISSUE_DATE + CUSTOM_TERM\");\n    const endDate = issueDateValue;\n    const startDate = subtractWorkingDays(endDate, customTerm);\n    return formatPeriodResult(startDate, endDate);\n  }\n\n  // 3️⃣ ВАРИАНТ 3: Только ISSUE_DATE (+ часы для расчета)\n  if (issueDateValue && hours && !isNaN(hours)) {\n    console.log(\"Вариант 3: Используем только ISSUE_DATE (+ часы для расчета периода)\");\n    const period = config.HOURS_TO_PERIOD[String(hours)];\n    \n    if (!period) {\n      console.warn(`Неизвестное количество часов: ${hours}`);\n      return getDefaultPeriod();\n    }\n    \n    const endDate = issueDateValue;\n    const startDate = subtractWorkingDays(endDate, period.value);\n    return formatPeriodResult(startDate, endDate);\n  }\n\n  // 4️⃣ ВАРИАНТ 4: Только CUSTOM_TERM + CREATED_DATE\n  if (customTerm && !isNaN(customTerm) && createdDateValue) {\n    console.log(\"Вариант 4: Используем только CUSTOM_TERM + CREATED_DATE\");\n    const endDate = createdDateValue;\n    const startDate = subtractWorkingDays(endDate, customTerm);\n    return formatPeriodResult(startDate, endDate);\n  }\n\n  // 5️⃣ ВАРИАНТ 5: Только CREATED_DATE (+ часы для расчета)\n  if (createdDateValue && hours && !isNaN(hours)) {\n    console.log(\"Вариант 5: Используем только CREATED_DATE (+ часы для расчета периода)\");\n    const period = config.HOURS_TO_PERIOD[String(hours)];\n    \n    if (!period) {\n      console.warn(`Неизвестное количество часов: ${hours}`);\n      return getDefaultPeriod();\n    }\n    \n    const endDate = createdDateValue;\n    const startDate = subtractWorkingDays(endDate, period.value);\n    return formatPeriodResult(startDate, endDate);\n  }\n\n  // 🔄 FALLBACK: Если ничего не подошло\n  console.warn(\"Не найдены необходимые данные для расчета периода, используем default\");\n  return getDefaultPeriod();\n}\n\n// Функция проверки заполненности обязательных полей\nfunction validateFields(data) {\n  const requiredFields = [\n    { key: 'id', label: 'ID' },\n    { key: 'scenario', label: 'Сценарий' },\n    { key: 'citizenship', label: 'Гражданство' },\n    { key: 'birthDate', label: 'Дата рождения' },\n    { key: 'gender', label: 'Пол' },\n    { key: 'program', label: 'Программа' },\n    { key: 'regNumber', label: 'Регистрационный номер' },\n    { key: 'snils', label: 'СНИЛС' },\n    { key: 'surname', label: 'Фамилия' },\n    { key: 'name', label: 'Имя' },\n    { key: 'hours', label: 'Часы' },\n    { key: 'frdoDocType', label: 'Вид документа ФРДО' },\n    { key: 'frdoExtraProgram', label: 'Дополнительная профессиональная программа ФРДО' }\n  ];\n  \n  // Проверяем period отдельно\n  const periodFields = [\n    { key: 'startYear', label: 'Год начала обучения', parent: 'period' },\n    { key: 'endYear', label: 'Год окончания обучения', parent: 'period' },\n    { key: 'dateFull', label: 'Дата окончания', parent: 'period' }\n  ];\n  \n  const missingFields = [];\n  \n  // Проверяем основные поля\n  requiredFields.forEach(field => {\n    const value = data[field.key];\n    if (!value || (typeof value === 'string' && value.trim() === '')) {\n      missingFields.push(field.label);\n    }\n  });\n  \n  // Проверяем поля периода\n  periodFields.forEach(field => {\n    const value = data.period ? data.period[field.key] : null;\n    if (!value || (typeof value === 'string' && value.trim() === '')) {\n      missingFields.push(field.label);\n    }\n  });\n  \n  if (data.scenario && data.scenario.includes(\"Диплом\")) {\n    const value = data.frdoDocNum;\n    if (!value || (typeof value === 'string' && value.trim() === '')) {\n      missingFields.push('Номер документа ФРДО');\n    }\n    }\n  \n  return missingFields;\n}\n\nif (registryRows.length === 0) {\n  return [{ json: { log: \"⚠️ Нет записей в реестре для обработки\" } }];\n}\n\n// Создаем индекс шаблонов по сценариям\nconst CT = config.COLUMNS.TEMPLATES;\nconst templatesByScenario = new Map();\n\ntemplateRows.forEach(t => {\n  const scenario = t.json[CT.SCENARIO];\n  if (scenario) {\n    // Сохраняем первый найденный шаблон для каждого сценария\n    if (!templatesByScenario.has(scenario)) {\n      templatesByScenario.set(scenario, {\n        frdoDocType: t.json[CT.FRDO_DOC_TYPE] || \"\",\n        frdoExtraProgram: t.json[CT.FRDO_EXTRA_PROGRAM] || \"\"\n      });\n    }\n  }\n});\n\nconsole.log(`Создан индекс шаблонов для ${templatesByScenario.size} сценариев`);\n\n// Готовим задачи\nconst tasks = [];\nconst C = config.COLUMNS.REGISTRY;\n\nregistryRows.forEach((item, index) => {\n  const reg = item.json;\n  const id = reg[C.ID];\n  const scenario = reg[C.SCENARIO];\n  \n  // Проверяем обязательные поля\n  if (!id) {\n    return;\n  }\n\n  // Рассчитываем период обучения для данной заявки\n  const period = calculateStudyPeriod(reg);\n  \n  // Обработка гражданства\n  let citizenship = \"643\"; // По умолчанию Россия\n  const citizenshipValue = reg[C.CITIZENSHIP];\n  if (citizenshipValue && citizenshipValue.trim() !== \"\") {\n    const parts = citizenshipValue.split(\":\");\n    if (parts.length > 1) {\n      citizenship = parts[1].trim();\n    }\n  }\n  \n  // Разбор ФИО\n  const fio = splitFIO(reg[C.FULL_NAME] || \"\");\n  \n  // FRDO_DOC_NUM - только для сценариев с \"Диплом\"\n  let frdoDocNum = \"\";\n  if (scenario && scenario.includes(\"Диплом\")) {\n    frdoDocNum = reg[C.FRDO_DOC_NUM] || \"\";\n  } else if (scenario && scenario.includes(\"Удостоверение\")) {\n    frdoDocNum = \"Нет\";\n  }\n    \n  // Получаем данные из шаблонов по сценарию\n  const templateData = templatesByScenario.get(scenario) || {\n    frdoDocType: \"\",\n    frdoExtraProgram: \"\"\n  };\n  \n  // Формируем данные записи\n  const recordData = {\n    id,\n    scenario: scenario || null,\n    citizenship,\n    birthDate: reg[C.BIRTH_DATE] || \"\",\n    gender: reg[C.GENDER] || \"\",\n    program: reg[C.PROGRAM] || \"\",\n    regNumber: reg[C.REG_NUMBER].split(\":\")[1] || \"\",\n    snils: reg[C.SNILS] || \"\",\n    surname: fio.surname,\n    name: fio.name,\n    qualif: reg[C.QUALIFICATION] || \"Нет\",\n    patronymic: fio.patronymic,\n    frdoDocNum,\n    hours: reg[C.HOURS] || \"\",\n    frdoDocType: templateData.frdoDocType,\n    frdoExtraProgram: templateData.frdoExtraProgram,\n    period: {\n      startYear: period.startYear,\n      endYear: period.endYear,\n      dateFull: period.dateFull\n    },\n  };\n  \n  // Проверяем заполненность полей\n  const missingFields = validateFields(recordData);\n  \n  if (missingFields.length === 0) {\n    // Все обязательные поля заполнены\n    recordData.status = \"toFrdoTable\";\n    console.log(`✅ ID=${id}: Все поля заполнены`);\n  } else {\n    // Есть незаполненные обязательные поля\n    recordData.status = \"incomplete\";\n    recordData.missingFields = missingFields;\n    console.log(`⚠️ ID=${id}: Не заполнены поля: ${missingFields.join(', ')}`);\n  }\n  \n  // Добавляем задачу\n  tasks.push({\n    json: recordData\n  });\n});\n\nconsole.log(`\\n=== ИТОГО ===`);\nconsole.log(`Подготовлено записей: ${tasks.length}`);\nconsole.log(`Готовых для ФРДО: ${tasks.filter(t => t.json.status === \"toFrdoTable\").length}`);\nconsole.log(`Неполных записей: ${tasks.filter(t => t.json.status === \"incomplete\").length}`);\n\nreturn tasks;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1792,
+        64
+      ],
+      "id": "b8caf4a8-2d4c-49a8-a238-07d03afe21eb",
+      "name": "FRDO_DATA"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "4f633ca9-f4a5-4ec6-9e6b-16e44f10aed2",
+                    "leftValue": "={{ $json.status }}",
+                    "rightValue": "incomplete",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.status }}",
+                    "rightValue": "toFrdoTable",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "ec57228b-a8db-4fdf-953a-c8caa2996746"
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        2016,
+        64
+      ],
+      "id": "dc8a105e-6249-4f4a-9f27-086c3d07b4af",
+      "name": "isCompleteData",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "copy",
+        "fileId": {
+          "__rl": true,
+          "value": "1kJdBHOG61uGAWjWrDmj1JXwhwvR2MshVj8Ii82PCOik",
+          "mode": "id"
+        },
+        "name": "=ПК-ПП:{{ $now.format('dd.MM.yyyy') }}",
+        "sameFolder": false,
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1xNqgN5d866EAjLnqK9uz7kY4e2KEZdEm",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        848,
+        64
+      ],
+      "id": "f15aa034-bb22-4d9a-b556-7505a341fa26",
+      "name": "CopyFRDOTamplate",
+      "executeOnce": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "jzAxR4XiEVWwbE9z",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{$('CopyFRDOTamplate').first().json.id}}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1546266917,
+          "mode": "list",
+          "cachedResultName": "Шаблон",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1R3cdNff2pY5LR3-uz-BoGP3xLPaS4Y2ihlI_oWQhHc8/edit#gid=1546266917"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Вид документа": "={{ $('isCompleteData').item.json.frdoDocType }}",
+            "Статус документа": "Оригинал",
+            "Подтверждение утраты": "Нет",
+            "Подтверждение обмена": "Нет",
+            "Подтверждение уничтожения": "Нет",
+            "Серия документа": "Нет",
+            "Номер документа": "={{ $('isCompleteData').item.json.frdoDocNum }}",
+            "Дата выдачи документа": "={{ $('isCompleteData').item.json.period.dateFull }}",
+            "Регистрационный номер": "={{ $('isCompleteData').item.json.regNumber }}",
+            "Дополнительная профессиональная программа (повышение квалификации/ профессиональная переподготовка)": "={{ $('isCompleteData').item.json.frdoExtraProgram }}",
+            "Наименование дополнительной профессиональной программы": "={{ $('isCompleteData').item.json.program }}",
+            "Год начала обучения (для документа о квалификации)": "={{ $('isCompleteData').item.json.period.startYear }}",
+            "Год окончания обучения (для документа о квалификации)": "={{ $('isCompleteData').item.json.period.endYear }}",
+            "Срок обучения, часов (для документа о квалификации)": "={{ $('isCompleteData').item.json.hours }}",
+            "Фамилия получателя": "={{ $('isCompleteData').item.json.surname }}",
+            "Имя получателя": "={{ $('isCompleteData').item.json.name }}",
+            "Отчество получателя": "={{ $('isCompleteData').item.json.patronymic }}",
+            "Дата рождения получателя": "={{ $('isCompleteData').item.json.birthDate }}",
+            "Пол получателя": "={{ $('isCompleteData').item.json.gender }}",
+            "СНИЛС": "={{ $('isCompleteData').item.json.snils }}",
+            "Форма обучения": "Заочная",
+            "Источник финансирования обучения": "Платное обучение",
+            "Форма получения образования на момент прекращения образовательных отношений": "в образовательной организации",
+            "Гражданство получателя (код страны по ОКСМ)": "={{ $('isCompleteData').item.json.citizenship }}",
+            "Наименование квалификации, профессии, специальности": "={{ $('isCompleteData').item.json.qualif }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Вид документа",
+              "displayName": "Вид документа",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Статус документа",
+              "displayName": "Статус документа",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Подтверждение утраты",
+              "displayName": "Подтверждение утраты",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Подтверждение обмена",
+              "displayName": "Подтверждение обмена",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Подтверждение уничтожения",
+              "displayName": "Подтверждение уничтожения",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Серия документа",
+              "displayName": "Серия документа",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Номер документа",
+              "displayName": "Номер документа",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Дата выдачи документа",
+              "displayName": "Дата выдачи документа",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Регистрационный номер",
+              "displayName": "Регистрационный номер",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Дополнительная профессиональная программа (повышение квалификации/ профессиональная переподготовка)",
+              "displayName": "Дополнительная профессиональная программа (повышение квалификации/ профессиональная переподготовка)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Наименование дополнительной профессиональной программы",
+              "displayName": "Наименование дополнительной профессиональной программы",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Наименование области профессиональной деятельности",
+              "displayName": "Наименование области профессиональной деятельности",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Укрупненные группы специальностей",
+              "displayName": "Укрупненные группы специальностей",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Наименование квалификации, профессии, специальности",
+              "displayName": "Наименование квалификации, профессии, специальности",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Уровень образования ВО/СПО",
+              "displayName": "Уровень образования ВО/СПО",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Фамилия указанная в дипломе о ВО или СПО",
+              "displayName": "Фамилия указанная в дипломе о ВО или СПО",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Серия документа о ВО/СПО",
+              "displayName": "Серия документа о ВО/СПО",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Номер документа о ВО/СПО",
+              "displayName": "Номер документа о ВО/СПО",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Год начала обучения (для документа о квалификации)",
+              "displayName": "Год начала обучения (для документа о квалификации)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Год окончания обучения (для документа о квалификации)",
+              "displayName": "Год окончания обучения (для документа о квалификации)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Срок обучения, часов (для документа о квалификации)",
+              "displayName": "Срок обучения, часов (для документа о квалификации)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Фамилия получателя",
+              "displayName": "Фамилия получателя",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Имя получателя",
+              "displayName": "Имя получателя",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Отчество получателя",
+              "displayName": "Отчество получателя",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Дата рождения получателя",
+              "displayName": "Дата рождения получателя",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Пол получателя",
+              "displayName": "Пол получателя",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "СНИЛС",
+              "displayName": "СНИЛС",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Форма обучения",
+              "displayName": "Форма обучения",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Источник финансирования обучения",
+              "displayName": "Источник финансирования обучения",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Форма получения образования на момент прекращения образовательных отношений",
+              "displayName": "Форма получения образования на момент прекращения образовательных отношений",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Гражданство получателя (код страны по ОКСМ)",
+              "displayName": "Гражданство получателя (код страны по ОКСМ)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Наименование документа об образовании (оригинала)",
+              "displayName": "Наименование документа об образовании (оригинала)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Серия (оригинала)",
+              "displayName": "Серия (оригинала)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Номер (оригинала)",
+              "displayName": "Номер (оригинала)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Регистрационный N (оригинала)",
+              "displayName": "Регистрационный N (оригинала)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Дата выдачи (оригинала)",
+              "displayName": "Дата выдачи (оригинала)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Фамилия получателя (оригинала)",
+              "displayName": "Фамилия получателя (оригинала)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Имя получателя (оригинала)",
+              "displayName": "Имя получателя (оригинала)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Отчество получателя (оригинала)",
+              "displayName": "Отчество получателя (оригинала)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Номер документа для изменения",
+              "displayName": "Номер документа для изменения",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2704,
+        112
+      ],
+      "id": "84b98994-3887-450c-a1c1-bcb09cf0d592",
+      "name": "UpdateFRDOTable",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ec2ddf6b-15b5-4459-a370-abc9310a3ffc",
+              "leftValue": "={{$json.isEmpty()}}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2432,
+        320
+      ],
+      "id": "39b5f118-cc15-45f1-8ef2-b24ee3430c7c",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "deleteFile",
+        "fileId": {
+          "__rl": true,
+          "value": "={{$('CopyFRDOTamplate').first().json.id}}",
+          "mode": "id"
+        },
+        "options": {
+          "deletePermanently": true
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2704,
+        528
+      ],
+      "id": "cf8cdaa1-a290-4781-84a3-5f009007b5c6",
+      "name": "Delete a file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "jzAxR4XiEVWwbE9z",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                5
+              ],
+              "triggerAtHour": 7
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        128,
+        64
+      ],
+      "id": "dc116989-7f26-45c6-8f02-af2ad54511f1",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1EisJDIxaU-ua3RhLnanE_ZgnXFFY2ARkUsSuVj0pU4A",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Реестр заявок",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EisJDIxaU-ua3RhLnanE_ZgnXFFY2ARkUsSuVj0pU4A/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $json.id }}",
+            "Статус заявки": "Передано в ФРДО",
+            "Незаполненные поля": "=",
+            "Название ФРДО": "={{ $('CopyFRDOTamplate').first().json.name }}",
+            "Дата ФРДО": "={{ $now.format('dd.MM.yyyy, hh:mm') }}",
+            "Дата последнего изменения": "={{ $now.format('dd.MM.yyyy, hh:mm') }}"
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Дата создания",
+              "displayName": "Дата создания",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Ссылка на лид",
+              "displayName": "Ссылка на лид",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Статус заявки",
+              "displayName": "Статус заявки",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Статус работы",
+              "displayName": "Статус работы",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ПЛАН",
+              "displayName": "ПЛАН",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ФИС ФРДО: Номер документа",
+              "displayName": "ФИС ФРДО: Номер документа",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Комментарии",
+              "displayName": "Комментарии",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ПАПКА",
+              "displayName": "ПАПКА",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Макеты",
+              "displayName": "Макеты",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Печать",
+              "displayName": "Печать",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Фамилия Имя Отчество",
+              "displayName": "Фамилия Имя Отчество",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Фамилия Имя Отчество в склонении",
+              "displayName": "Фамилия Имя Отчество в склонении",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Программа",
+              "displayName": "Программа",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Квалификация",
+              "displayName": "Квалификация",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Специализация",
+              "displayName": "Специализация",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Часов",
+              "displayName": "Часов",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Компания",
+              "displayName": "Компания",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Дата выдачи",
+              "displayName": "Дата выдачи",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Дата начала (фикс)",
+              "displayName": "Дата начала (фикс)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Дата окончания (фикс)",
+              "displayName": "Дата окончания (фикс)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Срок обучения (дн.)",
+              "displayName": "Срок обучения (дн.)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Город не Москва",
+              "displayName": "Город не Москва",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Сценарий",
+              "displayName": "Сценарий",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Документ об образовании",
+              "displayName": "Документ об образовании",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "СНИЛС",
+              "displayName": "СНИЛС",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Дата рождения",
+              "displayName": "Дата рождения",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Адрес",
+              "displayName": "Адрес",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Пол",
+              "displayName": "Пол",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Гражданство",
+              "displayName": "Гражданство",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Название ФРДО",
+              "displayName": "Название ФРДО",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Дата ФРДО",
+              "displayName": "Дата ФРДО",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Дата последнего изменения",
+              "displayName": "Дата последнего изменения",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Незаполненные поля",
+              "displayName": "Незаполненные поля",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Рег-номер",
+              "displayName": "Рег-номер",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Рег-номер (Выписка)",
+              "displayName": "Рег-номер (Выписка)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Дата от - Дата до",
+              "displayName": "Дата от - Дата до",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2704,
+        304
+      ],
+      "id": "617cfc88-2682-4d1d-87c1-f48b4ad15cc9",
+      "name": "UpdateStatusesFRDOreestr",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1EisJDIxaU-ua3RhLnanE_ZgnXFFY2ARkUsSuVj0pU4A",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Реестр заявок",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EisJDIxaU-ua3RhLnanE_ZgnXFFY2ARkUsSuVj0pU4A/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $json.id }}",
+            "Статус заявки": "⛔️ Ошибка ФРДО",
+            "Дата последнего изменения": "={{ $now.format('dd.MM.yyyy, hh:mm') }}",
+            "Незаполненные поля": "=Для ФРДО:{{'\\n'}}{{ $json.missingFields.join('\\n') }}"
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Дата создания",
+              "displayName": "Дата создания",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Ссылка на лид",
+              "displayName": "Ссылка на лид",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Статус заявки",
+              "displayName": "Статус заявки",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Статус работы",
+              "displayName": "Статус работы",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ПЛАН",
+              "displayName": "ПЛАН",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ФИС ФРДО: Номер документа",
+              "displayName": "ФИС ФРДО: Номер документа",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Комментарии",
+              "displayName": "Комментарии",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ПАПКА",
+              "displayName": "ПАПКА",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Макеты",
+              "displayName": "Макеты",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Печать",
+              "displayName": "Печать",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Фамилия Имя Отчество",
+              "displayName": "Фамилия Имя Отчество",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Фамилия Имя Отчество в склонении",
+              "displayName": "Фамилия Имя Отчество в склонении",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Программа",
+              "displayName": "Программа",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Квалификация",
+              "displayName": "Квалификация",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Специализация",
+              "displayName": "Специализация",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Часов",
+              "displayName": "Часов",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Компания",
+              "displayName": "Компания",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Дата выдачи",
+              "displayName": "Дата выдачи",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Дата начала (фикс)",
+              "displayName": "Дата начала (фикс)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Дата окончания (фикс)",
+              "displayName": "Дата окончания (фикс)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Срок обучения (дн.)",
+              "displayName": "Срок обучения (дн.)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Город не Москва",
+              "displayName": "Город не Москва",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Сценарий",
+              "displayName": "Сценарий",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Документ об образовании",
+              "displayName": "Документ об образовании",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "СНИЛС",
+              "displayName": "СНИЛС",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Дата рождения",
+              "displayName": "Дата рождения",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Адрес",
+              "displayName": "Адрес",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Пол",
+              "displayName": "Пол",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Гражданство",
+              "displayName": "Гражданство",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Название ФРДО",
+              "displayName": "Название ФРДО",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Дата ФРДО",
+              "displayName": "Дата ФРДО",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Дата последнего изменения",
+              "displayName": "Дата последнего изменения",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Незаполненные поля",
+              "displayName": "Незаполненные поля",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Рег-номер",
+              "displayName": "Рег-номер",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Рег-номер (Выписка)",
+              "displayName": "Рег-номер (Выписка)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Дата от - Дата до",
+              "displayName": "Дата от - Дата до",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2432,
+        -128
+      ],
+      "id": "62de234c-c1d7-4d6a-b1cc-afec56932fb3",
+      "name": "UpdateMissingFieldsReestr + Status",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "74a879b1-9d63-45a3-9654-5b3409a58ff5",
+              "leftValue": "={{ $json[\"Сценарий\"] }}",
+              "rightValue": "БИГ Удостоверение ПК",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "8e67c56b-2304-4a37-a2f8-c0a47e3b7729",
+              "leftValue": "={{ $json[\"Сценарий\"] }}",
+              "rightValue": "БИГ Удостоверение ПК + УД",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "af5766d5-4883-4188-bb3c-f41ae4a554b5",
+              "leftValue": "={{ $json[\"Сценарий\"] }}",
+              "rightValue": "БИГ Удостоверение ПК + УД фото",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "5f2f50bc-8fe7-4362-abbb-56b188d57930",
+              "leftValue": "={{ $json[\"Сценарий\"] }}",
+              "rightValue": "Диплом простой",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "ddb5ac12-fd72-4357-ac57-a5a75cb9da95",
+              "leftValue": "={{ $json[\"Сценарий\"] }}",
+              "rightValue": "Диплом простой + УД",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "ff903155-da5c-446f-bfc7-29a3e7045869",
+              "leftValue": "={{ $json[\"Сценарий\"] }}",
+              "rightValue": "Диплом с квалификацией",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "9d17cbc1-8341-4e21-940b-d747609f5736",
+              "leftValue": "={{ $json[\"Сценарий\"] }}",
+              "rightValue": "Диплом с квалификацией + УД",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "5ddddba7-ad54-4cbd-8856-d952559aa9a0",
+              "leftValue": "={{ $json[\"Сценарий\"] }}",
+              "rightValue": "Удостоверение ПК",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "9ac494d7-3572-453d-b310-33879b4a7b0a",
+              "leftValue": "={{ $json[\"Сценарий\"] }}",
+              "rightValue": "Удостоверение ПК + УД",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "e36f8ff2-6274-4c13-894c-0160fc567ee1",
+              "leftValue": "={{ $json[\"Сценарий\"] }}",
+              "rightValue": "Удостоверение ПК + УД фото",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1040,
+        -288
+      ],
+      "id": "00b35d28-be4b-44b0-abde-5072d2864ea4",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "7f9962df-a0a6-475c-85fb-b6036c9a43ea",
+              "leftValue": "={{ $json[\"Статус заявки\"] }}",
+              "rightValue": "Передано в ФРДО",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "54e258f6-92ab-4bbd-8788-4d461efecb92",
+              "leftValue": "={{ $json[\"Статус заявки\"] }}",
+              "rightValue": "⛔️ Ошибка ФРДО",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1424,
+        64
+      ],
+      "id": "c0a477da-7d1d-4cc7-b709-d6ea467ca70c",
+      "name": "Filter1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "95fa674a-a740-440f-b7c3-3a8255311ecd",
+              "leftValue": "={{ DateTime.fromFormat($json[\"Дата создания\"], \"dd.MM.yyyy\").toISODate() }}",
+              "rightValue": "={{ $today.toISO() }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "beforeOrEquals"
+              }
+            },
+            {
+              "id": "2b5019c6-af94-4884-8262-5f509c9ce769",
+              "leftValue": "={{ DateTime.fromFormat($json[\"Дата окончания (фикс)\"], \"dd.MM.yyyy\").toISODate() }}",
+              "rightValue": "={{ $today.toISO() }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "beforeOrEquals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {
+          "ignoreCase": false
+        }
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1232,
+        64
+      ],
+      "id": "82679ef3-1fee-4206-8945-2920e0644b32",
+      "name": "Filter2"
+    }
+  ],
+  "connections": {
+    "GetTemplates": {
+      "main": [
+        [
+          {
+            "node": "FRDO_DATA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetReestr": {
+      "main": [
+        [
+          {
+            "node": "Filter2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetHours": {
+      "main": [
+        [
+          {
+            "node": "makeHoursFormat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "makeHoursFormat": {
+      "main": [
+        [
+          {
+            "node": "config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "config": {
+      "main": [
+        [
+          {
+            "node": "CopyFRDOTamplate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FRDO_DATA": {
+      "main": [
+        [
+          {
+            "node": "isCompleteData",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "isCompleteData": {
+      "main": [
+        [
+          {
+            "node": "UpdateMissingFieldsReestr + Status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CopyFRDOTamplate": {
+      "main": [
+        [
+          {
+            "node": "GetReestr",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "UpdateFRDOTable",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "UpdateStatusesFRDOreestr",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Delete a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        []
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "GetTemplates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter2": {
+      "main": [
+        [
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "GetHours",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "GetHours",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "hX15tKh83Gq3N9El",
+    "callerPolicy": "workflowsFromSameOwner",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": null,
+  "versionId": "3afc18bc-8db4-462c-9c4a-755b53b6b26f",
+  "activeVersionId": "3afc18bc-8db4-462c-9c4a-755b53b6b26f",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2025-10-23T04:21:13.793Z",
+      "createdAt": "2025-10-23T04:21:13.793Z",
+      "role": "workflow:owner",
+      "workflowId": "phRrUh556uvizS7T",
+      "projectId": "OC8FWCQSkQb0Erkk"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-03-30T05:13:39.355Z",
+    "createdAt": "2026-03-16T11:32:04.405Z",
+    "versionId": "3afc18bc-8db4-462c-9c4a-755b53b6b26f",
+    "workflowId": "phRrUh556uvizS7T",
+    "nodes": [
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.manualTrigger",
+        "typeVersion": 1,
+        "position": [
+          128,
+          -96
+        ],
+        "id": "6b3588e6-db52-4a6a-a5be-a71ecfdce14c",
+        "name": "When clicking ‘Execute workflow’"
+      },
+      {
+        "parameters": {
+          "documentId": {
+            "__rl": true,
+            "value": "1EisJDIxaU-ua3RhLnanE_ZgnXFFY2ARkUsSuVj0pU4A",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Реестр заявок",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EisJDIxaU-ua3RhLnanE_ZgnXFFY2ARkUsSuVj0pU4A/edit#gid=0"
+          },
+          "filtersUI": {
+            "values": [
+              {
+                "lookupColumn": "Статус работы",
+                "lookupValue": "✅ выдано"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          1040,
+          64
+        ],
+        "id": "99fa59c0-4da6-4b8f-a85d-5492f50f39a3",
+        "name": "GetReestr",
+        "executeOnce": true,
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "Xpp4ndWQ84MtD53m",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "documentId": {
+            "__rl": true,
+            "value": "1EisJDIxaU-ua3RhLnanE_ZgnXFFY2ARkUsSuVj0pU4A",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 326388555,
+            "mode": "list",
+            "cachedResultName": "Шаблоны",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EisJDIxaU-ua3RhLnanE_ZgnXFFY2ARkUsSuVj0pU4A/edit#gid=326388555"
+          },
+          "filtersUI": {
+            "values": [
+              {
+                "lookupColumn": "ФИС ФРДО основной документ",
+                "lookupValue": "Y"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          1616,
+          64
+        ],
+        "id": "2b8d1d97-7085-4f51-8bda-d04e8d515e2e",
+        "name": "GetTemplates",
+        "executeOnce": true,
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "Xpp4ndWQ84MtD53m",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "// ===============================================\n//     🎯 КОНФИГУРАЦИЯ AUTODOCK v3.0 ФИНАЛЬНАЯ\n//     Обновлено с учетом рабочей версии\n// ===============================================\n\nconst AUTODOCK_CONFIG = {\n  // ========== НАЗВАНИЯ ЛИСТОВ ==========\n  \"SHEETS\": {\n    \"REGISTRY\": \"Реестр заявок\",\n    \"LAYOUTS\": \"Макеты документов\", \n    \"SYSTEM_SETTINGS\": \"Системные настройки\",\n    \"TEMPLATES\": \"Шаблоны\",\n    \"EMPLOYEES\": \"Сотрудники\",\n    \"FIS_FRDO\": \"ФИС ФРДО\",\n    \"LOGS\": \"Логи системы\",\n    \"COUNTERS\": \"Счётчики\" // ДОБАВЛЕНО: для хранения счетчиков регномеров\n  },\n\n  // ========== НАЗВАНИЯ СТОЛБЦОВ ==========\n  \"COLUMNS\": {\n    \"ID\": \"ID\",\n    \"FULL_NAME\": \"Фамилия Имя Отчество\",\n    \n    \"REGISTRY\": {\n      \"ID\": \"ID\",\n      \"REG_NUMBER\": \"Рег-номер\",\n      \"REG_NUMBER_VYPYSKA\": \"Рег-номер (Выписка)\",\n      \"FULL_NAME\": \"Фамилия Имя Отчество\",\n      \"EMPLOYEE\": \"Макеты\",\n      \"STATUS\": \"Статус заявки\",\n      \"FULL_NAME_DECLINED\": \"Фамилия Имя Отчество в склонении\",\n      \"PROGRAM\": \"Программа\",\n      \"QUALIFICATION\": \"Квалификация\",\n      \"SPECIALIZATION\": \"Специализация\", \n      \"HOURS\": \"Часов\",\n      \"COMPANY\": \"Компания\",\n      \"FRDO_DOC_NUM\": \"ФИС ФРДО: Номер документа\",\n      \"CITY\": \"Город не Москва\",\n      \"CITIZENSHIP\":\"Гражданство\",\n      \"SCENARIO\": \"Сценарий\",\n      \"EDUCATION_DOC\": \"Документ об образовании\",\n      \"SNILS\": \"СНИЛС\",\n      \"BIRTH_DATE\": \"Дата рождения\",\n      \"GENDER\": \"Пол\",\n      \"FOLDER\": \"ПАПКА\",\n      \"CREATED_DATE\": \"Дата создания\",\n      \"ISSUE_DATE\": \"Дата выдачи\",\n      \"START_DATE\": \"Дата начала (фикс)\",\n      \"END_DATE\": \"Дата окончания (фикс)\",\n      \"CUSTOM_TERM\": \"Срок обучения (дн.)\",\n      \"LAST_UPDATE\": \"Дата последнего изменения\",\n      \"MISFIELDS\": \"Незаполненные поля\"\n    },\n\n    \"LAYOUTS\": {\n      \"GENERATION_TRIGGER\": \"СТАРТ\", // ИЗМЕНЕНО: было CHECKBOX\n      \"SCENARIO\": \"Сценарий\", \n      \"DOCUMENT_TYPE\": \"Документ\",\n      \"STATUS\": \"Статус\",\n      \"EMPLOYEE\": \"Сотрудник\",\n      \"DOCUMENT_LINK\": \"Ссылка на док (без подложки)\",\n      \"DOCUMENT_LINK_UNDERLAY\": \"Ссылка на док (с подложкой)\",\n      \"REG_NUMBER\": \"Регистрационный номер\", // ДОБАВЛЕНО\n      \"UNDERLAY\": \"С подложкой\" // ДОБАВЛЕНО\n    },\n\n    \"TEMPLATES\": {\n      \"SCENARIO\": \"Сценарий\",\n      \"DOCUMENT\": \"Документ\",\n      \"TYPE\": \"Тип\",\n      \"TEMPLATE_LINK\": \"Ссылка на шаблон\",\n      \"UNDERLAY\": \"С подложкой\", // ДОБАВЛЕНО\n      \"REG_VARIABLE\": \"РегНомер\",// ДОБАВЛЕНО\n      \"FRDO_DOC_TYPE\": \"ФИС ФРДО: Вид документа\",\n      \"FRDO_EXTRA_PROGRAM\": \"ФИС ФРДО: Дополнительная профессиональная программа (повышение квалификации/ профессиональная переподготовка)\"\n    },\n    \n    \"COUNTERS\": { // ДОБАВЛЕНО: новая секция\n      \"COUNTER_TYPE\": \"Тип счётчика\",\n      \"CURRENT_VALUE\": \"Текущее значение\", \n      \"LAST_USED\": \"Последнее использование\",\n      \"LOCKED\": \"Заблокирован\"\n    }\n  },\n\n  // ========== ТРИГГЕРЫ ГЕНЕРАЦИИ ========== \n  \"GENERATION_TRIGGERS\": { // ДОБАВЛЕНО: новая секция\n    \"NEW\": \"новая\",     // lowercase как в рабочей версии\n    \"START\": \"запуск\",  \n    \"DONE\": \"готово\"\n  },\n\n  // ========== ОБЯЗАТЕЛЬНЫЕ ПОЛЯ ==========\n  \"REQUIRED_FIELDS\": {\n    \"base\": [\n      \"Дата создания\",\n      \"Фамилия Имя Отчество\",\n      \"Фамилия Имя Отчество в склонении\", \n      \"Программа\",\n      \"Часов\",\n      \"Сценарий\",\n      \"Документ об образовании\"\n    ],\n    \"diploma_qualified\": [\n      \"Квалификация\"\n    ],\n    \"fis_frdo\": [\n      \"СНИЛС\",\n      \"Дата рождения получателя\",\n      \"Пол получателя\"\n    ]\n  },\n\n\n\n  // ========== СТАТУСЫ ==========\n  \"STATUSES\": {\n    \"REGISTRY\": {\n      \"EMPTY\": \"\",\n      \"INCOMPLETE\": \"Неполные данные\",\n      \"READY\": \"Готов к обработке\",\n      \"IN_LAYOUTS\": \"Передано в макеты\",\n      \"CHANGED\": \"Изменены данные\",\n      \"DOCUMENTS_READY\": \"Документы готовы\",\n      \"READY_FOR_FIS\": \"Готов к подаче в ФИС ФРДО\",\n      \"IN_FIS_BATCH\": \"В пакете ФИС ФРДО\",\n      \"SUBMITTED_TO_FIS\": \"Подано в ФИС ФРДО\",\n      \"ISSUED\": \"Выдано\",\n      \"SENT_BY_MAIL\": \"Отправлено почтой\",\n      \"URGENT\": \"🔴 СРОЧНО\"\n    },\n    \"LAYOUTS\": {\n      \"WAITING\": \"Ожидает к генерации\",\n      \"NEEDS_REGEN\": \"Требует перегенерации\",\n      \"URGENT\": \"🔴 СРОЧНО\",\n      \"IN_QUEUE\": \"В очереди\",\n      \"GENERATING\": \"Генерируется\", // ДОБАВЛЕНО\n      \"CREATED\": \"Макет создан\",\n      \"ERROR\": \"Ошибка генерации\",\n      \"LOCKED\": \"Заблокировано\" // ДОБАВЛЕНО\n    }\n  },\n\n  // ========== СЦЕНАРИИ И ПАКЕТЫ ==========\n  \"SCENARIOS\": {\n    \"Диплом простой\": {\n      \"documents\": [\"Диплом простой\", \"Приложение\",\"Предметы\",\"Выписка ПП\",\"Диплом простой (подложка)\", \"Приложение (подложка)\",\"Предметы (подложка)\"],\n      \"count\": 8\n    },\n    \"Диплом с квалификацией\": {\n      \"documents\": [\"Диплом с квалификацией\", \"Приложение\", \"Предметы\",\"Выписка ПП\", \"Диплом с квалификацией (подложка)\", \"Приложение (подложка)\", \"Предметы (подложка)\"],\n      \"count\": 8\n    },\n    \"Диплом с квалификацией + УД\": {\n      \"documents\": [\"Диплом с квалификацией\", \"Приложение\", \"Предметы\",\"Выписка ПП\",\"Корочка ПП\",\"Диплом с квалификацией (подложка)\", \"Приложение (подложка)\", \"Предметы (подложка)\"],\n      \"count\": 10\n    }, \n    \"Диплом простой + УД\": {\n      \"documents\": [\"Диплом простой\", \"Приложение\", \"Предметы\",\"Выписка ПП\",\"Корочка ПП\",\"Диплом простой (подложка)\", \"Приложение (подложка)\", \"Предметы (подложка)\"],\n      \"count\": 10\n    }, \n    \"Удостоверение ПК\" : {\n      \"documents\": [\"Удостоверение ПК\",\"Выписка ПК\"],\n      \"count\": 4\n    },\n    \"Удостоверение ПК + УД фото\" : {\n      \"documents\": [\"Удостоверение ПК\",\"Выписка ПК\", \"Корочка ПК фото\"],\n      \"count\": 6\n    },\n    \"Удостоверение ПК + УД\" : {\n      \"documents\": [\"Удостоверение ПК\",\"Выписка ПК\",\"Корочка ПК\"],\n      \"count\": 6\n    },\n    \"БИГ Удостоверение ПК\" : {\n      \"documents\": [\"Удостоверение ПК\",\"Выписка ПК\"],\n      \"count\": 4\n    },\n    \"БИГ Удостоверение ПК + УД фото\" : {\n      \"documents\": [\"Удостоверение ПК\",\"Выписка ПК\", \"Корочка ПК фото\"],\n      \"count\": 5\n    },\n    \"БИГ Удостоверение ПК + УД\" : {\n      \"documents\": [\"Удостоверение ПК\",\"Выписка ПК\",\"Корочка ПК\"],\n      \"count\": 5\n    },\n    \"Удостоверение ДО\" : {\n      \"documents\": [\"Удостоверение ДО\"],\n      \"count\": 2\n    },\n    \"Сертификат\" : {\n      \"documents\": [\"Сертификат\"],\n      \"count\": 2\n    },\n    \"ОТ\": {\n      \"documents\": [\"ОТ\",\"Выписка ОТ\"],\n      \"count\": 2\n    },\n    \"ОТ высота\": {\n      \"documents\": [\"ОТ высота\",\"Выписка ОТ\"],\n      \"count\": 2\n    }\n    \n  },\n\n  // ========== СОТРУДНИКИ ==========\n  \"EMPLOYEES\": {\n    \"Полянская Мария\": {\n      \"folderId\": \"1RuDqHlHDfU5aChhpv1r4zNQRDIzzBh4K\"\n    },\n    \"Черненко Мария\": {\n      \"folderId\": \"1z-CIaI1vLSrnWOWD3wvT0l1kTSpTWyDD\"\n    },\n    \"Федорова Мария\": {\n      \"folderId\": \"1dXORm1U-sq5B52denaK59YtFv7K_A_9A\"\n    },\n    \"Настя\": {\n      \"folderId\": \"1cwiQBaxLS9hsJJum3GmUj24BLhzzkNku\"\n    },\n    \"Марина\": {\n      \"folderId\": \"1_dgBt_La_swpVkVPf36IelYUwLA4g_0e\"\n    },\n    \"Леднева Ольга\": {\n      \"folderId\": \"19ZEzJRNV_iDyDvJ4dBFTxH6lAmik57sm\"\n    },\n    \"Басана\": {\n      \"folderId\": \"10a6JgPpzFZvt19Lp6QSm70h1C_8O81KY\"\n    },\n    \"Крис\": {\n      \"folderId\": \"1E6aIiw2i598l7T5tu9Sy_TX9yEI0s08v\"\n    }  \n  },\n\n  // ========== КРИТИЧНЫЕ ПОЛЯ ДЛЯ ХЭША ==========\n  \"CRITICAL_FIELDS\": [\n    \"Фамилия Имя Отчество\",\n    \"Фамилия Имя Отчество в склонении\",\n    \"Программа\", \n    \"Квалификация\",\n    \"Специализация\",\n    \"Часов\",\n    \"Дата выдачи\",\n    \"Дата начала (фикс)\",\n    \"Дата окончания (фикс)\",\n    \"Срок обучения (дн.)\"\n  ],\n\n  // ========== ФОРМАТЫ РЕГИСТРАЦИОННЫХ НОМЕРОВ ==========\n  \"REG_NUMBER_FORMATS\": {\n    \"Диплом простой\": {\n      \"prefix\": \"П\", \n      \"format\": \"{number}-{yy}{month}{prefix}\",\n      \"counter_name\": \"diploma_counter\",\n      \"startFrom\": 98,\n      \"variable\": \"Рег-ПП\",\n      \"shared\": true // ДОБАВЛЕНО: общий счетчик с квалификацией\n    },\n    \"Диплом с квалификацией\": {\n      \"prefix\": \"П\", \n      \"format\": \"{number}-{yy}{month}{prefix}\",\n      \"counter_name\": \"diploma_counter\",\n      \"startFrom\": 98,\n      \"variable\": \"Рег-ПП\",\n      \"shared\": true // ДОБАВЛЕНО: общий счетчик с квалификацией\n    },\n    \"Удостоверение ПК\": {\n      \"prefix\": \"ПК\",\n      \"format\": \"{number}-{month}/{prefix}\",\n      \"counter_name\": \"pk_counter\",\n      \"startFrom\": 29,\n      \"variable\": \"Рег-ПК\",\n      \"shared\": true\n    },\n    \"Сертификат\": {\n      \"prefix\": \"ПК\",\n      \"format\": \"{number}-{month}/{prefix}\",\n      \"counter_name\": \"pk_counter\",\n      \"startFrom\": 29,\n      \"variable\": \"Рег-ПК\"\n    },\n    \"Удостоверение ДО\": {\n      \"prefix\": \"ПК\",\n      \"format\": \"{number}-{month}/{prefix}\",\n      \"counter_name\": \"pk_counter\",\n      \"startFrom\": 29,\n      \"variable\": \"Рег-ПК\"\n    },\n    \"Удостоверение РС\": {\n      \"prefix\": \"АН\",\n      \"format\": \"{number}-{prefix}\",\n      \"counter_name\": \"rs_counter\",\n      \"startFrom\": 24216,\n      \"variable\": \"Рег-РС-АН\",\n      \"shared\": true\n    },\n    \"Выписка ПП\": { // ДОБАВЛЕНО\n      \"prefix\": \"ПП\",\n      \"format\": \"{prefix}-{month}{yy}-{number}\",\n      \"counter_name\": \"vypiska_counter_pp\",\n      \"startFrom\": 95,\n      \"variable\": \"Рег-ВПП\",\n      \"parentVariable\": \"Рег-ПП\"\n    },\n    \"Выписка ПК\": { // ДОБАВЛЕНО\n      \"prefix\": \"ПК\",\n      \"format\": \"{prefix}-{month}{yy}-{number}\",\n      \"counter_name\": \"vypiska_counter_pk\",\n      \"startFrom\": 95,\n      \"variable\": \"Рег-ВПК\",\n      \"parentVariable\": \"Рег-ПК\"\n    },\n    \"Предметы\": { // ДОБАВЛЕНО\n      \"useParent\": true\n    },\n    \"Приложение\": { // ДОБАВЛЕНО\n      \"useParent\": true\n    },\n    \"Корочка ПП\": { // ДОБАВЛЕНО\n      \"useParent\": true\n    },\n    \"Корочка ПК\": { // ДОБАВЛЕНО\n      \"useParent\": true\n    },\n  },\n\n  // ========== ДОПУСТИМЫЕ ЧАСЫ ==========\n\"VALID_HOURS\": $('makeHoursFormat').first().json.VALID_HOURS,\n  // ========== КОНСТАНТЫ ДЛЯ РАСЧЕТА ПЕРИОДОВ ==========\n\"HOURS_TO_PERIOD\": $('makeHoursFormat').first().json.HOURS_TO_PERIOD,\n  // ========== СИСТЕМНЫЕ НАСТРОЙКИ ========== \n  \n  \"SYSTEM\": { // ДОБАВЛЕНО: новая секция\n    \"LOCK_TIMEOUT_MINUTES\": 5,\n    \"MAX_RETRIES\": 3,\n    \"BATCH_SIZE\": 50,\n    \"LOG_RETENTION_DAYS\": 90,\n    \"ID_PREFIX\": \"REQ\",\n    \"ID_PAD_LENGTH\": 5\n  },\n\n  // ========== ПРАЗДНИЧНЫЕ ДНИ 2025 ==========\n\"HOLIDAYS\": [\n  // 2024 год\n  \"2024-01-01\",\"2024-01-02\",\"2024-01-03\",\"2024-01-04\",\"2024-01-05\",\n  \"2024-01-06\",\"2024-01-07\",\"2024-01-08\",\n  \"2024-02-23\",\n  \"2024-03-08\",\n  \"2024-04-29\",\"2024-04-30\",\n  \"2024-05-01\",\"2024-05-09\",\"2024-05-10\",\n  \"2024-06-12\",\n  \"2024-11-04\",\n  \"2024-12-30\",\"2024-12-31\",\n  \n  // 2025 год\n  \"2025-01-01\",\"2025-01-02\",\"2025-01-03\",\"2025-01-04\",\"2025-01-05\",\n  \"2025-01-06\",\"2025-01-07\",\"2025-01-08\",\n  \"2025-02-23\",\"2025-02-24\",\n  \"2025-03-08\",\"2025-03-09\",\"2025-03-10\",\n  \"2025-05-01\",\"2025-05-02\",\"2025-05-03\",\"2025-05-04\",\n  \"2025-05-09\",\"2025-05-10\",\"2025-05-11\",\"2025-05-12\",\n  \"2025-06-12\",\"2025-06-13\",\n  \"2025-11-03\",\"2025-11-04\",\n  \"2025-12-31\",\n  \n  // 2026 год (предварительно, официальный календарь ещё не утверждён)\n  \"2026-01-01\",\"2026-01-02\",\"2026-01-03\",\"2026-01-04\",\"2026-01-05\",\n  \"2026-01-06\",\"2026-01-07\",\"2026-01-08\",\"2026-01-09\",\n  \"2026-02-23\",\n  \"2026-03-08\",\"2026-03-09\",\n  \"2026-05-01\",\"2026-05-04\",\n  \"2026-05-09\",\"2026-05-11\",\n  \"2026-06-12\",\n  \"2026-11-04\"\n],\n\n  // ========== НАЗВАНИЯ МЕСЯЦЕВ ==========\n  \"MONTH_NAMES\": {\n    \"genitive\": [\n      \"января\",\"февраля\",\"марта\",\"апреля\",\"мая\",\"июня\",\n      \"июля\",\"августа\",\"сентября\",\"октября\",\"ноября\",\"декабря\"\n    ]\n  }\n};\n\n\n\nreturn [{ \n  json: {config: AUTODOCK_CONFIG}\n}];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          672,
+          64
+        ],
+        "id": "af45b5b4-0299-4284-b673-1ca83039c743",
+        "name": "config"
+      },
+      {
+        "parameters": {
+          "documentId": {
+            "__rl": true,
+            "value": "1EisJDIxaU-ua3RhLnanE_ZgnXFFY2ARkUsSuVj0pU4A",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 1910040249,
+            "mode": "list",
+            "cachedResultName": "Часы-дни",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EisJDIxaU-ua3RhLnanE_ZgnXFFY2ARkUsSuVj0pU4A/edit#gid=1910040249"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          304,
+          64
+        ],
+        "id": "c3e43e90-876b-4a32-bccc-1657f23e37dd",
+        "name": "GetHours",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "Xpp4ndWQ84MtD53m",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "// Предположим, что твои данные приходят из предыдущего нода\n// в items[0].json, как массив объектов\nconst data = $input.all();\n\n// Извлекаем данные из каждого item.json\nconst hoursData = data.map(item => item.json);\n\n// Формируем массив VALID_HOURS\nconst VALID_HOURS = hoursData.map(el => el[\"ЧАСЫ\"]);\n\n// Формируем объект HOURS_TO_PERIOD\nconst HOURS_TO_PERIOD = {};\nfor (const el of hoursData) {\n  HOURS_TO_PERIOD[el[\"ЧАСЫ\"]] = {\n    value: el[\"ДНИ\"],\n    unit: \"дней\"\n  };\n}\n\n// Возвращаем результат как один item\nreturn [\n  {\n    json: {\n      VALID_HOURS,\n      HOURS_TO_PERIOD\n    }\n  }\n];\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          496,
+          64
+        ],
+        "id": "a3429af8-714d-485d-af77-3ac38ca53b70",
+        "name": "makeHoursFormat"
+      },
+      {
+        "parameters": {
+          "jsCode": "// ===============================================\n//     ПОДГОТОВКА ЗАДАЧ ДЛЯ ГЕНЕРАЦИИ ДОКУМЕНТОВ\n// ===============================================\n\n// Получаем конфигурацию\nconst config = $('config').first().json.config;\n\n// Получаем данные из реестра и шаблонов\nconst registryRows = $('Filter1').all() || [];\nconst templateRows = $('GetTemplates').all() || [];\n\nconsole.log(`Получено записей в реестре для обработки: ${registryRows.length}`);\nconsole.log(`Получено шаблонов: ${templateRows.length}`);\n\n// Функция разбора ФИО\nfunction splitFIO(fullName) {\n  const parts = (fullName || \"\").trim().split(/\\s+/);\n  return {\n    surname: parts[0] || \"\",\n    name: parts[1] || \"\",\n    patronymic: parts.slice(2).join(\" \") || \"\"\n  };\n}\n\n// Функция парсинга дат\nfunction parseDate(dateValue) {\n  if (!dateValue) return null;\n  \n  // Обработка формата DD.MM.YYYY (русский формат)\n  if (typeof dateValue === 'string') {\n    const ddmmyyyyPattern = /^(\\d{2})\\.(\\d{2})\\.(\\d{4})$/;\n    const match = dateValue.match(ddmmyyyyPattern);\n    \n    if (match) {\n      const [, day, month, year] = match;\n      const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));\n      return date instanceof Date && !isNaN(date.getTime()) ? date : null;\n    }\n  }\n  \n  // Для других форматов (ISO, timestamp, объекты Date)\n  const date = new Date(dateValue);\n  return date instanceof Date && !isNaN(date.getTime()) ? date : null;\n}\n\nfunction isWeekend(date) {\n  const day = date.getDay();\n  return day === 0 || day === 6;\n}\n\nfunction isHoliday(date) {\n  const dateStr = date.toISOString().split('T')[0];\n  return config.HOLIDAYS.includes(dateStr);\n}\n\nfunction isWorkingDay(date) {\n  return !isWeekend(date) && !isHoliday(date);\n}\n\nfunction subtractWorkingDays(endDate, daysToSubtract) {\n  let currentDate = new Date(endDate);\n  let workingDaysCount = 0;\n  \n  // Включаем конечную дату в подсчёт\n  if (isWorkingDay(currentDate)) {\n    workingDaysCount = 1;\n  }\n  \n  // Вычитаем оставшиеся дни\n  while (workingDaysCount < daysToSubtract) {\n    currentDate.setDate(currentDate.getDate() - 1);\n    if (isWorkingDay(currentDate)) {\n      workingDaysCount++;\n    }\n  }\n  \n  return currentDate;\n}\n\nfunction formatDateDDMMYYYY(date) {\n  const d = new Date(date);\n  return `${String(d.getDate()).padStart(2,\"0\")}.${String(d.getMonth()+1).padStart(2,\"0\")}.${d.getFullYear()}`;\n}\n\nfunction getDefaultPeriod() {\n  const endDate = new Date();\n  const startDate = new Date();\n  startDate.setDate(endDate.getDate() - 30);\n  return formatPeriodResult(startDate, endDate);\n}\n\nfunction formatPeriodResult(startDate, endDate) {\n  return {\n    startYear: startDate.getFullYear(),\n    endYear: endDate.getFullYear(),\n    dateFull: formatDateDDMMYYYY(endDate)\n  };\n}\n\n// Функция определения периода обучения\nfunction calculateStudyPeriod(regData) {\n  const C = config.COLUMNS.REGISTRY;\n  \n  // Парсим все возможные даты заранее\n  const startDateValue = parseDate(regData[C.START_DATE]);\n  const endDateValue = parseDate(regData[C.END_DATE]);\n  const issueDateValue = parseDate(regData[C.ISSUE_DATE]);\n  const createdDateValue = parseDate(regData[C.CREATED_DATE]);\n  const customTerm = regData[C.CUSTOM_TERM] ? parseInt(regData[C.CUSTOM_TERM]) : null;\n  const hours = regData[C.HOURS] ? parseInt(regData[C.HOURS]) : null;\n\n  // 1️⃣ ВАРИАНТ 1: START_DATE + END_DATE\n  if (startDateValue && endDateValue) {\n    console.log(\"Вариант 1: Используем фиксированные START_DATE и END_DATE\");\n    return formatPeriodResult(startDateValue, endDateValue);\n  }\n\n  // 2️⃣ ВАРИАНТ 2: ISSUE_DATE + CUSTOM_TERM\n  if (issueDateValue && customTerm && !isNaN(customTerm)) {\n    console.log(\"Вариант 2: Используем ISSUE_DATE + CUSTOM_TERM\");\n    const endDate = issueDateValue;\n    const startDate = subtractWorkingDays(endDate, customTerm);\n    return formatPeriodResult(startDate, endDate);\n  }\n\n  // 3️⃣ ВАРИАНТ 3: Только ISSUE_DATE (+ часы для расчета)\n  if (issueDateValue && hours && !isNaN(hours)) {\n    console.log(\"Вариант 3: Используем только ISSUE_DATE (+ часы для расчета периода)\");\n    const period = config.HOURS_TO_PERIOD[String(hours)];\n    \n    if (!period) {\n      console.warn(`Неизвестное количество часов: ${hours}`);\n      return getDefaultPeriod();\n    }\n    \n    const endDate = issueDateValue;\n    const startDate = subtractWorkingDays(endDate, period.value);\n    return formatPeriodResult(startDate, endDate);\n  }\n\n  // 4️⃣ ВАРИАНТ 4: Только CUSTOM_TERM + CREATED_DATE\n  if (customTerm && !isNaN(customTerm) && createdDateValue) {\n    console.log(\"Вариант 4: Используем только CUSTOM_TERM + CREATED_DATE\");\n    const endDate = createdDateValue;\n    const startDate = subtractWorkingDays(endDate, customTerm);\n    return formatPeriodResult(startDate, endDate);\n  }\n\n  // 5️⃣ ВАРИАНТ 5: Только CREATED_DATE (+ часы для расчета)\n  if (createdDateValue && hours && !isNaN(hours)) {\n    console.log(\"Вариант 5: Используем только CREATED_DATE (+ часы для расчета периода)\");\n    const period = config.HOURS_TO_PERIOD[String(hours)];\n    \n    if (!period) {\n      console.warn(`Неизвестное количество часов: ${hours}`);\n      return getDefaultPeriod();\n    }\n    \n    const endDate = createdDateValue;\n    const startDate = subtractWorkingDays(endDate, period.value);\n    return formatPeriodResult(startDate, endDate);\n  }\n\n  // 🔄 FALLBACK: Если ничего не подошло\n  console.warn(\"Не найдены необходимые данные для расчета периода, используем default\");\n  return getDefaultPeriod();\n}\n\n// Функция проверки заполненности обязательных полей\nfunction validateFields(data) {\n  const requiredFields = [\n    { key: 'id', label: 'ID' },\n    { key: 'scenario', label: 'Сценарий' },\n    { key: 'citizenship', label: 'Гражданство' },\n    { key: 'birthDate', label: 'Дата рождения' },\n    { key: 'gender', label: 'Пол' },\n    { key: 'program', label: 'Программа' },\n    { key: 'regNumber', label: 'Регистрационный номер' },\n    { key: 'snils', label: 'СНИЛС' },\n    { key: 'surname', label: 'Фамилия' },\n    { key: 'name', label: 'Имя' },\n    { key: 'hours', label: 'Часы' },\n    { key: 'frdoDocType', label: 'Вид документа ФРДО' },\n    { key: 'frdoExtraProgram', label: 'Дополнительная профессиональная программа ФРДО' }\n  ];\n  \n  // Проверяем period отдельно\n  const periodFields = [\n    { key: 'startYear', label: 'Год начала обучения', parent: 'period' },\n    { key: 'endYear', label: 'Год окончания обучения', parent: 'period' },\n    { key: 'dateFull', label: 'Дата окончания', parent: 'period' }\n  ];\n  \n  const missingFields = [];\n  \n  // Проверяем основные поля\n  requiredFields.forEach(field => {\n    const value = data[field.key];\n    if (!value || (typeof value === 'string' && value.trim() === '')) {\n      missingFields.push(field.label);\n    }\n  });\n  \n  // Проверяем поля периода\n  periodFields.forEach(field => {\n    const value = data.period ? data.period[field.key] : null;\n    if (!value || (typeof value === 'string' && value.trim() === '')) {\n      missingFields.push(field.label);\n    }\n  });\n  \n  if (data.scenario && data.scenario.includes(\"Диплом\")) {\n    const value = data.frdoDocNum;\n    if (!value || (typeof value === 'string' && value.trim() === '')) {\n      missingFields.push('Номер документа ФРДО');\n    }\n    }\n  \n  return missingFields;\n}\n\nif (registryRows.length === 0) {\n  return [{ json: { log: \"⚠️ Нет записей в реестре для обработки\" } }];\n}\n\n// Создаем индекс шаблонов по сценариям\nconst CT = config.COLUMNS.TEMPLATES;\nconst templatesByScenario = new Map();\n\ntemplateRows.forEach(t => {\n  const scenario = t.json[CT.SCENARIO];\n  if (scenario) {\n    // Сохраняем первый найденный шаблон для каждого сценария\n    if (!templatesByScenario.has(scenario)) {\n      templatesByScenario.set(scenario, {\n        frdoDocType: t.json[CT.FRDO_DOC_TYPE] || \"\",\n        frdoExtraProgram: t.json[CT.FRDO_EXTRA_PROGRAM] || \"\"\n      });\n    }\n  }\n});\n\nconsole.log(`Создан индекс шаблонов для ${templatesByScenario.size} сценариев`);\n\n// Готовим задачи\nconst tasks = [];\nconst C = config.COLUMNS.REGISTRY;\n\nregistryRows.forEach((item, index) => {\n  const reg = item.json;\n  const id = reg[C.ID];\n  const scenario = reg[C.SCENARIO];\n  \n  // Проверяем обязательные поля\n  if (!id) {\n    return;\n  }\n\n  // Рассчитываем период обучения для данной заявки\n  const period = calculateStudyPeriod(reg);\n  \n  // Обработка гражданства\n  let citizenship = \"643\"; // По умолчанию Россия\n  const citizenshipValue = reg[C.CITIZENSHIP];\n  if (citizenshipValue && citizenshipValue.trim() !== \"\") {\n    const parts = citizenshipValue.split(\":\");\n    if (parts.length > 1) {\n      citizenship = parts[1].trim();\n    }\n  }\n  \n  // Разбор ФИО\n  const fio = splitFIO(reg[C.FULL_NAME] || \"\");\n  \n  // FRDO_DOC_NUM - только для сценариев с \"Диплом\"\n  let frdoDocNum = \"\";\n  if (scenario && scenario.includes(\"Диплом\")) {\n    frdoDocNum = reg[C.FRDO_DOC_NUM] || \"\";\n  } else if (scenario && scenario.includes(\"Удостоверение\")) {\n    frdoDocNum = \"Нет\";\n  }\n    \n  // Получаем данные из шаблонов по сценарию\n  const templateData = templatesByScenario.get(scenario) || {\n    frdoDocType: \"\",\n    frdoExtraProgram: \"\"\n  };\n  \n  // Формируем данные записи\n  const recordData = {\n    id,\n    scenario: scenario || null,\n    citizenship,\n    birthDate: reg[C.BIRTH_DATE] || \"\",\n    gender: reg[C.GENDER] || \"\",\n    program: reg[C.PROGRAM] || \"\",\n    regNumber: reg[C.REG_NUMBER].split(\":\")[1] || \"\",\n    snils: reg[C.SNILS] || \"\",\n    surname: fio.surname,\n    name: fio.name,\n    qualif: reg[C.QUALIFICATION] || \"Нет\",\n    patronymic: fio.patronymic,\n    frdoDocNum,\n    hours: reg[C.HOURS] || \"\",\n    frdoDocType: templateData.frdoDocType,\n    frdoExtraProgram: templateData.frdoExtraProgram,\n    period: {\n      startYear: period.startYear,\n      endYear: period.endYear,\n      dateFull: period.dateFull\n    },\n  };\n  \n  // Проверяем заполненность полей\n  const missingFields = validateFields(recordData);\n  \n  if (missingFields.length === 0) {\n    // Все обязательные поля заполнены\n    recordData.status = \"toFrdoTable\";\n    console.log(`✅ ID=${id}: Все поля заполнены`);\n  } else {\n    // Есть незаполненные обязательные поля\n    recordData.status = \"incomplete\";\n    recordData.missingFields = missingFields;\n    console.log(`⚠️ ID=${id}: Не заполнены поля: ${missingFields.join(', ')}`);\n  }\n  \n  // Добавляем задачу\n  tasks.push({\n    json: recordData\n  });\n});\n\nconsole.log(`\\n=== ИТОГО ===`);\nconsole.log(`Подготовлено записей: ${tasks.length}`);\nconsole.log(`Готовых для ФРДО: ${tasks.filter(t => t.json.status === \"toFrdoTable\").length}`);\nconsole.log(`Неполных записей: ${tasks.filter(t => t.json.status === \"incomplete\").length}`);\n\nreturn tasks;"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1792,
+          64
+        ],
+        "id": "b8caf4a8-2d4c-49a8-a238-07d03afe21eb",
+        "name": "FRDO_DATA"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "4f633ca9-f4a5-4ec6-9e6b-16e44f10aed2",
+                      "leftValue": "={{ $json.status }}",
+                      "rightValue": "incomplete",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.status }}",
+                      "rightValue": "toFrdoTable",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "ec57228b-a8db-4fdf-953a-c8caa2996746"
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.2,
+        "position": [
+          2016,
+          64
+        ],
+        "id": "dc8a105e-6249-4f4a-9f27-086c3d07b4af",
+        "name": "isCompleteData",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "operation": "copy",
+          "fileId": {
+            "__rl": true,
+            "value": "1kJdBHOG61uGAWjWrDmj1JXwhwvR2MshVj8Ii82PCOik",
+            "mode": "id"
+          },
+          "name": "=ПК-ПП:{{ $now.format('dd.MM.yyyy') }}",
+          "sameFolder": false,
+          "driveId": {
+            "__rl": true,
+            "value": "My Drive",
+            "mode": "list",
+            "cachedResultName": "My Drive",
+            "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+          },
+          "folderId": {
+            "__rl": true,
+            "value": "1xNqgN5d866EAjLnqK9uz7kY4e2KEZdEm",
+            "mode": "id"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleDrive",
+        "typeVersion": 3,
+        "position": [
+          848,
+          64
+        ],
+        "id": "f15aa034-bb22-4d9a-b556-7505a341fa26",
+        "name": "CopyFRDOTamplate",
+        "executeOnce": true,
+        "credentials": {
+          "googleDriveOAuth2Api": {
+            "id": "jzAxR4XiEVWwbE9z",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "={{$('CopyFRDOTamplate').first().json.id}}",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 1546266917,
+            "mode": "list",
+            "cachedResultName": "Шаблон",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1R3cdNff2pY5LR3-uz-BoGP3xLPaS4Y2ihlI_oWQhHc8/edit#gid=1546266917"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "Вид документа": "={{ $('isCompleteData').item.json.frdoDocType }}",
+              "Статус документа": "Оригинал",
+              "Подтверждение утраты": "Нет",
+              "Подтверждение обмена": "Нет",
+              "Подтверждение уничтожения": "Нет",
+              "Серия документа": "Нет",
+              "Номер документа": "={{ $('isCompleteData').item.json.frdoDocNum }}",
+              "Дата выдачи документа": "={{ $('isCompleteData').item.json.period.dateFull }}",
+              "Регистрационный номер": "={{ $('isCompleteData').item.json.regNumber }}",
+              "Дополнительная профессиональная программа (повышение квалификации/ профессиональная переподготовка)": "={{ $('isCompleteData').item.json.frdoExtraProgram }}",
+              "Наименование дополнительной профессиональной программы": "={{ $('isCompleteData').item.json.program }}",
+              "Год начала обучения (для документа о квалификации)": "={{ $('isCompleteData').item.json.period.startYear }}",
+              "Год окончания обучения (для документа о квалификации)": "={{ $('isCompleteData').item.json.period.endYear }}",
+              "Срок обучения, часов (для документа о квалификации)": "={{ $('isCompleteData').item.json.hours }}",
+              "Фамилия получателя": "={{ $('isCompleteData').item.json.surname }}",
+              "Имя получателя": "={{ $('isCompleteData').item.json.name }}",
+              "Отчество получателя": "={{ $('isCompleteData').item.json.patronymic }}",
+              "Дата рождения получателя": "={{ $('isCompleteData').item.json.birthDate }}",
+              "Пол получателя": "={{ $('isCompleteData').item.json.gender }}",
+              "СНИЛС": "={{ $('isCompleteData').item.json.snils }}",
+              "Форма обучения": "Заочная",
+              "Источник финансирования обучения": "Платное обучение",
+              "Форма получения образования на момент прекращения образовательных отношений": "в образовательной организации",
+              "Гражданство получателя (код страны по ОКСМ)": "={{ $('isCompleteData').item.json.citizenship }}",
+              "Наименование квалификации, профессии, специальности": "={{ $('isCompleteData').item.json.qualif }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "Вид документа",
+                "displayName": "Вид документа",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Статус документа",
+                "displayName": "Статус документа",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Подтверждение утраты",
+                "displayName": "Подтверждение утраты",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Подтверждение обмена",
+                "displayName": "Подтверждение обмена",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Подтверждение уничтожения",
+                "displayName": "Подтверждение уничтожения",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Серия документа",
+                "displayName": "Серия документа",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Номер документа",
+                "displayName": "Номер документа",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Дата выдачи документа",
+                "displayName": "Дата выдачи документа",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Регистрационный номер",
+                "displayName": "Регистрационный номер",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Дополнительная профессиональная программа (повышение квалификации/ профессиональная переподготовка)",
+                "displayName": "Дополнительная профессиональная программа (повышение квалификации/ профессиональная переподготовка)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Наименование дополнительной профессиональной программы",
+                "displayName": "Наименование дополнительной профессиональной программы",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Наименование области профессиональной деятельности",
+                "displayName": "Наименование области профессиональной деятельности",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Укрупненные группы специальностей",
+                "displayName": "Укрупненные группы специальностей",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Наименование квалификации, профессии, специальности",
+                "displayName": "Наименование квалификации, профессии, специальности",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Уровень образования ВО/СПО",
+                "displayName": "Уровень образования ВО/СПО",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Фамилия указанная в дипломе о ВО или СПО",
+                "displayName": "Фамилия указанная в дипломе о ВО или СПО",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Серия документа о ВО/СПО",
+                "displayName": "Серия документа о ВО/СПО",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Номер документа о ВО/СПО",
+                "displayName": "Номер документа о ВО/СПО",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Год начала обучения (для документа о квалификации)",
+                "displayName": "Год начала обучения (для документа о квалификации)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Год окончания обучения (для документа о квалификации)",
+                "displayName": "Год окончания обучения (для документа о квалификации)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Срок обучения, часов (для документа о квалификации)",
+                "displayName": "Срок обучения, часов (для документа о квалификации)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Фамилия получателя",
+                "displayName": "Фамилия получателя",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Имя получателя",
+                "displayName": "Имя получателя",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Отчество получателя",
+                "displayName": "Отчество получателя",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Дата рождения получателя",
+                "displayName": "Дата рождения получателя",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Пол получателя",
+                "displayName": "Пол получателя",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "СНИЛС",
+                "displayName": "СНИЛС",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Форма обучения",
+                "displayName": "Форма обучения",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Источник финансирования обучения",
+                "displayName": "Источник финансирования обучения",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Форма получения образования на момент прекращения образовательных отношений",
+                "displayName": "Форма получения образования на момент прекращения образовательных отношений",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Гражданство получателя (код страны по ОКСМ)",
+                "displayName": "Гражданство получателя (код страны по ОКСМ)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Наименование документа об образовании (оригинала)",
+                "displayName": "Наименование документа об образовании (оригинала)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Серия (оригинала)",
+                "displayName": "Серия (оригинала)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Номер (оригинала)",
+                "displayName": "Номер (оригинала)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Регистрационный N (оригинала)",
+                "displayName": "Регистрационный N (оригинала)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Дата выдачи (оригинала)",
+                "displayName": "Дата выдачи (оригинала)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Фамилия получателя (оригинала)",
+                "displayName": "Фамилия получателя (оригинала)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Имя получателя (оригинала)",
+                "displayName": "Имя получателя (оригинала)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Отчество получателя (оригинала)",
+                "displayName": "Отчество получателя (оригинала)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Номер документа для изменения",
+                "displayName": "Номер документа для изменения",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          2704,
+          112
+        ],
+        "id": "84b98994-3887-450c-a1c1-bcb09cf0d592",
+        "name": "UpdateFRDOTable",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "Xpp4ndWQ84MtD53m",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "ec2ddf6b-15b5-4459-a370-abc9310a3ffc",
+                "leftValue": "={{$json.isEmpty()}}",
+                "rightValue": "",
+                "operator": {
+                  "type": "boolean",
+                  "operation": "false",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          2432,
+          320
+        ],
+        "id": "39b5f118-cc15-45f1-8ef2-b24ee3430c7c",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "operation": "deleteFile",
+          "fileId": {
+            "__rl": true,
+            "value": "={{$('CopyFRDOTamplate').first().json.id}}",
+            "mode": "id"
+          },
+          "options": {
+            "deletePermanently": true
+          }
+        },
+        "type": "n8n-nodes-base.googleDrive",
+        "typeVersion": 3,
+        "position": [
+          2704,
+          528
+        ],
+        "id": "cf8cdaa1-a290-4781-84a3-5f009007b5c6",
+        "name": "Delete a file",
+        "credentials": {
+          "googleDriveOAuth2Api": {
+            "id": "jzAxR4XiEVWwbE9z",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "weeks",
+                "triggerAtDay": [
+                  5
+                ],
+                "triggerAtHour": 7
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          128,
+          64
+        ],
+        "id": "dc116989-7f26-45c6-8f02-af2ad54511f1",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "documentId": {
+            "__rl": true,
+            "value": "1EisJDIxaU-ua3RhLnanE_ZgnXFFY2ARkUsSuVj0pU4A",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Реестр заявок",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EisJDIxaU-ua3RhLnanE_ZgnXFFY2ARkUsSuVj0pU4A/edit#gid=0"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "ID": "={{ $json.id }}",
+              "Статус заявки": "Передано в ФРДО",
+              "Незаполненные поля": "=",
+              "Название ФРДО": "={{ $('CopyFRDOTamplate').first().json.name }}",
+              "Дата ФРДО": "={{ $now.format('dd.MM.yyyy, hh:mm') }}",
+              "Дата последнего изменения": "={{ $now.format('dd.MM.yyyy, hh:mm') }}"
+            },
+            "matchingColumns": [
+              "ID"
+            ],
+            "schema": [
+              {
+                "id": "ID",
+                "displayName": "ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Дата создания",
+                "displayName": "Дата создания",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Ссылка на лид",
+                "displayName": "Ссылка на лид",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Статус заявки",
+                "displayName": "Статус заявки",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Статус работы",
+                "displayName": "Статус работы",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "ПЛАН",
+                "displayName": "ПЛАН",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "ФИС ФРДО: Номер документа",
+                "displayName": "ФИС ФРДО: Номер документа",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Комментарии",
+                "displayName": "Комментарии",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "ПАПКА",
+                "displayName": "ПАПКА",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Макеты",
+                "displayName": "Макеты",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Печать",
+                "displayName": "Печать",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Фамилия Имя Отчество",
+                "displayName": "Фамилия Имя Отчество",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Фамилия Имя Отчество в склонении",
+                "displayName": "Фамилия Имя Отчество в склонении",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Программа",
+                "displayName": "Программа",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Квалификация",
+                "displayName": "Квалификация",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Специализация",
+                "displayName": "Специализация",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Часов",
+                "displayName": "Часов",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Компания",
+                "displayName": "Компания",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Дата выдачи",
+                "displayName": "Дата выдачи",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Дата начала (фикс)",
+                "displayName": "Дата начала (фикс)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Дата окончания (фикс)",
+                "displayName": "Дата окончания (фикс)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Срок обучения (дн.)",
+                "displayName": "Срок обучения (дн.)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Город не Москва",
+                "displayName": "Город не Москва",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Сценарий",
+                "displayName": "Сценарий",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Документ об образовании",
+                "displayName": "Документ об образовании",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "СНИЛС",
+                "displayName": "СНИЛС",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Дата рождения",
+                "displayName": "Дата рождения",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Адрес",
+                "displayName": "Адрес",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Пол",
+                "displayName": "Пол",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Гражданство",
+                "displayName": "Гражданство",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Название ФРДО",
+                "displayName": "Название ФРДО",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Дата ФРДО",
+                "displayName": "Дата ФРДО",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Дата последнего изменения",
+                "displayName": "Дата последнего изменения",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Незаполненные поля",
+                "displayName": "Незаполненные поля",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Рег-номер",
+                "displayName": "Рег-номер",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Рег-номер (Выписка)",
+                "displayName": "Рег-номер (Выписка)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Дата от - Дата до",
+                "displayName": "Дата от - Дата до",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "row_number",
+                "displayName": "row_number",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "readOnly": true,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          2704,
+          304
+        ],
+        "id": "617cfc88-2682-4d1d-87c1-f48b4ad15cc9",
+        "name": "UpdateStatusesFRDOreestr",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "Xpp4ndWQ84MtD53m",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "documentId": {
+            "__rl": true,
+            "value": "1EisJDIxaU-ua3RhLnanE_ZgnXFFY2ARkUsSuVj0pU4A",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Реестр заявок",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EisJDIxaU-ua3RhLnanE_ZgnXFFY2ARkUsSuVj0pU4A/edit#gid=0"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "ID": "={{ $json.id }}",
+              "Статус заявки": "⛔️ Ошибка ФРДО",
+              "Дата последнего изменения": "={{ $now.format('dd.MM.yyyy, hh:mm') }}",
+              "Незаполненные поля": "=Для ФРДО:{{'\\n'}}{{ $json.missingFields.join('\\n') }}"
+            },
+            "matchingColumns": [
+              "ID"
+            ],
+            "schema": [
+              {
+                "id": "ID",
+                "displayName": "ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Дата создания",
+                "displayName": "Дата создания",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Ссылка на лид",
+                "displayName": "Ссылка на лид",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Статус заявки",
+                "displayName": "Статус заявки",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Статус работы",
+                "displayName": "Статус работы",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "ПЛАН",
+                "displayName": "ПЛАН",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "ФИС ФРДО: Номер документа",
+                "displayName": "ФИС ФРДО: Номер документа",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Комментарии",
+                "displayName": "Комментарии",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "ПАПКА",
+                "displayName": "ПАПКА",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Макеты",
+                "displayName": "Макеты",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Печать",
+                "displayName": "Печать",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Фамилия Имя Отчество",
+                "displayName": "Фамилия Имя Отчество",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Фамилия Имя Отчество в склонении",
+                "displayName": "Фамилия Имя Отчество в склонении",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Программа",
+                "displayName": "Программа",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Квалификация",
+                "displayName": "Квалификация",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Специализация",
+                "displayName": "Специализация",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Часов",
+                "displayName": "Часов",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Компания",
+                "displayName": "Компания",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Дата выдачи",
+                "displayName": "Дата выдачи",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Дата начала (фикс)",
+                "displayName": "Дата начала (фикс)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Дата окончания (фикс)",
+                "displayName": "Дата окончания (фикс)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Срок обучения (дн.)",
+                "displayName": "Срок обучения (дн.)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Город не Москва",
+                "displayName": "Город не Москва",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Сценарий",
+                "displayName": "Сценарий",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Документ об образовании",
+                "displayName": "Документ об образовании",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "СНИЛС",
+                "displayName": "СНИЛС",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Дата рождения",
+                "displayName": "Дата рождения",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Адрес",
+                "displayName": "Адрес",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Пол",
+                "displayName": "Пол",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Гражданство",
+                "displayName": "Гражданство",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Название ФРДО",
+                "displayName": "Название ФРДО",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Дата ФРДО",
+                "displayName": "Дата ФРДО",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Дата последнего изменения",
+                "displayName": "Дата последнего изменения",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Незаполненные поля",
+                "displayName": "Незаполненные поля",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Рег-номер",
+                "displayName": "Рег-номер",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Рег-номер (Выписка)",
+                "displayName": "Рег-номер (Выписка)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Дата от - Дата до",
+                "displayName": "Дата от - Дата до",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "row_number",
+                "displayName": "row_number",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "readOnly": true,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          2432,
+          -128
+        ],
+        "id": "62de234c-c1d7-4d6a-b1cc-afec56932fb3",
+        "name": "UpdateMissingFieldsReestr + Status",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "Xpp4ndWQ84MtD53m",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "74a879b1-9d63-45a3-9654-5b3409a58ff5",
+                "leftValue": "={{ $json[\"Сценарий\"] }}",
+                "rightValue": "БИГ Удостоверение ПК",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals",
+                  "name": "filter.operator.equals"
+                }
+              },
+              {
+                "id": "8e67c56b-2304-4a37-a2f8-c0a47e3b7729",
+                "leftValue": "={{ $json[\"Сценарий\"] }}",
+                "rightValue": "БИГ Удостоверение ПК + УД",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals",
+                  "name": "filter.operator.equals"
+                }
+              },
+              {
+                "id": "af5766d5-4883-4188-bb3c-f41ae4a554b5",
+                "leftValue": "={{ $json[\"Сценарий\"] }}",
+                "rightValue": "БИГ Удостоверение ПК + УД фото",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals",
+                  "name": "filter.operator.equals"
+                }
+              },
+              {
+                "id": "5f2f50bc-8fe7-4362-abbb-56b188d57930",
+                "leftValue": "={{ $json[\"Сценарий\"] }}",
+                "rightValue": "Диплом простой",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals",
+                  "name": "filter.operator.equals"
+                }
+              },
+              {
+                "id": "ddb5ac12-fd72-4357-ac57-a5a75cb9da95",
+                "leftValue": "={{ $json[\"Сценарий\"] }}",
+                "rightValue": "Диплом простой + УД",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals",
+                  "name": "filter.operator.equals"
+                }
+              },
+              {
+                "id": "ff903155-da5c-446f-bfc7-29a3e7045869",
+                "leftValue": "={{ $json[\"Сценарий\"] }}",
+                "rightValue": "Диплом с квалификацией",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals",
+                  "name": "filter.operator.equals"
+                }
+              },
+              {
+                "id": "9d17cbc1-8341-4e21-940b-d747609f5736",
+                "leftValue": "={{ $json[\"Сценарий\"] }}",
+                "rightValue": "Диплом с квалификацией + УД",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals",
+                  "name": "filter.operator.equals"
+                }
+              },
+              {
+                "id": "5ddddba7-ad54-4cbd-8856-d952559aa9a0",
+                "leftValue": "={{ $json[\"Сценарий\"] }}",
+                "rightValue": "Удостоверение ПК",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals",
+                  "name": "filter.operator.equals"
+                }
+              },
+              {
+                "id": "9ac494d7-3572-453d-b310-33879b4a7b0a",
+                "leftValue": "={{ $json[\"Сценарий\"] }}",
+                "rightValue": "Удостоверение ПК + УД",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals",
+                  "name": "filter.operator.equals"
+                }
+              },
+              {
+                "id": "e36f8ff2-6274-4c13-894c-0160fc567ee1",
+                "leftValue": "={{ $json[\"Сценарий\"] }}",
+                "rightValue": "Удостоверение ПК + УД фото",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals",
+                  "name": "filter.operator.equals"
+                }
+              }
+            ],
+            "combinator": "or"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.2,
+        "position": [
+          1040,
+          -288
+        ],
+        "id": "00b35d28-be4b-44b0-abde-5072d2864ea4",
+        "name": "Filter"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "7f9962df-a0a6-475c-85fb-b6036c9a43ea",
+                "leftValue": "={{ $json[\"Статус заявки\"] }}",
+                "rightValue": "Передано в ФРДО",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEquals"
+                }
+              },
+              {
+                "id": "54e258f6-92ab-4bbd-8788-4d461efecb92",
+                "leftValue": "={{ $json[\"Статус заявки\"] }}",
+                "rightValue": "⛔️ Ошибка ФРДО",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEquals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.2,
+        "position": [
+          1424,
+          64
+        ],
+        "id": "c0a477da-7d1d-4cc7-b709-d6ea467ca70c",
+        "name": "Filter1"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "95fa674a-a740-440f-b7c3-3a8255311ecd",
+                "leftValue": "={{ DateTime.fromFormat($json[\"Дата создания\"], \"dd.MM.yyyy\").toISODate() }}",
+                "rightValue": "={{ $today.toISO() }}",
+                "operator": {
+                  "type": "dateTime",
+                  "operation": "beforeOrEquals"
+                }
+              },
+              {
+                "id": "2b5019c6-af94-4884-8262-5f509c9ce769",
+                "leftValue": "={{ DateTime.fromFormat($json[\"Дата окончания (фикс)\"], \"dd.MM.yyyy\").toISODate() }}",
+                "rightValue": "={{ $today.toISO() }}",
+                "operator": {
+                  "type": "dateTime",
+                  "operation": "beforeOrEquals"
+                }
+              }
+            ],
+            "combinator": "or"
+          },
+          "options": {
+            "ignoreCase": false
+          }
+        },
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2.2,
+        "position": [
+          1232,
+          64
+        ],
+        "id": "82679ef3-1fee-4206-8945-2920e0644b32",
+        "name": "Filter2"
+      }
+    ],
+    "connections": {
+      "GetTemplates": {
+        "main": [
+          [
+            {
+              "node": "FRDO_DATA",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GetReestr": {
+        "main": [
+          [
+            {
+              "node": "Filter2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GetHours": {
+        "main": [
+          [
+            {
+              "node": "makeHoursFormat",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "makeHoursFormat": {
+        "main": [
+          [
+            {
+              "node": "config",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "config": {
+        "main": [
+          [
+            {
+              "node": "CopyFRDOTamplate",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "FRDO_DATA": {
+        "main": [
+          [
+            {
+              "node": "isCompleteData",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "isCompleteData": {
+        "main": [
+          [
+            {
+              "node": "UpdateMissingFieldsReestr + Status",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CopyFRDOTamplate": {
+        "main": [
+          [
+            {
+              "node": "GetReestr",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "UpdateFRDOTable",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "UpdateStatusesFRDOreestr",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Delete a file",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter": {
+        "main": [
+          []
+        ]
+      },
+      "Filter1": {
+        "main": [
+          [
+            {
+              "node": "GetTemplates",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter2": {
+        "main": [
+          [
+            {
+              "node": "Filter1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "GetHours",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When clicking ‘Execute workflow’": {
+        "main": [
+          [
+            {
+              "node": "GetHours",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Active User",
+    "name": "Version 3afc18bc",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": []
+}
