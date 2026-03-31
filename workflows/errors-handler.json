@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-31T09:40:02.891Z",
+  "updatedAt": "2026-03-31T10:09:09.893Z",
   "createdAt": "2026-03-27T12:29:10.722Z",
   "id": "hX15tKh83Gq3N9El",
   "name": "errors-handler",
@@ -20,7 +20,7 @@
     {
       "parameters": {
         "chatId": "-5230660630",
-        "text": "=Дата: {{$now.format('dd-MM-yyyy')}}\n\n❌ Ошибка в workflow {{ $json.workflow.name }} \n\n🔎 Произошла в ноде {{ $json.execution.lastNodeExecuted }}\n\n▶️ Посмотреть детальнее \n{{ $json.execution.url }}\n",
+        "text": "=Дата: {{$now.format('dd-MM-yyyy')}}\n\n⚠️ Ошибка workflow: {{ $json.workflow.name }} \n\n🔎 Произошла: {{ $json.execution.lastNodeExecuted }}\n\n❗Сообщение: {{ $json.execution.error.message }}\n\n▶️ Посмотреть детальнее: \n{{ $json.execution.url }}\n",
         "additionalFields": {
           "appendAttribution": false
         }
@@ -64,8 +64,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "c78fc13a-309f-4968-abef-187ebb954919",
-  "activeVersionId": "c78fc13a-309f-4968-abef-187ebb954919",
+  "versionId": "becadc49-bf93-4672-85d5-62755545accf",
+  "activeVersionId": "becadc49-bf93-4672-85d5-62755545accf",
   "triggerCount": 0,
   "shared": [
     {
@@ -77,9 +77,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-30T05:11:54.904Z",
-    "createdAt": "2026-03-30T05:11:42.187Z",
-    "versionId": "c78fc13a-309f-4968-abef-187ebb954919",
+    "updatedAt": "2026-03-31T10:09:14.099Z",
+    "createdAt": "2026-03-31T10:09:03.699Z",
+    "versionId": "becadc49-bf93-4672-85d5-62755545accf",
     "workflowId": "hX15tKh83Gq3N9El",
     "nodes": [
       {
@@ -96,7 +96,7 @@
       {
         "parameters": {
           "chatId": "-5230660630",
-          "text": "=Дата: {{$now.format('dd-MM-yyyy')}}\n\n❌ Ошибка в workflow {{ $json.workflow.name }} \n\n🔎 Произошла в ноде {{ $json.execution.lastNodeExecuted }}\n\n▶️ Посмотреть детальнее \n{{ $json.execution.url }}\n",
+          "text": "=Дата: {{$now.format('dd-MM-yyyy')}}\n\n⚠️ Ошибка workflow: {{ $json.workflow.name }} \n\n🔎 Произошла: {{ $json.execution.lastNodeExecuted }}\n\n❗Сообщение: {{ $json.execution.error.message }}\n\n▶️ Посмотреть детальнее: \n{{ $json.execution.url }}\n",
           "additionalFields": {
             "appendAttribution": false
           }
@@ -132,9 +132,9 @@
       }
     },
     "authors": "Active User",
-    "name": "Version c78fc13a",
+    "name": "Version becadc49",
     "description": "",
-    "autosaved": false
+    "autosaved": true
   },
   "tags": []
 }
