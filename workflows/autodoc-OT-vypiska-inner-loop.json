@@ -1,0 +1,474 @@
+{
+  "updatedAt": "2026-03-31T09:53:16.826Z",
+  "createdAt": "2026-03-10T10:00:09.866Z",
+  "id": "PWvm7ssLmLAV7lWT",
+  "name": "autodoc-OT-vypiska-inner-loop",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "get",
+        "documentURL": "={{ $('InputPersonData').first().json.link }}",
+        "simple": false
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        176,
+        16
+      ],
+      "id": "b0a09103-6a38-4fa5-858f-09707a09e6b9",
+      "name": "GetVypiskaWithNewStroke",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "function findTableStartIndexByHashColumn(doc) {\n  const content = doc.body.content;\n\n  for (const block of content) {\n    if (!block.table) continue;\n\n    const rows = block.table.tableRows;\n    if (!rows || rows.length === 0) continue;\n\n    const firstRow = rows[0];\n    if (!firstRow.tableCells || firstRow.tableCells.length === 0) continue;\n\n    const firstCell = firstRow.tableCells[0];\n    const cellText = firstCell.content\n      ?.flatMap(p => p.paragraph?.elements ?? [])\n      ?.map(el => el.textRun?.content ?? \"\")\n      ?.join(\"\")\n      ?.trim();\n\n    if (cellText === \"№\") {\n      return [{ tableStartIndex: block.startIndex }];\n    }\n  }\n\n  return [{ tableStartIndex: null }];\n}\n\nreturn findTableStartIndexByHashColumn($input.first().json);"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -192,
+        16
+      ],
+      "id": "86afa594-47dd-4d14-a917-0034f4a547f0",
+      "name": "GetTableStartIndex"
+    },
+    {
+      "parameters": {
+        "jsCode": "function buildBatchRequests(doc, values) {\n  const content = doc.body.content;\n\n  for (const block of content) {\n    if (!block.table) continue;\n\n    const rows = block.table.tableRows;\n    if (!rows || rows.length === 0) continue;\n\n    const firstRow = rows[0];\n    if (!firstRow.tableCells || firstRow.tableCells.length === 0) continue;\n\n    const firstCell = firstRow.tableCells[0];\n    const cellText = firstCell.content\n      ?.flatMap(p => p.paragraph?.elements ?? [])\n      ?.map(el => el.textRun?.content ?? \"\")\n      ?.join(\"\")\n      ?.trim();\n\n    if (cellText !== \"№\") continue;\n\n    const newRow = rows[1];\n    if (!newRow?.tableCells) return [{ requests: null }];\n\n    // Собираем индексы и значения, затем разворачиваем для вставки с конца\n    const requests = [...newRow.tableCells]\n      .map((cell, i) => ({\n        index: cell.content?.[0]?.paragraph?.elements?.[0]?.startIndex ?? null,\n        value: values[i] ?? \"\"\n      }))\n      .filter(item => item.index !== null && item.value !== \"\")\n      .sort((a, b) => b.index - a.index) // с конца!\n      .map(item => ({\n        insertText: {\n          location: { index: item.index },\n          text: item.value\n        }\n      }));\n\n    return [{ requests }];\n  }\n\n  return [{ requests: null }];\n}\n\n\nconst person_data = $(\"InputPersonData\").first().json.person;\nconst person_num = String(person_data.orederNum);\nconst fio = `${person_data.fio.surname} ${person_data.fio.name} ${person_data.fio.patronymic}`;\nconst job_post = person_data.variables['<<Должность>>'];\nconst company = person_data.variables['<<Компания>>'];\nconst ud_reg_num = person_data.variables['<<РегНомерУд>>'];\nconst program_template = person_data.variables['<<Шаблон программы>>'];\nconst grp = $('InputPersonData').first().json.grp;\nconst OTV_ARRAY = [\"Б1\", \"Б2\", \"Б3 3-5\", \"Б3 3-1\", \"Б3 3-4\", \"Б3 3-3\", \"Б3 3-2\", \"Б3 3-6\", \"Б3 1-6\", \"ОТВ А\", \"А1\", \"А2\", \"А3 1-6\"];\n\n// Значения для 9 ячеек по порядку столбцов\nconst values = [\n  person_num,                    // №\n  fio, // Ф.И.О.\n  job_post,            // Должность\n  company,    // Место работы\n  \"удовлетворительно\",    // Результат\n  ud_reg_num,              // № удостоверения\n  \"\",                     // Рег. номер\n  OTV_ARRAY.includes(grp) ? program_template : 'Первичная',     // Решение\n  \"\"                      // Подпись\n];\n\n\nreturn buildBatchRequests($input.first().json, values);"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        384,
+        16
+      ],
+      "id": "784a95a5-b59b-48d1-aaa3-075f5b7e8c55",
+      "name": "PrepareBodyToAppend"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://docs.googleapis.com/v1/documents/{{ $('InputPersonData').first().json.link }}:batchUpdate",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDocsOAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"requests\": {{JSON.stringify($('PrepareBodyToAppend').first().json.requests)}}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        592,
+        16
+      ],
+      "id": "3321279e-5d15-42d3-9def-854a33561fd4",
+      "name": "AppendDataToTable",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentURL": "={{ $('InputPersonData').first().json.link }}",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "object": "tableRow",
+              "action": "insert",
+              "index": "={{ $json.tableStartIndex }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        -16,
+        16
+      ],
+      "id": "2a90f323-dd6d-4e77-896e-10fcd250f39e",
+      "name": "AppendEmptyStroke",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "documentURL": "={{ $('InputPersonData').first().json.link }}",
+        "simple": false
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        -368,
+        16
+      ],
+      "id": "4ab21602-3625-4998-8a7d-40375825bc7e",
+      "name": "GetClearVpypiska",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "link"
+            },
+            {
+              "name": "person",
+              "type": "object"
+            },
+            {
+              "name": "grp"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -560,
+        16
+      ],
+      "id": "86ab19ed-ea22-4fbd-b5ef-fc960f6bf20d",
+      "name": "InputPersonData"
+    }
+  ],
+  "connections": {
+    "GetVypiskaWithNewStroke": {
+      "main": [
+        [
+          {
+            "node": "PrepareBodyToAppend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetTableStartIndex": {
+      "main": [
+        [
+          {
+            "node": "AppendEmptyStroke",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PrepareBodyToAppend": {
+      "main": [
+        [
+          {
+            "node": "AppendDataToTable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AppendEmptyStroke": {
+      "main": [
+        [
+          {
+            "node": "GetVypiskaWithNewStroke",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetClearVpypiska": {
+      "main": [
+        [
+          {
+            "node": "GetTableStartIndex",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "InputPersonData": {
+      "main": [
+        [
+          {
+            "node": "GetClearVpypiska",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "versionId": "c5c16a63-3952-4b3f-bc3e-fe466f680ea7",
+  "activeVersionId": "c5c16a63-3952-4b3f-bc3e-fe466f680ea7",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-03-10T10:00:09.866Z",
+      "createdAt": "2026-03-10T10:00:09.866Z",
+      "role": "workflow:owner",
+      "workflowId": "PWvm7ssLmLAV7lWT",
+      "projectId": "OC8FWCQSkQb0Erkk"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-03-24T06:19:46.445Z",
+    "createdAt": "2026-03-24T06:19:43.969Z",
+    "versionId": "c5c16a63-3952-4b3f-bc3e-fe466f680ea7",
+    "workflowId": "PWvm7ssLmLAV7lWT",
+    "nodes": [
+      {
+        "parameters": {
+          "operation": "get",
+          "documentURL": "={{ $('InputPersonData').first().json.link }}",
+          "simple": false
+        },
+        "type": "n8n-nodes-base.googleDocs",
+        "typeVersion": 2,
+        "position": [
+          176,
+          16
+        ],
+        "id": "b0a09103-6a38-4fa5-858f-09707a09e6b9",
+        "name": "GetVypiskaWithNewStroke",
+        "credentials": {
+          "googleDocsOAuth2Api": {
+            "id": "5aALK5qPqcCIdTaQ",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "function findTableStartIndexByHashColumn(doc) {\n  const content = doc.body.content;\n\n  for (const block of content) {\n    if (!block.table) continue;\n\n    const rows = block.table.tableRows;\n    if (!rows || rows.length === 0) continue;\n\n    const firstRow = rows[0];\n    if (!firstRow.tableCells || firstRow.tableCells.length === 0) continue;\n\n    const firstCell = firstRow.tableCells[0];\n    const cellText = firstCell.content\n      ?.flatMap(p => p.paragraph?.elements ?? [])\n      ?.map(el => el.textRun?.content ?? \"\")\n      ?.join(\"\")\n      ?.trim();\n\n    if (cellText === \"№\") {\n      return [{ tableStartIndex: block.startIndex }];\n    }\n  }\n\n  return [{ tableStartIndex: null }];\n}\n\nreturn findTableStartIndexByHashColumn($input.first().json);"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -192,
+          16
+        ],
+        "id": "86afa594-47dd-4d14-a917-0034f4a547f0",
+        "name": "GetTableStartIndex"
+      },
+      {
+        "parameters": {
+          "jsCode": "function buildBatchRequests(doc, values) {\n  const content = doc.body.content;\n\n  for (const block of content) {\n    if (!block.table) continue;\n\n    const rows = block.table.tableRows;\n    if (!rows || rows.length === 0) continue;\n\n    const firstRow = rows[0];\n    if (!firstRow.tableCells || firstRow.tableCells.length === 0) continue;\n\n    const firstCell = firstRow.tableCells[0];\n    const cellText = firstCell.content\n      ?.flatMap(p => p.paragraph?.elements ?? [])\n      ?.map(el => el.textRun?.content ?? \"\")\n      ?.join(\"\")\n      ?.trim();\n\n    if (cellText !== \"№\") continue;\n\n    const newRow = rows[1];\n    if (!newRow?.tableCells) return [{ requests: null }];\n\n    // Собираем индексы и значения, затем разворачиваем для вставки с конца\n    const requests = [...newRow.tableCells]\n      .map((cell, i) => ({\n        index: cell.content?.[0]?.paragraph?.elements?.[0]?.startIndex ?? null,\n        value: values[i] ?? \"\"\n      }))\n      .filter(item => item.index !== null && item.value !== \"\")\n      .sort((a, b) => b.index - a.index) // с конца!\n      .map(item => ({\n        insertText: {\n          location: { index: item.index },\n          text: item.value\n        }\n      }));\n\n    return [{ requests }];\n  }\n\n  return [{ requests: null }];\n}\n\n\nconst person_data = $(\"InputPersonData\").first().json.person;\nconst person_num = String(person_data.orederNum);\nconst fio = `${person_data.fio.surname} ${person_data.fio.name} ${person_data.fio.patronymic}`;\nconst job_post = person_data.variables['<<Должность>>'];\nconst company = person_data.variables['<<Компания>>'];\nconst ud_reg_num = person_data.variables['<<РегНомерУд>>'];\nconst program_template = person_data.variables['<<Шаблон программы>>'];\nconst grp = $('InputPersonData').first().json.grp;\nconst OTV_ARRAY = [\"Б1\", \"Б2\", \"Б3 3-5\", \"Б3 3-1\", \"Б3 3-4\", \"Б3 3-3\", \"Б3 3-2\", \"Б3 3-6\", \"Б3 1-6\", \"ОТВ А\", \"А1\", \"А2\", \"А3 1-6\"];\n\n// Значения для 9 ячеек по порядку столбцов\nconst values = [\n  person_num,                    // №\n  fio, // Ф.И.О.\n  job_post,            // Должность\n  company,    // Место работы\n  \"удовлетворительно\",    // Результат\n  ud_reg_num,              // № удостоверения\n  \"\",                     // Рег. номер\n  OTV_ARRAY.includes(grp) ? program_template : 'Первичная',     // Решение\n  \"\"                      // Подпись\n];\n\n\nreturn buildBatchRequests($input.first().json, values);"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          384,
+          16
+        ],
+        "id": "784a95a5-b59b-48d1-aaa3-075f5b7e8c55",
+        "name": "PrepareBodyToAppend"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://docs.googleapis.com/v1/documents/{{ $('InputPersonData').first().json.link }}:batchUpdate",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "googleDocsOAuth2Api",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"requests\": {{JSON.stringify($('PrepareBodyToAppend').first().json.requests)}}\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          592,
+          16
+        ],
+        "id": "3321279e-5d15-42d3-9def-854a33561fd4",
+        "name": "AppendDataToTable",
+        "credentials": {
+          "googleDocsOAuth2Api": {
+            "id": "5aALK5qPqcCIdTaQ",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "documentURL": "={{ $('InputPersonData').first().json.link }}",
+          "actionsUi": {
+            "actionFields": [
+              {
+                "object": "tableRow",
+                "action": "insert",
+                "index": "={{ $json.tableStartIndex }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.googleDocs",
+        "typeVersion": 2,
+        "position": [
+          -16,
+          16
+        ],
+        "id": "2a90f323-dd6d-4e77-896e-10fcd250f39e",
+        "name": "AppendEmptyStroke",
+        "credentials": {
+          "googleDocsOAuth2Api": {
+            "id": "5aALK5qPqcCIdTaQ",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "documentURL": "={{ $('InputPersonData').first().json.link }}",
+          "simple": false
+        },
+        "type": "n8n-nodes-base.googleDocs",
+        "typeVersion": 2,
+        "position": [
+          -368,
+          16
+        ],
+        "id": "4ab21602-3625-4998-8a7d-40375825bc7e",
+        "name": "GetClearVpypiska",
+        "credentials": {
+          "googleDocsOAuth2Api": {
+            "id": "5aALK5qPqcCIdTaQ",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "workflowInputs": {
+            "values": [
+              {
+                "name": "link"
+              },
+              {
+                "name": "person",
+                "type": "object"
+              },
+              {
+                "name": "grp"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -560,
+          16
+        ],
+        "id": "86ab19ed-ea22-4fbd-b5ef-fc960f6bf20d",
+        "name": "InputPersonData"
+      }
+    ],
+    "connections": {
+      "GetVypiskaWithNewStroke": {
+        "main": [
+          [
+            {
+              "node": "PrepareBodyToAppend",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GetTableStartIndex": {
+        "main": [
+          [
+            {
+              "node": "AppendEmptyStroke",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "PrepareBodyToAppend": {
+        "main": [
+          [
+            {
+              "node": "AppendDataToTable",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AppendEmptyStroke": {
+        "main": [
+          [
+            {
+              "node": "GetVypiskaWithNewStroke",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GetClearVpypiska": {
+        "main": [
+          [
+            {
+              "node": "GetTableStartIndex",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "InputPersonData": {
+        "main": [
+          [
+            {
+              "node": "GetClearVpypiska",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Active User",
+    "name": "Version c5c16a63",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": []
+}
