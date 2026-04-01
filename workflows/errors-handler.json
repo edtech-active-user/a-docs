@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-31T10:09:09.893Z",
+  "updatedAt": "2026-03-31T14:45:36.420Z",
   "createdAt": "2026-03-27T12:29:10.722Z",
   "id": "hX15tKh83Gq3N9El",
   "name": "errors-handler",
@@ -64,8 +64,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "becadc49-bf93-4672-85d5-62755545accf",
-  "activeVersionId": "becadc49-bf93-4672-85d5-62755545accf",
+  "versionId": "d9f46181-0505-4175-8cfe-7aad48ba9161",
+  "activeVersionId": "d9f46181-0505-4175-8cfe-7aad48ba9161",
   "triggerCount": 0,
   "shared": [
     {
@@ -77,9 +77,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-31T10:09:14.099Z",
-    "createdAt": "2026-03-31T10:09:03.699Z",
-    "versionId": "becadc49-bf93-4672-85d5-62755545accf",
+    "updatedAt": "2026-03-31T14:46:41.836Z",
+    "createdAt": "2026-03-31T14:45:36.421Z",
+    "versionId": "d9f46181-0505-4175-8cfe-7aad48ba9161",
     "workflowId": "hX15tKh83Gq3N9El",
     "nodes": [
       {
@@ -132,7 +132,7 @@
       }
     },
     "authors": "Active User",
-    "name": "Version becadc49",
+    "name": "Version d9f46181",
     "description": "",
     "autosaved": true
   },
