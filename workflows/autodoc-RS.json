@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-31T09:50:28.834Z",
+  "updatedAt": "2026-04-01T10:28:34.681Z",
   "createdAt": "2025-10-23T08:06:16.525Z",
   "id": "q02qpzB5xGdlK6Od",
   "name": "autodoc-RS",
@@ -53,6 +53,7 @@
       "id": "fb551dfa-2ea3-4cc7-9f98-028a9a3720c1",
       "name": "checkTable",
       "executeOnce": true,
+      "retryOnFail": true,
       "credentials": {
         "googleApi": {
           "id": "86ekhh3rUWlEgF4Y",
@@ -106,6 +107,7 @@
       ],
       "id": "6f7ac81b-ca56-4715-82e8-8008de297f35",
       "name": "GetRequestCounter",
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -139,6 +141,7 @@
       "name": "GetLayoutsIDExisting",
       "executeOnce": true,
       "alwaysOutputData": true,
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -172,6 +175,7 @@
       "name": "GetProfessionDatabase",
       "alwaysOutputData": true,
       "executeOnce": true,
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -216,6 +220,7 @@
       ],
       "id": "c3f63566-015c-4626-9217-8fe23053d0a5",
       "name": "GetHours",
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -262,6 +267,7 @@
       ],
       "id": "bf71fcdc-4572-454a-b3b9-f144afa2e4d3",
       "name": "GetQueue",
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -305,6 +311,7 @@
       ],
       "id": "1520fbb0-0109-413e-9e0b-5a84ef06ccee",
       "name": "GetStatusInReestr",
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -762,6 +769,7 @@
       ],
       "id": "70116f78-d87b-4d85-9aef-71daec0998aa",
       "name": "UpdateGeneratingInReestr",
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -882,6 +890,7 @@
       ],
       "id": "3cd5b0ca-2d09-4c5b-a229-c5159422ccb9",
       "name": "UpdateGeneratingStatusInQueue",
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -1397,6 +1406,7 @@
       ],
       "id": "bf0ab816-e22e-4a2a-af6f-92c2ef890153",
       "name": "update data: incomplete",
+      "retryOnFail": true,
       "credentials": {
         "googleApi": {
           "id": "86ekhh3rUWlEgF4Y",
@@ -1496,6 +1506,7 @@
       "id": "8d3f48fd-d02d-44aa-8a4e-eb2fed052675",
       "name": "UpdateRequestsCounter",
       "executeOnce": true,
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -1956,6 +1967,7 @@
       ],
       "id": "fdb0ef11-61a9-432a-94c5-7e91386e37bf",
       "name": "update data: complete",
+      "retryOnFail": true,
       "credentials": {
         "googleApi": {
           "id": "86ekhh3rUWlEgF4Y",
@@ -2411,10 +2423,11 @@
       "typeVersion": 4.7,
       "position": [
         592,
-        80
+        128
       ],
       "id": "30ab547f-6939-4f81-aa4d-83101bab240e",
       "name": "update data: exist_id_clear_incomplete",
+      "retryOnFail": true,
       "credentials": {
         "googleApi": {
           "id": "86ekhh3rUWlEgF4Y",
@@ -2495,6 +2508,7 @@
       "name": "readReestr",
       "executeOnce": true,
       "alwaysOutputData": true,
+      "retryOnFail": true,
       "credentials": {
         "googleApi": {
           "id": "86ekhh3rUWlEgF4Y",
@@ -2529,6 +2543,7 @@
       "name": "readCounters",
       "alwaysOutputData": true,
       "executeOnce": true,
+      "retryOnFail": true,
       "credentials": {
         "googleApi": {
           "id": "86ekhh3rUWlEgF4Y",
@@ -2562,6 +2577,7 @@
       "id": "bdfbf04b-d5bd-4a5e-be78-d98be0c5e00a",
       "name": "readTemplates",
       "executeOnce": true,
+      "retryOnFail": true,
       "credentials": {
         "googleApi": {
           "id": "86ekhh3rUWlEgF4Y",
@@ -2608,6 +2624,7 @@
       "name": "readDiaries",
       "executeOnce": true,
       "alwaysOutputData": true,
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -2795,6 +2812,7 @@
       ],
       "id": "12f2c976-c319-40c1-970c-32d839d87099",
       "name": "updateCounter",
+      "retryOnFail": true,
       "credentials": {
         "googleApi": {
           "id": "86ekhh3rUWlEgF4Y",
@@ -3429,6 +3447,7 @@
       ],
       "id": "be22401a-bd75-4d89-84f5-1b026487cce1",
       "name": "UpdateRegNumbersReestrVypiska",
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -3837,6 +3856,7 @@
       ],
       "id": "5b6e262d-670c-404f-a12c-52550ff777eb",
       "name": "UpdateRegNumbersReestr",
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -4243,6 +4263,7 @@
       ],
       "id": "4156e106-24e2-49d2-9736-60a648287435",
       "name": "UpdateDateReestr",
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -4698,6 +4719,7 @@
       ],
       "id": "8cd526f3-4e62-4358-8493-c6be609cddc4",
       "name": "apend_underlay_docs_folder",
+      "retryOnFail": true,
       "credentials": {
         "googleApi": {
           "id": "86ekhh3rUWlEgF4Y",
@@ -5606,6 +5628,7 @@
       ],
       "id": "8cc346f3-f4b4-4318-8122-a827186db835",
       "name": "UpdateReestrStatus",
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -5658,6 +5681,7 @@
       "id": "7bdbcd73-e8c4-43d8-af62-c9cc92cc17c3",
       "name": "get_queue_generating_row",
       "executeOnce": true,
+      "retryOnFail": true,
       "credentials": {
         "googleApi": {
           "id": "86ekhh3rUWlEgF4Y",
@@ -5746,6 +5770,7 @@
       "id": "f3f70571-c782-4869-b986-17179ea3c572",
       "name": "update_generating_done_in_queue",
       "executeOnce": true,
+      "retryOnFail": true,
       "credentials": {
         "googleApi": {
           "id": "86ekhh3rUWlEgF4Y",
@@ -6948,6 +6973,7 @@
       ],
       "id": "d619272c-5324-4486-aab9-0f90cecfd2ce",
       "name": "apend_underlay_docs_folder2",
+      "retryOnFail": true,
       "credentials": {
         "googleApi": {
           "id": "86ekhh3rUWlEgF4Y",
@@ -7445,6 +7471,7 @@
       ],
       "id": "4914bdf8-a198-492e-9e63-7e6df43f272e",
       "name": "UpdateDateReestr1",
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -9046,8 +9073,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "27695304-6ab9-4210-a04d-55a0e9dbb410",
-  "activeVersionId": "27695304-6ab9-4210-a04d-55a0e9dbb410",
+  "versionId": "d87f3699-abff-4a67-8406-5c0b29c01834",
+  "activeVersionId": "d87f3699-abff-4a67-8406-5c0b29c01834",
   "triggerCount": 1,
   "shared": [
     {
@@ -9059,9 +9086,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-30T06:30:08.489Z",
-    "createdAt": "2026-03-30T06:30:05.812Z",
-    "versionId": "27695304-6ab9-4210-a04d-55a0e9dbb410",
+    "updatedAt": "2026-04-01T10:29:02.202Z",
+    "createdAt": "2026-04-01T10:28:34.689Z",
+    "versionId": "d87f3699-abff-4a67-8406-5c0b29c01834",
     "workflowId": "q02qpzB5xGdlK6Od",
     "nodes": [
       {
@@ -9111,6 +9138,7 @@
         "id": "fb551dfa-2ea3-4cc7-9f98-028a9a3720c1",
         "name": "checkTable",
         "executeOnce": true,
+        "retryOnFail": true,
         "credentials": {
           "googleApi": {
             "id": "86ekhh3rUWlEgF4Y",
@@ -9164,6 +9192,7 @@
         ],
         "id": "6f7ac81b-ca56-4715-82e8-8008de297f35",
         "name": "GetRequestCounter",
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -9197,6 +9226,7 @@
         "name": "GetLayoutsIDExisting",
         "executeOnce": true,
         "alwaysOutputData": true,
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -9230,6 +9260,7 @@
         "name": "GetProfessionDatabase",
         "alwaysOutputData": true,
         "executeOnce": true,
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -9274,6 +9305,7 @@
         ],
         "id": "c3f63566-015c-4626-9217-8fe23053d0a5",
         "name": "GetHours",
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -9320,6 +9352,7 @@
         ],
         "id": "bf71fcdc-4572-454a-b3b9-f144afa2e4d3",
         "name": "GetQueue",
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -9363,6 +9396,7 @@
         ],
         "id": "1520fbb0-0109-413e-9e0b-5a84ef06ccee",
         "name": "GetStatusInReestr",
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -9820,6 +9854,7 @@
         ],
         "id": "70116f78-d87b-4d85-9aef-71daec0998aa",
         "name": "UpdateGeneratingInReestr",
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -9940,6 +9975,7 @@
         ],
         "id": "3cd5b0ca-2d09-4c5b-a229-c5159422ccb9",
         "name": "UpdateGeneratingStatusInQueue",
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -10455,6 +10491,7 @@
         ],
         "id": "bf0ab816-e22e-4a2a-af6f-92c2ef890153",
         "name": "update data: incomplete",
+        "retryOnFail": true,
         "credentials": {
           "googleApi": {
             "id": "86ekhh3rUWlEgF4Y",
@@ -10554,6 +10591,7 @@
         "id": "8d3f48fd-d02d-44aa-8a4e-eb2fed052675",
         "name": "UpdateRequestsCounter",
         "executeOnce": true,
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -11014,6 +11052,7 @@
         ],
         "id": "fdb0ef11-61a9-432a-94c5-7e91386e37bf",
         "name": "update data: complete",
+        "retryOnFail": true,
         "credentials": {
           "googleApi": {
             "id": "86ekhh3rUWlEgF4Y",
@@ -11469,10 +11508,11 @@
         "typeVersion": 4.7,
         "position": [
           592,
-          80
+          128
         ],
         "id": "30ab547f-6939-4f81-aa4d-83101bab240e",
         "name": "update data: exist_id_clear_incomplete",
+        "retryOnFail": true,
         "credentials": {
           "googleApi": {
             "id": "86ekhh3rUWlEgF4Y",
@@ -11553,6 +11593,7 @@
         "name": "readReestr",
         "executeOnce": true,
         "alwaysOutputData": true,
+        "retryOnFail": true,
         "credentials": {
           "googleApi": {
             "id": "86ekhh3rUWlEgF4Y",
@@ -11587,6 +11628,7 @@
         "name": "readCounters",
         "alwaysOutputData": true,
         "executeOnce": true,
+        "retryOnFail": true,
         "credentials": {
           "googleApi": {
             "id": "86ekhh3rUWlEgF4Y",
@@ -11620,6 +11662,7 @@
         "id": "bdfbf04b-d5bd-4a5e-be78-d98be0c5e00a",
         "name": "readTemplates",
         "executeOnce": true,
+        "retryOnFail": true,
         "credentials": {
           "googleApi": {
             "id": "86ekhh3rUWlEgF4Y",
@@ -11666,6 +11709,7 @@
         "name": "readDiaries",
         "executeOnce": true,
         "alwaysOutputData": true,
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -11853,6 +11897,7 @@
         ],
         "id": "12f2c976-c319-40c1-970c-32d839d87099",
         "name": "updateCounter",
+        "retryOnFail": true,
         "credentials": {
           "googleApi": {
             "id": "86ekhh3rUWlEgF4Y",
@@ -12487,6 +12532,7 @@
         ],
         "id": "be22401a-bd75-4d89-84f5-1b026487cce1",
         "name": "UpdateRegNumbersReestrVypiska",
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -12895,6 +12941,7 @@
         ],
         "id": "5b6e262d-670c-404f-a12c-52550ff777eb",
         "name": "UpdateRegNumbersReestr",
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -13301,6 +13348,7 @@
         ],
         "id": "4156e106-24e2-49d2-9736-60a648287435",
         "name": "UpdateDateReestr",
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -13756,6 +13804,7 @@
         ],
         "id": "8cd526f3-4e62-4358-8493-c6be609cddc4",
         "name": "apend_underlay_docs_folder",
+        "retryOnFail": true,
         "credentials": {
           "googleApi": {
             "id": "86ekhh3rUWlEgF4Y",
@@ -14664,6 +14713,7 @@
         ],
         "id": "8cc346f3-f4b4-4318-8122-a827186db835",
         "name": "UpdateReestrStatus",
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -14716,6 +14766,7 @@
         "id": "7bdbcd73-e8c4-43d8-af62-c9cc92cc17c3",
         "name": "get_queue_generating_row",
         "executeOnce": true,
+        "retryOnFail": true,
         "credentials": {
           "googleApi": {
             "id": "86ekhh3rUWlEgF4Y",
@@ -14804,6 +14855,7 @@
         "id": "f3f70571-c782-4869-b986-17179ea3c572",
         "name": "update_generating_done_in_queue",
         "executeOnce": true,
+        "retryOnFail": true,
         "credentials": {
           "googleApi": {
             "id": "86ekhh3rUWlEgF4Y",
@@ -16006,6 +16058,7 @@
         ],
         "id": "d619272c-5324-4486-aab9-0f90cecfd2ce",
         "name": "apend_underlay_docs_folder2",
+        "retryOnFail": true,
         "credentials": {
           "googleApi": {
             "id": "86ekhh3rUWlEgF4Y",
@@ -16503,6 +16556,7 @@
         ],
         "id": "4914bdf8-a198-492e-9e63-7e6df43f272e",
         "name": "UpdateDateReestr1",
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -18093,7 +18147,7 @@
       }
     },
     "authors": "Active User",
-    "name": "Version 27695304",
+    "name": "Version d87f3699",
     "description": "",
     "autosaved": true
   },
