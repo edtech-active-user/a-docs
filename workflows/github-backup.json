@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-31T10:02:06.295Z",
+  "updatedAt": "2026-04-01T07:20:43.560Z",
   "createdAt": "2026-03-30T10:32:08.822Z",
   "id": "rQgz3YcOV3BEXoXW",
   "name": "github-backup",
@@ -634,8 +634,8 @@
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        608,
-        1312
+        592,
+        1296
       ],
       "typeVersion": 1
     },
@@ -1248,7 +1248,7 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "ae5eb71b-3f8f-469f-bfc3-95190d39301a",
+  "versionId": "ee2a6176-2d26-45cf-ad01-865c3c1fefa3",
   "activeVersionId": "ae5eb71b-3f8f-469f-bfc3-95190d39301a",
   "triggerCount": 1,
   "shared": [
