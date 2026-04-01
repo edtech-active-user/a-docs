@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-01T05:50:56.992Z",
+  "updatedAt": "2026-04-01T10:25:41.019Z",
   "createdAt": "2025-10-23T04:12:51.205Z",
   "id": "bW5C7J4327CR8Kkq",
   "name": "autodoc-PK-PP",
@@ -40,6 +40,7 @@
       "id": "eb3aa2ea-ba74-418f-9e46-a652c4af4c58",
       "name": "checkTable",
       "executeOnce": true,
+      "retryOnFail": true,
       "credentials": {
         "googleApi": {
           "id": "86ekhh3rUWlEgF4Y",
@@ -555,6 +556,7 @@
       ],
       "id": "8bc3b7c8-50c6-4d24-97d9-448e41ad825e",
       "name": "update data: incomplete",
+      "retryOnFail": true,
       "credentials": {
         "googleApi": {
           "id": "86ekhh3rUWlEgF4Y",
@@ -1161,6 +1163,7 @@
       ],
       "id": "432cfe28-672e-466e-829f-aa38de3e3e52",
       "name": "GetRequestCounter",
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -1260,6 +1263,7 @@
       "id": "4401daee-1b08-4778-88d2-bc64dd72bfcd",
       "name": "UpdateRequestsCounter",
       "executeOnce": true,
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -1293,6 +1297,7 @@
       "name": "GetLayoutsIDExisting",
       "executeOnce": true,
       "alwaysOutputData": true,
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -1871,6 +1876,7 @@
       ],
       "id": "e29ba43e-dd1c-476f-8349-a553c302b93c",
       "name": "update data: complete",
+      "retryOnFail": true,
       "credentials": {
         "googleApi": {
           "id": "86ekhh3rUWlEgF4Y",
@@ -1932,6 +1938,7 @@
       ],
       "id": "1b7dd46e-c252-4e5a-ba69-3a4e93becbbf",
       "name": "GetQueue",
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -2052,6 +2059,7 @@
       ],
       "id": "8ac1be78-1bc1-4f98-aa60-d975fc6dc9d6",
       "name": "UpdateGeneratingStatusInQueue",
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -2095,6 +2103,7 @@
       ],
       "id": "e9104d2a-97fd-4a72-8f6b-cd6686160848",
       "name": "GetStatusInReestr",
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -2492,6 +2501,7 @@
       ],
       "id": "58b82a9f-5870-453d-ad5c-f513c85a7be3",
       "name": "UpdateGeneratingInReestr",
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -2538,6 +2548,7 @@
       "name": "readReestr",
       "executeOnce": true,
       "alwaysOutputData": true,
+      "retryOnFail": true,
       "credentials": {
         "googleApi": {
           "id": "86ekhh3rUWlEgF4Y",
@@ -2572,6 +2583,7 @@
       "name": "readCounters",
       "alwaysOutputData": true,
       "executeOnce": true,
+      "retryOnFail": true,
       "credentials": {
         "googleApi": {
           "id": "86ekhh3rUWlEgF4Y",
@@ -2605,6 +2617,7 @@
       "id": "1a3e1266-2f09-429a-9716-b8efe61c93c8",
       "name": "readTemplates",
       "executeOnce": true,
+      "retryOnFail": true,
       "credentials": {
         "googleApi": {
           "id": "86ekhh3rUWlEgF4Y",
@@ -3150,6 +3163,7 @@
       ],
       "id": "32917954-7eca-4770-9a99-a0c5e5ac01c5",
       "name": "updateCounter",
+      "retryOnFail": true,
       "credentials": {
         "googleApi": {
           "id": "86ekhh3rUWlEgF4Y",
@@ -3872,6 +3886,7 @@
       ],
       "id": "d640e244-4909-422a-b64e-c098ac11348e",
       "name": "UpdateReestrStatus",
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -3924,6 +3939,7 @@
       "id": "f0e698e0-cc35-49c1-a148-3393d438ecb9",
       "name": "get_queue_generating_row",
       "executeOnce": true,
+      "retryOnFail": true,
       "credentials": {
         "googleApi": {
           "id": "86ekhh3rUWlEgF4Y",
@@ -4012,6 +4028,7 @@
       "id": "ca7e76d0-09f6-4aab-bc0a-3463dfaf76ea",
       "name": "update_generating_done_in_queue",
       "executeOnce": true,
+      "retryOnFail": true,
       "credentials": {
         "googleApi": {
           "id": "86ekhh3rUWlEgF4Y",
@@ -4569,6 +4586,7 @@
       ],
       "id": "6fbe68fd-44d3-494d-b246-5cc814176635",
       "name": "apend_underlay_docs_folder",
+      "retryOnFail": true,
       "credentials": {
         "googleApi": {
           "id": "86ekhh3rUWlEgF4Y",
@@ -5818,6 +5836,7 @@
       ],
       "id": "3d5513a5-0e5d-45ea-9b1f-fa713ad016e0",
       "name": "UpdateDatesReestr",
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -6260,6 +6279,7 @@
       ],
       "id": "bc9033ed-357b-41db-bda6-3691093ee231",
       "name": "UpdateRegNumbersReestrVypiska",
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -6667,6 +6687,7 @@
       ],
       "id": "fb636f81-15cb-4f96-b06a-fdfe5e9d07ae",
       "name": "UpdateRegNumbersReestr",
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -7073,6 +7094,7 @@
       ],
       "id": "859ecef3-08f5-44a9-b594-ee53c15efa29",
       "name": "UpdateDateReestr",
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -7502,6 +7524,7 @@
       ],
       "id": "56981677-e820-4c5d-a1e7-bb045f4b5478",
       "name": "update data: exist_id_clear_incomplete",
+      "retryOnFail": true,
       "credentials": {
         "googleApi": {
           "id": "86ekhh3rUWlEgF4Y",
@@ -7533,6 +7556,7 @@
       ],
       "id": "34106bfc-2d60-4ae9-a989-0af099e9ef08",
       "name": "GetHours",
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -8015,6 +8039,7 @@
       ],
       "id": "1f0bf9de-6e81-4331-99e9-afa6d0266fc4",
       "name": "apend_underlay_docs_folder1",
+      "retryOnFail": true,
       "credentials": {
         "googleApi": {
           "id": "86ekhh3rUWlEgF4Y",
@@ -8226,6 +8251,7 @@
       ],
       "id": "7727f056-ac4f-4c8a-a46e-4281ae7c75b9",
       "name": "UpdateLogs",
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -8842,8 +8868,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "59415b7b-1f51-415a-873d-d18ffc8e2254",
-  "activeVersionId": "59415b7b-1f51-415a-873d-d18ffc8e2254",
+  "versionId": "c6898d4d-060a-4629-ba7d-b23475f062b8",
+  "activeVersionId": "c6898d4d-060a-4629-ba7d-b23475f062b8",
   "triggerCount": 1,
   "shared": [
     {
@@ -8855,9 +8881,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-01T05:50:58.376Z",
-    "createdAt": "2026-04-01T05:50:57.000Z",
-    "versionId": "59415b7b-1f51-415a-873d-d18ffc8e2254",
+    "updatedAt": "2026-04-01T10:25:46.551Z",
+    "createdAt": "2026-04-01T10:25:41.027Z",
+    "versionId": "c6898d4d-060a-4629-ba7d-b23475f062b8",
     "workflowId": "bW5C7J4327CR8Kkq",
     "nodes": [
       {
@@ -8894,6 +8920,7 @@
         "id": "eb3aa2ea-ba74-418f-9e46-a652c4af4c58",
         "name": "checkTable",
         "executeOnce": true,
+        "retryOnFail": true,
         "credentials": {
           "googleApi": {
             "id": "86ekhh3rUWlEgF4Y",
@@ -9409,6 +9436,7 @@
         ],
         "id": "8bc3b7c8-50c6-4d24-97d9-448e41ad825e",
         "name": "update data: incomplete",
+        "retryOnFail": true,
         "credentials": {
           "googleApi": {
             "id": "86ekhh3rUWlEgF4Y",
@@ -10015,6 +10043,7 @@
         ],
         "id": "432cfe28-672e-466e-829f-aa38de3e3e52",
         "name": "GetRequestCounter",
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -10114,6 +10143,7 @@
         "id": "4401daee-1b08-4778-88d2-bc64dd72bfcd",
         "name": "UpdateRequestsCounter",
         "executeOnce": true,
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -10147,6 +10177,7 @@
         "name": "GetLayoutsIDExisting",
         "executeOnce": true,
         "alwaysOutputData": true,
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -10725,6 +10756,7 @@
         ],
         "id": "e29ba43e-dd1c-476f-8349-a553c302b93c",
         "name": "update data: complete",
+        "retryOnFail": true,
         "credentials": {
           "googleApi": {
             "id": "86ekhh3rUWlEgF4Y",
@@ -10786,6 +10818,7 @@
         ],
         "id": "1b7dd46e-c252-4e5a-ba69-3a4e93becbbf",
         "name": "GetQueue",
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -10906,6 +10939,7 @@
         ],
         "id": "8ac1be78-1bc1-4f98-aa60-d975fc6dc9d6",
         "name": "UpdateGeneratingStatusInQueue",
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -10949,6 +10983,7 @@
         ],
         "id": "e9104d2a-97fd-4a72-8f6b-cd6686160848",
         "name": "GetStatusInReestr",
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -11346,6 +11381,7 @@
         ],
         "id": "58b82a9f-5870-453d-ad5c-f513c85a7be3",
         "name": "UpdateGeneratingInReestr",
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -11392,6 +11428,7 @@
         "name": "readReestr",
         "executeOnce": true,
         "alwaysOutputData": true,
+        "retryOnFail": true,
         "credentials": {
           "googleApi": {
             "id": "86ekhh3rUWlEgF4Y",
@@ -11426,6 +11463,7 @@
         "name": "readCounters",
         "alwaysOutputData": true,
         "executeOnce": true,
+        "retryOnFail": true,
         "credentials": {
           "googleApi": {
             "id": "86ekhh3rUWlEgF4Y",
@@ -11459,6 +11497,7 @@
         "id": "1a3e1266-2f09-429a-9716-b8efe61c93c8",
         "name": "readTemplates",
         "executeOnce": true,
+        "retryOnFail": true,
         "credentials": {
           "googleApi": {
             "id": "86ekhh3rUWlEgF4Y",
@@ -12004,6 +12043,7 @@
         ],
         "id": "32917954-7eca-4770-9a99-a0c5e5ac01c5",
         "name": "updateCounter",
+        "retryOnFail": true,
         "credentials": {
           "googleApi": {
             "id": "86ekhh3rUWlEgF4Y",
@@ -12726,6 +12766,7 @@
         ],
         "id": "d640e244-4909-422a-b64e-c098ac11348e",
         "name": "UpdateReestrStatus",
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -12778,6 +12819,7 @@
         "id": "f0e698e0-cc35-49c1-a148-3393d438ecb9",
         "name": "get_queue_generating_row",
         "executeOnce": true,
+        "retryOnFail": true,
         "credentials": {
           "googleApi": {
             "id": "86ekhh3rUWlEgF4Y",
@@ -12866,6 +12908,7 @@
         "id": "ca7e76d0-09f6-4aab-bc0a-3463dfaf76ea",
         "name": "update_generating_done_in_queue",
         "executeOnce": true,
+        "retryOnFail": true,
         "credentials": {
           "googleApi": {
             "id": "86ekhh3rUWlEgF4Y",
@@ -13423,6 +13466,7 @@
         ],
         "id": "6fbe68fd-44d3-494d-b246-5cc814176635",
         "name": "apend_underlay_docs_folder",
+        "retryOnFail": true,
         "credentials": {
           "googleApi": {
             "id": "86ekhh3rUWlEgF4Y",
@@ -14672,6 +14716,7 @@
         ],
         "id": "3d5513a5-0e5d-45ea-9b1f-fa713ad016e0",
         "name": "UpdateDatesReestr",
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -15114,6 +15159,7 @@
         ],
         "id": "bc9033ed-357b-41db-bda6-3691093ee231",
         "name": "UpdateRegNumbersReestrVypiska",
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -15521,6 +15567,7 @@
         ],
         "id": "fb636f81-15cb-4f96-b06a-fdfe5e9d07ae",
         "name": "UpdateRegNumbersReestr",
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -15927,6 +15974,7 @@
         ],
         "id": "859ecef3-08f5-44a9-b594-ee53c15efa29",
         "name": "UpdateDateReestr",
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -16356,6 +16404,7 @@
         ],
         "id": "56981677-e820-4c5d-a1e7-bb045f4b5478",
         "name": "update data: exist_id_clear_incomplete",
+        "retryOnFail": true,
         "credentials": {
           "googleApi": {
             "id": "86ekhh3rUWlEgF4Y",
@@ -16387,6 +16436,7 @@
         ],
         "id": "34106bfc-2d60-4ae9-a989-0af099e9ef08",
         "name": "GetHours",
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -16869,6 +16919,7 @@
         ],
         "id": "1f0bf9de-6e81-4331-99e9-afa6d0266fc4",
         "name": "apend_underlay_docs_folder1",
+        "retryOnFail": true,
         "credentials": {
           "googleApi": {
             "id": "86ekhh3rUWlEgF4Y",
@@ -17080,6 +17131,7 @@
         ],
         "id": "7727f056-ac4f-4c8a-a46e-4281ae7c75b9",
         "name": "UpdateLogs",
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -17685,7 +17737,7 @@
       }
     },
     "authors": "Active User",
-    "name": "Version 59415b7b",
+    "name": "Version c6898d4d",
     "description": "",
     "autosaved": true
   },
