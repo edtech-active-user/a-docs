@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-31T09:52:30.637Z",
+  "updatedAt": "2026-04-02T05:42:33.664Z",
   "createdAt": "2026-03-25T05:40:37.305Z",
   "id": "SqPr4m6mASc1ILN8",
   "name": "autodoc-OT-MINTRUD-file-from",
@@ -643,7 +643,7 @@
       "typeVersion": 4.7,
       "position": [
         608,
-        48
+        32
       ],
       "id": "3e2b6825-3f96-4fa0-8ab4-5eee5e3869e4",
       "name": "UpdateStatus",
@@ -687,8 +687,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        608,
-        256
+        592,
+        352
       ],
       "id": "8bb30a48-b196-4a17-8c18-e2ea812be475",
       "name": "GetQueue",
@@ -774,12 +774,104 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        784,
-        256
+        768,
+        352
       ],
       "id": "9ab6295e-b541-42de-8fe0-58e3d3e45033",
       "name": "UpdateStatusInQueue",
       "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1Nrl31uqtCw4-93L0AorlQKD5JKOHYYRHTykHbztDAhY",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Лог",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Nrl31uqtCw4-93L0AorlQKD5JKOHYYRHTykHbztDAhY/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Проект": "=ОТ",
+            "ID": "={{ $json.ID }}",
+            "Дата": "={{$now.format('dd.MM.yyyy')}}",
+            "Время": "={{$now.format('HH:mm')}}",
+            "Статус": "✅ Номера получены"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Проект",
+              "displayName": "Проект",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Статус",
+              "displayName": "Статус",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Дата",
+              "displayName": "Дата",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Время",
+              "displayName": "Время",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        608,
+        192
+      ],
+      "id": "40025c96-3c3e-4ed1-bf80-07ca0ee467de",
+      "name": "UpdateLog",
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -826,6 +918,11 @@
           },
           {
             "node": "GetMintrudFile",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "UpdateLog",
             "type": "main",
             "index": 0
           }
@@ -952,8 +1049,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "367e60c5-c64e-4464-b41c-daff34ac531e",
-  "activeVersionId": "367e60c5-c64e-4464-b41c-daff34ac531e",
+  "versionId": "9b6e852b-c8b9-4cbe-b79b-c0c69a838646",
+  "activeVersionId": "9b6e852b-c8b9-4cbe-b79b-c0c69a838646",
   "triggerCount": 1,
   "shared": [
     {
@@ -965,9 +1062,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-27T11:06:09.003Z",
-    "createdAt": "2026-03-27T11:05:37.782Z",
-    "versionId": "367e60c5-c64e-4464-b41c-daff34ac531e",
+    "updatedAt": "2026-04-02T05:42:38.417Z",
+    "createdAt": "2026-04-02T05:42:33.665Z",
+    "versionId": "9b6e852b-c8b9-4cbe-b79b-c0c69a838646",
     "workflowId": "SqPr4m6mASc1ILN8",
     "nodes": [
       {
@@ -1607,7 +1704,7 @@
         "typeVersion": 4.7,
         "position": [
           608,
-          48
+          32
         ],
         "id": "3e2b6825-3f96-4fa0-8ab4-5eee5e3869e4",
         "name": "UpdateStatus",
@@ -1651,8 +1748,8 @@
         "type": "n8n-nodes-base.googleSheets",
         "typeVersion": 4.7,
         "position": [
-          608,
-          256
+          592,
+          352
         ],
         "id": "8bb30a48-b196-4a17-8c18-e2ea812be475",
         "name": "GetQueue",
@@ -1738,12 +1835,104 @@
         "type": "n8n-nodes-base.googleSheets",
         "typeVersion": 4.7,
         "position": [
-          784,
-          256
+          768,
+          352
         ],
         "id": "9ab6295e-b541-42de-8fe0-58e3d3e45033",
         "name": "UpdateStatusInQueue",
         "executeOnce": true,
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "Xpp4ndWQ84MtD53m",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "1Nrl31uqtCw4-93L0AorlQKD5JKOHYYRHTykHbztDAhY",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Лог",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Nrl31uqtCw4-93L0AorlQKD5JKOHYYRHTykHbztDAhY/edit#gid=0"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "Проект": "=ОТ",
+              "ID": "={{ $json.ID }}",
+              "Дата": "={{$now.format('dd.MM.yyyy')}}",
+              "Время": "={{$now.format('HH:mm')}}",
+              "Статус": "✅ Номера получены"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "Проект",
+                "displayName": "Проект",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "ID",
+                "displayName": "ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Статус",
+                "displayName": "Статус",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Дата",
+                "displayName": "Дата",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Время",
+                "displayName": "Время",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          608,
+          192
+        ],
+        "id": "40025c96-3c3e-4ed1-bf80-07ca0ee467de",
+        "name": "UpdateLog",
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -1790,6 +1979,11 @@
             },
             {
               "node": "GetMintrudFile",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "UpdateLog",
               "type": "main",
               "index": 0
             }
@@ -1905,7 +2099,7 @@
       }
     },
     "authors": "Active User",
-    "name": "Version 367e60c5",
+    "name": "Version 9b6e852b",
     "description": "",
     "autosaved": true
   },
