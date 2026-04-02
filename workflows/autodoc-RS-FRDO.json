@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-31T09:50:43.778Z",
+  "updatedAt": "2026-04-02T05:28:08.565Z",
   "createdAt": "2026-02-10T06:54:35.727Z",
   "id": "LVDC6da2JfAxsblA",
   "name": "autodoc-RS-FRDO",
@@ -2185,6 +2185,98 @@
           "name": "with.edtech@gmail.com"
         }
       }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1VbuUhhS4wBKI3ALocMcOkGGWkCdkazO1_FWSqVzZ0l8",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Лог",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VbuUhhS4wBKI3ALocMcOkGGWkCdkazO1_FWSqVzZ0l8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Проект": "РС",
+            "ID": "={{ $json.ID }}",
+            "Статус": "={{ $json[\"Статус заявки\"] }}",
+            "Дата": "={{$now.format('dd.MM.yyyy')}}",
+            "Время": "={{$now.format('HH:mm')}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Проект",
+              "displayName": "Проект",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Статус",
+              "displayName": "Статус",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Дата",
+              "displayName": "Дата",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Время",
+              "displayName": "Время",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2912,
+        304
+      ],
+      "id": "9fdfc2e8-3650-43bd-a892-57fbc9a826f0",
+      "name": "UpdateLog",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
     }
   ],
   "connections": {
@@ -2354,6 +2446,17 @@
       "main": [
         []
       ]
+    },
+    "UpdateStatusesFRDOreestr": {
+      "main": [
+        [
+          {
+            "node": "UpdateLog",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -2372,8 +2475,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "c3fa5866-bdd5-4e98-b886-195e6bd5850d",
-  "activeVersionId": "c3fa5866-bdd5-4e98-b886-195e6bd5850d",
+  "versionId": "be199b99-4b21-4cdf-8016-1c437b44a8bf",
+  "activeVersionId": "be199b99-4b21-4cdf-8016-1c437b44a8bf",
   "triggerCount": 1,
   "shared": [
     {
@@ -2385,9 +2488,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-26T05:36:18.036Z",
-    "createdAt": "2026-03-17T12:46:56.116Z",
-    "versionId": "c3fa5866-bdd5-4e98-b886-195e6bd5850d",
+    "updatedAt": "2026-04-02T05:28:13.167Z",
+    "createdAt": "2026-04-02T05:28:08.567Z",
+    "versionId": "be199b99-4b21-4cdf-8016-1c437b44a8bf",
     "workflowId": "LVDC6da2JfAxsblA",
     "nodes": [
       {
@@ -4569,6 +4672,98 @@
             "name": "with.edtech@gmail.com"
           }
         }
+      },
+      {
+        "parameters": {
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "1VbuUhhS4wBKI3ALocMcOkGGWkCdkazO1_FWSqVzZ0l8",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Лог",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VbuUhhS4wBKI3ALocMcOkGGWkCdkazO1_FWSqVzZ0l8/edit#gid=0"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "Проект": "РС",
+              "ID": "={{ $json.ID }}",
+              "Статус": "={{ $json[\"Статус заявки\"] }}",
+              "Дата": "={{$now.format('dd.MM.yyyy')}}",
+              "Время": "={{$now.format('HH:mm')}}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "Проект",
+                "displayName": "Проект",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "ID",
+                "displayName": "ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Статус",
+                "displayName": "Статус",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Дата",
+                "displayName": "Дата",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Время",
+                "displayName": "Время",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          2912,
+          304
+        ],
+        "id": "9fdfc2e8-3650-43bd-a892-57fbc9a826f0",
+        "name": "UpdateLog",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "Xpp4ndWQ84MtD53m",
+            "name": "with.edtech@gmail.com"
+          }
+        }
       }
     ],
     "connections": {
@@ -4738,10 +4933,21 @@
         "main": [
           []
         ]
+      },
+      "UpdateStatusesFRDOreestr": {
+        "main": [
+          [
+            {
+              "node": "UpdateLog",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "Active User",
-    "name": "Version c3fa5866",
+    "name": "Version be199b99",
     "description": "",
     "autosaved": true
   },
