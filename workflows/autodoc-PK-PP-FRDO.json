@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-02T05:25:55.720Z",
+  "updatedAt": "2026-04-06T09:38:05.514Z",
   "createdAt": "2025-10-23T04:21:13.793Z",
   "id": "phRrUh556uvizS7T",
   "name": "autodoc-PK-PP-FRDO",
@@ -304,7 +304,7 @@
             "Срок обучения, часов (для документа о квалификации)": "={{ $('isCompleteData').item.json.hours }}",
             "Фамилия получателя": "={{ $('isCompleteData').item.json.surname }}",
             "Имя получателя": "={{ $('isCompleteData').item.json.name }}",
-            "Отчество получателя": "={{ $('isCompleteData').item.json.patronymic }}",
+            "Отчество получателя": "={{ $('isCompleteData').item.json.patronymic || \"нет\"}}",
             "Дата рождения получателя": "={{ $('isCompleteData').item.json.birthDate }}",
             "Пол получателя": "={{ $('isCompleteData').item.json.gender }}",
             "СНИЛС": "={{ $('isCompleteData').item.json.snils }}",
@@ -2154,8 +2154,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "14ad0546-04c6-4ba7-9adc-dbd01b9a2f17",
-  "activeVersionId": "14ad0546-04c6-4ba7-9adc-dbd01b9a2f17",
+  "versionId": "a9498fec-3dc3-4d26-af50-c83a2896738f",
+  "activeVersionId": "a9498fec-3dc3-4d26-af50-c83a2896738f",
   "triggerCount": 1,
   "shared": [
     {
@@ -2167,9 +2167,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-02T05:25:57.232Z",
-    "createdAt": "2026-04-02T05:25:55.724Z",
-    "versionId": "14ad0546-04c6-4ba7-9adc-dbd01b9a2f17",
+    "updatedAt": "2026-04-06T09:38:08.626Z",
+    "createdAt": "2026-04-06T09:38:05.516Z",
+    "versionId": "a9498fec-3dc3-4d26-af50-c83a2896738f",
     "workflowId": "phRrUh556uvizS7T",
     "nodes": [
       {
@@ -2470,7 +2470,7 @@
               "Срок обучения, часов (для документа о квалификации)": "={{ $('isCompleteData').item.json.hours }}",
               "Фамилия получателя": "={{ $('isCompleteData').item.json.surname }}",
               "Имя получателя": "={{ $('isCompleteData').item.json.name }}",
-              "Отчество получателя": "={{ $('isCompleteData').item.json.patronymic }}",
+              "Отчество получателя": "={{ $('isCompleteData').item.json.patronymic || \"нет\"}}",
               "Дата рождения получателя": "={{ $('isCompleteData').item.json.birthDate }}",
               "Пол получателя": "={{ $('isCompleteData').item.json.gender }}",
               "СНИЛС": "={{ $('isCompleteData').item.json.snils }}",
@@ -4305,7 +4305,7 @@
       }
     },
     "authors": "Active User",
-    "name": "Version 14ad0546",
+    "name": "Version a9498fec",
     "description": "",
     "autosaved": true
   },
