@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-31T09:40:21.334Z",
+  "updatedAt": "2026-04-13T12:59:14.594Z",
   "createdAt": "2025-09-04T06:58:53.773Z",
   "id": "L2MFLBVRIYuaZ84O",
   "name": "debug-test",
@@ -1728,8 +1728,8 @@
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        -1024,
-        -1520
+        -304,
+        320
       ],
       "id": "3c2eb1fb-4ebd-49ea-b63b-ca943a17d30f",
       "name": "When clicking ‘Execute workflow’"
@@ -2125,6 +2125,356 @@
       ],
       "id": "e9e152b0-69f0-462e-bd3f-2e2fecab40f6",
       "name": "Code in JavaScript13"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1EisJDIxaU-ua3RhLnanE_ZgnXFFY2ARkUsSuVj0pU4A",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Реестр заявок",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EisJDIxaU-ua3RhLnanE_ZgnXFFY2ARkUsSuVj0pU4A/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -64,
+        320
+      ],
+      "id": "b86c321e-fda6-41ad-815a-4ab39f333455",
+      "name": "Get row(s) in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "432544b1-e271-48bf-9dc0-69a23535115d",
+              "leftValue": "={{ DateTime.fromFormat($json['Дата рождения'].trim().replace(/[^\\d.]/g, \"\").replace(/З/g, \"3\"),ъ, \"dd.MM.yyyy\") <= DateTime.now().minus({ years: 18 }) }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "58618036-5ee6-4830-8b5d-026ac5427559",
+              "leftValue": "={{ $json['Дата рождения'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        144,
+        320
+      ],
+      "id": "f672eb81-8098-44eb-92c5-652f85e81819",
+      "name": "Filter1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "7b187ba8-f39f-4559-8951-fa47903f7d3e",
+              "leftValue": "={{ !$json.ID.trim().isEmpty() }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        352,
+        320
+      ],
+      "id": "e8a7317c-587a-4432-9621-5bcef82cce10",
+      "name": "Filter2"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1e2Ww1-NUbqzqVwvomrXjH2QJ4jYlnLcGqCMJDaSaCWM",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "ПК/ПП",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1e2Ww1-NUbqzqVwvomrXjH2QJ4jYlnLcGqCMJDaSaCWM/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $json.ID }}",
+            "Дата": "={{ $json[\"Дата рождения\"] }}"
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Дата",
+              "displayName": "Дата",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        560,
+        320
+      ],
+      "id": "952afe0d-75c2-4178-bc8f-350fcf1b1709",
+      "name": "Append row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1XNmY2kEPGh3_xIe7u43dELW19Gfe3yeV-p-mnj-M1C4",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Реестр заявок",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XNmY2kEPGh3_xIe7u43dELW19Gfe3yeV-p-mnj-M1C4/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -80,
+        544
+      ],
+      "id": "6f21890c-1d09-4231-b897-0b5ccec0e802",
+      "name": "Get row(s) in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "432544b1-e271-48bf-9dc0-69a23535115d",
+              "leftValue": "={{ DateTime.fromFormat($json['Дата рождения'].trim().replace(/[^\\d.]/g, \"\").replace(/З/g, \"3\"), \"dd.MM.yyyy\") <= DateTime.now().minus({ years: 18 }) }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "58618036-5ee6-4830-8b5d-026ac5427559",
+              "leftValue": "={{ $json['Дата рождения'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        128,
+        544
+      ],
+      "id": "cba18d33-a2e6-4aad-bc9e-1d488ccdad71",
+      "name": "Filter3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "7b187ba8-f39f-4559-8951-fa47903f7d3e",
+              "leftValue": "={{ !$json.ID.trim().isEmpty() }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        336,
+        544
+      ],
+      "id": "4f2a1745-5df7-4236-b042-e3c56604c9d8",
+      "name": "Filter4"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1e2Ww1-NUbqzqVwvomrXjH2QJ4jYlnLcGqCMJDaSaCWM",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 299292570,
+          "mode": "list",
+          "cachedResultName": "РС",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1e2Ww1-NUbqzqVwvomrXjH2QJ4jYlnLcGqCMJDaSaCWM/edit#gid=299292570"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $json.ID }}",
+            "Дата": "={{ $json[\"Дата рождения\"] }}"
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Дата",
+              "displayName": "Дата",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        544,
+        544
+      ],
+      "id": "09aa8fbb-ef07-40c8-b1cf-e75b26c27080",
+      "name": "Append row in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
     }
   ],
   "connections": {
@@ -2453,7 +2803,12 @@
       "main": [
         [
           {
-            "node": "Code in JavaScript13",
+            "node": "Get row(s) in sheet2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get row(s) in sheet1",
             "type": "main",
             "index": 0
           }
@@ -2573,6 +2928,72 @@
       "main": [
         []
       ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "Filter2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter2": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet2": {
+      "main": [
+        [
+          {
+            "node": "Filter3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter3": {
+      "main": [
+        [
+          {
+            "node": "Filter4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter4": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -2587,7 +3008,7 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "f31d9168-b137-430e-8ae3-b52d01a1d4fc",
+  "versionId": "d07d55e0-9977-4d37-b325-6bb48fd81087",
   "activeVersionId": null,
   "triggerCount": 1,
   "shared": [
