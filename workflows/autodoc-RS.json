@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-02T05:07:40.420Z",
+  "updatedAt": "2026-04-13T11:40:31.910Z",
   "createdAt": "2025-10-23T08:06:16.525Z",
   "id": "q02qpzB5xGdlK6Od",
   "name": "autodoc-RS",
@@ -13,7 +13,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -1120,
+        -1248,
         384
       ],
       "id": "88280560-22cf-455a-a7ce-36b287468a0a",
@@ -185,12 +185,12 @@
     },
     {
       "parameters": {
-        "jsCode": "// ===============================================\n//     🎯 КОНФИГУРАЦИЯ AUTODOCK v3.0 ФИНАЛЬНАЯ\n//     Обновлено с учетом рабочей версии\n// ===============================================\n\nconst AUTODOCK_CONFIG = {\n  // ========== НАЗВАНИЯ ЛИСТОВ ==========\n  // \"SHEETS\": {\n  //   \"REGISTRY\": \"Реестр заявок\",\n  //   \"LAYOUTS\": \"Макеты документов\", \n  //   \"SYSTEM_SETTINGS\": \"Системные настройки\",\n  //   \"TEMPLATES\": \"Шаблоны\",\n  //   \"EMPLOYEES\": \"Сотрудники\",\n  //   \"FIS_FRDO\": \"ФИС ФРДО\",\n  //   \"LOGS\": \"Логи системы\",\n  //   \"COUNTERS\": \"Счётчики\" // ДОБАВЛЕНО: для хранения счетчиков регномеров\n  // },\n\n  // ========== НАЗВАНИЯ СТОЛБЦОВ ==========\n  \"COLUMNS\": {\n    // \"ID\": \"ID\",\n    // \"FULL_NAME\": \"Фамилия Имя Отчество\",\n    \"REGISTRY\": {\n      \"ID\": \"ID\",\n      \"REG_NUMBER\": \"Рег-номер\",\n      \"REG_NUMBER_SVID\": \"Рег-номер (Свидетельство)\",\n      \"FULL_NAME\": \"Фамилия Имя Отчество\",\n      \"EMPLOYEE\": \"Макеты\",\n      \"STATUS\": \"Статус заявки\",\n      \"FULL_NAME_DECLINED\": \"Фамилия Имя Отчество в склонении\",\n      \"PROGRAM\": \"Специальность в свидетельство + Практика\", //значение изменено для РС\n      \"QUALIFICATION\": \"Специальность в удостоверение\", //значение изменено для РС\n      \"SPECIALIZATION\": \"Коммент\", //значение изменено для РС\n      \"WORK_CLASS\": \"Разряд\", //Новый столбец для РС\n      \"CODE\": \"Код\",\n      \"HOURS\": \"Часов\",\n      \"COMPANY\": \"Компания Выписка + Практика\",\n      \"COMPANY_POSITION\": \"Должность Выписка\",\n      \"CITY\": \"Город не Москва\",\n      \"SCENARIO\": \"Сценарий\",\n      //\"EDUCATION_DOC\": \"Документ об образовании\",\n      \"SNILS\": \"СНИЛС\",\n      \"BIRTH_DATE\": \"Дата рождения получателя\",\n      \"GENDER\": \"Пол получателя\",\n      \"FOLDER\": \"ПАПКА\",\n      \"DIARY_CREATED_DATE\": \"Дата создания дневника\",\n      \"DIARY_CUSTOM_DATE\": \"Особенная дата создания дневника\",\n      \"CREATED_DATE\": \"Дата выдачи свид\",\n      \"CUSTOM_DATE\": \"Особенная дата выдачи свид\",\n      //\"CREATED_DATE\": \"Дата создания\",\n      //\"ISSUE_DATE\": \"Дата выдачи\",\n      //\"START_DATE\": \"Дата начала (фикс)\",\n      //\"END_DATE\": \"Дата окончания (фикс)\",\n      //\"CUSTOM_TERM\": \"Срок обучения (дн.)\", - не нужно в РС\n      \"LAST_UPDATE\": \"Дата последнего изменения\",\n      \"MISFIELDS\": \"Незаполненные поля\"\n    },\n\n    // \"LAYOUTS\": {\n    //   \"GENERATION_TRIGGER\": \"СТАРТ\", // ИЗМЕНЕНО: было CHECKBOX\n    //   \"SCENARIO\": \"Сценарий\", \n    //   \"DOCUMENT_TYPE\": \"Документ\",\n    //   \"STATUS\": \"Статус\",\n    //   \"EMPLOYEE\": \"Сотрудник\",\n    //   \"DOCUMENT_LINK\": \"Ссылка на док (без подложки)\",\n    //   \"DOCUMENT_LINK_UNDERLAY\": \"Ссылка на док (с подложкой)\",\n    //   \"REG_NUMBER\": \"Регистрационный номер\", // ДОБАВЛЕНО\n    //   \"UNDERLAY\": \"С подложкой\" // ДОБАВЛЕНО\n    // },\n\n    \"PROFESSION_DATABASE\": {\n      \"PROFESSION_NAME\": \"Наименование профессий рабочих, должностей служащих, по которым осуществляется профессиональное обучение\",\n      \"PROFESSION_CLASS\": \"Квалификационный разряд, класс, категория (при наличии)\",\n      \"PROFESSION_CODE\": \"Код в соответствии с Общероссийским классификатором профессий рабочих, должностей служащих и тарифных разрядов (при наличии)\"\n    },\n\n    \"TEMPLATES\": {\n      \"SCENARIO\": \"Сценарий\",\n      \"DOCUMENT\": \"Документ\",\n      \"TYPE\": \"Тип\",\n      \"TEMPLATE_LINK\": \"Ссылка на шаблон\",\n      \"UNDERLAY\": \"С подложкой\", // ДОБАВЛЕНО\n      \"REG_VARIABLE\": \"РегНомер\" // ДОБАВЛЕНО\n    },\n    \n    \"COUNTERS\": { // ДОБАВЛЕНО: новая секция\n      \"COUNTER_TYPE\": \"Тип счётчика\",\n      \"CURRENT_VALUE\": \"Текущее значение\", \n      \"LAST_USED\": \"Последнее использование\",\n      // \"LOCKED\": \"Заблокирован\"\n    },\n\n    \"DIARIES\": {\n      \"DIARY_NAME\": \"Дневник\",\n      \"DIARY_TEMPLATE_LINK\": \"Ссылка на шаблон\"\n    }\n  },\n\n  // // ========== ТРИГГЕРЫ ГЕНЕРАЦИИ ========== \n  // \"GENERATION_TRIGGERS\": { // ДОБАВЛЕНО: новая секция\n  //   \"NEW\": \"новая\",     // lowercase как в рабочей версии\n  //   \"START\": \"запуск\",  \n  //   \"DONE\": \"готово\"\n  // },\n\n  // ========== ОБЯЗАТЕЛЬНЫЕ ПОЛЯ ==========\n  \"REQUIRED_FIELDS\": {\n    \"base\": [\n      \"Дата выдачи свид\",\n      \"Фамилия Имя Отчество\",\n      \"Фамилия Имя Отчество в склонении\", \n      \"Специальность в свидетельство + Практика\",\n      \"Часов\",\n      \"Сценарий\"\n      // \"Документ об образовании\"\n    ]\n    // \"diploma_qualified\": [\n    //   \"Квалификация\"\n    // ],\n    // \"fis_frdo\": [\n    //   \"СНИЛС\",\n    //   \"Дата рождения получателя\",\n    //   \"Пол получателя\"\n    // ]\n  },\n\n\n\n  // // ========== СТАТУСЫ ==========\n  // \"STATUSES\": {\n  //   \"REGISTRY\": {\n  //     \"EMPTY\": \"\",\n  //     \"INCOMPLETE\": \"Неполные данные\",\n  //     \"READY\": \"Готов к обработке\",\n  //     \"IN_LAYOUTS\": \"Передано в макеты\",\n  //     \"CHANGED\": \"Изменены данные\",\n  //     \"DOCUMENTS_READY\": \"Документы готовы\",\n  //     \"READY_FOR_FIS\": \"Готов к подаче в ФИС ФРДО\",\n  //     \"IN_FIS_BATCH\": \"В пакете ФИС ФРДО\",\n  //     \"SUBMITTED_TO_FIS\": \"Подано в ФИС ФРДО\",\n  //     \"ISSUED\": \"Выдано\",\n  //     \"SENT_BY_MAIL\": \"Отправлено почтой\",\n  //     \"URGENT\": \"🔴 СРОЧНО\"\n  //   },\n  //   \"LAYOUTS\": {\n  //     \"WAITING\": \"Ожидает к генерации\",\n  //     \"NEEDS_REGEN\": \"Требует перегенерации\",\n  //     \"URGENT\": \"🔴 СРОЧНО\",\n  //     \"IN_QUEUE\": \"В очереди\",\n  //     \"GENERATING\": \"Генерируется\", // ДОБАВЛЕНО\n  //     \"CREATED\": \"Макет создан\",\n  //     \"ERROR\": \"Ошибка генерации\",\n  //     \"LOCKED\": \"Заблокировано\" // ДОБАВЛЕНО\n  //   }\n  // },\n\n  // ========== СЦЕНАРИИ И ПАКЕТЫ ==========\n  \"SCENARIOS\": {\n    \"Полный РС\": {\n      \"documents\": [\"Свидетельство\",\"Удостоверение\",\"Выписка РС\"]\n    },\n    \"Полный РС без фото\": {\n      \"documents\": [\"Свидетельство\",\"Удостоверение без фото\",\"Выписка РС\", ]\n    },\n    \"Практика 20\": {\n      \"documents\": [\"Свидетельство\",\"Удостоверение\",\"Выписка РС\", \"<<Профессия>> 20\"]\n    }, \n    \"Практика 200\": {\n      \"documents\": [\"Свидетельство\",\"Удостоверение\", \"Выписка РС\", \"<<Профессия>> 200\" ]\n    }, \n    \"Свидетельство\" : {\n      \"documents\": [\"Свидетельство\", \"Выписка РС\"]\n    },\n    \"Удостоверение\" : {\n      \"documents\": [\"Удостоверение\", \"Выписка РС\"]\n    },\n    \"Удостоверение без фото\" : {\n      \"documents\": [\"Удостоверение без фото\", \"Выписка РС\"]\n    }\n  },\n\n  // ========== СОТРУДНИКИ ==========\n  \"EMPLOYEES\": {\n    \"Полянская Мария\": {\n      \"folderId\": \"1RuDqHlHDfU5aChhpv1r4zNQRDIzzBh4K\"\n    },\n    \"Черненко Мария\": {\n      \"folderId\": \"1z-CIaI1vLSrnWOWD3wvT0l1kTSpTWyDD\"\n    },\n    \"Федорова Мария\": {\n      \"folderId\": \"1dXORm1U-sq5B52denaK59YtFv7K_A_9A\"\n    },\n    \"Настя\": {\n      \"folderId\": \"1cwiQBaxLS9hsJJum3GmUj24BLhzzkNku\"\n    },\n    \"Марина\": {\n      \"folderId\": \"1_dgBt_La_swpVkVPf36IelYUwLA4g_0e\"\n    },\n    \"Леднева Ольга\": {\n      \"folderId\": \"19ZEzJRNV_iDyDvJ4dBFTxH6lAmik57sm\"\n    },\n    \"Басана\": {\n      \"folderId\": \"10a6JgPpzFZvt19Lp6QSm70h1C_8O81KY\"\n    },\n    \"Крис\": {\n      \"folderId\": \"1E6aIiw2i598l7T5tu9Sy_TX9yEI0s08v\"\n    },\n    \"Клюшкина Елена\": {\n      \"folderId\": \"1CDLI3MB1jCcf5YYE94UgTzpJvm0tWluq\"\n    },\n    \"Ирина Л\": {\n      \"folderId\": \"15OQteE9rPAljj6-HQxpYBBlh5EYvHdZS\"\n    },\n    \"Дарья\": {\n      \"folderId\": \"1ENJYwNEwCyd-dXOvQswzQA-7e8-FM7Xe\"\n    }\n  },\n\n  // // ========== КРИТИЧНЫЕ ПОЛЯ ДЛЯ ХЭША ==========\n  // \"CRITICAL_FIELDS\": [\n  //   \"Фамилия Имя Отчество\",\n  //   \"Фамилия Имя Отчество в склонении\",\n  //   \"Программа\", \n  //   \"Квалификация\",\n  //   \"Специализация\",\n  //   \"Часов\",\n  //   \"Дата выдачи\",\n  //   \"Дата начала (фикс)\",\n  //   \"Дата окончания (фикс)\",\n  //   \"Срок обучения (дн.)\"\n  // ],\n\n  // ========== ФОРМАТЫ РЕГИСТРАЦИОННЫХ НОМЕРОВ ==========\n  \"REG_NUMBER_FORMATS\": {\n  \"Удостоверение\" : {\n    \"prefix\": \"АН\", \n      \"format\": \"{number}-{prefix}\",\n      \"counter_name\": \"rs_counter\",\n      \"startFrom\": 98,\n      \"variable\": \"Рег-УД\",\n      \"shared\": true // \n  },\n  \"Свидетельство\" : {\n    \"prefix\": \"Н\", \n      \"format\": \"{number}-{prefix}\",\n      \"counter_name\": \"rs_counter\",\n      \"startFrom\": 98,\n      \"variable\": \"Рег-СВИД\",\n      \"shared\": true // \n  },\n  \"Выписка РС\" : {\n    \"prefix\": \"АН\", \n      \"format\": \"{number}-{prefix}\",\n      \"counter_name\": \"rs_counter\",\n      \"startFrom\": 98,\n      \"variable\": \"Рег-УД\",\n      \"shared\": true,\n      // \"parentVariable\": \"Рег-УД\"\n  },\n  \"Удостоверение без фото\" : {\n    \"prefix\": \"АН\", \n      \"format\": \"{number}-{prefix}\",\n      \"counter_name\": \"rs_counter\",\n      \"startFrom\": 98,\n      \"variable\": \"Рег-УД\",\n      \"shared\": true // \n  },\n    \n    // \"Диплом простой\": {\n    //   \"prefix\": \"П\", \n    //   \"format\": \"{number}-{yy}{month}{prefix}\",\n    //   \"counter_name\": \"diploma_counter\",\n    //   \"startFrom\": 98,\n    //   \"variable\": \"Рег-ПП\",\n    //   \"shared\": true // ДОБАВЛЕНО: общий счетчик с квалификацией\n    // },\n    // \"Диплом с квалификацией\": {\n    //   \"prefix\": \"П\", \n    //   \"format\": \"{number}-{yy}{month}{prefix}\",\n    //   \"counter_name\": \"diploma_counter\",\n    //   \"startFrom\": 98,\n    //   \"variable\": \"Рег-ПП\",\n    //   \"shared\": true // ДОБАВЛЕНО: общий счетчик с квалификацией\n    // },\n    // \"Удостоверение ПК\": {\n    //   \"prefix\": \"ПК\",\n    //   \"format\": \"{number}-{month}/{prefix}\",\n    //   \"counter_name\": \"pk_counter\",\n    //   \"startFrom\": 29,\n    //   \"variable\": \"Рег-ПК\",\n    //   \"shared\": true\n    // },\n    // \"Сертификат\": {\n    //   \"prefix\": \"ПК\",\n    //   \"format\": \"{number}-{month}/{prefix}\",\n    //   \"counter_name\": \"pk_counter\",\n    //   \"startFrom\": 29,\n    //   \"variable\": \"Рег-ПК\"\n    // },\n    // \"Удостоверение ДО\": {\n    //   \"prefix\": \"ПК\",\n    //   \"format\": \"{number}-{month}/{prefix}\",\n    //   \"counter_name\": \"pk_counter\",\n    //   \"startFrom\": 29,\n    //   \"variable\": \"Рег-ПК\"\n    // },\n    // \"Удостоверение РС\": {\n    //   \"prefix\": \"АН\",\n    //   \"format\": \"{number}-{prefix}\",\n    //   \"counter_name\": \"rs_counter\",\n    //   \"startFrom\": 24216,\n    //   \"variable\": \"Рег-РС-АН\",\n    //   \"shared\": true\n    // },\n    // \"Выписка ПП\": { // ДОБАВЛЕНО\n    //   \"prefix\": \"ПП\",\n    //   \"format\": \"{prefix}-{month}{yy}-{number}\",\n    //   \"counter_name\": \"vypiska_counter_pp\",\n    //   \"startFrom\": 95,\n    //   \"variable\": \"Рег-ВПП\",\n    //   \"parentVariable\": \"Рег-ПП\"\n    // },\n    // \"Выписка ПК\": { // ДОБАВЛЕНО\n    //   \"prefix\": \"ПК\",\n    //   \"format\": \"{prefix}-{month}{yy}-{number}\",\n    //   \"counter_name\": \"vypiska_counter_pk\",\n    //   \"startFrom\": 95,\n    //   \"variable\": \"Рег-ВПК\",\n    //   \"parentVariable\": \"Рег-ПК\"\n    // },\n    // \"Предметы\": { // ДОБАВЛЕНО\n    //   \"useParent\": true\n    // },\n    // \"Приложение\": { // ДОБАВЛЕНО\n    //   \"useParent\": true\n    // },\n    // \"Корочка ПП\": { // ДОБАВЛЕНО\n    //   \"useParent\": true\n    // },\n    // \"Корочка ПК\": { // ДОБАВЛЕНО\n    //   \"useParent\": true\n    // },\n    // \"Корочка ПК фото\": { // ДОБАВЛЕНО\n    //   \"useParent\": true\n    // },\n  },\n\n  // ========== ДОПУСТИМЫЕ ЧАСЫ ==========\n\"VALID_HOURS\": $('makeHoursFormat').first().json.VALID_HOURS,\n  // ========== КОНСТАНТЫ ДЛЯ РАСЧЕТА ПЕРИОДОВ ==========\n\"HOURS_TO_PERIOD\": $('makeHoursFormat').first().json.HOURS_TO_PERIOD,\n  // ========== СИСТЕМНЫЕ НАСТРОЙКИ ========== \n  \n  // \"SYSTEM\": { // ДОБАВЛЕНО: новая секция\n  //   \"LOCK_TIMEOUT_MINUTES\": 5,\n  //   \"MAX_RETRIES\": 3,\n  //   \"BATCH_SIZE\": 50,\n  //   \"LOG_RETENTION_DAYS\": 90,\n  //   \"ID_PREFIX\": \"REQ\",\n  //   \"ID_PAD_LENGTH\": 5\n  // },\n\n  // ========== ПРАЗДНИЧНЫЕ ДНИ 2025 ==========\n\"HOLIDAYS\": [\n  // 2024 год\n  \"2024-01-01\",\"2024-01-02\",\"2024-01-03\",\"2024-01-04\",\"2024-01-05\",\n  \"2024-01-06\",\"2024-01-07\",\"2024-01-08\",\n  \"2024-02-23\",\n  \"2024-03-08\",\n  \"2024-04-29\",\"2024-04-30\",\n  \"2024-05-01\",\"2024-05-09\",\"2024-05-10\",\n  \"2024-06-12\",\n  \"2024-11-04\",\n  \"2024-12-30\",\"2024-12-31\",\n  \n  // 2025 год\n  \"2025-01-01\",\"2025-01-02\",\"2025-01-03\",\"2025-01-04\",\"2025-01-05\",\n  \"2025-01-06\",\"2025-01-07\",\"2025-01-08\",\n  \"2025-02-23\",\"2025-02-24\",\n  \"2025-03-08\",\"2025-03-09\",\"2025-03-10\",\n  \"2025-05-01\",\"2025-05-02\",\"2025-05-03\",\"2025-05-04\",\n  \"2025-05-09\",\"2025-05-10\",\"2025-05-11\",\"2025-05-12\",\n  \"2025-06-12\",\"2025-06-13\",\n  \"2025-11-03\",\"2025-11-04\",\n  \"2025-12-31\",\n  \n  // 2026 год (предварительно, официальный календарь ещё не утверждён)\n  \"2026-01-01\",\"2026-01-02\",\"2026-01-03\",\"2026-01-04\",\"2026-01-05\",\n  \"2026-01-06\",\"2026-01-07\",\"2026-01-08\",\"2026-01-09\",\n  \"2026-02-23\",\n  \"2026-03-08\",\"2026-03-09\",\n  \"2026-05-01\",\"2026-05-04\",\n  \"2026-05-09\",\"2026-05-11\",\n  \"2026-06-12\",\n  \"2026-11-04\"\n],\n\n  // ========== НАЗВАНИЯ МЕСЯЦЕВ ==========\n  \"MONTH_NAMES\": {\n    \"genitive\": [\n      \"января\",\"февраля\",\"марта\",\"апреля\",\"мая\",\"июня\",\n      \"июля\",\"августа\",\"сентября\",\"октября\",\"ноября\",\"декабря\"\n    ]\n  }\n};\n\n\n\nreturn [{ \n  json: {config: AUTODOCK_CONFIG}\n}];\n"
+        "jsCode": "// ===============================================\n//     🎯 КОНФИГУРАЦИЯ AUTODOCK v3.0 ФИНАЛЬНАЯ\n//     Обновлено с учетом рабочей версии\n// ===============================================\n\nconst AUTODOCK_CONFIG = {\n  // ========== НАЗВАНИЯ ЛИСТОВ ==========\n  // \"SHEETS\": {\n  //   \"REGISTRY\": \"Реестр заявок\",\n  //   \"LAYOUTS\": \"Макеты документов\", \n  //   \"SYSTEM_SETTINGS\": \"Системные настройки\",\n  //   \"TEMPLATES\": \"Шаблоны\",\n  //   \"EMPLOYEES\": \"Сотрудники\",\n  //   \"FIS_FRDO\": \"ФИС ФРДО\",\n  //   \"LOGS\": \"Логи системы\",\n  //   \"COUNTERS\": \"Счётчики\" // ДОБАВЛЕНО: для хранения счетчиков регномеров\n  // },\n\n  // ========== НАЗВАНИЯ СТОЛБЦОВ ==========\n  \"COLUMNS\": {\n    // \"ID\": \"ID\",\n    // \"FULL_NAME\": \"Фамилия Имя Отчество\",\n    \"REGISTRY\": {\n      \"ID\": \"ID\",\n      \"REG_NUMBER\": \"Рег-номер\",\n      \"REG_NUMBER_SVID\": \"Рег-номер (Свидетельство)\",\n      \"FULL_NAME\": \"Фамилия Имя Отчество\",\n      \"EMPLOYEE\": \"Макеты\",\n      \"STATUS\": \"Статус заявки\",\n      \"FULL_NAME_DECLINED\": \"Фамилия Имя Отчество в склонении\",\n      \"PROGRAM\": \"Специальность в свидетельство + Практика\", //значение изменено для РС\n      \"QUALIFICATION\": \"Специальность в удостоверение\", //значение изменено для РС\n      \"SPECIALIZATION\": \"Коммент\", //значение изменено для РС\n      \"WORK_CLASS\": \"Разряд\", //Новый столбец для РС\n      \"CODE\": \"Код\",\n      \"HOURS\": \"Часов\",\n      \"COMPANY\": \"Компания Выписка + Практика\",\n      \"COMPANY_POSITION\": \"Должность Выписка\",\n      \"CITY\": \"Город не Москва\",\n      \"SCENARIO\": \"Сценарий\",\n      //\"EDUCATION_DOC\": \"Документ об образовании\",\n      \"SNILS\": \"СНИЛС\",\n      \"BIRTH_DATE\": \"Дата рождения получателя\",\n      \"GENDER\": \"Пол получателя\",\n      \"FOLDER\": \"ПАПКА\",\n      \"DIARY_CREATED_DATE\": \"Дата создания дневника\",\n      \"DIARY_CUSTOM_DATE\": \"Особенная дата создания дневника\",\n      \"CREATED_DATE\": \"Дата выдачи свид\",\n      \"CUSTOM_DATE\": \"Особенная дата выдачи свид\",\n      //\"CREATED_DATE\": \"Дата создания\",\n      //\"ISSUE_DATE\": \"Дата выдачи\",\n      //\"START_DATE\": \"Дата начала (фикс)\",\n      //\"END_DATE\": \"Дата окончания (фикс)\",\n      //\"CUSTOM_TERM\": \"Срок обучения (дн.)\", - не нужно в РС\n      \"LAST_UPDATE\": \"Дата последнего изменения\",\n      \"MISFIELDS\": \"Незаполненные поля\"\n    },\n\n    // \"LAYOUTS\": {\n    //   \"GENERATION_TRIGGER\": \"СТАРТ\", // ИЗМЕНЕНО: было CHECKBOX\n    //   \"SCENARIO\": \"Сценарий\", \n    //   \"DOCUMENT_TYPE\": \"Документ\",\n    //   \"STATUS\": \"Статус\",\n    //   \"EMPLOYEE\": \"Сотрудник\",\n    //   \"DOCUMENT_LINK\": \"Ссылка на док (без подложки)\",\n    //   \"DOCUMENT_LINK_UNDERLAY\": \"Ссылка на док (с подложкой)\",\n    //   \"REG_NUMBER\": \"Регистрационный номер\", // ДОБАВЛЕНО\n    //   \"UNDERLAY\": \"С подложкой\" // ДОБАВЛЕНО\n    // },\n\n    \"PROFESSION_DATABASE\": {\n      \"PROFESSION_NAME\": \"Наименование профессий рабочих, должностей служащих, по которым осуществляется профессиональное обучение\",\n      \"PROFESSION_CLASS\": \"Квалификационный разряд, класс, категория (при наличии)\",\n      \"PROFESSION_CODE\": \"Код в соответствии с Общероссийским классификатором профессий рабочих, должностей служащих и тарифных разрядов (при наличии)\"\n    },\n\n    \"TEMPLATES\": {\n      \"SCENARIO\": \"Сценарий\",\n      \"DOCUMENT\": \"Документ\",\n      \"TYPE\": \"Тип\",\n      \"TEMPLATE_LINK\": \"Ссылка на шаблон\",\n      \"UNDERLAY\": \"С подложкой\", // ДОБАВЛЕНО\n      \"REG_VARIABLE\": \"РегНомер\" // ДОБАВЛЕНО\n    },\n    \n    \"COUNTERS\": { // ДОБАВЛЕНО: новая секция\n      \"COUNTER_TYPE\": \"Тип счётчика\",\n      \"CURRENT_VALUE\": \"Текущее значение\", \n      \"LAST_USED\": \"Последнее использование\",\n      // \"LOCKED\": \"Заблокирован\"\n    },\n\n    \"DIARIES\": {\n      \"DIARY_NAME\": \"Дневник\",\n      \"DIARY_TEMPLATE_LINK\": \"Ссылка на шаблон\"\n    }\n  },\n\n  // // ========== ТРИГГЕРЫ ГЕНЕРАЦИИ ========== \n  // \"GENERATION_TRIGGERS\": { // ДОБАВЛЕНО: новая секция\n  //   \"NEW\": \"новая\",     // lowercase как в рабочей версии\n  //   \"START\": \"запуск\",  \n  //   \"DONE\": \"готово\"\n  // },\n\n  // ========== ОБЯЗАТЕЛЬНЫЕ ПОЛЯ ==========\n  \"REQUIRED_FIELDS\": {\n    \"base\": [\n      \"Дата выдачи свид\",\n      \"Фамилия Имя Отчество\",\n      \"Фамилия Имя Отчество в склонении\", \n      \"Специальность в свидетельство + Практика\",\n      \"Часов\",\n      \"Сценарий\",\n      \"Дата рождения\"\n      // \"Документ об образовании\"\n    ]\n    // \"diploma_qualified\": [\n    //   \"Квалификация\"\n    // ],\n    // \"fis_frdo\": [\n    //   \"СНИЛС\",\n    //   \"Дата рождения получателя\",\n    //   \"Пол получателя\"\n    // ]\n  },\n\n\n\n  // // ========== СТАТУСЫ ==========\n  // \"STATUSES\": {\n  //   \"REGISTRY\": {\n  //     \"EMPTY\": \"\",\n  //     \"INCOMPLETE\": \"Неполные данные\",\n  //     \"READY\": \"Готов к обработке\",\n  //     \"IN_LAYOUTS\": \"Передано в макеты\",\n  //     \"CHANGED\": \"Изменены данные\",\n  //     \"DOCUMENTS_READY\": \"Документы готовы\",\n  //     \"READY_FOR_FIS\": \"Готов к подаче в ФИС ФРДО\",\n  //     \"IN_FIS_BATCH\": \"В пакете ФИС ФРДО\",\n  //     \"SUBMITTED_TO_FIS\": \"Подано в ФИС ФРДО\",\n  //     \"ISSUED\": \"Выдано\",\n  //     \"SENT_BY_MAIL\": \"Отправлено почтой\",\n  //     \"URGENT\": \"🔴 СРОЧНО\"\n  //   },\n  //   \"LAYOUTS\": {\n  //     \"WAITING\": \"Ожидает к генерации\",\n  //     \"NEEDS_REGEN\": \"Требует перегенерации\",\n  //     \"URGENT\": \"🔴 СРОЧНО\",\n  //     \"IN_QUEUE\": \"В очереди\",\n  //     \"GENERATING\": \"Генерируется\", // ДОБАВЛЕНО\n  //     \"CREATED\": \"Макет создан\",\n  //     \"ERROR\": \"Ошибка генерации\",\n  //     \"LOCKED\": \"Заблокировано\" // ДОБАВЛЕНО\n  //   }\n  // },\n\n  // ========== СЦЕНАРИИ И ПАКЕТЫ ==========\n  \"SCENARIOS\": {\n    \"Полный РС\": {\n      \"documents\": [\"Свидетельство\",\"Удостоверение\",\"Выписка РС\"]\n    },\n    \"Полный РС без фото\": {\n      \"documents\": [\"Свидетельство\",\"Удостоверение без фото\",\"Выписка РС\", ]\n    },\n    \"Практика 20\": {\n      \"documents\": [\"Свидетельство\",\"Удостоверение\",\"Выписка РС\", \"<<Профессия>> 20\"]\n    }, \n    \"Практика 200\": {\n      \"documents\": [\"Свидетельство\",\"Удостоверение\", \"Выписка РС\", \"<<Профессия>> 200\" ]\n    }, \n    \"Свидетельство\" : {\n      \"documents\": [\"Свидетельство\", \"Выписка РС\"]\n    },\n    \"Удостоверение\" : {\n      \"documents\": [\"Удостоверение\", \"Выписка РС\"]\n    },\n    \"Удостоверение без фото\" : {\n      \"documents\": [\"Удостоверение без фото\", \"Выписка РС\"]\n    }\n  },\n\n  // ========== СОТРУДНИКИ ==========\n  \"EMPLOYEES\": {\n    \"Полянская Мария\": {\n      \"folderId\": \"1RuDqHlHDfU5aChhpv1r4zNQRDIzzBh4K\"\n    },\n    \"Черненко Мария\": {\n      \"folderId\": \"1z-CIaI1vLSrnWOWD3wvT0l1kTSpTWyDD\"\n    },\n    \"Федорова Мария\": {\n      \"folderId\": \"1dXORm1U-sq5B52denaK59YtFv7K_A_9A\"\n    },\n    \"Настя\": {\n      \"folderId\": \"1cwiQBaxLS9hsJJum3GmUj24BLhzzkNku\"\n    },\n    \"Марина\": {\n      \"folderId\": \"1_dgBt_La_swpVkVPf36IelYUwLA4g_0e\"\n    },\n    \"Леднева Ольга\": {\n      \"folderId\": \"19ZEzJRNV_iDyDvJ4dBFTxH6lAmik57sm\"\n    },\n    \"Басана\": {\n      \"folderId\": \"10a6JgPpzFZvt19Lp6QSm70h1C_8O81KY\"\n    },\n    \"Крис\": {\n      \"folderId\": \"1E6aIiw2i598l7T5tu9Sy_TX9yEI0s08v\"\n    },\n    \"Клюшкина Елена\": {\n      \"folderId\": \"1CDLI3MB1jCcf5YYE94UgTzpJvm0tWluq\"\n    },\n    \"Ирина Л\": {\n      \"folderId\": \"15OQteE9rPAljj6-HQxpYBBlh5EYvHdZS\"\n    },\n    \"Дарья\": {\n      \"folderId\": \"1ENJYwNEwCyd-dXOvQswzQA-7e8-FM7Xe\"\n    }\n  },\n\n  // // ========== КРИТИЧНЫЕ ПОЛЯ ДЛЯ ХЭША ==========\n  // \"CRITICAL_FIELDS\": [\n  //   \"Фамилия Имя Отчество\",\n  //   \"Фамилия Имя Отчество в склонении\",\n  //   \"Программа\", \n  //   \"Квалификация\",\n  //   \"Специализация\",\n  //   \"Часов\",\n  //   \"Дата выдачи\",\n  //   \"Дата начала (фикс)\",\n  //   \"Дата окончания (фикс)\",\n  //   \"Срок обучения (дн.)\"\n  // ],\n\n  // ========== ФОРМАТЫ РЕГИСТРАЦИОННЫХ НОМЕРОВ ==========\n  \"REG_NUMBER_FORMATS\": {\n  \"Удостоверение\" : {\n    \"prefix\": \"АН\", \n      \"format\": \"{number}-{prefix}\",\n      \"counter_name\": \"rs_counter\",\n      \"startFrom\": 98,\n      \"variable\": \"Рег-УД\",\n      \"shared\": true // \n  },\n  \"Свидетельство\" : {\n    \"prefix\": \"Н\", \n      \"format\": \"{number}-{prefix}\",\n      \"counter_name\": \"rs_counter\",\n      \"startFrom\": 98,\n      \"variable\": \"Рег-СВИД\",\n      \"shared\": true // \n  },\n  \"Выписка РС\" : {\n    \"prefix\": \"АН\", \n      \"format\": \"{number}-{prefix}\",\n      \"counter_name\": \"rs_counter\",\n      \"startFrom\": 98,\n      \"variable\": \"Рег-УД\",\n      \"shared\": true,\n      // \"parentVariable\": \"Рег-УД\"\n  },\n  \"Удостоверение без фото\" : {\n    \"prefix\": \"АН\", \n      \"format\": \"{number}-{prefix}\",\n      \"counter_name\": \"rs_counter\",\n      \"startFrom\": 98,\n      \"variable\": \"Рег-УД\",\n      \"shared\": true // \n  },\n    \n    // \"Диплом простой\": {\n    //   \"prefix\": \"П\", \n    //   \"format\": \"{number}-{yy}{month}{prefix}\",\n    //   \"counter_name\": \"diploma_counter\",\n    //   \"startFrom\": 98,\n    //   \"variable\": \"Рег-ПП\",\n    //   \"shared\": true // ДОБАВЛЕНО: общий счетчик с квалификацией\n    // },\n    // \"Диплом с квалификацией\": {\n    //   \"prefix\": \"П\", \n    //   \"format\": \"{number}-{yy}{month}{prefix}\",\n    //   \"counter_name\": \"diploma_counter\",\n    //   \"startFrom\": 98,\n    //   \"variable\": \"Рег-ПП\",\n    //   \"shared\": true // ДОБАВЛЕНО: общий счетчик с квалификацией\n    // },\n    // \"Удостоверение ПК\": {\n    //   \"prefix\": \"ПК\",\n    //   \"format\": \"{number}-{month}/{prefix}\",\n    //   \"counter_name\": \"pk_counter\",\n    //   \"startFrom\": 29,\n    //   \"variable\": \"Рег-ПК\",\n    //   \"shared\": true\n    // },\n    // \"Сертификат\": {\n    //   \"prefix\": \"ПК\",\n    //   \"format\": \"{number}-{month}/{prefix}\",\n    //   \"counter_name\": \"pk_counter\",\n    //   \"startFrom\": 29,\n    //   \"variable\": \"Рег-ПК\"\n    // },\n    // \"Удостоверение ДО\": {\n    //   \"prefix\": \"ПК\",\n    //   \"format\": \"{number}-{month}/{prefix}\",\n    //   \"counter_name\": \"pk_counter\",\n    //   \"startFrom\": 29,\n    //   \"variable\": \"Рег-ПК\"\n    // },\n    // \"Удостоверение РС\": {\n    //   \"prefix\": \"АН\",\n    //   \"format\": \"{number}-{prefix}\",\n    //   \"counter_name\": \"rs_counter\",\n    //   \"startFrom\": 24216,\n    //   \"variable\": \"Рег-РС-АН\",\n    //   \"shared\": true\n    // },\n    // \"Выписка ПП\": { // ДОБАВЛЕНО\n    //   \"prefix\": \"ПП\",\n    //   \"format\": \"{prefix}-{month}{yy}-{number}\",\n    //   \"counter_name\": \"vypiska_counter_pp\",\n    //   \"startFrom\": 95,\n    //   \"variable\": \"Рег-ВПП\",\n    //   \"parentVariable\": \"Рег-ПП\"\n    // },\n    // \"Выписка ПК\": { // ДОБАВЛЕНО\n    //   \"prefix\": \"ПК\",\n    //   \"format\": \"{prefix}-{month}{yy}-{number}\",\n    //   \"counter_name\": \"vypiska_counter_pk\",\n    //   \"startFrom\": 95,\n    //   \"variable\": \"Рег-ВПК\",\n    //   \"parentVariable\": \"Рег-ПК\"\n    // },\n    // \"Предметы\": { // ДОБАВЛЕНО\n    //   \"useParent\": true\n    // },\n    // \"Приложение\": { // ДОБАВЛЕНО\n    //   \"useParent\": true\n    // },\n    // \"Корочка ПП\": { // ДОБАВЛЕНО\n    //   \"useParent\": true\n    // },\n    // \"Корочка ПК\": { // ДОБАВЛЕНО\n    //   \"useParent\": true\n    // },\n    // \"Корочка ПК фото\": { // ДОБАВЛЕНО\n    //   \"useParent\": true\n    // },\n  },\n\n  // ========== ДОПУСТИМЫЕ ЧАСЫ ==========\n\"VALID_HOURS\": $('makeHoursFormat').first().json.VALID_HOURS,\n  // ========== КОНСТАНТЫ ДЛЯ РАСЧЕТА ПЕРИОДОВ ==========\n\"HOURS_TO_PERIOD\": $('makeHoursFormat').first().json.HOURS_TO_PERIOD,\n  // ========== СИСТЕМНЫЕ НАСТРОЙКИ ========== \n  \n  // \"SYSTEM\": { // ДОБАВЛЕНО: новая секция\n  //   \"LOCK_TIMEOUT_MINUTES\": 5,\n  //   \"MAX_RETRIES\": 3,\n  //   \"BATCH_SIZE\": 50,\n  //   \"LOG_RETENTION_DAYS\": 90,\n  //   \"ID_PREFIX\": \"REQ\",\n  //   \"ID_PAD_LENGTH\": 5\n  // },\n\n  // ========== ПРАЗДНИЧНЫЕ ДНИ 2025 ==========\n\"HOLIDAYS\": [\n  // 2024 год\n  \"2024-01-01\",\"2024-01-02\",\"2024-01-03\",\"2024-01-04\",\"2024-01-05\",\n  \"2024-01-06\",\"2024-01-07\",\"2024-01-08\",\n  \"2024-02-23\",\n  \"2024-03-08\",\n  \"2024-04-29\",\"2024-04-30\",\n  \"2024-05-01\",\"2024-05-09\",\"2024-05-10\",\n  \"2024-06-12\",\n  \"2024-11-04\",\n  \"2024-12-30\",\"2024-12-31\",\n  \n  // 2025 год\n  \"2025-01-01\",\"2025-01-02\",\"2025-01-03\",\"2025-01-04\",\"2025-01-05\",\n  \"2025-01-06\",\"2025-01-07\",\"2025-01-08\",\n  \"2025-02-23\",\"2025-02-24\",\n  \"2025-03-08\",\"2025-03-09\",\"2025-03-10\",\n  \"2025-05-01\",\"2025-05-02\",\"2025-05-03\",\"2025-05-04\",\n  \"2025-05-09\",\"2025-05-10\",\"2025-05-11\",\"2025-05-12\",\n  \"2025-06-12\",\"2025-06-13\",\n  \"2025-11-03\",\"2025-11-04\",\n  \"2025-12-31\",\n  \n  // 2026 год (предварительно, официальный календарь ещё не утверждён)\n  \"2026-01-01\",\"2026-01-02\",\"2026-01-03\",\"2026-01-04\",\"2026-01-05\",\n  \"2026-01-06\",\"2026-01-07\",\"2026-01-08\",\"2026-01-09\",\n  \"2026-02-23\",\n  \"2026-03-08\",\"2026-03-09\",\n  \"2026-05-01\",\"2026-05-04\",\n  \"2026-05-09\",\"2026-05-11\",\n  \"2026-06-12\",\n  \"2026-11-04\"\n],\n\n  // ========== НАЗВАНИЯ МЕСЯЦЕВ ==========\n  \"MONTH_NAMES\": {\n    \"genitive\": [\n      \"января\",\"февраля\",\"марта\",\"апреля\",\"мая\",\"июня\",\n      \"июля\",\"августа\",\"сентября\",\"октября\",\"ноября\",\"декабря\"\n    ]\n  }\n};\n\n\n\nreturn [{ \n  json: {config: AUTODOCK_CONFIG}\n}];\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -944,
+        -1072,
         384
       ],
       "id": "b849b4ee-276b-419f-ae84-e114844c29fd",
@@ -215,7 +215,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -1296,
+        -1424,
         384
       ],
       "id": "c3f63566-015c-4626-9217-8fe23053d0a5",
@@ -262,7 +262,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -1488,
+        -1616,
         384
       ],
       "id": "bf71fcdc-4572-454a-b3b9-f144afa2e4d3",
@@ -306,7 +306,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -1296,
+        -1424,
         176
       ],
       "id": "1520fbb0-0109-413e-9e0b-5a84ef06ccee",
@@ -764,7 +764,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -1088,
+        -1216,
         176
       ],
       "id": "70116f78-d87b-4d85-9aef-71daec0998aa",
@@ -804,7 +804,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -1296,
+        -1424,
         16
       ],
       "id": "7ef5ae42-9d47-452a-86a3-59f66ab230cd",
@@ -885,7 +885,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -1056,
+        -1184,
         -128
       ],
       "id": "3cd5b0ca-2d09-4c5b-a229-c5159422ccb9",
@@ -1963,7 +1963,7 @@
       "typeVersion": 4.7,
       "position": [
         592,
-        -432
+        -400
       ],
       "id": "fdb0ef11-61a9-432a-94c5-7e91386e37bf",
       "name": "update data: complete",
@@ -6518,7 +6518,7 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -1728,
+        -1856,
         384
       ],
       "id": "953a2705-4e70-40e8-9fc1-005361b74ed3",
@@ -7486,7 +7486,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -32,
+        -16,
         224
       ],
       "id": "a0e0b23c-1046-49c4-bf67-388a6cc24834",
@@ -8405,7 +8405,7 @@
       "typeVersion": 4.7,
       "position": [
         592,
-        -80
+        -64
       ],
       "id": "4188d748-da89-465b-bf11-2de32ebd7553",
       "name": "update data: exist_id_clear_incomplete1",
@@ -8550,6 +8550,152 @@
           "name": "with.edtech@gmail.com"
         }
       }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ===============================================\n//     НОДА: ОДИН ITEM НА ОДНУ СТРОКУ\n// ===============================================\n\n// 📦 конфиг\nconst config = $('config').first().json.config;\nconst request_counter = $('GetRequestCounter').first().json['Текущее значение'];\nlet currentCounter = request_counter;\n\n// 🆔 существующие ID\nconst existing_ids = $('GetLayoutsIDExisting').all().map(item => item.json.ID);\n\n// 👨‍💼 headSource (защита от [{}])\nconst secondSourceItems = $('GetCheckID')?.all?.() || [];\n\nconst headSourceIds = new Set(\n  secondSourceItems\n    .map(i => i?.json || {})\n    .map(r => r.ID)\n    .filter(id => typeof id === 'string' && id.trim().length > 0)\n);\n\n// 📊 данные таблицы\nconst registryData = $('checkTable').all();\n\n// ===============================================\n// 📅 DATE PARSER\n// ===============================================\nfunction parseDateDDMMYYYY(str) {\n  if (!str || typeof str !== 'string') return null;\n\n  const parts = str.split('.');\n  if (parts.length !== 3) return null;\n\n  const [day, month, year] = parts.map(Number);\n  if (!day || !month || !year) return null;\n\n  return new Date(year, month - 1, day);\n}\n\n// 🔞 возраст\nfunction isAdult(birthDateStr) {\n  const birthDate = parseDateDDMMYYYY(birthDateStr);\n  if (!birthDate) return false;\n\n  const today = new Date();\n\n  let age = today.getFullYear() - birthDate.getFullYear();\n  const m = today.getMonth() - birthDate.getMonth();\n\n  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {\n    age--;\n  }\n\n  return age >= 18;\n}\n\n// ===============================================\n// 🔁 результат\n// ===============================================\nconst results = [];\n\n// ===============================================\n// 🔥 ОБРАБОТКА СТРОК\n// ===============================================\nregistryData.forEach((item, index) => {\n  try {\n\n    const row = item.json;\n    const rowNumber = row.row_number || row._rowNumber || row.rowNumber || (index + 2);\n    const C = config.COLUMNS;\n\n    const fullName = row[C.REGISTRY.FULL_NAME] || 'Не указано';\n\n    // ===============================================\n    // 🔍 missing fields\n    // ===============================================\n    const missing = [];\n\n    for (const field of config.REQUIRED_FIELDS.base) {\n      const value = row[field];\n      if (value === undefined || value === null || String(value).trim() === '') {\n        missing.push(field);\n      }\n    }\n\n    // проверка часов\n    const hours = Number(row[C.REGISTRY.HOURS]);\n    if (!isNaN(hours) && !config.VALID_HOURS.includes(hours)) {\n      missing.push(`${C.REGISTRY.HOURS} (недопустимое значение: ${hours})`);\n    }\n\n    // ===============================================\n    // 🔞 age check\n    // ===============================================\n    const birthDateValue = row[C.REGISTRY.BIRTH_DATE];\n    const isUnderage = birthDateValue ? !isAdult(birthDateValue) : false;\n\n    // ===============================================\n    // 🆔 ID check\n    // ===============================================\n    const existingId = row[C.REGISTRY.ID];\n    const isInHeadSource = existingId && headSourceIds.has(existingId);\n\n    // ===============================================\n    // 🔥 1. CHECK_BY_HEAD (ПРИОРИТЕТ)\n    // ===============================================\n    if (isInHeadSource) {\n      results.push({\n        json: {\n          rowNumber,\n          action: 'check_by_head',\n          existingId,\n          fullName,\n          registryUpdates: {\n            [C.REGISTRY.LAST_UPDATE]: new Date().toLocaleString('ru-RU', {\n              timeZone: 'Europe/Moscow',\n              year: 'numeric',\n              month: '2-digit',\n              day: '2-digit',\n              hour: '2-digit',\n              minute: '2-digit'\n            })\n          }\n        }\n      });\n      return;\n    }\n\n    // ===============================================\n    // 🔞 2. UNDERAGE\n    // ===============================================\n    if (isUnderage) {\n      results.push({\n        json: {\n          rowNumber,\n          action: 'underage',\n          fullName,\n          birthDate: birthDateValue,\n          registryUpdates: {\n            [C.REGISTRY.LAST_UPDATE]: new Date().toLocaleString('ru-RU', {\n              timeZone: 'Europe/Moscow',\n              year: 'numeric',\n              month: '2-digit',\n              day: '2-digit',\n              hour: '2-digit',\n              minute: '2-digit'\n            })\n          }\n        }\n      });\n      return;\n    }\n\n    // ===============================================\n    // ❌ 3. INCOMPLETE\n    // ===============================================\n    if (missing.length > 0) {\n      results.push({\n        json: {\n          rowNumber,\n          action: 'incomplete',\n          fullName,\n          missingFields: missing,\n          registryUpdates: {\n            [C.REGISTRY.LAST_UPDATE]: new Date().toLocaleString('ru-RU', {\n              timeZone: 'Europe/Moscow',\n              year: 'numeric',\n              month: '2-digit',\n              day: '2-digit',\n              hour: '2-digit',\n              minute: '2-digit'\n            })\n          }\n        }\n      });\n      return;\n    }\n\n    // ===============================================\n    // 🆔 4. ASSIGN ID\n    // ===============================================\n    if (!existingId || String(existingId).trim() === '') {\n\n      let newId;\n      do {\n        currentCounter += 1;\n        newId = `REQ-${String(currentCounter).padStart(5, '0')}`;\n      } while (existing_ids.includes(newId));\n\n      existing_ids.push(newId);\n\n      results.push({\n        json: {\n          rowNumber,\n          action: 'assign_id',\n          newId,\n          fullName,\n          registryUpdates: {\n            [C.REGISTRY.LAST_UPDATE]: new Date().toLocaleString('ru-RU', {\n              timeZone: 'Europe/Moscow',\n              year: 'numeric',\n              month: '2-digit',\n              day: '2-digit',\n              hour: '2-digit',\n              minute: '2-digit'\n            })\n          }\n        }\n      });\n\n      return;\n    }\n\n    // ===============================================\n    // 🔵 5. EXIST_ID\n    // ===============================================\n    results.push({\n      json: {\n        rowNumber,\n        action: 'exist_id',\n        existingId,\n        fullName,\n        registryUpdates: {\n          [C.REGISTRY.LAST_UPDATE]: new Date().toLocaleString('ru-RU', {\n            timeZone: 'Europe/Moscow',\n            year: 'numeric',\n            month: '2-digit',\n            day: '2-digit',\n            hour: '2-digit',\n            minute: '2-digit'\n          })\n        }\n      }\n    });\n\n  } catch (err) {\n    results.push({\n      json: {\n        rowNumber: index + 2,\n        action: 'error',\n        error: err.message\n      }\n    });\n  }\n});\n\n// ===============================================\n// 📊 LOGS\n// ===============================================\nconsole.log(`Обработано: ${results.length} строк`);\n\nconsole.log(`- assign_id: ${results.filter(r => r.json.action === 'assign_id').length}`);\nconsole.log(`- exist_id: ${results.filter(r => r.json.action === 'exist_id').length}`);\nconsole.log(`- incomplete: ${results.filter(r => r.json.action === 'incomplete').length}`);\nconsole.log(`- underage: ${results.filter(r => r.json.action === 'underage').length}`);\nconsole.log(`- check_by_head: ${results.filter(r => r.json.action === 'check_by_head').length}`);\n\n// ===============================================\n// 🔁 counter update\n// ===============================================\nresults.push({\n  json: {\n    counterUpdate: currentCounter\n  }\n});\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -224,
+        64
+      ],
+      "id": "804900ae-f7b1-4b82-8761-db5f8285432c",
+      "name": "CheckStrokesNew",
+      "alwaysOutputData": true,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1e2Ww1-NUbqzqVwvomrXjH2QJ4jYlnLcGqCMJDaSaCWM",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 299292570,
+          "mode": "list",
+          "cachedResultName": "РС",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1e2Ww1-NUbqzqVwvomrXjH2QJ4jYlnLcGqCMJDaSaCWM/edit#gid=299292570"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -928,
+        384
+      ],
+      "id": "2343b6e9-d2c6-4e3e-bb74-ba88007df9d1",
+      "name": "GetCheckID",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1VbuUhhS4wBKI3ALocMcOkGGWkCdkazO1_FWSqVzZ0l8",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Лог",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VbuUhhS4wBKI3ALocMcOkGGWkCdkazO1_FWSqVzZ0l8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Проект": "РС"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Проект",
+              "displayName": "Проект",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Статус",
+              "displayName": "Статус",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Дата",
+              "displayName": "Дата",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Время",
+              "displayName": "Время",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        864,
+        -224
+      ],
+      "id": "063919e9-719a-41c8-a4a9-6d36458e463c",
+      "name": "UpdateLogs1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
     }
   ],
   "connections": {
@@ -8612,7 +8758,7 @@
       "main": [
         [
           {
-            "node": "GetRequestCounter",
+            "node": "GetCheckID",
             "type": "main",
             "index": 0
           }
@@ -9162,6 +9308,22 @@
           }
         ]
       ]
+    },
+    "GetCheckID": {
+      "main": [
+        [
+          {
+            "node": "GetRequestCounter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update data: incomplete": {
+      "main": [
+        []
+      ]
     }
   },
   "settings": {
@@ -9176,8 +9338,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "3ba2d8f1-74b2-48c5-a226-263ff364c685",
-  "activeVersionId": "3ba2d8f1-74b2-48c5-a226-263ff364c685",
+  "versionId": "426950df-dac7-42bf-9c4e-787f6fce7f90",
+  "activeVersionId": "d985d41c-3762-46f6-be88-cc353052862b",
   "triggerCount": 1,
   "shared": [
     {
@@ -9189,9 +9351,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-02T05:07:52.474Z",
-    "createdAt": "2026-04-02T05:07:40.425Z",
-    "versionId": "3ba2d8f1-74b2-48c5-a226-263ff364c685",
+    "updatedAt": "2026-04-13T11:30:36.588Z",
+    "createdAt": "2026-04-13T11:30:09.079Z",
+    "versionId": "d985d41c-3762-46f6-be88-cc353052862b",
     "workflowId": "q02qpzB5xGdlK6Od",
     "nodes": [
       {
@@ -9201,7 +9363,7 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          -1120,
+          -1248,
           384
         ],
         "id": "88280560-22cf-455a-a7ce-36b287468a0a",
@@ -9373,12 +9535,12 @@
       },
       {
         "parameters": {
-          "jsCode": "// ===============================================\n//     🎯 КОНФИГУРАЦИЯ AUTODOCK v3.0 ФИНАЛЬНАЯ\n//     Обновлено с учетом рабочей версии\n// ===============================================\n\nconst AUTODOCK_CONFIG = {\n  // ========== НАЗВАНИЯ ЛИСТОВ ==========\n  // \"SHEETS\": {\n  //   \"REGISTRY\": \"Реестр заявок\",\n  //   \"LAYOUTS\": \"Макеты документов\", \n  //   \"SYSTEM_SETTINGS\": \"Системные настройки\",\n  //   \"TEMPLATES\": \"Шаблоны\",\n  //   \"EMPLOYEES\": \"Сотрудники\",\n  //   \"FIS_FRDO\": \"ФИС ФРДО\",\n  //   \"LOGS\": \"Логи системы\",\n  //   \"COUNTERS\": \"Счётчики\" // ДОБАВЛЕНО: для хранения счетчиков регномеров\n  // },\n\n  // ========== НАЗВАНИЯ СТОЛБЦОВ ==========\n  \"COLUMNS\": {\n    // \"ID\": \"ID\",\n    // \"FULL_NAME\": \"Фамилия Имя Отчество\",\n    \"REGISTRY\": {\n      \"ID\": \"ID\",\n      \"REG_NUMBER\": \"Рег-номер\",\n      \"REG_NUMBER_SVID\": \"Рег-номер (Свидетельство)\",\n      \"FULL_NAME\": \"Фамилия Имя Отчество\",\n      \"EMPLOYEE\": \"Макеты\",\n      \"STATUS\": \"Статус заявки\",\n      \"FULL_NAME_DECLINED\": \"Фамилия Имя Отчество в склонении\",\n      \"PROGRAM\": \"Специальность в свидетельство + Практика\", //значение изменено для РС\n      \"QUALIFICATION\": \"Специальность в удостоверение\", //значение изменено для РС\n      \"SPECIALIZATION\": \"Коммент\", //значение изменено для РС\n      \"WORK_CLASS\": \"Разряд\", //Новый столбец для РС\n      \"CODE\": \"Код\",\n      \"HOURS\": \"Часов\",\n      \"COMPANY\": \"Компания Выписка + Практика\",\n      \"COMPANY_POSITION\": \"Должность Выписка\",\n      \"CITY\": \"Город не Москва\",\n      \"SCENARIO\": \"Сценарий\",\n      //\"EDUCATION_DOC\": \"Документ об образовании\",\n      \"SNILS\": \"СНИЛС\",\n      \"BIRTH_DATE\": \"Дата рождения получателя\",\n      \"GENDER\": \"Пол получателя\",\n      \"FOLDER\": \"ПАПКА\",\n      \"DIARY_CREATED_DATE\": \"Дата создания дневника\",\n      \"DIARY_CUSTOM_DATE\": \"Особенная дата создания дневника\",\n      \"CREATED_DATE\": \"Дата выдачи свид\",\n      \"CUSTOM_DATE\": \"Особенная дата выдачи свид\",\n      //\"CREATED_DATE\": \"Дата создания\",\n      //\"ISSUE_DATE\": \"Дата выдачи\",\n      //\"START_DATE\": \"Дата начала (фикс)\",\n      //\"END_DATE\": \"Дата окончания (фикс)\",\n      //\"CUSTOM_TERM\": \"Срок обучения (дн.)\", - не нужно в РС\n      \"LAST_UPDATE\": \"Дата последнего изменения\",\n      \"MISFIELDS\": \"Незаполненные поля\"\n    },\n\n    // \"LAYOUTS\": {\n    //   \"GENERATION_TRIGGER\": \"СТАРТ\", // ИЗМЕНЕНО: было CHECKBOX\n    //   \"SCENARIO\": \"Сценарий\", \n    //   \"DOCUMENT_TYPE\": \"Документ\",\n    //   \"STATUS\": \"Статус\",\n    //   \"EMPLOYEE\": \"Сотрудник\",\n    //   \"DOCUMENT_LINK\": \"Ссылка на док (без подложки)\",\n    //   \"DOCUMENT_LINK_UNDERLAY\": \"Ссылка на док (с подложкой)\",\n    //   \"REG_NUMBER\": \"Регистрационный номер\", // ДОБАВЛЕНО\n    //   \"UNDERLAY\": \"С подложкой\" // ДОБАВЛЕНО\n    // },\n\n    \"PROFESSION_DATABASE\": {\n      \"PROFESSION_NAME\": \"Наименование профессий рабочих, должностей служащих, по которым осуществляется профессиональное обучение\",\n      \"PROFESSION_CLASS\": \"Квалификационный разряд, класс, категория (при наличии)\",\n      \"PROFESSION_CODE\": \"Код в соответствии с Общероссийским классификатором профессий рабочих, должностей служащих и тарифных разрядов (при наличии)\"\n    },\n\n    \"TEMPLATES\": {\n      \"SCENARIO\": \"Сценарий\",\n      \"DOCUMENT\": \"Документ\",\n      \"TYPE\": \"Тип\",\n      \"TEMPLATE_LINK\": \"Ссылка на шаблон\",\n      \"UNDERLAY\": \"С подложкой\", // ДОБАВЛЕНО\n      \"REG_VARIABLE\": \"РегНомер\" // ДОБАВЛЕНО\n    },\n    \n    \"COUNTERS\": { // ДОБАВЛЕНО: новая секция\n      \"COUNTER_TYPE\": \"Тип счётчика\",\n      \"CURRENT_VALUE\": \"Текущее значение\", \n      \"LAST_USED\": \"Последнее использование\",\n      // \"LOCKED\": \"Заблокирован\"\n    },\n\n    \"DIARIES\": {\n      \"DIARY_NAME\": \"Дневник\",\n      \"DIARY_TEMPLATE_LINK\": \"Ссылка на шаблон\"\n    }\n  },\n\n  // // ========== ТРИГГЕРЫ ГЕНЕРАЦИИ ========== \n  // \"GENERATION_TRIGGERS\": { // ДОБАВЛЕНО: новая секция\n  //   \"NEW\": \"новая\",     // lowercase как в рабочей версии\n  //   \"START\": \"запуск\",  \n  //   \"DONE\": \"готово\"\n  // },\n\n  // ========== ОБЯЗАТЕЛЬНЫЕ ПОЛЯ ==========\n  \"REQUIRED_FIELDS\": {\n    \"base\": [\n      \"Дата выдачи свид\",\n      \"Фамилия Имя Отчество\",\n      \"Фамилия Имя Отчество в склонении\", \n      \"Специальность в свидетельство + Практика\",\n      \"Часов\",\n      \"Сценарий\"\n      // \"Документ об образовании\"\n    ]\n    // \"diploma_qualified\": [\n    //   \"Квалификация\"\n    // ],\n    // \"fis_frdo\": [\n    //   \"СНИЛС\",\n    //   \"Дата рождения получателя\",\n    //   \"Пол получателя\"\n    // ]\n  },\n\n\n\n  // // ========== СТАТУСЫ ==========\n  // \"STATUSES\": {\n  //   \"REGISTRY\": {\n  //     \"EMPTY\": \"\",\n  //     \"INCOMPLETE\": \"Неполные данные\",\n  //     \"READY\": \"Готов к обработке\",\n  //     \"IN_LAYOUTS\": \"Передано в макеты\",\n  //     \"CHANGED\": \"Изменены данные\",\n  //     \"DOCUMENTS_READY\": \"Документы готовы\",\n  //     \"READY_FOR_FIS\": \"Готов к подаче в ФИС ФРДО\",\n  //     \"IN_FIS_BATCH\": \"В пакете ФИС ФРДО\",\n  //     \"SUBMITTED_TO_FIS\": \"Подано в ФИС ФРДО\",\n  //     \"ISSUED\": \"Выдано\",\n  //     \"SENT_BY_MAIL\": \"Отправлено почтой\",\n  //     \"URGENT\": \"🔴 СРОЧНО\"\n  //   },\n  //   \"LAYOUTS\": {\n  //     \"WAITING\": \"Ожидает к генерации\",\n  //     \"NEEDS_REGEN\": \"Требует перегенерации\",\n  //     \"URGENT\": \"🔴 СРОЧНО\",\n  //     \"IN_QUEUE\": \"В очереди\",\n  //     \"GENERATING\": \"Генерируется\", // ДОБАВЛЕНО\n  //     \"CREATED\": \"Макет создан\",\n  //     \"ERROR\": \"Ошибка генерации\",\n  //     \"LOCKED\": \"Заблокировано\" // ДОБАВЛЕНО\n  //   }\n  // },\n\n  // ========== СЦЕНАРИИ И ПАКЕТЫ ==========\n  \"SCENARIOS\": {\n    \"Полный РС\": {\n      \"documents\": [\"Свидетельство\",\"Удостоверение\",\"Выписка РС\"]\n    },\n    \"Полный РС без фото\": {\n      \"documents\": [\"Свидетельство\",\"Удостоверение без фото\",\"Выписка РС\", ]\n    },\n    \"Практика 20\": {\n      \"documents\": [\"Свидетельство\",\"Удостоверение\",\"Выписка РС\", \"<<Профессия>> 20\"]\n    }, \n    \"Практика 200\": {\n      \"documents\": [\"Свидетельство\",\"Удостоверение\", \"Выписка РС\", \"<<Профессия>> 200\" ]\n    }, \n    \"Свидетельство\" : {\n      \"documents\": [\"Свидетельство\", \"Выписка РС\"]\n    },\n    \"Удостоверение\" : {\n      \"documents\": [\"Удостоверение\", \"Выписка РС\"]\n    },\n    \"Удостоверение без фото\" : {\n      \"documents\": [\"Удостоверение без фото\", \"Выписка РС\"]\n    }\n  },\n\n  // ========== СОТРУДНИКИ ==========\n  \"EMPLOYEES\": {\n    \"Полянская Мария\": {\n      \"folderId\": \"1RuDqHlHDfU5aChhpv1r4zNQRDIzzBh4K\"\n    },\n    \"Черненко Мария\": {\n      \"folderId\": \"1z-CIaI1vLSrnWOWD3wvT0l1kTSpTWyDD\"\n    },\n    \"Федорова Мария\": {\n      \"folderId\": \"1dXORm1U-sq5B52denaK59YtFv7K_A_9A\"\n    },\n    \"Настя\": {\n      \"folderId\": \"1cwiQBaxLS9hsJJum3GmUj24BLhzzkNku\"\n    },\n    \"Марина\": {\n      \"folderId\": \"1_dgBt_La_swpVkVPf36IelYUwLA4g_0e\"\n    },\n    \"Леднева Ольга\": {\n      \"folderId\": \"19ZEzJRNV_iDyDvJ4dBFTxH6lAmik57sm\"\n    },\n    \"Басана\": {\n      \"folderId\": \"10a6JgPpzFZvt19Lp6QSm70h1C_8O81KY\"\n    },\n    \"Крис\": {\n      \"folderId\": \"1E6aIiw2i598l7T5tu9Sy_TX9yEI0s08v\"\n    },\n    \"Клюшкина Елена\": {\n      \"folderId\": \"1CDLI3MB1jCcf5YYE94UgTzpJvm0tWluq\"\n    },\n    \"Ирина Л\": {\n      \"folderId\": \"15OQteE9rPAljj6-HQxpYBBlh5EYvHdZS\"\n    },\n    \"Дарья\": {\n      \"folderId\": \"1ENJYwNEwCyd-dXOvQswzQA-7e8-FM7Xe\"\n    }\n  },\n\n  // // ========== КРИТИЧНЫЕ ПОЛЯ ДЛЯ ХЭША ==========\n  // \"CRITICAL_FIELDS\": [\n  //   \"Фамилия Имя Отчество\",\n  //   \"Фамилия Имя Отчество в склонении\",\n  //   \"Программа\", \n  //   \"Квалификация\",\n  //   \"Специализация\",\n  //   \"Часов\",\n  //   \"Дата выдачи\",\n  //   \"Дата начала (фикс)\",\n  //   \"Дата окончания (фикс)\",\n  //   \"Срок обучения (дн.)\"\n  // ],\n\n  // ========== ФОРМАТЫ РЕГИСТРАЦИОННЫХ НОМЕРОВ ==========\n  \"REG_NUMBER_FORMATS\": {\n  \"Удостоверение\" : {\n    \"prefix\": \"АН\", \n      \"format\": \"{number}-{prefix}\",\n      \"counter_name\": \"rs_counter\",\n      \"startFrom\": 98,\n      \"variable\": \"Рег-УД\",\n      \"shared\": true // \n  },\n  \"Свидетельство\" : {\n    \"prefix\": \"Н\", \n      \"format\": \"{number}-{prefix}\",\n      \"counter_name\": \"rs_counter\",\n      \"startFrom\": 98,\n      \"variable\": \"Рег-СВИД\",\n      \"shared\": true // \n  },\n  \"Выписка РС\" : {\n    \"prefix\": \"АН\", \n      \"format\": \"{number}-{prefix}\",\n      \"counter_name\": \"rs_counter\",\n      \"startFrom\": 98,\n      \"variable\": \"Рег-УД\",\n      \"shared\": true,\n      // \"parentVariable\": \"Рег-УД\"\n  },\n  \"Удостоверение без фото\" : {\n    \"prefix\": \"АН\", \n      \"format\": \"{number}-{prefix}\",\n      \"counter_name\": \"rs_counter\",\n      \"startFrom\": 98,\n      \"variable\": \"Рег-УД\",\n      \"shared\": true // \n  },\n    \n    // \"Диплом простой\": {\n    //   \"prefix\": \"П\", \n    //   \"format\": \"{number}-{yy}{month}{prefix}\",\n    //   \"counter_name\": \"diploma_counter\",\n    //   \"startFrom\": 98,\n    //   \"variable\": \"Рег-ПП\",\n    //   \"shared\": true // ДОБАВЛЕНО: общий счетчик с квалификацией\n    // },\n    // \"Диплом с квалификацией\": {\n    //   \"prefix\": \"П\", \n    //   \"format\": \"{number}-{yy}{month}{prefix}\",\n    //   \"counter_name\": \"diploma_counter\",\n    //   \"startFrom\": 98,\n    //   \"variable\": \"Рег-ПП\",\n    //   \"shared\": true // ДОБАВЛЕНО: общий счетчик с квалификацией\n    // },\n    // \"Удостоверение ПК\": {\n    //   \"prefix\": \"ПК\",\n    //   \"format\": \"{number}-{month}/{prefix}\",\n    //   \"counter_name\": \"pk_counter\",\n    //   \"startFrom\": 29,\n    //   \"variable\": \"Рег-ПК\",\n    //   \"shared\": true\n    // },\n    // \"Сертификат\": {\n    //   \"prefix\": \"ПК\",\n    //   \"format\": \"{number}-{month}/{prefix}\",\n    //   \"counter_name\": \"pk_counter\",\n    //   \"startFrom\": 29,\n    //   \"variable\": \"Рег-ПК\"\n    // },\n    // \"Удостоверение ДО\": {\n    //   \"prefix\": \"ПК\",\n    //   \"format\": \"{number}-{month}/{prefix}\",\n    //   \"counter_name\": \"pk_counter\",\n    //   \"startFrom\": 29,\n    //   \"variable\": \"Рег-ПК\"\n    // },\n    // \"Удостоверение РС\": {\n    //   \"prefix\": \"АН\",\n    //   \"format\": \"{number}-{prefix}\",\n    //   \"counter_name\": \"rs_counter\",\n    //   \"startFrom\": 24216,\n    //   \"variable\": \"Рег-РС-АН\",\n    //   \"shared\": true\n    // },\n    // \"Выписка ПП\": { // ДОБАВЛЕНО\n    //   \"prefix\": \"ПП\",\n    //   \"format\": \"{prefix}-{month}{yy}-{number}\",\n    //   \"counter_name\": \"vypiska_counter_pp\",\n    //   \"startFrom\": 95,\n    //   \"variable\": \"Рег-ВПП\",\n    //   \"parentVariable\": \"Рег-ПП\"\n    // },\n    // \"Выписка ПК\": { // ДОБАВЛЕНО\n    //   \"prefix\": \"ПК\",\n    //   \"format\": \"{prefix}-{month}{yy}-{number}\",\n    //   \"counter_name\": \"vypiska_counter_pk\",\n    //   \"startFrom\": 95,\n    //   \"variable\": \"Рег-ВПК\",\n    //   \"parentVariable\": \"Рег-ПК\"\n    // },\n    // \"Предметы\": { // ДОБАВЛЕНО\n    //   \"useParent\": true\n    // },\n    // \"Приложение\": { // ДОБАВЛЕНО\n    //   \"useParent\": true\n    // },\n    // \"Корочка ПП\": { // ДОБАВЛЕНО\n    //   \"useParent\": true\n    // },\n    // \"Корочка ПК\": { // ДОБАВЛЕНО\n    //   \"useParent\": true\n    // },\n    // \"Корочка ПК фото\": { // ДОБАВЛЕНО\n    //   \"useParent\": true\n    // },\n  },\n\n  // ========== ДОПУСТИМЫЕ ЧАСЫ ==========\n\"VALID_HOURS\": $('makeHoursFormat').first().json.VALID_HOURS,\n  // ========== КОНСТАНТЫ ДЛЯ РАСЧЕТА ПЕРИОДОВ ==========\n\"HOURS_TO_PERIOD\": $('makeHoursFormat').first().json.HOURS_TO_PERIOD,\n  // ========== СИСТЕМНЫЕ НАСТРОЙКИ ========== \n  \n  // \"SYSTEM\": { // ДОБАВЛЕНО: новая секция\n  //   \"LOCK_TIMEOUT_MINUTES\": 5,\n  //   \"MAX_RETRIES\": 3,\n  //   \"BATCH_SIZE\": 50,\n  //   \"LOG_RETENTION_DAYS\": 90,\n  //   \"ID_PREFIX\": \"REQ\",\n  //   \"ID_PAD_LENGTH\": 5\n  // },\n\n  // ========== ПРАЗДНИЧНЫЕ ДНИ 2025 ==========\n\"HOLIDAYS\": [\n  // 2024 год\n  \"2024-01-01\",\"2024-01-02\",\"2024-01-03\",\"2024-01-04\",\"2024-01-05\",\n  \"2024-01-06\",\"2024-01-07\",\"2024-01-08\",\n  \"2024-02-23\",\n  \"2024-03-08\",\n  \"2024-04-29\",\"2024-04-30\",\n  \"2024-05-01\",\"2024-05-09\",\"2024-05-10\",\n  \"2024-06-12\",\n  \"2024-11-04\",\n  \"2024-12-30\",\"2024-12-31\",\n  \n  // 2025 год\n  \"2025-01-01\",\"2025-01-02\",\"2025-01-03\",\"2025-01-04\",\"2025-01-05\",\n  \"2025-01-06\",\"2025-01-07\",\"2025-01-08\",\n  \"2025-02-23\",\"2025-02-24\",\n  \"2025-03-08\",\"2025-03-09\",\"2025-03-10\",\n  \"2025-05-01\",\"2025-05-02\",\"2025-05-03\",\"2025-05-04\",\n  \"2025-05-09\",\"2025-05-10\",\"2025-05-11\",\"2025-05-12\",\n  \"2025-06-12\",\"2025-06-13\",\n  \"2025-11-03\",\"2025-11-04\",\n  \"2025-12-31\",\n  \n  // 2026 год (предварительно, официальный календарь ещё не утверждён)\n  \"2026-01-01\",\"2026-01-02\",\"2026-01-03\",\"2026-01-04\",\"2026-01-05\",\n  \"2026-01-06\",\"2026-01-07\",\"2026-01-08\",\"2026-01-09\",\n  \"2026-02-23\",\n  \"2026-03-08\",\"2026-03-09\",\n  \"2026-05-01\",\"2026-05-04\",\n  \"2026-05-09\",\"2026-05-11\",\n  \"2026-06-12\",\n  \"2026-11-04\"\n],\n\n  // ========== НАЗВАНИЯ МЕСЯЦЕВ ==========\n  \"MONTH_NAMES\": {\n    \"genitive\": [\n      \"января\",\"февраля\",\"марта\",\"апреля\",\"мая\",\"июня\",\n      \"июля\",\"августа\",\"сентября\",\"октября\",\"ноября\",\"декабря\"\n    ]\n  }\n};\n\n\n\nreturn [{ \n  json: {config: AUTODOCK_CONFIG}\n}];\n"
+          "jsCode": "// ===============================================\n//     🎯 КОНФИГУРАЦИЯ AUTODOCK v3.0 ФИНАЛЬНАЯ\n//     Обновлено с учетом рабочей версии\n// ===============================================\n\nconst AUTODOCK_CONFIG = {\n  // ========== НАЗВАНИЯ ЛИСТОВ ==========\n  // \"SHEETS\": {\n  //   \"REGISTRY\": \"Реестр заявок\",\n  //   \"LAYOUTS\": \"Макеты документов\", \n  //   \"SYSTEM_SETTINGS\": \"Системные настройки\",\n  //   \"TEMPLATES\": \"Шаблоны\",\n  //   \"EMPLOYEES\": \"Сотрудники\",\n  //   \"FIS_FRDO\": \"ФИС ФРДО\",\n  //   \"LOGS\": \"Логи системы\",\n  //   \"COUNTERS\": \"Счётчики\" // ДОБАВЛЕНО: для хранения счетчиков регномеров\n  // },\n\n  // ========== НАЗВАНИЯ СТОЛБЦОВ ==========\n  \"COLUMNS\": {\n    // \"ID\": \"ID\",\n    // \"FULL_NAME\": \"Фамилия Имя Отчество\",\n    \"REGISTRY\": {\n      \"ID\": \"ID\",\n      \"REG_NUMBER\": \"Рег-номер\",\n      \"REG_NUMBER_SVID\": \"Рег-номер (Свидетельство)\",\n      \"FULL_NAME\": \"Фамилия Имя Отчество\",\n      \"EMPLOYEE\": \"Макеты\",\n      \"STATUS\": \"Статус заявки\",\n      \"FULL_NAME_DECLINED\": \"Фамилия Имя Отчество в склонении\",\n      \"PROGRAM\": \"Специальность в свидетельство + Практика\", //значение изменено для РС\n      \"QUALIFICATION\": \"Специальность в удостоверение\", //значение изменено для РС\n      \"SPECIALIZATION\": \"Коммент\", //значение изменено для РС\n      \"WORK_CLASS\": \"Разряд\", //Новый столбец для РС\n      \"CODE\": \"Код\",\n      \"HOURS\": \"Часов\",\n      \"COMPANY\": \"Компания Выписка + Практика\",\n      \"COMPANY_POSITION\": \"Должность Выписка\",\n      \"CITY\": \"Город не Москва\",\n      \"SCENARIO\": \"Сценарий\",\n      //\"EDUCATION_DOC\": \"Документ об образовании\",\n      \"SNILS\": \"СНИЛС\",\n      \"BIRTH_DATE\": \"Дата рождения получателя\",\n      \"GENDER\": \"Пол получателя\",\n      \"FOLDER\": \"ПАПКА\",\n      \"DIARY_CREATED_DATE\": \"Дата создания дневника\",\n      \"DIARY_CUSTOM_DATE\": \"Особенная дата создания дневника\",\n      \"CREATED_DATE\": \"Дата выдачи свид\",\n      \"CUSTOM_DATE\": \"Особенная дата выдачи свид\",\n      //\"CREATED_DATE\": \"Дата создания\",\n      //\"ISSUE_DATE\": \"Дата выдачи\",\n      //\"START_DATE\": \"Дата начала (фикс)\",\n      //\"END_DATE\": \"Дата окончания (фикс)\",\n      //\"CUSTOM_TERM\": \"Срок обучения (дн.)\", - не нужно в РС\n      \"LAST_UPDATE\": \"Дата последнего изменения\",\n      \"MISFIELDS\": \"Незаполненные поля\"\n    },\n\n    // \"LAYOUTS\": {\n    //   \"GENERATION_TRIGGER\": \"СТАРТ\", // ИЗМЕНЕНО: было CHECKBOX\n    //   \"SCENARIO\": \"Сценарий\", \n    //   \"DOCUMENT_TYPE\": \"Документ\",\n    //   \"STATUS\": \"Статус\",\n    //   \"EMPLOYEE\": \"Сотрудник\",\n    //   \"DOCUMENT_LINK\": \"Ссылка на док (без подложки)\",\n    //   \"DOCUMENT_LINK_UNDERLAY\": \"Ссылка на док (с подложкой)\",\n    //   \"REG_NUMBER\": \"Регистрационный номер\", // ДОБАВЛЕНО\n    //   \"UNDERLAY\": \"С подложкой\" // ДОБАВЛЕНО\n    // },\n\n    \"PROFESSION_DATABASE\": {\n      \"PROFESSION_NAME\": \"Наименование профессий рабочих, должностей служащих, по которым осуществляется профессиональное обучение\",\n      \"PROFESSION_CLASS\": \"Квалификационный разряд, класс, категория (при наличии)\",\n      \"PROFESSION_CODE\": \"Код в соответствии с Общероссийским классификатором профессий рабочих, должностей служащих и тарифных разрядов (при наличии)\"\n    },\n\n    \"TEMPLATES\": {\n      \"SCENARIO\": \"Сценарий\",\n      \"DOCUMENT\": \"Документ\",\n      \"TYPE\": \"Тип\",\n      \"TEMPLATE_LINK\": \"Ссылка на шаблон\",\n      \"UNDERLAY\": \"С подложкой\", // ДОБАВЛЕНО\n      \"REG_VARIABLE\": \"РегНомер\" // ДОБАВЛЕНО\n    },\n    \n    \"COUNTERS\": { // ДОБАВЛЕНО: новая секция\n      \"COUNTER_TYPE\": \"Тип счётчика\",\n      \"CURRENT_VALUE\": \"Текущее значение\", \n      \"LAST_USED\": \"Последнее использование\",\n      // \"LOCKED\": \"Заблокирован\"\n    },\n\n    \"DIARIES\": {\n      \"DIARY_NAME\": \"Дневник\",\n      \"DIARY_TEMPLATE_LINK\": \"Ссылка на шаблон\"\n    }\n  },\n\n  // // ========== ТРИГГЕРЫ ГЕНЕРАЦИИ ========== \n  // \"GENERATION_TRIGGERS\": { // ДОБАВЛЕНО: новая секция\n  //   \"NEW\": \"новая\",     // lowercase как в рабочей версии\n  //   \"START\": \"запуск\",  \n  //   \"DONE\": \"готово\"\n  // },\n\n  // ========== ОБЯЗАТЕЛЬНЫЕ ПОЛЯ ==========\n  \"REQUIRED_FIELDS\": {\n    \"base\": [\n      \"Дата выдачи свид\",\n      \"Фамилия Имя Отчество\",\n      \"Фамилия Имя Отчество в склонении\", \n      \"Специальность в свидетельство + Практика\",\n      \"Часов\",\n      \"Сценарий\",\n      \"Дата рождения\"\n      // \"Документ об образовании\"\n    ]\n    // \"diploma_qualified\": [\n    //   \"Квалификация\"\n    // ],\n    // \"fis_frdo\": [\n    //   \"СНИЛС\",\n    //   \"Дата рождения получателя\",\n    //   \"Пол получателя\"\n    // ]\n  },\n\n\n\n  // // ========== СТАТУСЫ ==========\n  // \"STATUSES\": {\n  //   \"REGISTRY\": {\n  //     \"EMPTY\": \"\",\n  //     \"INCOMPLETE\": \"Неполные данные\",\n  //     \"READY\": \"Готов к обработке\",\n  //     \"IN_LAYOUTS\": \"Передано в макеты\",\n  //     \"CHANGED\": \"Изменены данные\",\n  //     \"DOCUMENTS_READY\": \"Документы готовы\",\n  //     \"READY_FOR_FIS\": \"Готов к подаче в ФИС ФРДО\",\n  //     \"IN_FIS_BATCH\": \"В пакете ФИС ФРДО\",\n  //     \"SUBMITTED_TO_FIS\": \"Подано в ФИС ФРДО\",\n  //     \"ISSUED\": \"Выдано\",\n  //     \"SENT_BY_MAIL\": \"Отправлено почтой\",\n  //     \"URGENT\": \"🔴 СРОЧНО\"\n  //   },\n  //   \"LAYOUTS\": {\n  //     \"WAITING\": \"Ожидает к генерации\",\n  //     \"NEEDS_REGEN\": \"Требует перегенерации\",\n  //     \"URGENT\": \"🔴 СРОЧНО\",\n  //     \"IN_QUEUE\": \"В очереди\",\n  //     \"GENERATING\": \"Генерируется\", // ДОБАВЛЕНО\n  //     \"CREATED\": \"Макет создан\",\n  //     \"ERROR\": \"Ошибка генерации\",\n  //     \"LOCKED\": \"Заблокировано\" // ДОБАВЛЕНО\n  //   }\n  // },\n\n  // ========== СЦЕНАРИИ И ПАКЕТЫ ==========\n  \"SCENARIOS\": {\n    \"Полный РС\": {\n      \"documents\": [\"Свидетельство\",\"Удостоверение\",\"Выписка РС\"]\n    },\n    \"Полный РС без фото\": {\n      \"documents\": [\"Свидетельство\",\"Удостоверение без фото\",\"Выписка РС\", ]\n    },\n    \"Практика 20\": {\n      \"documents\": [\"Свидетельство\",\"Удостоверение\",\"Выписка РС\", \"<<Профессия>> 20\"]\n    }, \n    \"Практика 200\": {\n      \"documents\": [\"Свидетельство\",\"Удостоверение\", \"Выписка РС\", \"<<Профессия>> 200\" ]\n    }, \n    \"Свидетельство\" : {\n      \"documents\": [\"Свидетельство\", \"Выписка РС\"]\n    },\n    \"Удостоверение\" : {\n      \"documents\": [\"Удостоверение\", \"Выписка РС\"]\n    },\n    \"Удостоверение без фото\" : {\n      \"documents\": [\"Удостоверение без фото\", \"Выписка РС\"]\n    }\n  },\n\n  // ========== СОТРУДНИКИ ==========\n  \"EMPLOYEES\": {\n    \"Полянская Мария\": {\n      \"folderId\": \"1RuDqHlHDfU5aChhpv1r4zNQRDIzzBh4K\"\n    },\n    \"Черненко Мария\": {\n      \"folderId\": \"1z-CIaI1vLSrnWOWD3wvT0l1kTSpTWyDD\"\n    },\n    \"Федорова Мария\": {\n      \"folderId\": \"1dXORm1U-sq5B52denaK59YtFv7K_A_9A\"\n    },\n    \"Настя\": {\n      \"folderId\": \"1cwiQBaxLS9hsJJum3GmUj24BLhzzkNku\"\n    },\n    \"Марина\": {\n      \"folderId\": \"1_dgBt_La_swpVkVPf36IelYUwLA4g_0e\"\n    },\n    \"Леднева Ольга\": {\n      \"folderId\": \"19ZEzJRNV_iDyDvJ4dBFTxH6lAmik57sm\"\n    },\n    \"Басана\": {\n      \"folderId\": \"10a6JgPpzFZvt19Lp6QSm70h1C_8O81KY\"\n    },\n    \"Крис\": {\n      \"folderId\": \"1E6aIiw2i598l7T5tu9Sy_TX9yEI0s08v\"\n    },\n    \"Клюшкина Елена\": {\n      \"folderId\": \"1CDLI3MB1jCcf5YYE94UgTzpJvm0tWluq\"\n    },\n    \"Ирина Л\": {\n      \"folderId\": \"15OQteE9rPAljj6-HQxpYBBlh5EYvHdZS\"\n    },\n    \"Дарья\": {\n      \"folderId\": \"1ENJYwNEwCyd-dXOvQswzQA-7e8-FM7Xe\"\n    }\n  },\n\n  // // ========== КРИТИЧНЫЕ ПОЛЯ ДЛЯ ХЭША ==========\n  // \"CRITICAL_FIELDS\": [\n  //   \"Фамилия Имя Отчество\",\n  //   \"Фамилия Имя Отчество в склонении\",\n  //   \"Программа\", \n  //   \"Квалификация\",\n  //   \"Специализация\",\n  //   \"Часов\",\n  //   \"Дата выдачи\",\n  //   \"Дата начала (фикс)\",\n  //   \"Дата окончания (фикс)\",\n  //   \"Срок обучения (дн.)\"\n  // ],\n\n  // ========== ФОРМАТЫ РЕГИСТРАЦИОННЫХ НОМЕРОВ ==========\n  \"REG_NUMBER_FORMATS\": {\n  \"Удостоверение\" : {\n    \"prefix\": \"АН\", \n      \"format\": \"{number}-{prefix}\",\n      \"counter_name\": \"rs_counter\",\n      \"startFrom\": 98,\n      \"variable\": \"Рег-УД\",\n      \"shared\": true // \n  },\n  \"Свидетельство\" : {\n    \"prefix\": \"Н\", \n      \"format\": \"{number}-{prefix}\",\n      \"counter_name\": \"rs_counter\",\n      \"startFrom\": 98,\n      \"variable\": \"Рег-СВИД\",\n      \"shared\": true // \n  },\n  \"Выписка РС\" : {\n    \"prefix\": \"АН\", \n      \"format\": \"{number}-{prefix}\",\n      \"counter_name\": \"rs_counter\",\n      \"startFrom\": 98,\n      \"variable\": \"Рег-УД\",\n      \"shared\": true,\n      // \"parentVariable\": \"Рег-УД\"\n  },\n  \"Удостоверение без фото\" : {\n    \"prefix\": \"АН\", \n      \"format\": \"{number}-{prefix}\",\n      \"counter_name\": \"rs_counter\",\n      \"startFrom\": 98,\n      \"variable\": \"Рег-УД\",\n      \"shared\": true // \n  },\n    \n    // \"Диплом простой\": {\n    //   \"prefix\": \"П\", \n    //   \"format\": \"{number}-{yy}{month}{prefix}\",\n    //   \"counter_name\": \"diploma_counter\",\n    //   \"startFrom\": 98,\n    //   \"variable\": \"Рег-ПП\",\n    //   \"shared\": true // ДОБАВЛЕНО: общий счетчик с квалификацией\n    // },\n    // \"Диплом с квалификацией\": {\n    //   \"prefix\": \"П\", \n    //   \"format\": \"{number}-{yy}{month}{prefix}\",\n    //   \"counter_name\": \"diploma_counter\",\n    //   \"startFrom\": 98,\n    //   \"variable\": \"Рег-ПП\",\n    //   \"shared\": true // ДОБАВЛЕНО: общий счетчик с квалификацией\n    // },\n    // \"Удостоверение ПК\": {\n    //   \"prefix\": \"ПК\",\n    //   \"format\": \"{number}-{month}/{prefix}\",\n    //   \"counter_name\": \"pk_counter\",\n    //   \"startFrom\": 29,\n    //   \"variable\": \"Рег-ПК\",\n    //   \"shared\": true\n    // },\n    // \"Сертификат\": {\n    //   \"prefix\": \"ПК\",\n    //   \"format\": \"{number}-{month}/{prefix}\",\n    //   \"counter_name\": \"pk_counter\",\n    //   \"startFrom\": 29,\n    //   \"variable\": \"Рег-ПК\"\n    // },\n    // \"Удостоверение ДО\": {\n    //   \"prefix\": \"ПК\",\n    //   \"format\": \"{number}-{month}/{prefix}\",\n    //   \"counter_name\": \"pk_counter\",\n    //   \"startFrom\": 29,\n    //   \"variable\": \"Рег-ПК\"\n    // },\n    // \"Удостоверение РС\": {\n    //   \"prefix\": \"АН\",\n    //   \"format\": \"{number}-{prefix}\",\n    //   \"counter_name\": \"rs_counter\",\n    //   \"startFrom\": 24216,\n    //   \"variable\": \"Рег-РС-АН\",\n    //   \"shared\": true\n    // },\n    // \"Выписка ПП\": { // ДОБАВЛЕНО\n    //   \"prefix\": \"ПП\",\n    //   \"format\": \"{prefix}-{month}{yy}-{number}\",\n    //   \"counter_name\": \"vypiska_counter_pp\",\n    //   \"startFrom\": 95,\n    //   \"variable\": \"Рег-ВПП\",\n    //   \"parentVariable\": \"Рег-ПП\"\n    // },\n    // \"Выписка ПК\": { // ДОБАВЛЕНО\n    //   \"prefix\": \"ПК\",\n    //   \"format\": \"{prefix}-{month}{yy}-{number}\",\n    //   \"counter_name\": \"vypiska_counter_pk\",\n    //   \"startFrom\": 95,\n    //   \"variable\": \"Рег-ВПК\",\n    //   \"parentVariable\": \"Рег-ПК\"\n    // },\n    // \"Предметы\": { // ДОБАВЛЕНО\n    //   \"useParent\": true\n    // },\n    // \"Приложение\": { // ДОБАВЛЕНО\n    //   \"useParent\": true\n    // },\n    // \"Корочка ПП\": { // ДОБАВЛЕНО\n    //   \"useParent\": true\n    // },\n    // \"Корочка ПК\": { // ДОБАВЛЕНО\n    //   \"useParent\": true\n    // },\n    // \"Корочка ПК фото\": { // ДОБАВЛЕНО\n    //   \"useParent\": true\n    // },\n  },\n\n  // ========== ДОПУСТИМЫЕ ЧАСЫ ==========\n\"VALID_HOURS\": $('makeHoursFormat').first().json.VALID_HOURS,\n  // ========== КОНСТАНТЫ ДЛЯ РАСЧЕТА ПЕРИОДОВ ==========\n\"HOURS_TO_PERIOD\": $('makeHoursFormat').first().json.HOURS_TO_PERIOD,\n  // ========== СИСТЕМНЫЕ НАСТРОЙКИ ========== \n  \n  // \"SYSTEM\": { // ДОБАВЛЕНО: новая секция\n  //   \"LOCK_TIMEOUT_MINUTES\": 5,\n  //   \"MAX_RETRIES\": 3,\n  //   \"BATCH_SIZE\": 50,\n  //   \"LOG_RETENTION_DAYS\": 90,\n  //   \"ID_PREFIX\": \"REQ\",\n  //   \"ID_PAD_LENGTH\": 5\n  // },\n\n  // ========== ПРАЗДНИЧНЫЕ ДНИ 2025 ==========\n\"HOLIDAYS\": [\n  // 2024 год\n  \"2024-01-01\",\"2024-01-02\",\"2024-01-03\",\"2024-01-04\",\"2024-01-05\",\n  \"2024-01-06\",\"2024-01-07\",\"2024-01-08\",\n  \"2024-02-23\",\n  \"2024-03-08\",\n  \"2024-04-29\",\"2024-04-30\",\n  \"2024-05-01\",\"2024-05-09\",\"2024-05-10\",\n  \"2024-06-12\",\n  \"2024-11-04\",\n  \"2024-12-30\",\"2024-12-31\",\n  \n  // 2025 год\n  \"2025-01-01\",\"2025-01-02\",\"2025-01-03\",\"2025-01-04\",\"2025-01-05\",\n  \"2025-01-06\",\"2025-01-07\",\"2025-01-08\",\n  \"2025-02-23\",\"2025-02-24\",\n  \"2025-03-08\",\"2025-03-09\",\"2025-03-10\",\n  \"2025-05-01\",\"2025-05-02\",\"2025-05-03\",\"2025-05-04\",\n  \"2025-05-09\",\"2025-05-10\",\"2025-05-11\",\"2025-05-12\",\n  \"2025-06-12\",\"2025-06-13\",\n  \"2025-11-03\",\"2025-11-04\",\n  \"2025-12-31\",\n  \n  // 2026 год (предварительно, официальный календарь ещё не утверждён)\n  \"2026-01-01\",\"2026-01-02\",\"2026-01-03\",\"2026-01-04\",\"2026-01-05\",\n  \"2026-01-06\",\"2026-01-07\",\"2026-01-08\",\"2026-01-09\",\n  \"2026-02-23\",\n  \"2026-03-08\",\"2026-03-09\",\n  \"2026-05-01\",\"2026-05-04\",\n  \"2026-05-09\",\"2026-05-11\",\n  \"2026-06-12\",\n  \"2026-11-04\"\n],\n\n  // ========== НАЗВАНИЯ МЕСЯЦЕВ ==========\n  \"MONTH_NAMES\": {\n    \"genitive\": [\n      \"января\",\"февраля\",\"марта\",\"апреля\",\"мая\",\"июня\",\n      \"июля\",\"августа\",\"сентября\",\"октября\",\"ноября\",\"декабря\"\n    ]\n  }\n};\n\n\n\nreturn [{ \n  json: {config: AUTODOCK_CONFIG}\n}];\n"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          -944,
+          -1072,
           384
         ],
         "id": "b849b4ee-276b-419f-ae84-e114844c29fd",
@@ -9403,7 +9565,7 @@
         "type": "n8n-nodes-base.googleSheets",
         "typeVersion": 4.7,
         "position": [
-          -1296,
+          -1424,
           384
         ],
         "id": "c3f63566-015c-4626-9217-8fe23053d0a5",
@@ -9450,7 +9612,7 @@
         "type": "n8n-nodes-base.googleSheets",
         "typeVersion": 4.7,
         "position": [
-          -1488,
+          -1616,
           384
         ],
         "id": "bf71fcdc-4572-454a-b3b9-f144afa2e4d3",
@@ -9494,7 +9656,7 @@
         "type": "n8n-nodes-base.googleSheets",
         "typeVersion": 4.7,
         "position": [
-          -1296,
+          -1424,
           176
         ],
         "id": "1520fbb0-0109-413e-9e0b-5a84ef06ccee",
@@ -9952,7 +10114,7 @@
         "type": "n8n-nodes-base.googleSheets",
         "typeVersion": 4.7,
         "position": [
-          -1088,
+          -1216,
           176
         ],
         "id": "70116f78-d87b-4d85-9aef-71daec0998aa",
@@ -9992,7 +10154,7 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.2,
         "position": [
-          -1296,
+          -1424,
           16
         ],
         "id": "7ef5ae42-9d47-452a-86a3-59f66ab230cd",
@@ -10073,7 +10235,7 @@
         "type": "n8n-nodes-base.googleSheets",
         "typeVersion": 4.7,
         "position": [
-          -1056,
+          -1184,
           -128
         ],
         "id": "3cd5b0ca-2d09-4c5b-a229-c5159422ccb9",
@@ -15706,7 +15868,7 @@
         "type": "n8n-nodes-base.webhook",
         "typeVersion": 2.1,
         "position": [
-          -1728,
+          -1856,
           384
         ],
         "id": "953a2705-4e70-40e8-9fc1-005361b74ed3",
@@ -16674,8 +16836,8 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          -32,
-          224
+          -16,
+          64
         ],
         "id": "a0e0b23c-1046-49c4-bf67-388a6cc24834",
         "name": "CheckStrokes1",
@@ -17738,6 +17900,53 @@
             "name": "with.edtech@gmail.com"
           }
         }
+      },
+      {
+        "parameters": {
+          "jsCode": "// ===============================================\n//     НОДА: ОДИН ITEM НА ОДНУ СТРОКУ\n// ===============================================\n\n// 📦 конфиг\nconst config = $('config').first().json.config;\nconst request_counter = $('GetRequestCounter').first().json['Текущее значение'];\nlet currentCounter = request_counter;\n\n// 🆔 существующие ID\nconst existing_ids = $('GetLayoutsIDExisting').all().map(item => item.json.ID);\n\n// 👨‍💼 headSource (защита от [{}])\nconst secondSourceItems = $('GetCheckID')?.all?.() || [];\n\nconst headSourceIds = new Set(\n  secondSourceItems\n    .map(i => i?.json || {})\n    .map(r => r.ID)\n    .filter(id => typeof id === 'string' && id.trim().length > 0)\n);\n\n// 📊 данные таблицы\nconst registryData = $('checkTable').all();\n\n// ===============================================\n// 📅 DATE PARSER\n// ===============================================\nfunction parseDateDDMMYYYY(str) {\n  if (!str || typeof str !== 'string') return null;\n\n  const parts = str.split('.');\n  if (parts.length !== 3) return null;\n\n  const [day, month, year] = parts.map(Number);\n  if (!day || !month || !year) return null;\n\n  return new Date(year, month - 1, day);\n}\n\n// 🔞 возраст\nfunction isAdult(birthDateStr) {\n  const birthDate = parseDateDDMMYYYY(birthDateStr);\n  if (!birthDate) return false;\n\n  const today = new Date();\n\n  let age = today.getFullYear() - birthDate.getFullYear();\n  const m = today.getMonth() - birthDate.getMonth();\n\n  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {\n    age--;\n  }\n\n  return age >= 18;\n}\n\n// ===============================================\n// 🔁 результат\n// ===============================================\nconst results = [];\n\n// ===============================================\n// 🔥 ОБРАБОТКА СТРОК\n// ===============================================\nregistryData.forEach((item, index) => {\n  try {\n\n    const row = item.json;\n    const rowNumber = row.row_number || row._rowNumber || row.rowNumber || (index + 2);\n    const C = config.COLUMNS;\n\n    const fullName = row[C.REGISTRY.FULL_NAME] || 'Не указано';\n\n    // ===============================================\n    // 🔍 missing fields\n    // ===============================================\n    const missing = [];\n\n    for (const field of config.REQUIRED_FIELDS.base) {\n      const value = row[field];\n      if (value === undefined || value === null || String(value).trim() === '') {\n        missing.push(field);\n      }\n    }\n\n    // проверка часов\n    const hours = Number(row[C.REGISTRY.HOURS]);\n    if (!isNaN(hours) && !config.VALID_HOURS.includes(hours)) {\n      missing.push(`${C.REGISTRY.HOURS} (недопустимое значение: ${hours})`);\n    }\n\n    // ===============================================\n    // 🔞 age check\n    // ===============================================\n    const birthDateValue = row[C.REGISTRY.BIRTH_DATE];\n    const isUnderage = birthDateValue ? !isAdult(birthDateValue) : false;\n\n    // ===============================================\n    // 🆔 ID check\n    // ===============================================\n    const existingId = row[C.REGISTRY.ID];\n    const isInHeadSource = existingId && headSourceIds.has(existingId);\n\n    // ===============================================\n    // 🔥 1. CHECK_BY_HEAD (ПРИОРИТЕТ)\n    // ===============================================\n    if (isInHeadSource) {\n      results.push({\n        json: {\n          rowNumber,\n          action: 'check_by_head',\n          existingId,\n          fullName,\n          registryUpdates: {\n            [C.REGISTRY.LAST_UPDATE]: new Date().toLocaleString('ru-RU', {\n              timeZone: 'Europe/Moscow',\n              year: 'numeric',\n              month: '2-digit',\n              day: '2-digit',\n              hour: '2-digit',\n              minute: '2-digit'\n            })\n          }\n        }\n      });\n      return;\n    }\n\n    // ===============================================\n    // 🔞 2. UNDERAGE\n    // ===============================================\n    if (isUnderage) {\n      results.push({\n        json: {\n          rowNumber,\n          action: 'underage',\n          fullName,\n          birthDate: birthDateValue,\n          registryUpdates: {\n            [C.REGISTRY.LAST_UPDATE]: new Date().toLocaleString('ru-RU', {\n              timeZone: 'Europe/Moscow',\n              year: 'numeric',\n              month: '2-digit',\n              day: '2-digit',\n              hour: '2-digit',\n              minute: '2-digit'\n            })\n          }\n        }\n      });\n      return;\n    }\n\n    // ===============================================\n    // ❌ 3. INCOMPLETE\n    // ===============================================\n    if (missing.length > 0) {\n      results.push({\n        json: {\n          rowNumber,\n          action: 'incomplete',\n          fullName,\n          missingFields: missing,\n          registryUpdates: {\n            [C.REGISTRY.LAST_UPDATE]: new Date().toLocaleString('ru-RU', {\n              timeZone: 'Europe/Moscow',\n              year: 'numeric',\n              month: '2-digit',\n              day: '2-digit',\n              hour: '2-digit',\n              minute: '2-digit'\n            })\n          }\n        }\n      });\n      return;\n    }\n\n    // ===============================================\n    // 🆔 4. ASSIGN ID\n    // ===============================================\n    if (!existingId || String(existingId).trim() === '') {\n\n      let newId;\n      do {\n        currentCounter += 1;\n        newId = `REQ-${String(currentCounter).padStart(5, '0')}`;\n      } while (existing_ids.includes(newId));\n\n      existing_ids.push(newId);\n\n      results.push({\n        json: {\n          rowNumber,\n          action: 'assign_id',\n          newId,\n          fullName,\n          registryUpdates: {\n            [C.REGISTRY.LAST_UPDATE]: new Date().toLocaleString('ru-RU', {\n              timeZone: 'Europe/Moscow',\n              year: 'numeric',\n              month: '2-digit',\n              day: '2-digit',\n              hour: '2-digit',\n              minute: '2-digit'\n            })\n          }\n        }\n      });\n\n      return;\n    }\n\n    // ===============================================\n    // 🔵 5. EXIST_ID\n    // ===============================================\n    results.push({\n      json: {\n        rowNumber,\n        action: 'exist_id',\n        existingId,\n        fullName,\n        registryUpdates: {\n          [C.REGISTRY.LAST_UPDATE]: new Date().toLocaleString('ru-RU', {\n            timeZone: 'Europe/Moscow',\n            year: 'numeric',\n            month: '2-digit',\n            day: '2-digit',\n            hour: '2-digit',\n            minute: '2-digit'\n          })\n        }\n      }\n    });\n\n  } catch (err) {\n    results.push({\n      json: {\n        rowNumber: index + 2,\n        action: 'error',\n        error: err.message\n      }\n    });\n  }\n});\n\n// ===============================================\n// 📊 LOGS\n// ===============================================\nconsole.log(`Обработано: ${results.length} строк`);\n\nconsole.log(`- assign_id: ${results.filter(r => r.json.action === 'assign_id').length}`);\nconsole.log(`- exist_id: ${results.filter(r => r.json.action === 'exist_id').length}`);\nconsole.log(`- incomplete: ${results.filter(r => r.json.action === 'incomplete').length}`);\nconsole.log(`- underage: ${results.filter(r => r.json.action === 'underage').length}`);\nconsole.log(`- check_by_head: ${results.filter(r => r.json.action === 'check_by_head').length}`);\n\n// ===============================================\n// 🔁 counter update\n// ===============================================\nresults.push({\n  json: {\n    counterUpdate: currentCounter\n  }\n});\n\nreturn results;"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -240,
+          80
+        ],
+        "id": "804900ae-f7b1-4b82-8761-db5f8285432c",
+        "name": "CheckStrokesNew",
+        "alwaysOutputData": true,
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "documentId": {
+            "__rl": true,
+            "value": "1e2Ww1-NUbqzqVwvomrXjH2QJ4jYlnLcGqCMJDaSaCWM",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 299292570,
+            "mode": "list",
+            "cachedResultName": "РС",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1e2Ww1-NUbqzqVwvomrXjH2QJ4jYlnLcGqCMJDaSaCWM/edit#gid=299292570"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          -928,
+          384
+        ],
+        "id": "2343b6e9-d2c6-4e3e-bb74-ba88007df9d1",
+        "name": "GetCheckID",
+        "executeOnce": true,
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "Xpp4ndWQ84MtD53m",
+            "name": "with.edtech@gmail.com"
+          }
+        }
       }
     ],
     "connections": {
@@ -17800,7 +18009,7 @@
         "main": [
           [
             {
-              "node": "GetRequestCounter",
+              "node": "GetCheckID",
               "type": "main",
               "index": 0
             }
@@ -18350,12 +18559,23 @@
             }
           ]
         ]
+      },
+      "GetCheckID": {
+        "main": [
+          [
+            {
+              "node": "GetRequestCounter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "Active User",
-    "name": "Version 3ba2d8f1",
+    "name": "Version d985d41c",
     "description": "",
-    "autosaved": false
+    "autosaved": true
   },
   "tags": []
 }
