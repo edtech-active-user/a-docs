@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-31T09:53:05.052Z",
+  "updatedAt": "2026-04-13T10:45:38.583Z",
   "createdAt": "2026-03-13T08:54:21.083Z",
   "id": "PNwggetcKcsuEyBH",
   "name": "autodoc-OT-refresh-loop",
@@ -340,7 +340,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const searchData = $('SearchExistingVyp').all();\nconst personData = $('InputData').first();\nconst searchKey = `ВЫПИСКА ${personData.json.data.key} ${personData.json.data.company.replace('\"','«').replace('\"','»')} ${personData.json.data.person.variables[\"<<Дата>>\"].replaceAll(\".\",\"-\")}`;\n\nlet rs;\n\nfor (let searchResult of searchData) {\n  if (searchResult.json.name.includes(searchKey)) {\n    rs = [searchResult];\n  }\n};\n\nif (rs) {\n  return rs; \n} else {\n  return [{}]\n}"
+        "jsCode": "const searchData = $('SearchExistingVyp').all();\n\nconst isEmpty =\n  !searchData?.length ||\n  searchData.every(i => !i.json || Object.keys(i.json).length === 0);\n\nif (isEmpty) {\n  return [{}];\n}\n\n\nconst personData = $('InputData').first();\nconst searchKey = `ВЫПИСКА ${personData.json.data.key} ${personData.json.data.company.replace('\"','«').replace('\"','»')} ${personData.json.data.person.variables[\"<<Дата>>\"].replaceAll(\".\",\"-\")}`;\n\nlet rs;\n\nfor (let searchResult of searchData) {\n  if (searchResult.json.name.includes(searchKey)) {\n    rs = [searchResult];\n  }\n};\n\nif (rs) {\n  return rs; \n} else {\n  return [{}]\n}"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -514,8 +514,8 @@
   },
   "staticData": null,
   "meta": null,
-  "versionId": "6829abdf-ff45-491f-893d-246fc2bd204a",
-  "activeVersionId": "6829abdf-ff45-491f-893d-246fc2bd204a",
+  "versionId": "d696d991-f400-4539-b7e1-d9f2c64ec50b",
+  "activeVersionId": "d696d991-f400-4539-b7e1-d9f2c64ec50b",
   "triggerCount": 0,
   "shared": [
     {
@@ -527,9 +527,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-27T07:37:55.074Z",
-    "createdAt": "2026-03-27T07:37:53.174Z",
-    "versionId": "6829abdf-ff45-491f-893d-246fc2bd204a",
+    "updatedAt": "2026-04-13T10:45:39.928Z",
+    "createdAt": "2026-04-13T10:45:38.584Z",
+    "versionId": "d696d991-f400-4539-b7e1-d9f2c64ec50b",
     "workflowId": "PNwggetcKcsuEyBH",
     "nodes": [
       {
@@ -866,7 +866,7 @@
       },
       {
         "parameters": {
-          "jsCode": "const searchData = $('SearchExistingVyp').all();\nconst personData = $('InputData').first();\nconst searchKey = `ВЫПИСКА ${personData.json.data.key} ${personData.json.data.company.replace('\"','«').replace('\"','»')} ${personData.json.data.person.variables[\"<<Дата>>\"].replaceAll(\".\",\"-\")}`;\n\nlet rs;\n\nfor (let searchResult of searchData) {\n  if (searchResult.json.name.includes(searchKey)) {\n    rs = [searchResult];\n  }\n};\n\nif (rs) {\n  return rs; \n} else {\n  return [{}]\n}"
+          "jsCode": "const searchData = $('SearchExistingVyp').all();\n\nconst isEmpty =\n  !searchData?.length ||\n  searchData.every(i => !i.json || Object.keys(i.json).length === 0);\n\nif (isEmpty) {\n  return [{}];\n}\n\n\nconst personData = $('InputData').first();\nconst searchKey = `ВЫПИСКА ${personData.json.data.key} ${personData.json.data.company.replace('\"','«').replace('\"','»')} ${personData.json.data.person.variables[\"<<Дата>>\"].replaceAll(\".\",\"-\")}`;\n\nlet rs;\n\nfor (let searchResult of searchData) {\n  if (searchResult.json.name.includes(searchKey)) {\n    rs = [searchResult];\n  }\n};\n\nif (rs) {\n  return rs; \n} else {\n  return [{}]\n}"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
@@ -1034,7 +1034,7 @@
       }
     },
     "authors": "Active User",
-    "name": "Version 6829abdf",
+    "name": "Version d696d991",
     "description": "",
     "autosaved": true
   },
