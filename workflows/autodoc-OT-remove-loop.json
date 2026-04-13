@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-31T09:52:48.060Z",
+  "updatedAt": "2026-04-13T10:45:09.253Z",
   "createdAt": "2026-03-13T06:24:35.859Z",
   "id": "hj2Eq6rOJJBNOWLs",
   "name": "autodoc-OT-remove-loop",
@@ -256,7 +256,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const searchData = $('SearchExistingVyp').all();\nconst personData = $('InputData').first();\nconst searchKey = `ВЫПИСКА ${personData.json.data.group} ${personData.json.data.company.replace('\"','«').replace('\"','»')} ${personData.json.data.data.replaceAll(\".\",\"-\")}`;\n\nlet rs;\n\nfor (let searchResult of searchData) {\n  if (searchResult.json.name.includes(searchKey)) {\n    rs = [searchResult];\n  }\n};\n\nif (rs) {\n  return rs; \n} else {\n  return [{}]\n}"
+        "jsCode": "const searchData = $('SearchExistingVyp').all();\n\nconst isEmpty =\n  !searchData?.length ||\n  searchData.every(i => !i.json || Object.keys(i.json).length === 0);\n\nif (isEmpty) {\n  return [{}];\n}\n\n\nconst personData = $('InputData').first();\nconst searchKey = `ВЫПИСКА ${personData.json.data.group} ${personData.json.data.company.replace('\"','«').replace('\"','»')} ${personData.json.data.data.replaceAll(\".\",\"-\")}`;\n\nlet rs;\n\nfor (let searchResult of searchData) {\n  if (searchResult.json.name.includes(searchKey)) {\n    rs = [searchResult];\n  }\n};\n\nif (rs) {\n  return rs; \n} else {\n  return [{}]\n}"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -374,8 +374,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "77183b64-10c4-4efe-8daa-101717ea1464",
-  "activeVersionId": "77183b64-10c4-4efe-8daa-101717ea1464",
+  "versionId": "b92034fc-3cbf-424a-995e-b8aad3cf759f",
+  "activeVersionId": "b92034fc-3cbf-424a-995e-b8aad3cf759f",
   "triggerCount": 0,
   "shared": [
     {
@@ -387,9 +387,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-27T07:38:36.896Z",
-    "createdAt": "2026-03-27T07:38:09.390Z",
-    "versionId": "77183b64-10c4-4efe-8daa-101717ea1464",
+    "updatedAt": "2026-04-13T10:45:15.618Z",
+    "createdAt": "2026-04-13T10:45:09.256Z",
+    "versionId": "b92034fc-3cbf-424a-995e-b8aad3cf759f",
     "workflowId": "hj2Eq6rOJJBNOWLs",
     "nodes": [
       {
@@ -642,7 +642,7 @@
       },
       {
         "parameters": {
-          "jsCode": "const searchData = $('SearchExistingVyp').all();\nconst personData = $('InputData').first();\nconst searchKey = `ВЫПИСКА ${personData.json.data.group} ${personData.json.data.company.replace('\"','«').replace('\"','»')} ${personData.json.data.data.replaceAll(\".\",\"-\")}`;\n\nlet rs;\n\nfor (let searchResult of searchData) {\n  if (searchResult.json.name.includes(searchKey)) {\n    rs = [searchResult];\n  }\n};\n\nif (rs) {\n  return rs; \n} else {\n  return [{}]\n}"
+          "jsCode": "const searchData = $('SearchExistingVyp').all();\n\nconst isEmpty =\n  !searchData?.length ||\n  searchData.every(i => !i.json || Object.keys(i.json).length === 0);\n\nif (isEmpty) {\n  return [{}];\n}\n\n\nconst personData = $('InputData').first();\nconst searchKey = `ВЫПИСКА ${personData.json.data.group} ${personData.json.data.company.replace('\"','«').replace('\"','»')} ${personData.json.data.data.replaceAll(\".\",\"-\")}`;\n\nlet rs;\n\nfor (let searchResult of searchData) {\n  if (searchResult.json.name.includes(searchKey)) {\n    rs = [searchResult];\n  }\n};\n\nif (rs) {\n  return rs; \n} else {\n  return [{}]\n}"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
@@ -752,7 +752,7 @@
       }
     },
     "authors": "Active User",
-    "name": "Version 77183b64",
+    "name": "Version b92034fc",
     "description": "",
     "autosaved": true
   },
