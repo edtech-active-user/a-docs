@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-31T09:37:19.800Z",
+  "updatedAt": "2026-04-14T06:10:35.985Z",
   "createdAt": "2026-03-30T06:19:17.704Z",
   "id": "9IRG2pEZBGn7MonU",
   "name": "move-ready-strokes",
@@ -635,8 +635,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        1184,
-        -144
+        1104,
+        -64
       ],
       "id": "b16701f6-8d19-4d4c-99e0-93dbe4e341b4",
       "name": "Delete rows or columns from sheet",
@@ -666,7 +666,7 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        416,
+        448,
         -176
       ],
       "id": "282ce305-a059-4e2f-9eab-18422906d032",
@@ -764,7 +764,7 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "41aab671-f82a-47f3-a3de-1622d5de9621",
+  "versionId": "ec9f3ae1-ae3e-4012-919a-7db38a2be7a7",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [
