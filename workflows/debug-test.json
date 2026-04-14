@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-13T12:59:14.594Z",
+  "updatedAt": "2026-04-13T13:11:36.309Z",
   "createdAt": "2025-09-04T06:58:53.773Z",
   "id": "L2MFLBVRIYuaZ84O",
   "name": "debug-test",
@@ -2169,7 +2169,7 @@
           "conditions": [
             {
               "id": "432544b1-e271-48bf-9dc0-69a23535115d",
-              "leftValue": "={{ DateTime.fromFormat($json['Дата рождения'].trim().replace(/[^\\d.]/g, \"\").replace(/З/g, \"3\"),ъ, \"dd.MM.yyyy\") <= DateTime.now().minus({ years: 18 }) }}",
+              "leftValue": "={{ DateTime.fromFormat($json['Дата рождения'].trim().replace(/[^\\d.]/g, \"\").replace(/З/g, \"3\"), \"dd.MM.yyyy\") <= DateTime.now().minus({ years: 18 }) }}",
               "rightValue": "",
               "operator": {
                 "type": "boolean",
@@ -2254,7 +2254,8 @@
           "mappingMode": "defineBelow",
           "value": {
             "ID": "={{ $json.ID }}",
-            "Дата": "={{ $json[\"Дата рождения\"] }}"
+            "Дата": "={{ $json[\"Дата рождения\"] }}",
+            "Статус заявки": "={{ $json[\"Статус заявки\"] }}"
           },
           "matchingColumns": [
             "ID"
@@ -2273,6 +2274,16 @@
             {
               "id": "Дата",
               "displayName": "Дата",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Статус заявки",
+              "displayName": "Статус заявки",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -2429,7 +2440,8 @@
           "mappingMode": "defineBelow",
           "value": {
             "ID": "={{ $json.ID }}",
-            "Дата": "={{ $json[\"Дата рождения\"] }}"
+            "Дата": "={{ $json[\"Дата рождения\"] }}",
+            "Статус заявки": "={{ $json[\"Статус заявки\"] }}"
           },
           "matchingColumns": [
             "ID"
@@ -2448,6 +2460,16 @@
             {
               "id": "Дата",
               "displayName": "Дата",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Статус заявки",
+              "displayName": "Статус заявки",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -3008,7 +3030,7 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "d07d55e0-9977-4d37-b325-6bb48fd81087",
+  "versionId": "e3dced2c-9d71-46c3-8814-25862cc32de2",
   "activeVersionId": null,
   "triggerCount": 1,
   "shared": [
