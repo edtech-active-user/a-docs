@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-31T14:45:36.420Z",
+  "updatedAt": "2026-04-13T13:53:23.932Z",
   "createdAt": "2026-03-27T12:29:10.722Z",
   "id": "hX15tKh83Gq3N9El",
   "name": "errors-handler",
@@ -19,27 +19,43 @@
     },
     {
       "parameters": {
-        "chatId": "-5230660630",
-        "text": "=Дата: {{$now.format('dd-MM-yyyy')}}\n\n⚠️ Ошибка workflow: {{ $json.workflow.name }} \n\n🔎 Произошла: {{ $json.execution.lastNodeExecuted }}\n\n❗Сообщение: {{ $json.execution.error.message }}\n\n▶️ Посмотреть детальнее: \n{{ $json.execution.url }}\n",
-        "additionalFields": {
-          "appendAttribution": false
-        }
+        "method": "POST",
+        "url": "https://edtech-automatic.ru/webhook/43e4f7ce-962b-4bf2-80c8-2e819ac41981",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=date",
+              "value": "={{$now.format('dd-MM-yyyy')}}"
+            },
+            {
+              "name": "workflowName",
+              "value": "={{ $json.workflow.name }}"
+            },
+            {
+              "name": "error_message",
+              "value": "={{ $json.execution.error.message }}"
+            },
+            {
+              "name": "check_url",
+              "value": "={{ $json.execution.url }}"
+            },
+            {
+              "name": "node",
+              "value": "={{ $json.execution.lastNodeExecuted }}"
+            }
+          ]
+        },
+        "options": {}
       },
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
       "position": [
-        -224,
+        -240,
         16
       ],
-      "id": "a73ab9a7-fa09-4e93-bfaa-e65667fd5c7c",
-      "name": "Send a text message",
-      "webhookId": "f124b941-6600-4794-9289-a68e9accb09a",
-      "credentials": {
-        "telegramApi": {
-          "id": "nGoUrfYXGemRgfnO",
-          "name": "Платон"
-        }
-      }
+      "id": "5ae9df04-31ed-44ba-b8fd-2d57d576efd4",
+      "name": "SendHookToEdtech"
     }
   ],
   "connections": {
@@ -47,7 +63,7 @@
       "main": [
         [
           {
-            "node": "Send a text message",
+            "node": "SendHookToEdtech",
             "type": "main",
             "index": 0
           }
@@ -64,8 +80,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "d9f46181-0505-4175-8cfe-7aad48ba9161",
-  "activeVersionId": "d9f46181-0505-4175-8cfe-7aad48ba9161",
+  "versionId": "2711d517-7f9a-4183-8aa5-f3ee68064f5b",
+  "activeVersionId": "2711d517-7f9a-4183-8aa5-f3ee68064f5b",
   "triggerCount": 0,
   "shared": [
     {
@@ -77,9 +93,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-31T14:46:41.836Z",
-    "createdAt": "2026-03-31T14:45:36.421Z",
-    "versionId": "d9f46181-0505-4175-8cfe-7aad48ba9161",
+    "updatedAt": "2026-04-13T13:53:24.966Z",
+    "createdAt": "2026-04-13T13:53:23.933Z",
+    "versionId": "2711d517-7f9a-4183-8aa5-f3ee68064f5b",
     "workflowId": "hX15tKh83Gq3N9El",
     "nodes": [
       {
@@ -95,27 +111,43 @@
       },
       {
         "parameters": {
-          "chatId": "-5230660630",
-          "text": "=Дата: {{$now.format('dd-MM-yyyy')}}\n\n⚠️ Ошибка workflow: {{ $json.workflow.name }} \n\n🔎 Произошла: {{ $json.execution.lastNodeExecuted }}\n\n❗Сообщение: {{ $json.execution.error.message }}\n\n▶️ Посмотреть детальнее: \n{{ $json.execution.url }}\n",
-          "additionalFields": {
-            "appendAttribution": false
-          }
+          "method": "POST",
+          "url": "https://edtech-automatic.ru/webhook/43e4f7ce-962b-4bf2-80c8-2e819ac41981",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "=date",
+                "value": "={{$now.format('dd-MM-yyyy')}}"
+              },
+              {
+                "name": "workflowName",
+                "value": "={{ $json.workflow.name }}"
+              },
+              {
+                "name": "error_message",
+                "value": "={{ $json.execution.error.message }}"
+              },
+              {
+                "name": "check_url",
+                "value": "={{ $json.execution.url }}"
+              },
+              {
+                "name": "node",
+                "value": "={{ $json.execution.lastNodeExecuted }}"
+              }
+            ]
+          },
+          "options": {}
         },
-        "type": "n8n-nodes-base.telegram",
-        "typeVersion": 1.2,
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
         "position": [
-          -224,
+          -240,
           16
         ],
-        "id": "a73ab9a7-fa09-4e93-bfaa-e65667fd5c7c",
-        "name": "Send a text message",
-        "webhookId": "f124b941-6600-4794-9289-a68e9accb09a",
-        "credentials": {
-          "telegramApi": {
-            "id": "nGoUrfYXGemRgfnO",
-            "name": "Платон"
-          }
-        }
+        "id": "5ae9df04-31ed-44ba-b8fd-2d57d576efd4",
+        "name": "SendHookToEdtech"
       }
     ],
     "connections": {
@@ -123,7 +155,7 @@
         "main": [
           [
             {
-              "node": "Send a text message",
+              "node": "SendHookToEdtech",
               "type": "main",
               "index": 0
             }
@@ -132,9 +164,9 @@
       }
     },
     "authors": "Active User",
-    "name": "Version d9f46181",
+    "name": "Version 2711d517",
     "description": "",
-    "autosaved": true
+    "autosaved": false
   },
   "tags": []
 }
