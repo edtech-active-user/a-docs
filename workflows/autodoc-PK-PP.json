@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-13T12:24:01.570Z",
+  "updatedAt": "2026-04-13T13:32:40.623Z",
   "createdAt": "2025-10-23T04:12:51.205Z",
   "id": "bW5C7J4327CR8Kkq",
   "name": "autodoc-PK-PP",
@@ -1858,8 +1858,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        256,
-        384
+        144,
+        336
       ],
       "id": "e29ba43e-dd1c-476f-8349-a553c302b93c",
       "name": "update data: complete",
@@ -8321,7 +8321,7 @@
           "conditions": [
             {
               "id": "a701830e-2b26-4d90-be2c-6afaddf3bdbf",
-              "leftValue": "={{ DateTime.fromISO($json.bd).toMillis() <= DateTime.now().minus({ years: 18 }).toMillis() }}",
+              "leftValue": "={{ DateTime.fromFormat($json.bd.trim().replace(/[^\\d.]/g, \"\").replace(/З/g, \"3\"), \"dd.MM.yyyy\") <= DateTime.now().minus({ years: 18 }) }}",
               "rightValue": "",
               "operator": {
                 "type": "boolean",
@@ -8805,7 +8805,8 @@
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "ID": "={{ $json.newId }}"
+            "ID": "={{ $json.newId }}",
+            "Дата": "={{$json.bd}}"
           },
           "matchingColumns": [
             "ID"
@@ -8820,6 +8821,26 @@
               "type": "string",
               "canBeUsedToMatch": true,
               "removed": false
+            },
+            {
+              "id": "Дата",
+              "displayName": "Дата",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Дата рождения",
+              "displayName": "Дата рождения",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
             }
           ],
           "attemptToConvertTypes": false,
@@ -8948,7 +8969,7 @@
           "conditions": [
             {
               "id": "a1140e71-3e56-4547-9c9a-f5f66d95225e",
-              "leftValue": "={{ $('GetCheckID').first().json.IDS.includes($json.existingId) }}",
+              "leftValue": "={{ $('HeadIDsList').first().json.IDS.includes($json.existingId) }}",
               "rightValue": "",
               "operator": {
                 "type": "boolean",
@@ -9389,7 +9410,7 @@
       "typeVersion": 4.7,
       "position": [
         544,
-        1072
+        1040
       ],
       "id": "d28b5ad4-8b67-4406-b358-0ea81dc05e01",
       "name": "update data: on checking",
@@ -9483,7 +9504,7 @@
       "typeVersion": 4.7,
       "position": [
         544,
-        1248
+        1216
       ],
       "id": "fc955b86-f599-464f-a891-277eccc039ed",
       "name": "UpdateLogs2",
@@ -10184,8 +10205,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "5678731e-8cfc-4f99-9401-16e812eae066",
-  "activeVersionId": "5678731e-8cfc-4f99-9401-16e812eae066",
+  "versionId": "1e381eb7-1665-413e-b517-a1dc764ec743",
+  "activeVersionId": "1e381eb7-1665-413e-b517-a1dc764ec743",
   "triggerCount": 1,
   "shared": [
     {
@@ -10197,9 +10218,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-13T12:24:19.292Z",
-    "createdAt": "2026-04-13T12:24:01.574Z",
-    "versionId": "5678731e-8cfc-4f99-9401-16e812eae066",
+    "updatedAt": "2026-04-13T13:40:53.423Z",
+    "createdAt": "2026-04-13T13:32:40.627Z",
+    "versionId": "1e381eb7-1665-413e-b517-a1dc764ec743",
     "workflowId": "bW5C7J4327CR8Kkq",
     "nodes": [
       {
@@ -12054,8 +12075,8 @@
         "type": "n8n-nodes-base.googleSheets",
         "typeVersion": 4.7,
         "position": [
-          256,
-          384
+          144,
+          336
         ],
         "id": "e29ba43e-dd1c-476f-8349-a553c302b93c",
         "name": "update data: complete",
@@ -18517,7 +18538,7 @@
             "conditions": [
               {
                 "id": "a701830e-2b26-4d90-be2c-6afaddf3bdbf",
-                "leftValue": "={{ DateTime.fromISO($json.bd).toMillis() <= DateTime.now().minus({ years: 18 }).toMillis() }}",
+                "leftValue": "={{ DateTime.fromFormat($json.bd.trim().replace(/[^\\d.]/g, \"\").replace(/З/g, \"3\"), \"dd.MM.yyyy\") <= DateTime.now().minus({ years: 18 }) }}",
                 "rightValue": "",
                 "operator": {
                   "type": "boolean",
@@ -19001,7 +19022,8 @@
           "columns": {
             "mappingMode": "defineBelow",
             "value": {
-              "ID": "={{ $json.newId }}"
+              "ID": "={{ $json.newId }}",
+              "Дата": "={{$json.bd}}"
             },
             "matchingColumns": [
               "ID"
@@ -19016,6 +19038,26 @@
                 "type": "string",
                 "canBeUsedToMatch": true,
                 "removed": false
+              },
+              {
+                "id": "Дата",
+                "displayName": "Дата",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Дата рождения",
+                "displayName": "Дата рождения",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
               }
             ],
             "attemptToConvertTypes": false,
@@ -19144,7 +19186,7 @@
             "conditions": [
               {
                 "id": "a1140e71-3e56-4547-9c9a-f5f66d95225e",
-                "leftValue": "={{ $('GetCheckID').first().json.IDS.includes($json.existingId) }}",
+                "leftValue": "={{ $('HeadIDsList').first().json.IDS.includes($json.existingId) }}",
                 "rightValue": "",
                 "operator": {
                   "type": "boolean",
@@ -19585,7 +19627,7 @@
         "typeVersion": 4.7,
         "position": [
           544,
-          1072
+          1040
         ],
         "id": "d28b5ad4-8b67-4406-b358-0ea81dc05e01",
         "name": "update data: on checking",
@@ -19679,7 +19721,7 @@
         "typeVersion": 4.7,
         "position": [
           544,
-          1248
+          1216
         ],
         "id": "fc955b86-f599-464f-a891-277eccc039ed",
         "name": "UpdateLogs2",
@@ -20369,7 +20411,7 @@
       }
     },
     "authors": "Active User",
-    "name": "Version 5678731e",
+    "name": "Version 1e381eb7",
     "description": "",
     "autosaved": true
   },
