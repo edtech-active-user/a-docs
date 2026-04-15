@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-02T05:42:33.664Z",
+  "updatedAt": "2026-04-14T15:17:26.240Z",
   "createdAt": "2026-03-25T05:40:37.305Z",
   "id": "SqPr4m6mASc1ILN8",
   "name": "autodoc-OT-MINTRUD-file-from",
@@ -45,6 +45,7 @@
       "id": "bf6fd895-d7a5-492d-af25-a627f2cb11af",
       "name": "GetMintrudFile",
       "executeOnce": true,
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -84,6 +85,7 @@
       ],
       "id": "472e095a-b95f-43b1-ba98-54936b51d933",
       "name": "GetReestr",
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -142,6 +144,7 @@
       ],
       "id": "be783a3b-948a-4816-8377-bbd0cfad6c82",
       "name": "searchVyp",
+      "retryOnFail": true,
       "credentials": {
         "googleDriveOAuth2Api": {
           "id": "jzAxR4XiEVWwbE9z",
@@ -151,7 +154,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const searchData = $('searchVyp').all();\nconst searchKey = $('Loop Over Items').first().json.file_name\nlet rs;\n\nfor (let searchResult of searchData) {\n  if (searchResult.json.name.includes(searchKey)) {\n    rs = [searchResult];\n  }\n};\n\nif (rs) {\n  return rs; \n} else {\n  return [{}]\n}"
+        "jsCode": "const searchData = $('searchVyp').all();\nconst searchKey = $('Loop Over Items').first().json.file_name\nlet rs;\n\nconst isEmpty =\n  !searchData?.length ||\n  searchData.every(i => !i.json || Object.keys(i.json).length === 0);\n\nif (isEmpty) {\n  return [{}];\n}\n\n\nfor (let searchResult of searchData) {\n  if (searchResult.json.name.includes(searchKey)) {\n    rs = [searchResult];\n  }\n};\n\nif (rs) {\n  return rs; \n} else {\n  return [{}]\n}"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -211,6 +214,7 @@
       ],
       "id": "4206788c-5fe4-499f-9d8b-bd1aba0d64a7",
       "name": "GetVypDoc",
+      "retryOnFail": true,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -250,6 +254,7 @@
       ],
       "id": "f0eecc29-27a3-4c1a-bdd2-cb6783194cfe",
       "name": "UpdateCell",
+      "retryOnFail": true,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -647,6 +652,7 @@
       ],
       "id": "3e2b6825-3f96-4fa0-8ab4-5eee5e3869e4",
       "name": "UpdateStatus",
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -693,6 +699,7 @@
       "id": "8bb30a48-b196-4a17-8c18-e2ea812be475",
       "name": "GetQueue",
       "executeOnce": true,
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -780,6 +787,7 @@
       "id": "9ab6295e-b541-42de-8fe0-58e3d3e45033",
       "name": "UpdateStatusInQueue",
       "executeOnce": true,
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -872,6 +880,7 @@
       ],
       "id": "40025c96-3c3e-4ed1-bf80-07ca0ee467de",
       "name": "UpdateLog",
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -1049,7 +1058,7 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "9b6e852b-c8b9-4cbe-b79b-c0c69a838646",
+  "versionId": "486ce425-9736-425d-935e-c77616c6693f",
   "activeVersionId": "9b6e852b-c8b9-4cbe-b79b-c0c69a838646",
   "triggerCount": 1,
   "shared": [
