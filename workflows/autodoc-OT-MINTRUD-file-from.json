@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-17T18:04:42.012Z",
+  "updatedAt": "2026-04-23T16:53:42.874Z",
   "createdAt": "2026-03-25T05:40:37.305Z",
   "id": "SqPr4m6mASc1ILN8",
   "name": "autodoc-OT-MINTRUD-file-from",
@@ -140,7 +140,7 @@
       "typeVersion": 3,
       "position": [
         1232,
-        32
+        -80
       ],
       "id": "be783a3b-948a-4816-8377-bbd0cfad6c82",
       "name": "searchVyp",
@@ -160,7 +160,7 @@
       "typeVersion": 2,
       "position": [
         1440,
-        32
+        -80
       ],
       "id": "afdb8da6-ba82-4ee1-8968-374f46a9f404",
       "name": "FindDirectEntry",
@@ -195,7 +195,7 @@
       "typeVersion": 2.3,
       "position": [
         1632,
-        32
+        -80
       ],
       "id": "ab3da125-95f8-4f2a-bd1e-d515a8824bad",
       "name": "If"
@@ -210,7 +210,7 @@
       "typeVersion": 2,
       "position": [
         1872,
-        16
+        240
       ],
       "id": "4206788c-5fe4-499f-9d8b-bd1aba0d64a7",
       "name": "GetVypDoc",
@@ -230,10 +230,12 @@
       "typeVersion": 2,
       "position": [
         2080,
-        16
+        240
       ],
       "id": "2680ff1b-160e-470e-87a1-9e2dc4217662",
-      "name": "GetCellToInsert"
+      "name": "GetCellToInsert",
+      "retryOnFail": false,
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -249,8 +251,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        2272,
-        16
+        2320,
+        320
       ],
       "id": "f0eecc29-27a3-4c1a-bdd2-cb6783194cfe",
       "name": "UpdateCell",
@@ -260,7 +262,8 @@
           "id": "5aALK5qPqcCIdTaQ",
           "name": "with.edtech@gmail.com"
         }
-      }
+      },
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1057,11 +1060,25 @@
             "type": "main",
             "index": 0
           }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
     "UpdateCell": {
       "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ],
         [
           {
             "node": "Loop Over Items",
@@ -1106,8 +1123,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "88f085b3-ee21-4b8d-b61f-bdb6fad4fbd8",
-  "activeVersionId": "88f085b3-ee21-4b8d-b61f-bdb6fad4fbd8",
+  "versionId": "d62c27f5-ebd8-4579-83fa-2d3ba25de21a",
+  "activeVersionId": "d62c27f5-ebd8-4579-83fa-2d3ba25de21a",
   "triggerCount": 1,
   "shared": [
     {
@@ -1119,9 +1136,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-17T18:04:48.385Z",
-    "createdAt": "2026-04-17T18:04:42.013Z",
-    "versionId": "88f085b3-ee21-4b8d-b61f-bdb6fad4fbd8",
+    "updatedAt": "2026-04-23T16:53:44.044Z",
+    "createdAt": "2026-04-23T16:53:42.875Z",
+    "versionId": "d62c27f5-ebd8-4579-83fa-2d3ba25de21a",
     "workflowId": "SqPr4m6mASc1ILN8",
     "nodes": [
       {
@@ -1258,7 +1275,7 @@
         "typeVersion": 3,
         "position": [
           1232,
-          32
+          -80
         ],
         "id": "be783a3b-948a-4816-8377-bbd0cfad6c82",
         "name": "searchVyp",
@@ -1278,7 +1295,7 @@
         "typeVersion": 2,
         "position": [
           1440,
-          32
+          -80
         ],
         "id": "afdb8da6-ba82-4ee1-8968-374f46a9f404",
         "name": "FindDirectEntry",
@@ -1313,7 +1330,7 @@
         "typeVersion": 2.3,
         "position": [
           1632,
-          32
+          -80
         ],
         "id": "ab3da125-95f8-4f2a-bd1e-d515a8824bad",
         "name": "If"
@@ -1328,7 +1345,7 @@
         "typeVersion": 2,
         "position": [
           1872,
-          16
+          240
         ],
         "id": "4206788c-5fe4-499f-9d8b-bd1aba0d64a7",
         "name": "GetVypDoc",
@@ -1348,10 +1365,12 @@
         "typeVersion": 2,
         "position": [
           2080,
-          16
+          240
         ],
         "id": "2680ff1b-160e-470e-87a1-9e2dc4217662",
-        "name": "GetCellToInsert"
+        "name": "GetCellToInsert",
+        "retryOnFail": false,
+        "onError": "continueErrorOutput"
       },
       {
         "parameters": {
@@ -1367,8 +1386,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.4,
         "position": [
-          2272,
-          16
+          2320,
+          320
         ],
         "id": "f0eecc29-27a3-4c1a-bdd2-cb6783194cfe",
         "name": "UpdateCell",
@@ -1378,7 +1397,8 @@
             "id": "5aALK5qPqcCIdTaQ",
             "name": "with.edtech@gmail.com"
           }
-        }
+        },
+        "onError": "continueErrorOutput"
       },
       {
         "parameters": {
@@ -2175,11 +2195,25 @@
               "type": "main",
               "index": 0
             }
+          ],
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
           ]
         ]
       },
       "UpdateCell": {
         "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ],
           [
             {
               "node": "Loop Over Items",
@@ -2213,7 +2247,7 @@
       }
     },
     "authors": "Active User",
-    "name": "Version 88f085b3",
+    "name": "Version d62c27f5",
     "description": "",
     "autosaved": true
   },
