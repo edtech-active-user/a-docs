@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-27T09:12:06.015Z",
+  "updatedAt": "2026-04-28T14:34:25.330Z",
   "createdAt": "2026-03-02T04:58:11.042Z",
   "id": "GH7moINZwDUlmWbK",
   "name": "autodoc-OT",
@@ -4480,7 +4480,7 @@
           "value": "PWvm7ssLmLAV7lWT",
           "mode": "list",
           "cachedResultUrl": "/workflow/PWvm7ssLmLAV7lWT",
-          "cachedResultName": "AutoDoc OT vypiska inner loop"
+          "cachedResultName": "autodoc-OT-vypiska-inner-loop"
         },
         "workflowInputs": {
           "mappingMode": "defineBelow",
@@ -4539,7 +4539,8 @@
         1792
       ],
       "id": "c7405cd2-a676-434e-b609-f3d68b9535ff",
-      "name": "InsertPersons"
+      "name": "InsertPersons",
+      "retryOnFail": true
     },
     {
       "parameters": {
@@ -7338,6 +7339,7 @@
       ],
       "id": "d035a7cb-da6e-4a05-ba48-e883ce0d1224",
       "name": "CountingVypStrokesToOrder1",
+      "retryOnFail": true,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -7451,6 +7453,7 @@
       ],
       "id": "1de8938b-611f-4600-8227-8b9ac629bb34",
       "name": "UpdateStyles",
+      "retryOnFail": true,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -7517,6 +7520,7 @@
       ],
       "id": "b6899d8b-d110-46d9-a2e2-cfe0866a441d",
       "name": "UpdateStyles1",
+      "retryOnFail": true,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -7643,6 +7647,7 @@
       ],
       "id": "c5215794-6a03-48d5-b786-55f9c7623cac",
       "name": "UpdateStyles2",
+      "retryOnFail": true,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -7709,6 +7714,7 @@
       ],
       "id": "9aa8abe5-1c2d-4775-8b66-e4343a9d7008",
       "name": "UpdateStyles3",
+      "retryOnFail": true,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -9342,8 +9348,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "c0374ac7-743a-4771-8c64-37765c13c9f8",
-  "activeVersionId": "c0374ac7-743a-4771-8c64-37765c13c9f8",
+  "versionId": "ea33176b-a708-4d15-82ea-9b1236a1ce96",
+  "activeVersionId": "ea33176b-a708-4d15-82ea-9b1236a1ce96",
   "triggerCount": 1,
   "shared": [
     {
@@ -9355,9 +9361,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-27T09:12:08.453Z",
-    "createdAt": "2026-04-27T09:12:06.020Z",
-    "versionId": "c0374ac7-743a-4771-8c64-37765c13c9f8",
+    "updatedAt": "2026-04-28T14:34:37.715Z",
+    "createdAt": "2026-04-28T14:34:25.337Z",
+    "versionId": "ea33176b-a708-4d15-82ea-9b1236a1ce96",
     "workflowId": "GH7moINZwDUlmWbK",
     "nodes": [
       {
@@ -13834,7 +13840,7 @@
             "value": "PWvm7ssLmLAV7lWT",
             "mode": "list",
             "cachedResultUrl": "/workflow/PWvm7ssLmLAV7lWT",
-            "cachedResultName": "AutoDoc OT vypiska inner loop"
+            "cachedResultName": "autodoc-OT-vypiska-inner-loop"
           },
           "workflowInputs": {
             "mappingMode": "defineBelow",
@@ -13893,7 +13899,8 @@
           1792
         ],
         "id": "c7405cd2-a676-434e-b609-f3d68b9535ff",
-        "name": "InsertPersons"
+        "name": "InsertPersons",
+        "retryOnFail": true
       },
       {
         "parameters": {
@@ -16692,6 +16699,7 @@
         ],
         "id": "d035a7cb-da6e-4a05-ba48-e883ce0d1224",
         "name": "CountingVypStrokesToOrder1",
+        "retryOnFail": true,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -16805,6 +16813,7 @@
         ],
         "id": "1de8938b-611f-4600-8227-8b9ac629bb34",
         "name": "UpdateStyles",
+        "retryOnFail": true,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -16871,6 +16880,7 @@
         ],
         "id": "b6899d8b-d110-46d9-a2e2-cfe0866a441d",
         "name": "UpdateStyles1",
+        "retryOnFail": true,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -16997,6 +17007,7 @@
         ],
         "id": "c5215794-6a03-48d5-b786-55f9c7623cac",
         "name": "UpdateStyles2",
+        "retryOnFail": true,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -17063,6 +17074,7 @@
         ],
         "id": "9aa8abe5-1c2d-4775-8b66-e4343a9d7008",
         "name": "UpdateStyles3",
+        "retryOnFail": true,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -18685,7 +18697,7 @@
       }
     },
     "authors": "Active User",
-    "name": "Version c0374ac7",
+    "name": "Version ea33176b",
     "description": "",
     "autosaved": true
   },
