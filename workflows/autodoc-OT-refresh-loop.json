@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-13T10:45:38.583Z",
+  "updatedAt": "2026-04-28T13:39:12.143Z",
   "createdAt": "2026-03-13T08:54:21.083Z",
   "id": "PNwggetcKcsuEyBH",
   "name": "autodoc-OT-refresh-loop",
@@ -147,12 +147,14 @@
       ],
       "id": "683993e4-5ae1-499c-8133-e51dfb4f1a5d",
       "name": "DeleteStrokeFromExistingVyp",
+      "retryOnFail": true,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
           "name": "with.edtech@gmail.com"
         }
-      }
+      },
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -514,8 +516,8 @@
   },
   "staticData": null,
   "meta": null,
-  "versionId": "d696d991-f400-4539-b7e1-d9f2c64ec50b",
-  "activeVersionId": "d696d991-f400-4539-b7e1-d9f2c64ec50b",
+  "versionId": "7e40e6a1-16aa-483d-813f-88dcb38c488a",
+  "activeVersionId": "7e40e6a1-16aa-483d-813f-88dcb38c488a",
   "triggerCount": 0,
   "shared": [
     {
@@ -527,9 +529,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-13T10:45:39.928Z",
-    "createdAt": "2026-04-13T10:45:38.584Z",
-    "versionId": "d696d991-f400-4539-b7e1-d9f2c64ec50b",
+    "updatedAt": "2026-04-28T13:39:13.109Z",
+    "createdAt": "2026-04-28T13:39:12.144Z",
+    "versionId": "7e40e6a1-16aa-483d-813f-88dcb38c488a",
     "workflowId": "PNwggetcKcsuEyBH",
     "nodes": [
       {
@@ -673,12 +675,14 @@
         ],
         "id": "683993e4-5ae1-499c-8133-e51dfb4f1a5d",
         "name": "DeleteStrokeFromExistingVyp",
+        "retryOnFail": true,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
             "name": "with.edtech@gmail.com"
           }
-        }
+        },
+        "onError": "continueRegularOutput"
       },
       {
         "parameters": {
@@ -1034,7 +1038,7 @@
       }
     },
     "authors": "Active User",
-    "name": "Version d696d991",
+    "name": "Version 7e40e6a1",
     "description": "",
     "autosaved": true
   },
