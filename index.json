@@ -78,5 +78,9 @@
   "qEjEz3ATzDQY0Y25": {
     "name": "autodoc-OT-add-loop",
     "file_path": "workflows/autodoc-OT-add-loop.json"
+  },
+  "4LntIQeZ4iQ3w0kW": {
+    "name": "My workflow",
+    "file_path": "workflows/My workflow.json"
   }
 }
