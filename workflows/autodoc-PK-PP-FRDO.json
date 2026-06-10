@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-06T09:38:05.514Z",
+  "updatedAt": "2026-06-10T12:55:43.838Z",
   "createdAt": "2025-10-23T04:21:13.793Z",
   "id": "phRrUh556uvizS7T",
   "name": "autodoc-PK-PP-FRDO",
@@ -39,6 +39,7 @@
             }
           ]
         },
+        "combineFilters": "OR",
         "options": {}
       },
       "type": "n8n-nodes-base.googleSheets",
@@ -2154,7 +2155,7 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "a9498fec-3dc3-4d26-af50-c83a2896738f",
+  "versionId": "480a5118-d384-4e8b-9ea9-20bbf4366f76",
   "activeVersionId": "a9498fec-3dc3-4d26-af50-c83a2896738f",
   "triggerCount": 1,
   "shared": [
