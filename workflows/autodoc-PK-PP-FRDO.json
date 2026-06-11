@@ -2156,7 +2156,7 @@
     "templateCredsSetupCompleted": true
   },
   "versionId": "480a5118-d384-4e8b-9ea9-20bbf4366f76",
-  "activeVersionId": "a9498fec-3dc3-4d26-af50-c83a2896738f",
+  "activeVersionId": "480a5118-d384-4e8b-9ea9-20bbf4366f76",
   "triggerCount": 1,
   "shared": [
     {
@@ -2168,9 +2168,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-06T09:38:08.626Z",
-    "createdAt": "2026-04-06T09:38:05.516Z",
-    "versionId": "a9498fec-3dc3-4d26-af50-c83a2896738f",
+    "updatedAt": "2026-06-11T07:10:28.591Z",
+    "createdAt": "2026-06-10T12:55:43.839Z",
+    "versionId": "480a5118-d384-4e8b-9ea9-20bbf4366f76",
     "workflowId": "phRrUh556uvizS7T",
     "nodes": [
       {
@@ -2206,6 +2206,7 @@
               }
             ]
           },
+          "combineFilters": "OR",
           "options": {}
         },
         "type": "n8n-nodes-base.googleSheets",
@@ -4306,7 +4307,7 @@
       }
     },
     "authors": "Active User",
-    "name": "Version a9498fec",
+    "name": "Version 480a5118",
     "description": "",
     "autosaved": true
   },
