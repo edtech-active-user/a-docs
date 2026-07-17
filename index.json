@@ -1,1 +1,118 @@
-{}
+{
+  "OqgfapoZ7XWO2FJW": {
+    "name": "autodoc-PK-PP-newReestr",
+    "file_path": "workflows/autodoc-PK-PP-newReestr.json"
+  },
+  "PWvm7ssLmLAV7lWT": {
+    "name": "autodoc-OT-vypiska-inner-loop",
+    "file_path": "workflows/autodoc-OT-vypiska-inner-loop.json"
+  },
+  "vHM7d8SJtPoHmfKF": {
+    "name": "autodoc-PK-PP-FRDO-newReestr",
+    "file_path": "workflows/autodoc-PK-PP-FRDO-newReestr.json"
+  },
+  "9IRG2pEZBGn7MonU": {
+    "name": "mark-ready-strokes",
+    "file_path": "workflows/mark-ready-strokes.json"
+  },
+  "QWI21fLoL57P1I0B": {
+    "name": "autodoc-OT-MINTRUD-file-to-newReestr",
+    "file_path": "workflows/autodoc-OT-MINTRUD-file-to-newReestr.json"
+  },
+  "ZA1aNYswbNygMsLe": {
+    "name": "review-bot",
+    "file_path": "workflows/review-bot.json"
+  },
+  "Hyr2yN9pjZc4BsRZ": {
+    "name": "autodoc-OT-newReestr",
+    "file_path": "workflows/autodoc-OT-newReestr.json"
+  },
+  "GH7moINZwDUlmWbK": {
+    "name": "autodoc-OT",
+    "file_path": "workflows/autodoc-OT.json"
+  },
+  "phRrUh556uvizS7T": {
+    "name": "autodoc-PK-PP-FRDO",
+    "file_path": "workflows/autodoc-PK-PP-FRDO.json"
+  },
+  "L2MFLBVRIYuaZ84O": {
+    "name": "debug-test",
+    "file_path": "workflows/debug-test.json"
+  },
+  "wMz0FzNx6GsO8tah": {
+    "name": "autodoc-RS-FRDO-newReestr",
+    "file_path": "workflows/autodoc-RS-FRDO-newReestr.json"
+  },
+  "bW5C7J4327CR8Kkq": {
+    "name": "autodoc-PK-PP",
+    "file_path": "workflows/autodoc-PK-PP.json"
+  },
+  "SqPr4m6mASc1ILN8": {
+    "name": "autodoc-OT-MINTRUD-file-from",
+    "file_path": "workflows/autodoc-OT-MINTRUD-file-from.json"
+  },
+  "4LntIQeZ4iQ3w0kW": {
+    "name": "My workflow",
+    "file_path": "workflows/My workflow.json"
+  },
+  "hj2Eq6rOJJBNOWLs": {
+    "name": "autodoc-OT-remove-loop",
+    "file_path": "workflows/autodoc-OT-remove-loop.json"
+  },
+  "PNwggetcKcsuEyBH": {
+    "name": "autodoc-OT-refresh-loop",
+    "file_path": "workflows/autodoc-OT-refresh-loop.json"
+  },
+  "rQgz3YcOV3BEXoXW": {
+    "name": "github-backup",
+    "file_path": "workflows/github-backup.json"
+  },
+  "LVDC6da2JfAxsblA": {
+    "name": "autodoc-RS-FRDO",
+    "file_path": "workflows/autodoc-RS-FRDO.json"
+  },
+  "WHZVlIfLFK9dyFUq": {
+    "name": "clear-queue",
+    "file_path": "workflows/clear-queue.json"
+  },
+  "WxQNDRBvNRBFSLcD": {
+    "name": "autodoc-PK-PP - newReestr",
+    "file_path": "workflows/autodoc-PK-PP - newReestr.json"
+  },
+  "tUjwi1OXuGq60XAe": {
+    "name": "autodoc-OT-MINTRUD-file-from-newReestr",
+    "file_path": "workflows/autodoc-OT-MINTRUD-file-from-newReestr.json"
+  },
+  "q02qpzB5xGdlK6Od": {
+    "name": "autodoc-RS",
+    "file_path": "workflows/autodoc-RS.json"
+  },
+  "dxm3YMctZqt3GOxy": {
+    "name": "autodoc-OT-MINTRUD-file-to",
+    "file_path": "workflows/autodoc-OT-MINTRUD-file-to.json"
+  },
+  "hX15tKh83Gq3N9El": {
+    "name": "errors-handler",
+    "file_path": "workflows/errors-handler.json"
+  },
+  "l3umusa7UyEF1jFT": {
+    "name": "autodoc-RS-newReestr",
+    "file_path": "workflows/autodoc-RS-newReestr.json"
+  },
+  "eM592FBhShyLRim0": {
+    "name": "study-plans-rs",
+    "file_path": "workflows/study-plans-rs.json"
+  },
+  "UW7rVNtMXXQajD4T": {
+    "name": "study-plans-pp",
+    "file_path": "workflows/study-plans-pp.json"
+  },
+  "u8DK2pcysZZbW5vT": {
+    "name": "review-bot-garbage-collector",
+    "file_path": "workflows/review-bot-garbage-collector.json"
+  },
+  "qEjEz3ATzDQY0Y25": {
+    "name": "autodoc-OT-add-loop",
+    "file_path": "workflows/autodoc-OT-add-loop.json"
+  }
+}
