@@ -1,0 +1,1975 @@
+{
+  "updatedAt": "2026-03-31T09:44:07.610Z",
+  "createdAt": "2025-09-22T06:37:53.020Z",
+  "id": "UW7rVNtMXXQajD4T",
+  "name": "study-plans-pp",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -336,
+        0
+      ],
+      "id": "10821410-9e61-43c0-b480-b27412cec3cb",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "const SYSTEM_CONFIG = {\n  // Таблица часы-модули - ИСПРАВЛЕННАЯ\n  hours_mapping: {\n    256: {modules: 8},\n    512: {modules: 10},\n    1100: {modules: 16, submodules: {\"11-16\": 2}},\n    1600: {modules: 20, submodules: {\"11-16\": 2, \"17-20\": 3}},\n    2048: {modules: 22, submodules: {\"11-16\": 2, \"17-20\": 3, \"21-22\": 4}}\n  },\n  \n    // Шаблоны Google Docs для каждого объема\n  template_docs: {\n    256: \"https://docs.google.com/document/d/[ID_шаблона_256]\",\n    512: \"https://docs.google.com/document/d/[ID_шаблона_512]\",\n    1100: \"https://docs.google.com/document/d/[ID_шаблона_1100]\",\n    1600: \"https://docs.google.com/document/d/[ID_шаблона_1600]\",\n    2048: \"https://docs.google.com/document/d/[ID_шаблона_2048]\"\n  },\n  \n  // Доверенные домены для официальных документов\n  trusted_domains: [\n    \"hr-portal.ru\", \"kadrovik.ru\", \"consultant.ru\",\n    \"garant.ru\", \"profiz.ru\", \"worldskills.ru\", \"nark.ru\",\n    \"classinform.ru\"\n  ],\n  \n  // Качественные источники про профессии (новое)\n  quality_sources: [\n    \"habr.com\",           // IT профессии\n    \"vc.ru\",              // бизнес и стартапы\n    \"proforientator.ru\",  // профориентация\n    \"ucheba.ru\",          // образование\n    \"hh.ru\",              // вакансии (раздел про профессии)\n    \"postupi.online\",     // учебные программы\n    \"netology.ru/blog\",   // блог Нетологии\n    \"skillbox.ru/media\",  // медиа Скиллбокса\n    \"practicum.yandex.ru/blog\" // блог Практикума\n  ],\n  \n  \n  \n  // Минимальные требования - ОК\n  validation_rules: {\n    min_functions: 5,\n    min_knowledge: 10,\n    min_skills: 10,\n    max_knowledge_extract: 30,\n    max_skills_extract: 30,\n    max_actions_extract: 20\n  },\n  \n  // Параметры поиска - ОК  \n  search_config: {\n    region: \"Moscow\",\n    results_limit: 10,\n    search_engine: \"Yandex\"\n  },\n  \n// Расчет confidence\n  confidence_scores: {\n    classinform_exact: 100,      // Точное совпадение в ClassInform\n    classinform_close: 85,       // Близкое совпадение в ClassInform  \n    trusted_domain_di: 90,       // Должностная инструкция с доверенного домена\n    trusted_domain_ps: 85,       // Профстандарт с доверенного домена\n    pdf_di: 70,                  // PDF должностной инструкции\n    pdf_ps: 65,                  // PDF профстандарта\n    trusted_domain_other: 60,    // Другое с доверенного домена\n    any_source: 40               // Любой другой источник\n  },\n  \n  // Пороги для принятия решений\n  confidence_thresholds: {\n    auto_approve: 85,            // Создаем план без флагов\n    review_required: 60,         // Создаем план с флагом проверки\n    manual_required: 59          // Стоп, нужна ручная работа\n  }\n}\n\nreturn SYSTEM_CONFIG"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -144,
+        0
+      ],
+      "id": "402ec529-83dd-4b25-a325-845b25affc5b",
+      "name": "Variables"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1uMIr-gA1jEwNtzxkM4AadBQdvRgJa2Gl0NhyHoaWE1Y",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Планы",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1uMIr-gA1jEwNtzxkM4AadBQdvRgJa2Gl0NhyHoaWE1Y/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Статус",
+              "lookupValue": "Новый"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        64,
+        0
+      ],
+      "id": "edf8d080-e481-4a05-8bdb-8511f51e9563",
+      "name": "plansTable",
+      "credentials": {
+        "googleApi": {
+          "id": "86ekhh3rUWlEgF4Y",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputString = $input.first().json.message.content;\n\n// Убираем \"```json\" и \"```\"\nconst cleaned = inputString.replace(/^```json\\n/, '').replace(/```$/, '');\n\n// Преобразуем в объект\nconst parsed = JSON.parse(cleaned);\n\n// В n8n Function Item нужно вернуть объект\nreturn parsed;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        656,
+        0
+      ],
+      "id": "db2cf1f7-5ac1-4bd1-9d3f-b7e7d6307327",
+      "name": "parseJson"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=ВХОДНЫЕ ДАННЫЕ:\nПрофессия: {{ $json['Профессия'] }}\nОбъем_часов: {{ $json['Обьем_часов'] }}\n\nЗАДАЧИ:\n1. Извлечь ТОЧНОЕ название профессии (как написано)\n2. Извлечь количество часов из поля \"Объем_часов\"\n3. Определить, есть ли в названии профессии аббревиатура (ПТО, ИТР, АХО и т.д.)\n4. Определи связана ли профессия с риском для жизни, запиши резульат в свойство needsSafety\n5. Проверить, что часы = 256, 512, 1100, 1600 или 2048\n\nВАЖНО:\n- НЕ изменять название\n- НЕ расшифровывать аббревиатуры  \n- НЕ разбивать на части\n\nВЫХОДНЫЕ ДАННЫЕ (JSON):\n\n{\n  \"profession_exact\": \"точное название профессии из таблицы\",\n  \"hours\": число из поля Объем_часов,\n  \"has_abbreviation\": true/false,\n  'needsSafety':true/false\n}"
+            },
+            {
+              "content": "=Ты - методист-аналитик. Обработай входные данные.",
+              "role": "system"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        288,
+        0
+      ],
+      "id": "ce345679-a66c-4f8e-aa2f-2cb6765b423a",
+      "name": "TableAnalyse1",
+      "credentials": {
+        "openAiApi": {
+          "id": "36mFwxxeJbMPxCvV",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Сравни между собой страницы по количеству ОТФ (обобщенных трудовых функций):\n{{ $json.urls.join('\\n') }}\n\nСо страницы, у которой большее количество ОТФ (обобщенных трудовых функций), собери данные по списку:\n\nДАННЫЕ\n- Код профстандарта (например: 40.116)\n- Полное название профстандарта\n- ВСЕ ОТФ с кодами (A, B, C...)\n- Трудовые действия (до 20 самых важных)\n- Необходимые знания (до 30 самых важных)\n- Необходимые умения (до 30 самых важных)\n- Для каждой ОТФ - ВСЕ трудовые функции с кодами (A/01.6, A/02.6...)\n\nВыведи собранную информацию со страницы без результатов стравнения количества ОТФ, источников и итогов. Только указанные данные. Ничего лишнего.\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        848,
+        1200
+      ],
+      "id": "e80427e1-5253-4aee-87a3-20af57929b71",
+      "name": "searchClassinform",
+      "credentials": {
+        "openAiApi": {
+          "id": "36mFwxxeJbMPxCvV",
+          "name": "OpenAi account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/customsearch/v1",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "=key",
+              "value": "AIzaSyBjWpLbv495C6izDX01VzSije6eEpwgK0E"
+            },
+            {
+              "name": "cx",
+              "value": "44903129cc13d4212"
+            },
+            {
+              "name": "q",
+              "value": "=Профстандарт {{ $('parseJson').item.json.profession_exact }} intitle:\"{{ $('parseJson').item.json.profession_exact }}\""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1136,
+        0
+      ],
+      "id": "cf45f1c8-45de-4810-a2b0-f45f2f553ce0",
+      "name": "Google Search classinform.ru"
+    },
+    {
+      "parameters": {
+        "jsCode": "const results = $('Google Search classinform.ru').all()[0].json.items;\n\n// Создаем отдельные массивы\nconst urls = results.map(item => item.link);\n\nreturn [{ \n    json: { \n        urls: urls,\n        // Также можно вернуть и исходный объект для полноты\n    } \n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1584,
+        288
+      ],
+      "id": "be348bdb-58f4-4412-a1ae-3683bdf3d1c2",
+      "name": "getResultsLinks"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.queries.request[0].totalResults.toNumber() }}",
+                    "rightValue": 0,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    },
+                    "id": "42377a19-85a5-4d13-88b2-8cd91fb7e154"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "565b649e-636c-49c1-b84e-f400df963f6d",
+                    "leftValue": "={{ $json.queries.request[0].totalResults.toNumber() }}",
+                    "rightValue": 1,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "f512fb6c-d8a0-42c8-a5af-5c73606291a5",
+                    "leftValue": "={{ $json.queries.request[0].totalResults.toNumber() }}",
+                    "rightValue": 1,
+                    "operator": {
+                      "type": "number",
+                      "operation": "gt"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1376,
+        -16
+      ],
+      "id": "fdf1a135-6bbb-4967-94f5-56ab50347ff0",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Данные: {{ $json.content[0].text }}\n\nПроверь, что в данных есть:\n- Минимум 3 трудовые функции\n- Минимум 5 знаний\n- Минимум 5 умений\n\n1. Если данные проверены и все условия соблюдены, добавь эти данные в JSON:\n\n  otf - это обощенная трудовая функция\n  actions - трудовые действия\n  \n  {\n  \"found\": true,\n  \"confidence\": 100,\n    \"prof_standard\": {\n      \"code\": string,\n      \"name\": string,\n      \"knowledge\": array,\n      \"skills\": array, \n      \"actions\": array\n    }\n  }\n  \n  В ответе выведи только сформированный JSON, без лишних комментариев твоего анализа даннных и хода работы\n\n2. Если данные не прошли проверку, то выведи в ответе только JSON {\"found\": false} без лишних комментариев твоего анализа даннных и хода работы\n\n\n\n  "
+            }
+          ]
+        },
+        "options": {
+          "maxTokens": 16384
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        848,
+        1376
+      ],
+      "id": "f31442d6-f167-4c92-ba04-32a154765b65",
+      "name": "getJson",
+      "credentials": {
+        "openAiApi": {
+          "id": "36mFwxxeJbMPxCvV",
+          "name": "OpenAi account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputString = $input.first().json.content[0].text;\n\n// Убираем \"```json\" и \"```\"\nconst cleaned = inputString.replace(/^```json\\n/, '').replace(/```$/, '');\n\n// Преобразуем в объект\nconst parsed = JSON.parse(cleaned);\n\n// В n8n Function Item нужно вернуть объект\nreturn parsed;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2256,
+        144
+      ],
+      "id": "3e570671-41a5-4eab-af7d-39fc454e7ae7",
+      "name": "parseJson1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "7b9d44c6-b033-4e26-a8fc-a498c073212a",
+              "leftValue": "={{ $json.found }}",
+              "rightValue": "=true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3088,
+        -1008
+      ],
+      "id": "4f6b0bb3-6bd6-45c7-b7ff-9273ff19a22a",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "claude-3-7-sonnet-20250219",
+          "mode": "list",
+          "cachedResultName": "Claude Sonnet 3.7"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        1600,
+        -304
+      ],
+      "id": "ec71e0d1-e2d6-4945-a870-f18ab1dc1575",
+      "name": "Anthropic Chat Model",
+      "credentials": {
+        "anthropicApi": {
+          "id": "8AkBAMDQngBh1b1w",
+          "name": "Anthropic account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputString = $input.first().json.output;\n\n// Убираем \"```json\" и \"```\"\nconst cleaned = inputString.replace(/^```json\\n/, '').replace(/```$/, '');\n\n// Преобразуем в объект\nconst parsed = JSON.parse(cleaned);\n\n// В n8n Function Item нужно вернуть объект\nreturn parsed;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1936,
+        -464
+      ],
+      "id": "0b8df541-189a-4d1f-94cb-ead4e847c157",
+      "name": "parseJson2"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-search-preview",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-SEARCH-PREVIEW"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Сравни между собой страницы по количеству ОТФ (обобщенных трудовых функций):\n\n\nСо страницы {{ $json.urls.join('\\n') }} собери информацию:\n\n- Код профстандарта (например: 40.116)\n- Полное название профстандарта\n- ВСЕ ОТФ(обобщенные трудовые функций) с кодами (A, B, C...)\n- Для каждой ОТФ - ВСЕ трудовые функции с кодами (A/01.6, A/02.6...)\n- Трудовые действия (до 10 самых важных)\n- Необходимые знания (до 10)\n- Необходимые умения (до 10)\n\nВыведи эту только собранную информацию без комментариев своей работы и анализа"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        3088,
+        -848
+      ],
+      "id": "c5e13284-c93e-4322-ad06-eacd71c13c8d",
+      "name": "searchClassinform1",
+      "credentials": {
+        "openAiApi": {
+          "id": "36mFwxxeJbMPxCvV",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const results = $('Google Search classinform.ru').all()[0].json.items;\n\n// Создаем отдельные массивы\nconst urls = results.map(item => item.link);\n\nreturn [{ \n    json: { \n        urls: urls,\n        // Также можно вернуть и исходный объект для полноты\n    } \n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1584,
+        0
+      ],
+      "id": "c499d446-faae-4a93-a15f-1cec4df1fbbb",
+      "name": "getResultsLinks1"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Данные: {{ $json.message.content }}\n\nПроверь, что в данных есть:\n- Минимум 3 трудовые функции\n- Минимум 5 знаний\n- Минимум 5 умений\n\n1. Если данные проверены и все условия соблюдены, добавь эти данные в JSON:\n\n  otf - это обощенная трудовая функция\n  tf - трудовая функция\n  \n  {\n  \"found\": true,\n  \"confidence\": 100,\n    \"prof_standard\": {\n      \"code\": string,\n      \"name\": string,\n      \"otf\": [{ \n        \"code\": string, \n        \"name\": string,\n        \"tf\": [{\n          \"code\": string,\n          \"name\": string\n        }]\n      }],\n      \"knowledge\": array,\n      \"skills\": array, \n      \"actions\": array\n    }\n  }\n  \n  В ответе выведи только сформированный JSON, без лишних комментариев твоего анализа даннных и хода работы\n\n2. Если данные не прошли проверку, то выведи в ответе только JSON {\"found\": false} без лишних комментариев твоего анализа даннных и хода работы\n\n\n\n  "
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        3408,
+        -864
+      ],
+      "id": "1b6dec2e-bb5e-48ae-92d0-5633d68e8a00",
+      "name": "getJson1",
+      "credentials": {
+        "openAiApi": {
+          "id": "36mFwxxeJbMPxCvV",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputString = $input.first().json.message.content;\n\n// Убираем \"```json\" и \"```\"\nconst cleaned = inputString.replace(/^```json\\n/, '').replace(/```$/, '');\n\n// Преобразуем в объект\nconst parsed = JSON.parse(cleaned);\n\n// В n8n Function Item нужно вернуть объект\nreturn parsed;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3728,
+        -864
+      ],
+      "id": "4f5a47d2-b01a-4756-ab2a-f5fe2c2839c4",
+      "name": "parseJson3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "7b9d44c6-b033-4e26-a8fc-a498c073212a",
+              "leftValue": "={{ $json.found }}",
+              "rightValue": "=true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3936,
+        -864
+      ],
+      "id": "928bf2be-0f47-49ec-b6c3-ef84f81a1399",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a17413fa-1043-45c1-b7a4-fab73b983172",
+              "leftValue": "={{ $json.found }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2128,
+        -464
+      ],
+      "id": "ed099e21-e996-4f2e-8817-d331269dc7c6",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputString = $input.first().json.output;\n\n// Убираем \"```json\" и \"```\"\nconst cleaned = inputString.replace(/^```json\\n/, '').replace(/```$/, '');\n\n// Преобразуем в объект\nconst parsed = JSON.parse(cleaned);\n\n// В n8n Function Item нужно вернуть объект\nreturn parsed;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2656,
+        -176
+      ],
+      "id": "7b38ff01-3568-4253-b2a7-3c12744bcfa2",
+      "name": "parseJson4"
+    },
+    {
+      "parameters": {
+        "jsCode": "function generatePlanStructure(hours, profession, needsSafety) {\n  const config = {\n    256: {modules: 8, practicals: 8},\n    512: {modules: 10, practicals: 10},\n    1100: {modules: 16, practicals: 22,submodules: {\"11-16\": 2}},\n    1600: {modules: 20, practicals: 34,submodules: {\"11-16\": 2, \"17-20\": 3}},\n    2048: {modules: 22, practicals: 46,submodules: {\"11-16\": 2, \"17-20\": 3, \"21-22\": 4}}\n  }[hours];\n  \n  const modules = [];\n  let availableHours = hours;\n\n  // Модуль 1 - вводный\n  modules.push({ number: 1, type: \"introduction\", hours: null, submodules: null });\n  \n  // Модуль 2 - безопасность\n  if (needsSafety) {\n    modules.push({ number: 2, type: \"safety\", hours: 16, submodules: null });\n    availableHours -= 16;\n  }\n  \n  // Остальные модули\n  const startFrom = needsSafety ? 3 : 2;\n  for (let i = startFrom; i <= config.modules; i++) {\n    let submodules = null;\n    if (config.submodules) {\n      for (let [range, count] of Object.entries(config.submodules)) {\n        const [start, end] = range.split('-').map(Number);\n        if (i >= start && i <= end) {\n          submodules = [];\n          for (let j = 1; j <= count; j++) {\n            submodules.push({ number: `${i}.${j}`, type: \"content\" });\n          }\n          break;\n        }\n      }\n    }\n    modules.push({ number: i, type: \"content\", hours: null, submodules });\n  }\n  \n  return {\n    hours,\n    available_hours: availableHours,\n    modules,\n    total_practicals: config.practicals,\n  };\n}\n\n// 🔹 Берём все входные items\nconst items = $input.all();\n\n// 🔹 Обрабатываем каждый item\nconst results = items.map(item => {\n  const { hours, profession, needsSafety } = item.json;\n  return {\n    json: generatePlanStructure(hours, profession, needsSafety)\n  };\n});\n\nreturn results;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        608,
+        720
+      ],
+      "id": "5026e698-8fbb-46c1-b905-a8798f5ff343",
+      "name": "generateStructure",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputString = $input.first().json.content[0].text;\n\n// Убираем \"```json\" и \"```\"\nconst cleaned = inputString.replace(/^```json\\n/, '').replace(/```$/, '');\n\n// Преобразуем в объект\nconst parsed = JSON.parse(cleaned);\n\n// В n8n Function Item нужно вернуть объект\nreturn parsed;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2928,
+        144
+      ],
+      "id": "c73af73e-9e75-4d8f-8683-a1159fe9b885",
+      "name": "parseJson5"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=### ИНСТРУКЦИЯ: Заполнение учебного плана\n\nВХОДНЫЕ ДАННЫЕ:\n- plan_structure:{{ JSON.stringify($('generateStructure').item.json)}}\n- knowledge: {{ $('parseJson1').item.json.prof_standard.knowledge }}\n- skills: {{ $('parseJson1').item.json.prof_standard.skills }}\n- functions: {{ $('parseJson1').item.json.prof_standard.actions }}\n- profession_name: {{ $('parseJson').item.json.profession_exact }}\n\nПРАВИЛА ФОРМИРОВАНИЯ МОДУЛЕЙ:\n\n1. Модуль type=\"introduction\":\n   - Название: вводная формулировка о профессии/направлении\n   - Содержание: роль специалиста, функционал, место в организации\n\n2. Модуль type=\"safety\" (если есть):\n   - Название: формулировка про безопасность в контексте профессии\n   - Всегда 16 часов\n\n3. Модули type=\"content\":\n   - Распределить functions, knowledge и skills логически\n   - Начинать с частых/базовых задач\n   - Переходить к более сложным/специализированным\n   - Для модулей с подмодулями: разбить тему на логические части\n\nРАСПРЕДЕЛЕНИЕ ЧАСОВ:\n- available_hours распределить между content-модулями\n- Более важные/объемные темы получают больше часов\n- Минимум 8 часов на модуль\n\nДЛЯ КАЖДОГО МОДУЛЯ СОЗДАТЬ:\n- name: конкретное название\n- hours: количество часов\n- topics: темы для изучения (3-5)\n- practical_tasks: задания (количество из plan_structure.total_practicals)\n\nЛИТЕРАТУРА:\n- Список источников (plan_structure.literature_count штук)\n\nВЫХОД (JSON):\nЗаполненная plan_structure со всеми полями"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        848,
+        992
+      ],
+      "id": "cc397dd1-9183-4d9d-888f-ad02d8d030d0",
+      "name": "generatePlan",
+      "credentials": {
+        "openAiApi": {
+          "id": "36mFwxxeJbMPxCvV",
+          "name": "OpenAi account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.confidence }}",
+                    "rightValue": 85,
+                    "operator": {
+                      "type": "number",
+                      "operation": "gte"
+                    },
+                    "id": "521688a5-cc46-43ca-b090-957dcc04ab0a"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "1f318158-55ef-4473-b170-dee179ed4cab",
+                    "leftValue": "={{ $json.confidence }}",
+                    "rightValue": 0,
+                    "operator": {
+                      "type": "number",
+                      "operation": "gte"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "e0c26e4b-c85e-4997-85f6-ec7cda2ba74f",
+                    "leftValue": "={{ $json.confidence }}",
+                    "rightValue": 60,
+                    "operator": {
+                      "type": "number",
+                      "operation": "lt"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        4960,
+        -240
+      ],
+      "id": "e9a28956-97ac-49f3-a7c9-5411e2482b71",
+      "name": "ConfidenceCase"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=### ИНСТРУКЦИЯ: Широкий поиск информации\n\nВХОД:*\n- profession_exact: {{ $('parseJson').item.json.profession_exact }}\n- quality_sources: {{ $('Variables').item.json.quality_sources }}\n\nЗАДАЧА:\nНайти по профессии profession_exact хотя бы 3 функции/обязанности, хотя бы 5 знаний, хотя бы 5 умений\n\nЭТАП 1 - Качественные источники:\nСначала искать ТОЛЬКО на доменах из quality_sources\nЕсли нашел достаточно информации, добавь информацию в JSON ниже и выведи его без лишних комментариев твоего анализа даннных и хода работы\n{\n  \"found\": boolean,\n  \"confidence\": 60,\n  \"warning\": \"Данные из неструктурированных источников\",\n  \"source_urls\": array (минимум 2-3 разных),\n  \"functions\": array,\n  \"knowledge\": array,\n  \"skills\": array,\n  \"recommendation\": \"Требуется проверка методистом\"\n}\n\nЕсли не нашел → переход к Этапу 2\n\nЭТАП 2 - Открытый поиск:\nИскать на ЛЮБЫХ сайтах без ограничений\nДобавь найденную информацию в JSON ниже и выведи его без лишних комментариев твоего анализа даннных и хода работы\n{\n  \"found\": boolean,\n  \"confidence\": 50,\n  \"warning\": \"Данные из неструктурированных источников\",\n  \"source_urls\": array (минимум 2-3 разных),\n  \"functions\": array,\n  \"knowledge\": array,\n  \"skills\": array,\n  \"recommendation\": \"Требуется проверка методистом\"\n}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        2336,
+        -176
+      ],
+      "id": "7e7a2e6f-64b9-46ee-93eb-48b4de67fd07",
+      "name": "wideSearch"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "claude-3-7-sonnet-20250219",
+          "mode": "list",
+          "cachedResultName": "claude-3-7-sonnet-20250219"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Сравни между собой страницы по количеству ОТФ (обобщенных трудовых функций):\n{{ $json.urls.join('\\n') }}\n\nСо страницы, у которой большее количество ОТФ (обобщенных трудовых функций), собери данные по списку:\n\nДАННЫЕ\n- Код профстандарта (например: 40.116)\n- Полное название профстандарта\n- Трудовые действия (до 20 самых важных)\n- Необходимые знания (до 20 самых важных)\n- Необходимые умения (до 20 самых важных)\n\nИспользуй ТОЛЬКО данные со страницы.\n\nДобавь собранную информацию в JSON:\n\n  otf - это обощенная трудовая функция\n  actions - трудовые действия\n  \n  {\n  \"found\": true,\n  \"confidence\": 100,\n    \"prof_standard\": {\n      \"code\": string,\n      \"name\": string,\n      \"knowledge\": array,\n      \"skills\": array, \n      \"actions\": array\n    }\n  }\n\nВыведи только JSON без лишних рассуждений, результатов анализа и твоей работы\n"
+            }
+          ]
+        },
+        "options": {
+          "maxTokens": 20000,
+          "temperature": 0,
+          "topP": 0.1,
+          "topK": 10
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.anthropic",
+      "typeVersion": 1,
+      "position": [
+        1792,
+        288
+      ],
+      "id": "92dcf66d-6546-4847-91f5-c8d5363c2048",
+      "name": "search_classinform",
+      "credentials": {
+        "anthropicApi": {
+          "id": "8AkBAMDQngBh1b1w",
+          "name": "Anthropic account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "claude-3-7-sonnet-20250219",
+          "mode": "list",
+          "cachedResultName": "claude-3-7-sonnet-20250219"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=### ИНСТРУКЦИЯ: Заполнение учебного плана\n\nВХОДНЫЕ ДАННЫЕ:\n- plan_structure:{{ JSON.stringify($('generateStructure').item.json)}}\n- knowledge: {{ $('parseJson1').item.json.prof_standard.knowledge }}\n- skills: {{ $('parseJson1').item.json.prof_standard.skills }}\n- functions: {{ $('parseJson1').item.json.prof_standard.actions }}\n- profession_name: {{ $('parseJson').item.json.profession_exact }}\n\nПРАВИЛА ФОРМИРОВАНИЯ МОДУЛЕЙ:\n\n1. Модуль type=\"introduction\":\n   - Название: вводная формулировка о профессии/направлении\n   - Содержание: роль специалиста, функционал, место в организации\n\n2. Модуль type=\"safety\" (если есть):\n   - Название: формулировка про безопасность в контексте профессии\n   - Всегда 16 часов\n\n3. Модули type=\"content\":\n   - Распределить functions, knowledge и skills логически\n   - Начинать с частых/базовых задач\n   - Переходить к более сложным/специализированным\n   - Для модулей с подмодулями: разбить тему на логические части\n\nРАСПРЕДЕЛЕНИЕ ЧАСОВ:\n- available_hours распределить между content-модулями\n- Более важные/объемные темы получают больше часов\n- Минимум 8 часов на модуль\n\nДЛЯ КАЖДОГО МОДУЛЯ СОЗДАТЬ:\n- name: конкретное название\n- hours: количество часов\n- topics: темы для изучения (3-5)\n- practical_tasks: задания (количество из plan_structure.total_practicals)\n\nВЫХОД (JSON):\nЗаполненная plan_structure со всеми полями, без лишних комментариев, результатов твоей работы и так далее."
+            }
+          ]
+        },
+        "options": {
+          "maxTokens": 20000
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.anthropic",
+      "typeVersion": 1,
+      "position": [
+        864,
+        768
+      ],
+      "id": "14b5f2fd-948b-4632-b88d-ad36bd6047f0",
+      "name": "generate_plan",
+      "credentials": {
+        "anthropicApi": {
+          "id": "8AkBAMDQngBh1b1w",
+          "name": "Anthropic account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentURL": "16paXHSfOLcdTMUMnOPRzrgtsk13MRbVJXqvpes9Ft80",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "action": "replaceAll",
+              "text": "{Название_профессии}",
+              "replaceText": "={{ $json[\"Название_профессии\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-1}",
+              "replaceText": "={{ $json[\"модуль-1\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-2}",
+              "replaceText": "={{ $json[\"модуль-2\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-3}",
+              "replaceText": "={{ $json[\"модуль-3\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-4}",
+              "replaceText": "={{ $json[\"модуль-4\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-5}",
+              "replaceText": "={{ $json[\"модуль-5\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-6}",
+              "replaceText": "={{ $json[\"модуль-6\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-7}",
+              "replaceText": "={{ $json[\"модуль-7\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-8}",
+              "replaceText": "={{ $json[\"модуль-8\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-9}",
+              "replaceText": "={{ $json[\"модуль-9\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-10}",
+              "replaceText": "={{ $json[\"модуль-10\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-11}",
+              "replaceText": "={{ $json[\"модуль-11\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-12}",
+              "replaceText": "={{ $json[\"модуль-12\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-13}",
+              "replaceText": "={{ $json[\"модуль-13\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-14}",
+              "replaceText": "={{ $json[\"модуль-14\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-15}",
+              "replaceText": "={{ $json[\"модуль-15\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-16}",
+              "replaceText": "={{ $json[\"модуль-16\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м11-подмодуль-1}",
+              "replaceText": "={{ $json[\"м11-подмодуль-1\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м11-подмодуль-2}",
+              "replaceText": "={{ $json[\"м11-подмодуль-2\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м12-подмодуль-1}",
+              "replaceText": "={{ $json[\"м12-подмодуль-1\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м12-подмодуль-2}",
+              "replaceText": "={{ $json[\"м12-подмодуль-2\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м13-подмодуль-1}",
+              "replaceText": "={{ $json[\"м13-подмодуль-1\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м13-подмодуль-2}",
+              "replaceText": "={{ $json[\"м13-подмодуль-2\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м14-подмодуль-1}",
+              "replaceText": "={{ $json[\"м14-подмодуль-1\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м14-подмодуль-2}",
+              "replaceText": "={{ $json[\"м14-подмодуль-2\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м15-подмодуль-1}",
+              "replaceText": "={{ $json[\"м15-подмодуль-1\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м15-подмодуль-2}",
+              "replaceText": "={{ $json[\"м15-подмодуль-2\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м16-подмодуль-1}",
+              "replaceText": "={{ $json[\"м16-подмодуль-1\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м16-подмодуль-2}",
+              "replaceText": "={{ $json[\"м16-подмодуль-2\"] }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        3168,
+        144
+      ],
+      "id": "e7af450a-51d8-4572-ba62-7e19dbbfcfcc",
+      "name": "Update a document",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "claude-3-7-sonnet-20250219",
+          "mode": "list",
+          "cachedResultName": "claude-3-7-sonnet-20250219"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=### ИНСТРУКЦИЯ: Заполнение учебного плана\n\n**ВХОДНЫЕ ДАННЫЕ:**\n- plan_structure: {{ JSON.stringify($('generateStructure2').item.json)}}\n- knowledge: {{ $json.prof_standard.knowledge }}\n- skills: {{ $json.prof_standard.skills }}\n- functions: {{ $json.prof_standard.actions }}\n- profession_name: {{ $('parseJson').item.json.profession_exact }}\n\n**ЗАДАЧА:**\nСформировать названия модулей для учебного плана.\n\n**ПРАВИЛА:**\n1. Модуль 1: вводная формулировка о профессии\n2. Если есть модуль type=\"safety\": формулировка про охрану труда в контексте профессии\n3. Остальные модули: конкретные рабочие процессы/инструменты из functions и skills\n4. Для подмодулей: декомпозиция темы модуля на логические части\n\n**ВЫВОД - ТОЛЬКО НАЗВАНИЯ ДЛЯ ШАБЛОНА:**\n{\n  \"Название_профессии\": \"{{ $('parseJson').item.json.profession_exact }}\",\n  \"модуль-1\": \"название\",\n  \"модуль-2\": \"название\",\n  // ... все модули согласно plan_structure\n  \n  // Для программ с подмодулями добавить:\n  \"м11-подмодуль-1\": \"название\",\n  \"м11-подмодуль-2\": \"название\",\n  // ... все подмодули согласно plan_structure\n}\n\nНЕ ДОБАВЛЯТЬ topics, practical_tasks, hours или другие поля!\nТолько названия для заполнения шаблона Google Docs."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.anthropic",
+      "typeVersion": 1,
+      "position": [
+        2528,
+        144
+      ],
+      "id": "7a9cd770-5559-49e1-a5f5-c7fb54e9d153",
+      "name": "makePlan",
+      "credentials": {
+        "anthropicApi": {
+          "id": "8AkBAMDQngBh1b1w",
+          "name": "Anthropic account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const generatePlanStructure = (hours, profession, needsSafety) => {\n  const configs = {\n    256: {\n      modules: 8,\n      hours_per_module: [28, 32, 32, 32, 28, 32, 32, 28],\n      attestation: 12,\n      practicals: 8,\n      literature: 8\n    },\n    512: {\n      modules: 10,\n      hours_per_module: [46, 46, 46, 46, 46, 46, 56, 56, 56, 56],\n      attestation: 12,\n      practicals: 10,\n      literature: 10\n    },\n    1100: {\n      modules: 16,\n      hours_per_module: [50,50,50,50,50,50, 60,60,60,60, 90,90,90,90,90,90],\n      attestation: 20,\n      practicals: 22,\n      literature: 15,\n      submodules: {\"11-16\": 2}\n    },\n    1600: {\n      modules: 20,\n      hours_per_module: [50,50,50,50,50,50, 60,60,60,60, 100,100,100,100,100,100, 110,110,110,110],\n      attestation: 20,\n      practicals: 34,\n      literature: 15,\n      submodules: {\"11-16\": 2, \"17-20\": 3}\n    },\n    2048: {\n      modules: 22,\n      hours_per_module: [52,52,52,52,52,52, 64,64,64,64, 110,110,110,110,110,110, 120,120,120,120, 160,160],\n      attestation: 20,\n      practicals: 46,\n      literature: 15,\n      submodules: {\"11-16\": 2, \"17-20\": 3, \"21-22\": 4}\n    }\n  };\n  \n  const config = configs[hours];\n  if (!config) throw new Error(`Неподдерживаемое количество часов: ${hours}`);\n  \n  const template_fields = [\"Название_профессии\"];\n  \n  for (let i = 1; i <= config.modules; i++) {\n    template_fields.push(`модуль-${i}`);\n  }\n  \n  if (config.submodules) {\n    for (let [range, count] of Object.entries(config.submodules)) {\n      const [start, end] = range.split('-').map(Number);\n      for (let i = start; i <= end; i++) {\n        for (let j = 1; j <= count; j++) {\n          template_fields.push(`м${i}-подмодуль-${j}`);\n        }\n      }\n    }\n  }\n  \n  // Возвращаем массив с одним объектом для N8N\n  return [{\n    json: {\n      hours: hours,\n      profession: profession,\n      module_count: config.modules,\n      has_safety: needsSafety,\n      hours_per_module: config.hours_per_module,\n      attestation: config.attestation,\n      submodules: config.submodules || null,\n      template_fields: template_fields,\n      practicals: config.practicals,\n      literature: config.literature\n    }\n  }];\n};\n\n// В Function node N8N:\nconst hours = $input.item.json.hours;\nconst profession = $input.item.json.profession_exact;\nconst functions = $input.item.json.functions || [];\n\nconst needsSafety = functions.some(f => \n  f.toLowerCase().includes('безопасн') || \n  f.toLowerCase().includes('производств') ||\n  f.toLowerCase().includes('оборудован')\n);\n\n// Вызываем функцию - она уже возвращает правильный формат для N8N\nreturn generatePlanStructure(hours, profession, needsSafety);"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        896,
+        0
+      ],
+      "id": "0d968001-4ec7-46b4-86c5-0ff329f316b6",
+      "name": "generateStructure2"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "claude-3-7-sonnet-20250219",
+          "mode": "list",
+          "cachedResultName": "claude-3-7-sonnet-20250219"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Со страницы {{ $json.urls.join('\\n') }} собери данные по списку:\n\nДАННЫЕ\n- Код профстандарта (например: 40.116)\n- Полное название профстандарта\n- Трудовые действия (до 20 самых важных)\n- Необходимые знания (до 20 самых важных)\n- Необходимые умения (до 20 самых важных)\n\nИспользуй ТОЛЬКО данные со страницы.\n\nДобавь собранную информацию в JSON:\n\n  otf - это обощенная трудовая функция\n  actions - трудовые действия\n  \n  {\n  \"found\": true,\n  \"confidence\": 100,\n    \"prof_standard\": {\n      \"code\": string,\n      \"name\": string,\n      \"knowledge\": array,\n      \"skills\": array, \n      \"actions\": array\n    }\n  }\n\nВыведи только JSON без лишних рассуждений, результатов анализа и твоей работы\n"
+            }
+          ]
+        },
+        "options": {
+          "maxTokens": 20000,
+          "temperature": 0,
+          "topP": 0.1,
+          "topK": 10
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.anthropic",
+      "typeVersion": 1,
+      "position": [
+        1792,
+        0
+      ],
+      "id": "9115b299-f78b-46d7-8356-8eed86f1fa4a",
+      "name": "search_classinform1",
+      "credentials": {
+        "anthropicApi": {
+          "id": "8AkBAMDQngBh1b1w",
+          "name": "Anthropic account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "claude-3-7-sonnet-20250219",
+          "mode": "list",
+          "cachedResultName": "Claude Sonnet 3.7"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        2336,
+        -16
+      ],
+      "id": "6fbaca31-7945-4d67-8f80-a56e3953208f",
+      "name": "Anthropic Chat Model1",
+      "credentials": {
+        "anthropicApi": {
+          "id": "8AkBAMDQngBh1b1w",
+          "name": "Anthropic account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=### ИНСТРУКЦИЯ: Поиск информации о профессии\n\nВХОД:\n- profession_exact: {{ $('parseJson').item.json.profession_exact }}\n- trusted_domains: {{ $('Variables').item.json.trusted_domains }}\n\nЗАПРОСЫ В ПОРЯДКЕ ПРИОРИТЕТА:\n1. profession_exact должностная инструкция (доверенные домены)\n2. profession_exact профстандарт (доверенные домены)\n3. profession_exact профессиональный стандарт (доверенные домены)\n4. profession_exact должностная инструкция filetype:pdf (любые домены)\n5. profession_exact профстандарт filetype:pdf (любые домены)\n6. profession_exact требования обязанности (доверенные домены)\n\nАЛГОРИТМ:\n- Начать с запроса 1\n- Если нашел подходящий документ → извлечь данные → конец\n- Если не нашел → следующий запрос\n- Проверять ВСЕ результаты в выдаче (не ограничивать числом)\n\nДОКУМЕНТ ПОДХОДИТ ЕСЛИ:\n- Профессия совпадает или очень близка к profession_exact\n- Есть описание того, что делает специалист (минимум 5 пунктов)\n- Есть требования/знания (минимум 10)\n- Есть умения/навыки (минимум 10)\n\nИЗВЛЕКАТЬ ВСЁ, что относится к:\n- Что делает специалист (любые формулировки)\n- Что должен знать (любые формулировки)\n- Что должен уметь (любые формулировки)\n\nПримеры (не ограничиваться ими):\n- Функции, обязанности, задачи, ответственность, выполняет, отвечает за...\n- Знания, требования, компетенции, разбирается в, понимает, владеет теорией...\n- Умения, навыки, может, способен, использует, применяет, работает с...\n\nВЫХОД в формате JSON:\n{\n  \"found\": boolean,\n  \"confidence\": число (100 для запросов 1-3, 85 для 4-5, 75 для 6),\n  \"source_url\": string,\n  \"query_used\": номер запроса который сработал,\n  \"functions\": array,\n  \"knowledge\": array,\n  \"skills\": array\n}\n\nВ ответе выведи только сформированный JSON, без лишних комментариев твоего анализа даннных и хода работы",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1600,
+        -464
+      ],
+      "id": "154d614e-d1c4-4e32-8302-9e14dc5e1dc4",
+      "name": "trustedDomainsSearch"
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputString = $input.first().json.content[0].text;\n\n// Убираем \"```json\" и \"```\"\nconst cleaned = inputString.replace(/^```json\\n/, '').replace(/```$/, '');\n\n// Преобразуем в объект\nconst parsed = JSON.parse(cleaned);\n\n// В n8n Function Item нужно вернуть объект\nreturn parsed;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2720,
+        -480
+      ],
+      "id": "7ae906f9-d8ec-405e-b19e-41e0398c52c8",
+      "name": "parseJson6"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentURL": "16paXHSfOLcdTMUMnOPRzrgtsk13MRbVJXqvpes9Ft80",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "action": "replaceAll",
+              "text": "{Название_профессии}",
+              "replaceText": "={{ $json[\"Название_профессии\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-1}",
+              "replaceText": "={{ $json[\"модуль-1\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-2}",
+              "replaceText": "={{ $json[\"модуль-2\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-3}",
+              "replaceText": "={{ $json[\"модуль-3\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-4}",
+              "replaceText": "={{ $json[\"модуль-4\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-5}",
+              "replaceText": "={{ $json[\"модуль-5\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-6}",
+              "replaceText": "={{ $json[\"модуль-6\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-7}",
+              "replaceText": "={{ $json[\"модуль-7\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-8}",
+              "replaceText": "={{ $json[\"модуль-8\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-9}",
+              "replaceText": "={{ $json[\"модуль-9\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-10}",
+              "replaceText": "={{ $json[\"модуль-10\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-11}",
+              "replaceText": "={{ $json[\"модуль-11\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-12}",
+              "replaceText": "={{ $json[\"модуль-12\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-13}",
+              "replaceText": "={{ $json[\"модуль-13\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-14}",
+              "replaceText": "={{ $json[\"модуль-14\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-15}",
+              "replaceText": "={{ $json[\"модуль-15\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-16}",
+              "replaceText": "={{ $json[\"модуль-16\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м11-подмодуль-1}",
+              "replaceText": "={{ $json[\"м11-подмодуль-1\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м11-подмодуль-2}",
+              "replaceText": "={{ $json[\"м11-подмодуль-2\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м12-подмодуль-1}",
+              "replaceText": "={{ $json[\"м12-подмодуль-1\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м12-подмодуль-2}",
+              "replaceText": "={{ $json[\"м12-подмодуль-2\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м13-подмодуль-1}",
+              "replaceText": "={{ $json[\"м13-подмодуль-1\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м13-подмодуль-2}",
+              "replaceText": "={{ $json[\"м13-подмодуль-2\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м14-подмодуль-1}",
+              "replaceText": "={{ $json[\"м14-подмодуль-1\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м14-подмодуль-2}",
+              "replaceText": "={{ $json[\"м14-подмодуль-2\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м15-подмодуль-1}",
+              "replaceText": "={{ $json[\"м15-подмодуль-1\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м15-подмодуль-2}",
+              "replaceText": "={{ $json[\"м15-подмодуль-2\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м16-подмодуль-1}",
+              "replaceText": "={{ $json[\"м16-подмодуль-1\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м16-подмодуль-2}",
+              "replaceText": "={{ $json[\"м16-подмодуль-2\"] }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        2960,
+        -480
+      ],
+      "id": "afdc1e88-22a6-4dec-8835-dea3e719f0b1",
+      "name": "Update a document1",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "claude-3-7-sonnet-20250219",
+          "mode": "list",
+          "cachedResultName": "claude-3-7-sonnet-20250219"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=### ИНСТРУКЦИЯ: Заполнение учебного плана\n\n**ВХОДНЫЕ ДАННЫЕ:**\n- plan_structure: {{ JSON.stringify($('generateStructure2').item.json)}}\n- knowledge: {{ $json.prof_standard.knowledge }}\n- skills: {{ $json.prof_standard.skills }}\n- functions: {{ $json.prof_standard.actions }}\n- profession_name: {{ $('parseJson').item.json.profession_exact }}\n\n**ЗАДАЧА:**\nСформировать названия модулей для учебного плана.\n\n**ПРАВИЛА:**\n1. Модуль 1: вводная формулировка о профессии\n2. Если есть модуль type=\"safety\": формулировка про охрану труда в контексте профессии\n3. Остальные модули: конкретные рабочие процессы/инструменты из functions и skills\n4. Для подмодулей: декомпозиция темы модуля на логические части\n\n**ВЫВОД - ТОЛЬКО НАЗВАНИЯ ДЛЯ ШАБЛОНА:**\n{\n  \"Название_профессии\": \"{{ $('parseJson').item.json.profession_exact }}\",\n  \"модуль-1\": \"название\",\n  \"модуль-2\": \"название\",\n  // ... все модули согласно plan_structure\n  \n  // Для программ с подмодулями добавить:\n  \"м11-подмодуль-1\": \"название\",\n  \"м11-подмодуль-2\": \"название\",\n  // ... все подмодули согласно plan_structure\n}\n\nНЕ ДОБАВЛЯТЬ topics, practical_tasks, hours или другие поля!\nТолько названия для заполнения шаблона Google Docs."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.anthropic",
+      "typeVersion": 1,
+      "position": [
+        2384,
+        -480
+      ],
+      "id": "a759d00d-f1fc-44e2-8001-bc3f4b10ecbf",
+      "name": "makePlan1",
+      "credentials": {
+        "anthropicApi": {
+          "id": "8AkBAMDQngBh1b1w",
+          "name": "Anthropic account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "a17413fa-1043-45c1-b7a4-fab73b983172",
+              "leftValue": "={{ $json.found }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2864,
+        -176
+      ],
+      "id": "ba43ad14-2484-481c-ab2e-98d9998b5f9e",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputString = $input.first().json.content[0].text;\n\n// Убираем \"```json\" и \"```\"\nconst cleaned = inputString.replace(/^```json\\n/, '').replace(/```$/, '');\n\n// Преобразуем в объект\nconst parsed = JSON.parse(cleaned);\n\n// В n8n Function Item нужно вернуть объект\nreturn parsed;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3536,
+        -192
+      ],
+      "id": "8b45241c-f7d4-4050-9771-bfdba9386331",
+      "name": "parseJson7"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentURL": "16paXHSfOLcdTMUMnOPRzrgtsk13MRbVJXqvpes9Ft80",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "action": "replaceAll",
+              "text": "{Название_профессии}",
+              "replaceText": "={{ $json[\"Название_профессии\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-1}",
+              "replaceText": "={{ $json[\"модуль-1\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-2}",
+              "replaceText": "={{ $json[\"модуль-2\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-3}",
+              "replaceText": "={{ $json[\"модуль-3\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-4}",
+              "replaceText": "={{ $json[\"модуль-4\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-5}",
+              "replaceText": "={{ $json[\"модуль-5\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-6}",
+              "replaceText": "={{ $json[\"модуль-6\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-7}",
+              "replaceText": "={{ $json[\"модуль-7\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-8}",
+              "replaceText": "={{ $json[\"модуль-8\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-9}",
+              "replaceText": "={{ $json[\"модуль-9\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-10}",
+              "replaceText": "={{ $json[\"модуль-10\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-11}",
+              "replaceText": "={{ $json[\"модуль-11\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-12}",
+              "replaceText": "={{ $json[\"модуль-12\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-13}",
+              "replaceText": "={{ $json[\"модуль-13\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-14}",
+              "replaceText": "={{ $json[\"модуль-14\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-15}",
+              "replaceText": "={{ $json[\"модуль-15\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-16}",
+              "replaceText": "={{ $json[\"модуль-16\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м11-подмодуль-1}",
+              "replaceText": "={{ $json[\"м11-подмодуль-1\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м11-подмодуль-2}",
+              "replaceText": "={{ $json[\"м11-подмодуль-2\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м12-подмодуль-1}",
+              "replaceText": "={{ $json[\"м12-подмодуль-1\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м12-подмодуль-2}",
+              "replaceText": "={{ $json[\"м12-подмодуль-2\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м13-подмодуль-1}",
+              "replaceText": "={{ $json[\"м13-подмодуль-1\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м13-подмодуль-2}",
+              "replaceText": "={{ $json[\"м13-подмодуль-2\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м14-подмодуль-1}",
+              "replaceText": "={{ $json[\"м14-подмодуль-1\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м14-подмодуль-2}",
+              "replaceText": "={{ $json[\"м14-подмодуль-2\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м15-подмодуль-1}",
+              "replaceText": "={{ $json[\"м15-подмодуль-1\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м15-подмодуль-2}",
+              "replaceText": "={{ $json[\"м15-подмодуль-2\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м16-подмодуль-1}",
+              "replaceText": "={{ $json[\"м16-подмодуль-1\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{м16-подмодуль-2}",
+              "replaceText": "={{ $json[\"м16-подмодуль-2\"] }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        3776,
+        -192
+      ],
+      "id": "a14fec76-7c41-4499-88ca-9ecc6ceeae05",
+      "name": "Update a document2",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "5aALK5qPqcCIdTaQ",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "claude-3-7-sonnet-20250219",
+          "mode": "list",
+          "cachedResultName": "claude-3-7-sonnet-20250219"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=### ИНСТРУКЦИЯ: Заполнение учебного плана\n\n**ВХОДНЫЕ ДАННЫЕ:**\n- plan_structure: {{ JSON.stringify($('generateStructure2').item.json)}}\n- knowledge: {{ $json.prof_standard.knowledge }}\n- skills: {{ $json.prof_standard.skills }}\n- functions: {{ $json.prof_standard.actions }}\n- profession_name: {{ $('parseJson').item.json.profession_exact }}\n\n**ЗАДАЧА:**\nСформировать названия модулей для учебного плана.\n\n**ПРАВИЛА:**\n1. Модуль 1: вводная формулировка о профессии\n2. Если есть модуль type=\"safety\": формулировка про охрану труда в контексте профессии\n3. Остальные модули: конкретные рабочие процессы/инструменты из functions и skills\n4. Для подмодулей: декомпозиция темы модуля на логические части\n\n**ВЫВОД - ТОЛЬКО НАЗВАНИЯ ДЛЯ ШАБЛОНА:**\n{\n  \"Название_профессии\": \"{{ $('parseJson').item.json.profession_exact }}\",\n  \"модуль-1\": \"название\",\n  \"модуль-2\": \"название\",\n  // ... все модули согласно plan_structure\n  \n  // Для программ с подмодулями добавить:\n  \"м11-подмодуль-1\": \"название\",\n  \"м11-подмодуль-2\": \"название\",\n  // ... все подмодули согласно plan_structure\n}\n\nНЕ ДОБАВЛЯТЬ topics, practical_tasks, hours или другие поля!\nТолько названия для заполнения шаблона Google Docs."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.anthropic",
+      "typeVersion": 1,
+      "position": [
+        3136,
+        -192
+      ],
+      "id": "1b11a4e4-2667-4ad4-8a5c-6651a19fe70f",
+      "name": "makePlan2",
+      "credentials": {
+        "anthropicApi": {
+          "id": "8AkBAMDQngBh1b1w",
+          "name": "Anthropic account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Variables",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Variables": {
+      "main": [
+        [
+          {
+            "node": "plansTable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "plansTable": {
+      "main": [
+        [
+          {
+            "node": "TableAnalyse1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "TableAnalyse1": {
+      "main": [
+        [
+          {
+            "node": "parseJson",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "parseJson": {
+      "main": [
+        [
+          {
+            "node": "generateStructure2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Search classinform.ru": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "searchClassinform": {
+      "main": [
+        []
+      ]
+    },
+    "getResultsLinks": {
+      "main": [
+        [
+          {
+            "node": "search_classinform",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "trustedDomainsSearch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "getResultsLinks1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "getResultsLinks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "getJson": {
+      "main": [
+        []
+      ]
+    },
+    "parseJson1": {
+      "main": [
+        [
+          {
+            "node": "makePlan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "trustedDomainsSearch",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "searchClassinform1": {
+      "main": [
+        [
+          {
+            "node": "getJson1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "getResultsLinks1": {
+      "main": [
+        [
+          {
+            "node": "search_classinform1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "getJson1": {
+      "main": [
+        [
+          {
+            "node": "parseJson3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "parseJson3": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "parseJson2": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [],
+        []
+      ]
+    },
+    "If1": {
+      "main": [
+        [],
+        []
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "makePlan1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "wideSearch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "generateStructure": {
+      "main": [
+        []
+      ]
+    },
+    "generatePlan": {
+      "main": [
+        []
+      ]
+    },
+    "ConfidenceCase": {
+      "main": [
+        []
+      ]
+    },
+    "parseJson4": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "wideSearch": {
+      "main": [
+        [
+          {
+            "node": "parseJson4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "parseJson5": {
+      "main": [
+        [
+          {
+            "node": "Update a document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "search_classinform": {
+      "main": [
+        [
+          {
+            "node": "parseJson1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "generate_plan": {
+      "main": [
+        []
+      ]
+    },
+    "makePlan": {
+      "main": [
+        [
+          {
+            "node": "parseJson5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "generateStructure2": {
+      "main": [
+        [
+          {
+            "node": "Google Search classinform.ru",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "search_classinform1": {
+      "main": [
+        [
+          {
+            "node": "parseJson1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "wideSearch",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "trustedDomainsSearch": {
+      "main": [
+        [
+          {
+            "node": "parseJson2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "parseJson6": {
+      "main": [
+        [
+          {
+            "node": "Update a document1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "makePlan1": {
+      "main": [
+        [
+          {
+            "node": "parseJson6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "parseJson7": {
+      "main": [
+        [
+          {
+            "node": "Update a document2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "makePlan2": {
+      "main": [
+        [
+          {
+            "node": "parseJson7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "makePlan2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "versionId": "3d91518c-7d2d-4fa4-9452-bf55ca82742f",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-09-22T06:37:53.020Z",
+      "createdAt": "2025-09-22T06:37:53.020Z",
+      "role": "workflow:owner",
+      "workflowId": "UW7rVNtMXXQajD4T",
+      "projectId": "OC8FWCQSkQb0Erkk"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
