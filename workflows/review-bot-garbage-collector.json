@@ -1,0 +1,99 @@
+{
+  "updatedAt": "2026-03-31T09:43:44.803Z",
+  "createdAt": "2025-12-25T05:24:36.816Z",
+  "id": "u8DK2pcysZZbW5vT",
+  "name": "review-bot-garbage-collector",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 7
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "b3128bcf-f185-48a3-95de-fad1355843d8",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "clear",
+        "documentId": {
+          "__rl": true,
+          "value": "16trekzMWKXfYIt3x7sRZFD9cbhsioOm4GkSKMIhg7Tw",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2073623980,
+          "mode": "list",
+          "cachedResultName": "Количество отзывов в сутки",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/16trekzMWKXfYIt3x7sRZFD9cbhsioOm4GkSKMIhg7Tw/edit#gid=2073623980"
+        },
+        "keepFirstRow": true
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        0
+      ],
+      "id": "d556dd13-1636-4b4d-84b5-64e024e9efd6",
+      "name": "Clear sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Clear sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "versionId": "1fe070f6-37d8-4950-ab8c-09af520f65f8",
+  "activeVersionId": null,
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2025-12-25T05:24:36.816Z",
+      "createdAt": "2025-12-25T05:24:36.816Z",
+      "role": "workflow:owner",
+      "workflowId": "u8DK2pcysZZbW5vT",
+      "projectId": "OC8FWCQSkQb0Erkk"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
