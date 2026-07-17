@@ -1,0 +1,218 @@
+{
+  "updatedAt": "2026-05-20T08:59:19.139Z",
+  "createdAt": "2026-05-20T08:48:55.614Z",
+  "id": "4LntIQeZ4iQ3w0kW",
+  "name": "My workflow",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "adc3be74-faad-48da-bed6-ae5360cca99e",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1_H2f1qBdHVymGvstbARCRHhGyH5pPDc6Lck_0CdHmW8",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Лог",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_H2f1qBdHVymGvstbARCRHhGyH5pPDc6Lck_0CdHmW8/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        0
+      ],
+      "id": "4e339244-d0bd-445e-a5d6-b0b2ae34b219",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = $('Get row(s) in sheet').all().map(item => item.json);\n\nfunction parseDateTime(dateStr, timeStr) {\n  if (!dateStr || !timeStr) return null;\n\n  const [day, month, year] = String(dateStr).trim().split('.');\n  const [hours, minutes] = String(timeStr).trim().split(':');\n\n  if (!day || !month || !year || !hours || !minutes) return null;\n\n  return new Date(\n    Number(year),\n    Number(month) - 1,\n    Number(day),\n    Number(hours),\n    Number(minutes),\n    0\n  );\n}\n\nconst prepared = rows\n  .filter(row => {\n    const id = String(row['ID'] || '').trim();\n    const status = String(row['Статус'] || '').trim();\n\n    if (!id) return false;\n    if (id === 'ID') return false;\n    if (status === 'Статус') return false;\n    if (status === 'Статус работы') return false;\n\n    return true;\n  })\n  .map(row => ({\n    project: String(row['Проект'] || '').trim(),\n    id: String(row['ID']).trim(),\n    status: String(row['Статус'] || '').trim(),\n    started_at: parseDateTime(row['Дата'], row['Время']),\n  }))\n  .filter(row => row.started_at)\n  .sort((a, b) => {\n    if (a.id !== b.id) return a.id.localeCompare(b.id);\n    return a.started_at - b.started_at;\n  });\n\nconst result = prepared.map((row, index) => {\n  const next = prepared[index + 1];\n\n  const ended_at =\n    next && next.id === row.id\n      ? next.started_at\n      : null;\n\n  const duration_minutes = ended_at\n    ? Math.round((ended_at - row.started_at) / 1000 / 60)\n    : null;\n\n  return {\n    json: {\n      Проект: row.project,\n      ID: row.id,\n      Статус: row.status,\n      started_at: row.started_at.toISOString(),\n      ended_at: ended_at ? ended_at.toISOString() : null,\n      duration_minutes,\n    },\n  };\n});\n\nreturn result;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "473fb876-ce0c-40c7-a53b-7893bcecee27",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1_H2f1qBdHVymGvstbARCRHhGyH5pPDc6Lck_0CdHmW8",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 334240684,
+          "mode": "list",
+          "cachedResultName": "prepared_events",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_H2f1qBdHVymGvstbARCRHhGyH5pPDc6Lck_0CdHmW8/edit#gid=334240684"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $json.ID }}",
+            "status": "={{ $json[\"Статус\"] }}",
+            "started_at": "={{ $json.started_at }}",
+            "ended_at": "={{ $json.ended_at }}",
+            "duration_minutes": "={{ $json.duration_minutes }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "started_at",
+              "displayName": "started_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ended_at",
+              "displayName": "ended_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "duration_minutes",
+              "displayName": "duration_minutes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        624,
+        0
+      ],
+      "id": "f218b44e-8c10-4c36-8396-07956d52e73a",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "versionId": "4b6cbd2b-9dd8-4a25-93fb-86ed18e8fb85",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-05-20T08:48:55.614Z",
+      "createdAt": "2026-05-20T08:48:55.614Z",
+      "role": "workflow:owner",
+      "workflowId": "4LntIQeZ4iQ3w0kW",
+      "projectId": "OC8FWCQSkQb0Erkk"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
