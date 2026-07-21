@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-16T06:43:45.369Z",
+  "updatedAt": "2026-07-17T09:33:27.850Z",
   "createdAt": "2026-07-16T06:25:05.633Z",
   "id": "vHM7d8SJtPoHmfKF",
   "name": "autodoc-PK-PP-FRDO-newReestr",
@@ -1960,6 +1960,8 @@
       ],
       "id": "958072ad-d590-4c1e-a484-f68a2e1e1539",
       "name": "Clear Queue",
+      "executeOnce": true,
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -2159,8 +2161,8 @@
   },
   "staticData": null,
   "meta": null,
-  "versionId": "f6e4d256-2cc9-41f5-8cc3-8021f895f368",
-  "activeVersionId": "f6e4d256-2cc9-41f5-8cc3-8021f895f368",
+  "versionId": "66c126ea-f7c3-496a-9866-431684479cdd",
+  "activeVersionId": "66c126ea-f7c3-496a-9866-431684479cdd",
   "triggerCount": 1,
   "shared": [
     {
@@ -2172,9 +2174,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-07-16T06:30:49.156Z",
-    "createdAt": "2026-07-16T06:29:24.587Z",
-    "versionId": "f6e4d256-2cc9-41f5-8cc3-8021f895f368",
+    "updatedAt": "2026-07-17T09:33:29.205Z",
+    "createdAt": "2026-07-17T09:33:27.852Z",
+    "versionId": "66c126ea-f7c3-496a-9866-431684479cdd",
     "workflowId": "vHM7d8SJtPoHmfKF",
     "nodes": [
       {
@@ -4131,6 +4133,8 @@
         ],
         "id": "958072ad-d590-4c1e-a484-f68a2e1e1539",
         "name": "Clear Queue",
+        "executeOnce": true,
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -4324,9 +4328,9 @@
       }
     },
     "authors": "Active User",
-    "name": "Version f6e4d256",
+    "name": "Version 66c126ea",
     "description": "",
-    "autosaved": true
+    "autosaved": false
   },
   "tags": []
 }
