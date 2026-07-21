@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-13T13:58:16.231Z",
+  "updatedAt": "2026-07-17T08:01:41.246Z",
   "createdAt": "2026-03-30T10:32:08.822Z",
   "id": "rQgz3YcOV3BEXoXW",
   "name": "github-backup",
@@ -611,7 +611,7 @@
       "name": "Edit Files",
       "type": "n8n-nodes-base.github",
       "position": [
-        3856,
+        3760,
         1600
       ],
       "webhookId": "0cfd3844-d625-413e-9760-c352d50d4c79",
@@ -635,7 +635,7 @@
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        592,
+        496,
         1296
       ],
       "typeVersion": 1
@@ -1249,7 +1249,7 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "389d6f53-80c7-4f1c-be3d-8acf58479a5e",
+  "versionId": "aeab5831-0b7f-4885-a718-bcbbe227bc24",
   "activeVersionId": "389d6f53-80c7-4f1c-be3d-8acf58479a5e",
   "triggerCount": 1,
   "shared": [
