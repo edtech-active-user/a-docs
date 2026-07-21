@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-16T06:43:31.341Z",
+  "updatedAt": "2026-07-17T09:33:42.982Z",
   "createdAt": "2026-07-16T06:27:51.167Z",
   "id": "wMz0FzNx6GsO8tah",
   "name": "autodoc-RS-FRDO-newReestr",
@@ -2279,6 +2279,8 @@
       ],
       "id": "1b4e44c7-cf15-47d7-8da6-2394cd227907",
       "name": "Clear queue",
+      "executeOnce": true,
+      "retryOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -2489,8 +2491,8 @@
   },
   "staticData": null,
   "meta": null,
-  "versionId": "0b45489e-2b80-4695-9c09-0d50afa5bdf6",
-  "activeVersionId": "0b45489e-2b80-4695-9c09-0d50afa5bdf6",
+  "versionId": "deb253b6-f650-4ff6-9ce3-7ffff6627e1c",
+  "activeVersionId": "deb253b6-f650-4ff6-9ce3-7ffff6627e1c",
   "triggerCount": 1,
   "shared": [
     {
@@ -2502,9 +2504,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-07-16T06:32:18.532Z",
-    "createdAt": "2026-07-16T06:31:15.003Z",
-    "versionId": "0b45489e-2b80-4695-9c09-0d50afa5bdf6",
+    "updatedAt": "2026-07-17T09:33:43.865Z",
+    "createdAt": "2026-07-17T09:33:42.988Z",
+    "versionId": "deb253b6-f650-4ff6-9ce3-7ffff6627e1c",
     "workflowId": "wMz0FzNx6GsO8tah",
     "nodes": [
       {
@@ -4780,6 +4782,8 @@
         ],
         "id": "1b4e44c7-cf15-47d7-8da6-2394cd227907",
         "name": "Clear queue",
+        "executeOnce": true,
+        "retryOnFail": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -4984,7 +4988,7 @@
       }
     },
     "authors": "Active User",
-    "name": "Version 0b45489e",
+    "name": "Version deb253b6",
     "description": "",
     "autosaved": false
   },
