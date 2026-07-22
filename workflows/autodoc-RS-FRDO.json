@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-17T09:32:37.493Z",
+  "updatedAt": "2026-07-22T12:44:25.114Z",
   "createdAt": "2026-02-10T06:54:35.727Z",
   "id": "LVDC6da2JfAxsblA",
   "name": "autodoc-RS-FRDO",
@@ -2299,15 +2299,15 @@
         "operation": "clear",
         "documentId": {
           "__rl": true,
-          "value": "1EisJDIxaU-ua3RhLnanE_ZgnXFFY2ARkUsSuVj0pU4A",
+          "value": "1XNmY2kEPGh3_xIe7u43dELW19Gfe3yeV-p-mnj-M1C4",
           "mode": "id"
         },
         "sheetName": {
           "__rl": true,
-          "value": 1225082698,
+          "value": 2014314358,
           "mode": "list",
           "cachedResultName": "queue ФРДО",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EisJDIxaU-ua3RhLnanE_ZgnXFFY2ARkUsSuVj0pU4A/edit#gid=1225082698"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XNmY2kEPGh3_xIe7u43dELW19Gfe3yeV-p-mnj-M1C4/edit#gid=2014314358"
         },
         "keepFirstRow": true
       },
@@ -2534,8 +2534,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "35fd69ba-f376-4fa6-9e90-aa5f9785640e",
-  "activeVersionId": "35fd69ba-f376-4fa6-9e90-aa5f9785640e",
+  "versionId": "2bb24fa0-e5db-43f6-a7e2-9b7fcb2d107f",
+  "activeVersionId": "2bb24fa0-e5db-43f6-a7e2-9b7fcb2d107f",
   "triggerCount": 1,
   "shared": [
     {
@@ -2547,9 +2547,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-07-17T09:32:38.711Z",
-    "createdAt": "2026-07-17T09:32:37.500Z",
-    "versionId": "35fd69ba-f376-4fa6-9e90-aa5f9785640e",
+    "updatedAt": "2026-07-22T12:44:26.299Z",
+    "createdAt": "2026-07-22T12:44:25.117Z",
+    "versionId": "2bb24fa0-e5db-43f6-a7e2-9b7fcb2d107f",
     "workflowId": "LVDC6da2JfAxsblA",
     "nodes": [
       {
@@ -4845,15 +4845,15 @@
           "operation": "clear",
           "documentId": {
             "__rl": true,
-            "value": "1EisJDIxaU-ua3RhLnanE_ZgnXFFY2ARkUsSuVj0pU4A",
+            "value": "1XNmY2kEPGh3_xIe7u43dELW19Gfe3yeV-p-mnj-M1C4",
             "mode": "id"
           },
           "sheetName": {
             "__rl": true,
-            "value": 1225082698,
+            "value": 2014314358,
             "mode": "list",
             "cachedResultName": "queue ФРДО",
-            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EisJDIxaU-ua3RhLnanE_ZgnXFFY2ARkUsSuVj0pU4A/edit#gid=1225082698"
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XNmY2kEPGh3_xIe7u43dELW19Gfe3yeV-p-mnj-M1C4/edit#gid=2014314358"
           },
           "keepFirstRow": true
         },
@@ -5065,9 +5065,9 @@
       }
     },
     "authors": "Active User",
-    "name": "Version 35fd69ba",
+    "name": "Version 2bb24fa0",
     "description": "",
-    "autosaved": true
+    "autosaved": false
   },
   "tags": []
 }
