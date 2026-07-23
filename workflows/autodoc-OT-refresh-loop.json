@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-28T13:39:12.143Z",
+  "updatedAt": "2026-07-22T14:37:01.011Z",
   "createdAt": "2026-03-13T08:54:21.083Z",
   "id": "PNwggetcKcsuEyBH",
   "name": "autodoc-OT-refresh-loop",
@@ -53,6 +53,9 @@
       "id": "6f263631-56a4-47ff-a01e-b6343d97383d",
       "name": "SearchExistingVyp",
       "alwaysOutputData": true,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleDriveOAuth2Api": {
           "id": "jzAxR4XiEVWwbE9z",
@@ -108,6 +111,9 @@
       ],
       "id": "4982b862-841d-49ad-92f0-de9002740985",
       "name": "GetExistingVyp1",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "maxTries": 5,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -148,6 +154,8 @@
       "id": "683993e4-5ae1-499c-8133-e51dfb4f1a5d",
       "name": "DeleteStrokeFromExistingVyp",
       "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "maxTries": 5,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -170,6 +178,9 @@
       ],
       "id": "a9588e87-1bdf-4b7a-8774-ff9cc3887522",
       "name": "GetVypiskaWithNewStroke1",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -223,6 +234,9 @@
       ],
       "id": "db1e09c3-b9b0-4caf-b87b-d24769c4d165",
       "name": "AppendDataToTable1",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -252,6 +266,9 @@
       ],
       "id": "2491d650-6dd6-4831-a540-964968835f29",
       "name": "AppendEmptyStroke1",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -273,6 +290,9 @@
       ],
       "id": "e549d3d7-3aa1-400d-91d5-f1b6504213ec",
       "name": "GetExistingVyp2",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -307,6 +327,9 @@
       ],
       "id": "5300e7f1-4745-47bd-a074-a61b9f1d3de5",
       "name": "GetFilledVyp1",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -333,6 +356,9 @@
       ],
       "id": "f09bd431-e200-4784-b9b7-8396eb64cddf",
       "name": "CountingVypStrokesToOrder1",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -352,6 +378,20 @@
       ],
       "id": "1143ea77-1db9-4668-8b70-505f71c6743e",
       "name": "FindDirectEntry"
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        48,
+        208
+      ],
+      "id": "aaa5433f-8d88-43a4-ad61-ced9aa021bad",
+      "name": "Wait",
+      "webhookId": "5d18a17b-1d32-41c4-89c6-6501acaa35d5"
     }
   ],
   "connections": {
@@ -360,6 +400,11 @@
         [
           {
             "node": "SearchExistingVyp",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Wait",
             "type": "main",
             "index": 0
           }
@@ -516,8 +561,8 @@
   },
   "staticData": null,
   "meta": null,
-  "versionId": "7e40e6a1-16aa-483d-813f-88dcb38c488a",
-  "activeVersionId": "7e40e6a1-16aa-483d-813f-88dcb38c488a",
+  "versionId": "5385faad-251e-461d-bfa2-7cecbd9d4224",
+  "activeVersionId": "5385faad-251e-461d-bfa2-7cecbd9d4224",
   "triggerCount": 0,
   "shared": [
     {
@@ -529,9 +574,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-28T13:39:13.109Z",
-    "createdAt": "2026-04-28T13:39:12.144Z",
-    "versionId": "7e40e6a1-16aa-483d-813f-88dcb38c488a",
+    "updatedAt": "2026-07-22T14:37:01.975Z",
+    "createdAt": "2026-07-22T14:37:01.013Z",
+    "versionId": "5385faad-251e-461d-bfa2-7cecbd9d4224",
     "workflowId": "PNwggetcKcsuEyBH",
     "nodes": [
       {
@@ -581,6 +626,9 @@
         "id": "6f263631-56a4-47ff-a01e-b6343d97383d",
         "name": "SearchExistingVyp",
         "alwaysOutputData": true,
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleDriveOAuth2Api": {
             "id": "jzAxR4XiEVWwbE9z",
@@ -636,6 +684,9 @@
         ],
         "id": "4982b862-841d-49ad-92f0-de9002740985",
         "name": "GetExistingVyp1",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
+        "maxTries": 5,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -676,6 +727,8 @@
         "id": "683993e4-5ae1-499c-8133-e51dfb4f1a5d",
         "name": "DeleteStrokeFromExistingVyp",
         "retryOnFail": true,
+        "waitBetweenTries": 5000,
+        "maxTries": 5,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -698,6 +751,9 @@
         ],
         "id": "a9588e87-1bdf-4b7a-8774-ff9cc3887522",
         "name": "GetVypiskaWithNewStroke1",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -751,6 +807,9 @@
         ],
         "id": "db1e09c3-b9b0-4caf-b87b-d24769c4d165",
         "name": "AppendDataToTable1",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -780,6 +839,9 @@
         ],
         "id": "2491d650-6dd6-4831-a540-964968835f29",
         "name": "AppendEmptyStroke1",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -801,6 +863,9 @@
         ],
         "id": "e549d3d7-3aa1-400d-91d5-f1b6504213ec",
         "name": "GetExistingVyp2",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -835,6 +900,9 @@
         ],
         "id": "5300e7f1-4745-47bd-a074-a61b9f1d3de5",
         "name": "GetFilledVyp1",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -861,6 +929,9 @@
         ],
         "id": "f09bd431-e200-4784-b9b7-8396eb64cddf",
         "name": "CountingVypStrokesToOrder1",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -880,6 +951,20 @@
         ],
         "id": "1143ea77-1db9-4668-8b70-505f71c6743e",
         "name": "FindDirectEntry"
+      },
+      {
+        "parameters": {
+          "amount": 1
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          48,
+          208
+        ],
+        "id": "aaa5433f-8d88-43a4-ad61-ced9aa021bad",
+        "name": "Wait",
+        "webhookId": "5d18a17b-1d32-41c4-89c6-6501acaa35d5"
       }
     ],
     "connections": {
@@ -888,6 +973,11 @@
           [
             {
               "node": "SearchExistingVyp",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Wait",
               "type": "main",
               "index": 0
             }
@@ -1038,9 +1128,9 @@
       }
     },
     "authors": "Active User",
-    "name": "Version 7e40e6a1",
+    "name": "Version 5385faad",
     "description": "",
-    "autosaved": true
+    "autosaved": false
   },
   "tags": []
 }
