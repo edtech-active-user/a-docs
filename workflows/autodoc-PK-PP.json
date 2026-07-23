@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-13T11:39:56.093Z",
+  "updatedAt": "2026-07-23T11:37:40.444Z",
   "createdAt": "2025-10-23T04:12:51.205Z",
   "id": "bW5C7J4327CR8Kkq",
   "name": "autodoc-PK-PP",
@@ -10196,7 +10196,7 @@
   "settings": {
     "executionOrder": "v1",
     "timeSavedMode": "fixed",
-    "errorWorkflow": "hX15tKh83Gq3N9El",
+    "errorWorkflow": "4LntIQeZ4iQ3w0kW",
     "callerPolicy": "workflowsFromSameOwner",
     "binaryMode": "separate",
     "availableInMCP": false
@@ -10205,8 +10205,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "7e516533-8b69-464f-994c-cf74159b5e5c",
-  "activeVersionId": "7e516533-8b69-464f-994c-cf74159b5e5c",
+  "versionId": "a81063f8-c923-4f71-a143-0a34ef02d67e",
+  "activeVersionId": "a81063f8-c923-4f71-a143-0a34ef02d67e",
   "triggerCount": 1,
   "shared": [
     {
@@ -10218,9 +10218,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-07-13T11:40:01.242Z",
-    "createdAt": "2026-07-13T11:39:56.097Z",
-    "versionId": "7e516533-8b69-464f-994c-cf74159b5e5c",
+    "updatedAt": "2026-07-23T07:01:12.754Z",
+    "createdAt": "2026-07-23T07:01:11.443Z",
+    "versionId": "a81063f8-c923-4f71-a143-0a34ef02d67e",
     "workflowId": "bW5C7J4327CR8Kkq",
     "nodes": [
       {
@@ -20411,9 +20411,9 @@
       }
     },
     "authors": "Active User",
-    "name": "Version 7e516533",
+    "name": "Version a81063f8",
     "description": "",
-    "autosaved": true
+    "autosaved": false
   },
   "tags": []
 }
