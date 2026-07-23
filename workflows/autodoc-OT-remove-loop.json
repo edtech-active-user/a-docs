@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-13T10:45:09.253Z",
+  "updatedAt": "2026-07-22T14:36:26.024Z",
   "createdAt": "2026-03-13T06:24:35.859Z",
   "id": "hj2Eq6rOJJBNOWLs",
   "name": "autodoc-OT-remove-loop",
@@ -108,6 +108,9 @@
       ],
       "id": "281b2641-2c91-423b-b884-b6719586363f",
       "name": "GetExistingVyp1",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -147,6 +150,10 @@
       ],
       "id": "32b59eb2-a7bd-4bc6-be8c-1c2918379574",
       "name": "DeleteStrokeFromExistingVyp",
+      "executeOnce": false,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -247,6 +254,9 @@
       ],
       "id": "cdef6913-d6c6-41b1-8e5b-78e929a3b28a",
       "name": "Delete a file",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleDriveOAuth2Api": {
           "id": "jzAxR4XiEVWwbE9z",
@@ -266,6 +276,20 @@
       ],
       "id": "a640cb5d-d2da-4670-8089-d955e782efe6",
       "name": "FindDirectEntry"
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        48,
+        176
+      ],
+      "id": "5329d2d4-4d3f-4c48-812f-ce6eee248499",
+      "name": "Wait",
+      "webhookId": "31c874a4-f18e-468c-a5d4-16d081cb4ff5"
     }
   ],
   "connections": {
@@ -274,6 +298,11 @@
         [
           {
             "node": "SearchExistingVyp",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Wait",
             "type": "main",
             "index": 0
           }
@@ -374,8 +403,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "b92034fc-3cbf-424a-995e-b8aad3cf759f",
-  "activeVersionId": "b92034fc-3cbf-424a-995e-b8aad3cf759f",
+  "versionId": "b4da70ab-470a-4f18-a673-255197464ff3",
+  "activeVersionId": "3673791a-1838-4285-bda2-6b2f5ee7771e",
   "triggerCount": 0,
   "shared": [
     {
@@ -387,9 +416,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-13T10:45:15.618Z",
-    "createdAt": "2026-04-13T10:45:09.256Z",
-    "versionId": "b92034fc-3cbf-424a-995e-b8aad3cf759f",
+    "updatedAt": "2026-07-22T14:36:22.789Z",
+    "createdAt": "2026-07-22T14:36:21.701Z",
+    "versionId": "3673791a-1838-4285-bda2-6b2f5ee7771e",
     "workflowId": "hj2Eq6rOJJBNOWLs",
     "nodes": [
       {
@@ -494,6 +523,9 @@
         ],
         "id": "281b2641-2c91-423b-b884-b6719586363f",
         "name": "GetExistingVyp1",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -533,6 +565,10 @@
         ],
         "id": "32b59eb2-a7bd-4bc6-be8c-1c2918379574",
         "name": "DeleteStrokeFromExistingVyp",
+        "executeOnce": false,
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -633,6 +669,9 @@
         ],
         "id": "cdef6913-d6c6-41b1-8e5b-78e929a3b28a",
         "name": "Delete a file",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleDriveOAuth2Api": {
             "id": "jzAxR4XiEVWwbE9z",
@@ -652,6 +691,20 @@
         ],
         "id": "a640cb5d-d2da-4670-8089-d955e782efe6",
         "name": "FindDirectEntry"
+      },
+      {
+        "parameters": {
+          "amount": 1
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          112,
+          112
+        ],
+        "id": "5329d2d4-4d3f-4c48-812f-ce6eee248499",
+        "name": "Wait",
+        "webhookId": "31c874a4-f18e-468c-a5d4-16d081cb4ff5"
       }
     ],
     "connections": {
@@ -660,6 +713,11 @@
           [
             {
               "node": "SearchExistingVyp",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Wait",
               "type": "main",
               "index": 0
             }
@@ -752,7 +810,7 @@
       }
     },
     "authors": "Active User",
-    "name": "Version b92034fc",
+    "name": "Version 3673791a",
     "description": "",
     "autosaved": true
   },
