@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-13T10:45:51.318Z",
+  "updatedAt": "2026-07-22T14:36:40.641Z",
   "createdAt": "2026-03-12T09:55:26.934Z",
   "id": "qEjEz3ATzDQY0Y25",
   "name": "autodoc-OT-add-loop",
@@ -104,6 +104,9 @@
       ],
       "id": "2384bffd-93bf-4508-b8a0-9ef7bffeb696",
       "name": "CopyNewVypTemplate",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleDriveOAuth2Api": {
           "id": "jzAxR4XiEVWwbE9z",
@@ -151,6 +154,8 @@
       "id": "716f2f90-23fe-46f8-b440-747a38b3c1a5",
       "name": "UpdateBaseNewVypFields",
       "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleApi": {
           "id": "86ekhh3rUWlEgF4Y",
@@ -231,6 +236,9 @@
       ],
       "id": "9ac4fac3-436a-4340-9f07-dc1ff2d8d4d7",
       "name": "UpdateVypCounter",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -252,6 +260,9 @@
       ],
       "id": "70f1deb4-0f5e-4e98-a352-e6764b6e62be",
       "name": "GetVypiskaWithNewStroke",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -304,6 +315,9 @@
       ],
       "id": "6aeb4825-31bb-47cb-8c1d-04f14b41f6eb",
       "name": "AppendDataToTable",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -333,6 +347,9 @@
       ],
       "id": "5689b602-23fa-41ac-a5d1-51efc401df5c",
       "name": "AppendEmptyStroke",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -354,6 +371,9 @@
       ],
       "id": "67868e01-b700-4030-9768-865082bfec08",
       "name": "GetClearVpypiska",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -388,6 +408,9 @@
       ],
       "id": "562ced52-dc76-447d-b36b-06c84560e508",
       "name": "GetFilledVyp",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -414,6 +437,9 @@
       ],
       "id": "4e088f2e-0d39-4e87-ba9e-dcf163121135",
       "name": "CountingVypStrokesToOrder",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -568,6 +594,9 @@
       ],
       "id": "15f07702-3772-4f03-843f-99c811f50b5c",
       "name": "readCounters",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -701,6 +730,9 @@
       ],
       "id": "1878f79a-028d-45a1-9101-525cb0783001",
       "name": "GetVypiskaWithNewStroke1",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -754,6 +786,9 @@
       ],
       "id": "754c59fa-4fd1-4289-b3f7-4cd717f624de",
       "name": "AppendDataToTable1",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -783,6 +818,9 @@
       ],
       "id": "bbc7d801-f283-4df6-8c42-e242c9fa1b39",
       "name": "AppendEmptyStroke1",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -804,6 +842,9 @@
       ],
       "id": "95d3679d-cfe5-45f1-95c2-118b8d405209",
       "name": "GetExistingVyp2",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -838,6 +879,9 @@
       ],
       "id": "273aecc9-9416-498a-a214-bfde091ad96b",
       "name": "GetFilledVyp1",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -864,6 +908,9 @@
       ],
       "id": "477333cd-306c-4d77-bd6a-4368fd314971",
       "name": "CountingVypStrokesToOrder1",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -897,12 +944,29 @@
       ],
       "id": "b4ec2873-867b-4f88-8311-073d41dfeec8",
       "name": "GetExistingVyp",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
           "name": "with.edtech@gmail.com"
         }
       }
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -2096,
+        112
+      ],
+      "id": "dda209a5-4a70-4edc-9e63-f406f272dd08",
+      "name": "Wait",
+      "webhookId": "0f98ca7f-92ca-40d0-a830-d17d332c7178"
     }
   ],
   "connections": {
@@ -1082,6 +1146,11 @@
             "node": "SearchExistingVyp",
             "type": "main",
             "index": 0
+          },
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
           }
         ]
       ]
@@ -1228,8 +1297,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "4263ab21-618b-441e-b30f-c7e4786813fa",
-  "activeVersionId": "4263ab21-618b-441e-b30f-c7e4786813fa",
+  "versionId": "bad0998e-9da6-483c-8c0a-831085b3db6d",
+  "activeVersionId": "bad0998e-9da6-483c-8c0a-831085b3db6d",
   "triggerCount": 0,
   "shared": [
     {
@@ -1241,9 +1310,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-13T10:45:52.535Z",
-    "createdAt": "2026-04-13T10:45:51.319Z",
-    "versionId": "4263ab21-618b-441e-b30f-c7e4786813fa",
+    "updatedAt": "2026-07-22T14:36:41.756Z",
+    "createdAt": "2026-07-22T14:36:40.643Z",
+    "versionId": "bad0998e-9da6-483c-8c0a-831085b3db6d",
     "workflowId": "qEjEz3ATzDQY0Y25",
     "nodes": [
       {
@@ -1344,6 +1413,9 @@
         ],
         "id": "2384bffd-93bf-4508-b8a0-9ef7bffeb696",
         "name": "CopyNewVypTemplate",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleDriveOAuth2Api": {
             "id": "jzAxR4XiEVWwbE9z",
@@ -1391,6 +1463,8 @@
         "id": "716f2f90-23fe-46f8-b440-747a38b3c1a5",
         "name": "UpdateBaseNewVypFields",
         "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleApi": {
             "id": "86ekhh3rUWlEgF4Y",
@@ -1471,6 +1545,9 @@
         ],
         "id": "9ac4fac3-436a-4340-9f07-dc1ff2d8d4d7",
         "name": "UpdateVypCounter",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -1492,6 +1569,9 @@
         ],
         "id": "70f1deb4-0f5e-4e98-a352-e6764b6e62be",
         "name": "GetVypiskaWithNewStroke",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -1544,6 +1624,9 @@
         ],
         "id": "6aeb4825-31bb-47cb-8c1d-04f14b41f6eb",
         "name": "AppendDataToTable",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -1573,6 +1656,9 @@
         ],
         "id": "5689b602-23fa-41ac-a5d1-51efc401df5c",
         "name": "AppendEmptyStroke",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -1594,6 +1680,9 @@
         ],
         "id": "67868e01-b700-4030-9768-865082bfec08",
         "name": "GetClearVpypiska",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -1628,6 +1717,9 @@
         ],
         "id": "562ced52-dc76-447d-b36b-06c84560e508",
         "name": "GetFilledVyp",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -1654,6 +1746,9 @@
         ],
         "id": "4e088f2e-0d39-4e87-ba9e-dcf163121135",
         "name": "CountingVypStrokesToOrder",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -1808,6 +1903,9 @@
         ],
         "id": "15f07702-3772-4f03-843f-99c811f50b5c",
         "name": "readCounters",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -1941,6 +2039,9 @@
         ],
         "id": "1878f79a-028d-45a1-9101-525cb0783001",
         "name": "GetVypiskaWithNewStroke1",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -1994,6 +2095,9 @@
         ],
         "id": "754c59fa-4fd1-4289-b3f7-4cd717f624de",
         "name": "AppendDataToTable1",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -2023,6 +2127,9 @@
         ],
         "id": "bbc7d801-f283-4df6-8c42-e242c9fa1b39",
         "name": "AppendEmptyStroke1",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -2044,6 +2151,9 @@
         ],
         "id": "95d3679d-cfe5-45f1-95c2-118b8d405209",
         "name": "GetExistingVyp2",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -2078,6 +2188,9 @@
         ],
         "id": "273aecc9-9416-498a-a214-bfde091ad96b",
         "name": "GetFilledVyp1",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -2104,6 +2217,9 @@
         ],
         "id": "477333cd-306c-4d77-bd6a-4368fd314971",
         "name": "CountingVypStrokesToOrder1",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -2137,12 +2253,29 @@
         ],
         "id": "b4ec2873-867b-4f88-8311-073d41dfeec8",
         "name": "GetExistingVyp",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
             "name": "with.edtech@gmail.com"
           }
         }
+      },
+      {
+        "parameters": {
+          "amount": 1
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          -2096,
+          112
+        ],
+        "id": "dda209a5-4a70-4edc-9e63-f406f272dd08",
+        "name": "Wait",
+        "webhookId": "0f98ca7f-92ca-40d0-a830-d17d332c7178"
       }
     ],
     "connections": {
@@ -2322,6 +2455,11 @@
               "node": "SearchExistingVyp",
               "type": "main",
               "index": 0
+            },
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
             }
           ]
         ]
@@ -2460,7 +2598,7 @@
       }
     },
     "authors": "Active User",
-    "name": "Version 4263ab21",
+    "name": "Version bad0998e",
     "description": "",
     "autosaved": false
   },
