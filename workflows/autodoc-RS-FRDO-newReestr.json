@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-17T09:33:42.982Z",
+  "updatedAt": "2026-07-23T07:04:32.705Z",
   "createdAt": "2026-07-16T06:27:51.167Z",
   "id": "wMz0FzNx6GsO8tah",
   "name": "autodoc-RS-FRDO-newReestr",
@@ -227,7 +227,7 @@
           "value": "16PLoZb3JTMv2oy3SBL9w5bseyDdq6avG9uBw8fpMBxM",
           "mode": "id"
         },
-        "name": "=РС:{{ $now.format('dd.MM.yyyy') }}",
+        "name": "=АНО РС:{{ $now.format('dd.MM.yyyy') }}",
         "sameFolder": false,
         "driveId": {
           "__rl": true,
@@ -2491,8 +2491,8 @@
   },
   "staticData": null,
   "meta": null,
-  "versionId": "deb253b6-f650-4ff6-9ce3-7ffff6627e1c",
-  "activeVersionId": "deb253b6-f650-4ff6-9ce3-7ffff6627e1c",
+  "versionId": "50dbe364-e97b-4e64-a3f6-280a0be13074",
+  "activeVersionId": "50dbe364-e97b-4e64-a3f6-280a0be13074",
   "triggerCount": 1,
   "shared": [
     {
@@ -2504,9 +2504,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-07-17T09:33:43.865Z",
-    "createdAt": "2026-07-17T09:33:42.988Z",
-    "versionId": "deb253b6-f650-4ff6-9ce3-7ffff6627e1c",
+    "updatedAt": "2026-07-23T07:04:35.813Z",
+    "createdAt": "2026-07-23T07:04:15.711Z",
+    "versionId": "50dbe364-e97b-4e64-a3f6-280a0be13074",
     "workflowId": "wMz0FzNx6GsO8tah",
     "nodes": [
       {
@@ -2730,7 +2730,7 @@
             "value": "16PLoZb3JTMv2oy3SBL9w5bseyDdq6avG9uBw8fpMBxM",
             "mode": "id"
           },
-          "name": "=РС:{{ $now.format('dd.MM.yyyy') }}",
+          "name": "=АНО РС:{{ $now.format('dd.MM.yyyy') }}",
           "sameFolder": false,
           "driveId": {
             "__rl": true,
@@ -4988,9 +4988,9 @@
       }
     },
     "authors": "Active User",
-    "name": "Version deb253b6",
+    "name": "Version 50dbe364",
     "description": "",
-    "autosaved": false
+    "autosaved": true
   },
   "tags": []
 }
