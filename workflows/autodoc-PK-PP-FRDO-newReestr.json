@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-17T09:33:27.850Z",
+  "updatedAt": "2026-07-23T07:05:07.213Z",
   "createdAt": "2026-07-16T06:25:05.633Z",
   "id": "vHM7d8SJtPoHmfKF",
   "name": "autodoc-PK-PP-FRDO-newReestr",
@@ -239,7 +239,7 @@
           "value": "1kJdBHOG61uGAWjWrDmj1JXwhwvR2MshVj8Ii82PCOik",
           "mode": "id"
         },
-        "name": "=ПК-ПП:{{ $now.format('dd.MM.yyyy') }}",
+        "name": "=АНО ПК-ПП:{{ $now.format('dd.MM.yyyy') }}",
         "sameFolder": false,
         "driveId": {
           "__rl": true,
@@ -2161,8 +2161,8 @@
   },
   "staticData": null,
   "meta": null,
-  "versionId": "66c126ea-f7c3-496a-9866-431684479cdd",
-  "activeVersionId": "66c126ea-f7c3-496a-9866-431684479cdd",
+  "versionId": "7e12adac-3e34-4371-a601-ee735a396f72",
+  "activeVersionId": "7e12adac-3e34-4371-a601-ee735a396f72",
   "triggerCount": 1,
   "shared": [
     {
@@ -2174,9 +2174,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-07-17T09:33:29.205Z",
-    "createdAt": "2026-07-17T09:33:27.852Z",
-    "versionId": "66c126ea-f7c3-496a-9866-431684479cdd",
+    "updatedAt": "2026-07-23T07:05:08.323Z",
+    "createdAt": "2026-07-23T07:05:07.216Z",
+    "versionId": "7e12adac-3e34-4371-a601-ee735a396f72",
     "workflowId": "vHM7d8SJtPoHmfKF",
     "nodes": [
       {
@@ -2412,7 +2412,7 @@
             "value": "1kJdBHOG61uGAWjWrDmj1JXwhwvR2MshVj8Ii82PCOik",
             "mode": "id"
           },
-          "name": "=ПК-ПП:{{ $now.format('dd.MM.yyyy') }}",
+          "name": "=АНО ПК-ПП:{{ $now.format('dd.MM.yyyy') }}",
           "sameFolder": false,
           "driveId": {
             "__rl": true,
@@ -4328,9 +4328,9 @@
       }
     },
     "authors": "Active User",
-    "name": "Version 66c126ea",
+    "name": "Version 7e12adac",
     "description": "",
-    "autosaved": false
+    "autosaved": true
   },
   "tags": []
 }
