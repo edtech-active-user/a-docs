@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-04-28T14:34:25.330Z",
+  "updatedAt": "2026-07-22T13:10:08.603Z",
   "createdAt": "2026-03-02T04:58:11.042Z",
   "id": "GH7moINZwDUlmWbK",
   "name": "autodoc-OT",
@@ -5845,7 +5845,9 @@
       ],
       "id": "8923589a-f492-4e54-94ec-bd8c91300852",
       "name": "add",
-      "retryOnFail": true
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
     },
     {
       "parameters": {
@@ -5892,7 +5894,9 @@
       ],
       "id": "841357fa-149a-459f-a98f-0cd23fd39baf",
       "name": "remove",
-      "retryOnFail": true
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
     },
     {
       "parameters": {
@@ -5939,7 +5943,9 @@
       ],
       "id": "02e124b7-bfcd-4365-a4cd-ec8d1e39b08a",
       "name": "refresh",
-      "retryOnFail": true
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
     },
     {
       "parameters": {
@@ -9348,8 +9354,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "ea33176b-a708-4d15-82ea-9b1236a1ce96",
-  "activeVersionId": "ea33176b-a708-4d15-82ea-9b1236a1ce96",
+  "versionId": "a87a46de-be29-45fa-a97c-23e7a560e2aa",
+  "activeVersionId": "a87a46de-be29-45fa-a97c-23e7a560e2aa",
   "triggerCount": 1,
   "shared": [
     {
@@ -9361,9 +9367,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-04-28T14:34:37.715Z",
-    "createdAt": "2026-04-28T14:34:25.337Z",
-    "versionId": "ea33176b-a708-4d15-82ea-9b1236a1ce96",
+    "updatedAt": "2026-07-22T13:10:09.748Z",
+    "createdAt": "2026-07-22T13:10:08.612Z",
+    "versionId": "a87a46de-be29-45fa-a97c-23e7a560e2aa",
     "workflowId": "GH7moINZwDUlmWbK",
     "nodes": [
       {
@@ -15205,7 +15211,9 @@
         ],
         "id": "8923589a-f492-4e54-94ec-bd8c91300852",
         "name": "add",
-        "retryOnFail": true
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000
       },
       {
         "parameters": {
@@ -15252,7 +15260,9 @@
         ],
         "id": "841357fa-149a-459f-a98f-0cd23fd39baf",
         "name": "remove",
-        "retryOnFail": true
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000
       },
       {
         "parameters": {
@@ -15299,7 +15309,9 @@
         ],
         "id": "02e124b7-bfcd-4365-a4cd-ec8d1e39b08a",
         "name": "refresh",
-        "retryOnFail": true
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000
       },
       {
         "parameters": {
@@ -18697,7 +18709,7 @@
       }
     },
     "authors": "Active User",
-    "name": "Version ea33176b",
+    "name": "Version a87a46de",
     "description": "",
     "autosaved": true
   },
