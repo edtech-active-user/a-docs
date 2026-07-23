@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-03-31T09:53:16.826Z",
+  "updatedAt": "2026-07-22T14:36:06.754Z",
   "createdAt": "2026-03-10T10:00:09.866Z",
   "id": "PWvm7ssLmLAV7lWT",
   "name": "autodoc-OT-vypiska-inner-loop",
@@ -20,6 +20,9 @@
       ],
       "id": "b0a09103-6a38-4fa5-858f-09707a09e6b9",
       "name": "GetVypiskaWithNewStroke",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -72,6 +75,9 @@
       ],
       "id": "3321279e-5d15-42d3-9def-854a33561fd4",
       "name": "AppendDataToTable",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -101,6 +107,9 @@
       ],
       "id": "2a90f323-dd6d-4e77-896e-10fcd250f39e",
       "name": "AppendEmptyStroke",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -122,6 +131,9 @@
       ],
       "id": "4ab21602-3625-4998-8a7d-40375825bc7e",
       "name": "GetClearVpypiska",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleDocsOAuth2Api": {
           "id": "5aALK5qPqcCIdTaQ",
@@ -154,6 +166,20 @@
       ],
       "id": "86ab19ed-ea22-4fbd-b5ef-fc960f6bf20d",
       "name": "InputPersonData"
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -368,
+        192
+      ],
+      "id": "c65c4ce5-93ef-459f-8533-e1dd40cefa3a",
+      "name": "Wait",
+      "webhookId": "da08b762-8b3b-4127-97bb-2fc06e4dcbb3"
     }
   ],
   "connections": {
@@ -219,6 +245,11 @@
             "node": "GetClearVpypiska",
             "type": "main",
             "index": 0
+          },
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
           }
         ]
       ]
@@ -229,8 +260,8 @@
   },
   "staticData": null,
   "meta": null,
-  "versionId": "c5c16a63-3952-4b3f-bc3e-fe466f680ea7",
-  "activeVersionId": "c5c16a63-3952-4b3f-bc3e-fe466f680ea7",
+  "versionId": "21ebdf2a-e1e9-45de-a4a3-61edd4c51a6a",
+  "activeVersionId": "21ebdf2a-e1e9-45de-a4a3-61edd4c51a6a",
   "triggerCount": 0,
   "shared": [
     {
@@ -242,9 +273,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-03-24T06:19:46.445Z",
-    "createdAt": "2026-03-24T06:19:43.969Z",
-    "versionId": "c5c16a63-3952-4b3f-bc3e-fe466f680ea7",
+    "updatedAt": "2026-07-22T14:36:08.172Z",
+    "createdAt": "2026-07-22T14:36:06.755Z",
+    "versionId": "21ebdf2a-e1e9-45de-a4a3-61edd4c51a6a",
     "workflowId": "PWvm7ssLmLAV7lWT",
     "nodes": [
       {
@@ -261,6 +292,9 @@
         ],
         "id": "b0a09103-6a38-4fa5-858f-09707a09e6b9",
         "name": "GetVypiskaWithNewStroke",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -313,6 +347,9 @@
         ],
         "id": "3321279e-5d15-42d3-9def-854a33561fd4",
         "name": "AppendDataToTable",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -342,6 +379,9 @@
         ],
         "id": "2a90f323-dd6d-4e77-896e-10fcd250f39e",
         "name": "AppendEmptyStroke",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -363,6 +403,9 @@
         ],
         "id": "4ab21602-3625-4998-8a7d-40375825bc7e",
         "name": "GetClearVpypiska",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleDocsOAuth2Api": {
             "id": "5aALK5qPqcCIdTaQ",
@@ -395,6 +438,20 @@
         ],
         "id": "86ab19ed-ea22-4fbd-b5ef-fc960f6bf20d",
         "name": "InputPersonData"
+      },
+      {
+        "parameters": {
+          "amount": 1
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          -368,
+          192
+        ],
+        "id": "c65c4ce5-93ef-459f-8533-e1dd40cefa3a",
+        "name": "Wait",
+        "webhookId": "da08b762-8b3b-4127-97bb-2fc06e4dcbb3"
       }
     ],
     "connections": {
@@ -460,15 +517,20 @@
               "node": "GetClearVpypiska",
               "type": "main",
               "index": 0
+            },
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
             }
           ]
         ]
       }
     },
     "authors": "Active User",
-    "name": "Version c5c16a63",
+    "name": "Version 21ebdf2a",
     "description": "",
-    "autosaved": true
+    "autosaved": false
   },
   "tags": []
 }
