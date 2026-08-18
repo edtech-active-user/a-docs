@@ -1,0 +1,288 @@
+{
+  "updatedAt": "2026-08-18T06:29:46.824Z",
+  "createdAt": "2026-08-18T06:11:48.788Z",
+  "id": "oKNPNF7epqCw7K9O",
+  "name": "My workflow 2",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://opendata.digital.gov.ru/downloads/DEF-9xx.csv?1787033174206",
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "91e563d1-2006-41ab-a1c5-853763f98e58",
+      "name": "Download Number Database"
+    },
+    {
+      "parameters": {
+        "options": {
+          "delimiter": ";",
+          "encoding": "utf-8",
+          "relaxQuotes": true
+        }
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "e6f02012-a2d7-4a5a-9c8f-df6e9948d832",
+      "name": "Convert CSV to JSON"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "9hFJtuPHCs89twz9",
+          "mode": "list",
+          "cachedResultName": "Official Phone Dataset",
+          "cachedResultUrl": "/projects/OC8FWCQSkQb0Erkk/datatables/9hFJtuPHCs89twz9"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "DEF": "={{ $json[\"﻿АВС/ DEF\"] }}",
+            "FROM": "={{ $json[\"От\"] }}",
+            "TO": "={{ $json[\"До\"] }}",
+            "Capacity": "={{ $json[\"Емкость\"] }}",
+            "Operator": "={{ $json[\"Оператор\"] }}",
+            "Territory": "={{ $json[\"Территория ГАР\"] }}",
+            "Region": "={{ $json[\"Регион\"] }}",
+            "INN": "={{ $json[\"ИНН\"] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "DEF",
+              "displayName": "DEF",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "FROM",
+              "displayName": "FROM",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "TO",
+              "displayName": "TO",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Capacity",
+              "displayName": "Capacity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Operator",
+              "displayName": "Operator",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Region",
+              "displayName": "Region",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Territory",
+              "displayName": "Territory",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "INN",
+              "displayName": "INN",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        624,
+        64
+      ],
+      "id": "9a80a42d-355a-43f2-b341-c48bd2704370",
+      "name": "Insert row"
+    },
+    {
+      "parameters": {
+        "operation": "deleteRows",
+        "dataTableId": {
+          "__rl": true,
+          "value": "9hFJtuPHCs89twz9",
+          "mode": "list",
+          "cachedResultName": "Official Phone Dataset",
+          "cachedResultUrl": "/projects/OC8FWCQSkQb0Erkk/datatables/9hFJtuPHCs89twz9"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "DEF",
+              "condition": "isNotEmpty"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        624,
+        -112
+      ],
+      "id": "c5adf2e4-c15e-4f5c-90b1-c80efddc3d25",
+      "name": "Delete row(s)",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 3
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        16,
+        0
+      ],
+      "id": "3a5ab40f-085b-46b7-879a-ddb644738489",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "path": "b7a1d1c0-6636-43ad-821e-ec01e130aee8",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        16,
+        224
+      ],
+      "id": "1b0adb25-6360-488d-8ebf-606fecf1273a",
+      "name": "Webhook",
+      "webhookId": "b7a1d1c0-6636-43ad-821e-ec01e130aee8"
+    }
+  ],
+  "connections": {
+    "Download Number Database": {
+      "main": [
+        [
+          {
+            "node": "Convert CSV to JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert CSV to JSON": {
+      "main": [
+        [
+          {
+            "node": "Delete row(s)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Insert row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Download Number Database",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "versionId": "cc6114d5-3318-4866-856e-84b7e0ff1036",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-08-18T06:11:48.788Z",
+      "createdAt": "2026-08-18T06:11:48.788Z",
+      "role": "workflow:owner",
+      "workflowId": "oKNPNF7epqCw7K9O",
+      "projectId": "OC8FWCQSkQb0Erkk"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
