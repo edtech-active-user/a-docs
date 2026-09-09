@@ -1,0 +1,601 @@
+{
+  "updatedAt": "2026-09-09T09:53:00.246Z",
+  "createdAt": "2026-08-19T11:23:14.232Z",
+  "id": "E1A6Ouo4GmBByMWE",
+  "name": "Распознавание данных документов Yandex OCR v2",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "passport-parse",
+        "responseMode": "responseNode",
+        "options": {
+          "rawBody": false
+        }
+      },
+      "id": "7ebae815-e751-4494-8a83-04b01e1c4ca2",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -816,
+        272
+      ],
+      "webhookId": "a1000000-0000-4000-8000-0000000000ff"
+    },
+    {
+      "parameters": {
+        "jsCode": "const config = {\n  yandexFolderId: 'b1gk4dm4vthtnce2m2ip',\n  gptModel: 'yandexgpt-5-lite'\n};\n\n// ВАЖНО: нода стоит в разрыве между Webhook и Prepare inputs, поэтому она обязана\n// пропускать через себя и json, и binary вебхука. Иначе файлы и текст теряются здесь.\nconst items = $input.all();\nif (!items.length) return [{ json: { config } }];\n\nreturn items.map(item => ({\n  json: { ...item.json, config },\n  binary: item.binary\n}));"
+      },
+      "id": "f4aa78f0-2700-4530-bf8d-c583caabe316",
+      "name": "Config",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -592,
+        272
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst first = items[0] || { json: {} };\n// body приходит с Webhook и пропускается нодой Config без изменений\nconst body = first.json.body || first.json || {};\nconst freeText = String(body.text ?? body.freeText ?? body.message ?? '').trim();\nconst hasBinaryAnywhere = items.some(item => Object.keys(item.binary || {}).length > 0);\n\nconst guessMime = (fileName, mimeType) => {\n  const value = String(mimeType || '').toLowerCase();\n  if (value === 'image/jpg') return 'image/jpeg';\n  if (value === 'image/jpeg' || value === 'image/png' || value === 'application/pdf') return value;\n  const ext = String(fileName || '').toLowerCase().split('.').pop();\n  if (ext === 'png') return 'image/png';\n  if (ext === 'pdf') return 'application/pdf';\n  return 'image/jpeg';\n};\n\n// Здесь ещё не кодируем в base64: сначала картинка должна пройти ресайз,\n// поэтому binary переносим под фиксированный ключ data и отдаём дальше как есть.\nconst out = [];\nfor (let index = 0; index < items.length; index++) {\n  const binary = items[index].binary || {};\n  for (const key of Object.keys(binary)) {\n    const meta = binary[key] || {};\n    out.push({\n      json: {\n        fileIndex: out.length,\n        hasFile: true,\n        fileName: meta.fileName || key,\n        mimeType: guessMime(meta.fileName, meta.mimeType),\n        freeText\n      },\n      binary: { data: meta }\n    });\n  }\n}\n\nif (!out.length) {\n  if (!freeText) {\n    throw new Error('Webhook не передал ни файлов, ни текста. Проверьте, что запрос multipart/form-data и что промежуточные ноды пропускают binary.');\n  }\n  out.push({ json: { fileIndex: 0, hasFile: false, fileName: '', mimeType: null, base64: '', freeText } });\n}\nif (!out.some(item => item.json.hasFile) && hasBinaryAnywhere) {\n  throw new Error('Бинарные данные есть на входе, но не прочитаны.');\n}\nreturn out;"
+      },
+      "id": "c078091c-b097-451e-b0d2-667ef079ae2c",
+      "name": "Prepare inputs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -384,
+        272
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1000000-0000-4000-8000-000000000001",
+              "leftValue": "={{ $json.hasFile }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "b0bfb6c6-f879-488f-adef-3d19c94a6c60",
+      "name": "Has file?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -160,
+        272
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "resize",
+        "width": 3000,
+        "height": 3000,
+        "resizeOption": "onlyIfLarger",
+        "options": {}
+      },
+      "id": "a20d5456-af91-47f8-a29e-be2434994d5d",
+      "name": "Resize image",
+      "type": "n8n-nodes-base.editImage",
+      "typeVersion": 1,
+      "position": [
+        64,
+        144
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst limitBytes = 10 * 1024 * 1024;\nconst out = [];\n\nfor (let index = 0; index < items.length; index++) {\n  const item = items[index];\n  if (!item.json.hasFile) {\n    out.push({ json: { ...item.json, base64: '' } });\n    continue;\n  }\n\n  const meta = (item.binary || {}).data || {};\n  const buffer = await this.helpers.getBinaryDataBuffer(index, 'data');\n\n  if (buffer.length > limitBytes) {\n    throw new Error(\n      'Файл ' + item.json.fileName + ' весит ' + Math.round(buffer.length / 1048576) +\n      ' МБ после уменьшения при лимите Yandex в 10 МБ. Чаще всего это PNG-скриншот: пересохраните в JPEG или уменьшите ширину в ноде Resize image.'\n    );\n  }\n\n  const mimeType = String(meta.mimeType || '').toLowerCase();\n  out.push({ json: {\n    ...item.json,\n    mimeType: (mimeType === 'image/jpeg' || mimeType === 'image/png' || mimeType === 'application/pdf') ? mimeType : item.json.mimeType,\n    sizeBytes: buffer.length,\n    base64: buffer.toString('base64')\n  } });\n}\n\nreturn out;"
+      },
+      "id": "f2440cdb-d039-4937-a4e7-fb8c483166bf",
+      "name": "Encode base64",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        144
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ocr.api.cloud.yandex.net/ocr/v1/recognizeText",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-folder-id",
+              "value": "={{ $('Config').first().json.config.yandexFolderId }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ mimeType: $json.mimeType, languageCodes: ['ru','en'], model: 'page', content: $json.base64 }) }}",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 1200
+            }
+          },
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          },
+          "timeout": 120000
+        }
+      },
+      "id": "77a46f1d-ade8-478f-b964-e5456b484109",
+      "name": "OCR page",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        512,
+        144
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000,
+      "alwaysOutputData": true,
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "BeQyQBPwcRZ5qaw2",
+          "name": "Yandex Cloud"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const sources = $('Encode base64').all().map(item => item.json).filter(item => item.hasFile);\nconst responses = $input.all().map(item => item.json);\n\nfunction findAnnotation(value) {\n  if (!value || typeof value !== 'object') return null;\n  if (value.textAnnotation) return value.textAnnotation;\n  if (value.text_annotation) return value.text_annotation;\n  for (const child of Object.values(value)) {\n    const found = findAnnotation(child);\n    if (found) return found;\n  }\n  return null;\n}\n\nfunction blockText(block) {\n  const lines = Array.isArray(block.lines) ? block.lines : [];\n  const lineText = lines\n    .map(line => line.text || (line.words || []).map(word => word.text || '').join(' '))\n    .filter(Boolean);\n  return String(block.text || lineText.join('\\n') || '').trim();\n}\n\nfunction rectOf(block, width, height) {\n  const box = block.boundingBox || block.bounding_box || {};\n  const vertices = box.vertices || [];\n  const xs = vertices.map(vertex => Number(vertex.x || 0));\n  const ys = vertices.map(vertex => Number(vertex.y || 0));\n  const x1 = xs.length ? Math.min(...xs) : 0;\n  const y1 = ys.length ? Math.min(...ys) : 0;\n  const x2 = xs.length ? Math.max(...xs) : width;\n  const y2 = ys.length ? Math.max(...ys) : height;\n  return { x1, y1, x2, y2, cx: (x1 + x2) / 2, cy: (y1 + y2) / 2 };\n}\n\nfunction classify(text) {\n  const value = text.toLowerCase();\n  let passport = 0;\n  let snils = 0;\n  // \"Российская Федерация\" и \"дата и место рождения\" есть и на СНИЛС,\n  // поэтому паспорт опознаём только по тому, чего на СНИЛС быть не может.\n  if (/паспорт|кем выдан|код подразделения|личная подпись/.test(value)) passport += 8;\n  if (/(у|г)?\\s?мвд|уфмс|фмс россии|отделом|отделением|овд|увд/.test(value)) passport += 6;\n  if (/^pnrus|<<</.test(value)) passport += 6;\n  if (/страховое свидетельство|пенсионного страхования|снилс/.test(value)) snils += 10;\n  if (/страховой номер индивидуального|дата регистрации/.test(value)) snils += 6;\n  if (passport === 0 && snils === 0) return 'unknown';\n  return passport >= snils ? 'passport' : 'snils';\n}\n\nconst output = [];\n\nfor (let index = 0; index < sources.length; index++) {\n  const source = sources[index];\n  const response = responses[index] || {};\n  const annotation = findAnnotation(response);\n  // Yandex Cloud отдаёт отказ как {code, message, details} без ключа error,\n  // поэтому пустой ответ без аннотации трактуем как сбой, а не как пустой документ.\n  let apiError = null;\n  if (response?.error) {\n    apiError = String(response.error.message || response.error);\n  } else if (!annotation) {\n    const message = response?.message || response?.details?.[0]?.message;\n    apiError = message ? String(response.code ?? '') + ' ' + String(message) : 'пустой ответ OCR';\n    apiError = apiError.trim();\n  }\n\n  const width = Number(annotation?.width || 1) || 1;\n  const height = Number(annotation?.height || 1) || 1;\n  const rawBlocks = Array.isArray(annotation?.blocks) ? annotation.blocks : [];\n\n  let blocks = rawBlocks\n    .map((block, blockIndex) => {\n      const text = blockText(block);\n      return { blockIndex, text, bbox: rectOf(block, width, height), type: classify(text) };\n    })\n    .filter(block => block.text);\n\n  // Числовые полосы (серия/номер печатаются вертикально) не должны попадать\n  // под геометрическую привязку к чужому документу — помечаем их отдельно.\n  const numericBlocks = [];\n  for (const block of blocks) {\n    const stripped = block.text.replace(/[\\s\\-\\u2013\\u2014\\u2116]/g, '');\n    if (/^\\d{6,}$/.test(stripped)) {\n      numericBlocks.push(stripped);\n      // 11 цифр - это потенциальный СНИЛС, тип не перетираем, иначе номер выпадет из snils-региона\n      if (stripped.length !== 11) block.type = 'numeric';\n    }\n  }\n\n  const anchors = blocks.filter(block => block.type === 'passport' || block.type === 'snils');\n  for (const block of blocks.filter(block => block.type === 'unknown')) {\n    if (!anchors.length) break;\n    const nearest = anchors\n      .map(anchor => {\n        const dx = (block.bbox.cx - anchor.bbox.cx) / width;\n        const dy = (block.bbox.cy - anchor.bbox.cy) / height;\n        return { anchor, distance: Math.sqrt(dx * dx + dy * dy) };\n      })\n      .sort((a, b) => a.distance - b.distance)[0];\n    if (nearest && nearest.distance <= 0.35) block.type = nearest.anchor.type;\n  }\n\n  if (!blocks.length) {\n    const fallback = annotation?.fullText || annotation?.full_text || '';\n    if (fallback) {\n      blocks = [{ blockIndex: 0, text: fallback, bbox: { x1: 0, y1: 0, x2: width, y2: height, cx: width / 2, cy: height / 2 }, type: 'unknown' }];\n    }\n  }\n\n  output.push({ json: {\n    fileIndex: source.fileIndex,\n    fileName: source.fileName,\n    mimeType: source.mimeType,\n    base64: source.base64,\n    freeText: source.freeText,\n    ocrError: apiError,\n    ocrText: blocks.map(block => block.text).join('\\n'),\n    blockCount: blocks.length,\n    sizeBytes: source.sizeBytes ?? null,\n    numericBlocks,\n    regions: blocks.map(block => ({\n      fileName: source.fileName,\n      type: block.type,\n      text: block.text,\n      bbox: [block.bbox.x1, block.bbox.y1, block.bbox.x2, block.bbox.y2],\n      page: { width, height }\n    }))\n  } });\n}\n\nif (!output.length) throw new Error('OCR не вернул ни одного результата.');\nreturn output;"
+      },
+      "id": "a23e0d32-2911-4ed6-b30d-02caf4383249",
+      "name": "Parse page OCR",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        736,
+        144
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ocr.api.cloud.yandex.net/ocr/v1/recognizeText",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-folder-id",
+              "value": "={{ $('Config').first().json.config.yandexFolderId }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ mimeType: $json.mimeType, languageCodes: ['ru'], model: 'passport', content: $json.base64 }) }}",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 1200
+            }
+          },
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          },
+          "timeout": 120000
+        }
+      },
+      "id": "09ae52df-3db2-4181-ad23-046584fc298e",
+      "name": "OCR passport template",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        944,
+        144
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000,
+      "alwaysOutputData": true,
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "BeQyQBPwcRZ5qaw2",
+          "name": "Yandex Cloud"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const previous = $('Parse page OCR').all().map(item => item.json);\nconst responses = $input.all().map(item => item.json);\n\nfunction findAnnotation(value) {\n  if (!value || typeof value !== 'object') return null;\n  if (value.textAnnotation) return value.textAnnotation;\n  if (value.text_annotation) return value.text_annotation;\n  for (const child of Object.values(value)) {\n    const found = findAnnotation(child);\n    if (found) return found;\n  }\n  return null;\n}\n\nconst digits = value => String(value || '').replace(/\\D/g, '');\nconst capitalize = value => (value ? value.charAt(0).toUpperCase() + value.slice(1) : '');\n\n// Контрольный разряд MRZ по схеме 7-3-1\nfunction mrzCheckDigit(value) {\n  const weights = [7, 3, 1];\n  let sum = 0;\n  for (let i = 0; i < value.length; i++) {\n    const char = value[i];\n    let digit = 0;\n    if (char >= '0' && char <= '9') digit = Number(char);\n    else if (char >= 'A' && char <= 'Z') digit = char.charCodeAt(0) - 55;\n    sum += digit * weights[i % 3];\n  }\n  return sum % 10;\n}\n\n// Внутренний паспорт РФ: первые 9 цифр второй строки MRZ - это 3 цифры серии\n// и 6 цифр номера, четвёртая цифра серии стоит сразу после заполнителей '<'.\n// К абсолютной позиции не привязываемся: OCR регулярно теряет или добавляет '<'.\nfunction twoDigitYear(value) {\n  const year = Number(value);\n  const current = new Date().getFullYear() % 100;\n  return (year <= current + 1 ? 2000 : 1900) + year;\n}\nfunction asDate(value) {\n  if (!/^\\d{6}$/.test(value)) return null;\n  const year = twoDigitYear(value.slice(0, 2));\n  const month = value.slice(2, 4);\n  const day = value.slice(4, 6);\n  if (Number(month) < 1 || Number(month) > 12 || Number(day) < 1 || Number(day) > 31) return null;\n  return day + '.' + month + '.' + year;\n}\nfunction parseMrz(text) {\n  const lines = String(text || '').toUpperCase().split(/\\r?\\n/).map(line => line.replace(/\\s/g, ''));\n  for (const line of lines) {\n    if (line.length < 35 || !line.includes('<<')) continue;\n    const document = line.slice(0, 9);\n    if (!/^\\d{9}$/.test(document)) continue;\n\n    const control = line[9];\n    const checked = /^\\d$/.test(control) && mrzCheckDigit(document) === Number(control);\n\n    // после пола идёт блок заполнителей, сразу за ним - четвёртая цифра серии\n    const tail = line.slice(20);\n    const match = tail.match(/<+(\\d)(\\d{6})?(\\d{6})?/);\n    if (!match) continue;\n\n    const departmentDigits = match[3] || '';\n    return {\n      series: document.slice(0, 3) + match[1],\n      number: document.slice(3),\n      checked,\n      birth_date: asDate(line.slice(13, 19)),\n      issue_date: asDate(match[2] || ''),\n      department_code: /^\\d{6}$/.test(departmentDigits)\n        ? departmentDigits.slice(0, 3) + '-' + departmentDigits.slice(3)\n        : null\n    };\n  }\n  return null;\n}\n\nconst output = [];\n\nfor (let index = 0; index < previous.length; index++) {\n  const base = previous[index];\n  const response = responses[index] || {};\n  const annotation = findAnnotation(response);\n\n  const entities = {};\n  for (const entity of (annotation?.entities || [])) {\n    if (entity && entity.name) entities[entity.name] = String(entity.text || '').trim();\n  }\n\n  const combined = digits(entities.number);\n  // Модель отдаёт код подразделения под именем subdivision.\n  const subdivision = digits(entities.subdivision);\n  const template = {\n    passport_series: combined.length === 10 ? combined.slice(0, 4) : null,\n    passport_number: combined.length === 10 ? combined.slice(4) : null,\n    full_name: [entities.surname, entities.name, entities.middle_name].filter(Boolean).map(capitalize).join(' ') || null,\n    birth_date: entities.birth_date || null,\n    birth_place: capitalize(entities.birth_place || '') || null,\n    issue_date: entities.issue_date || null,\n    issued_by: capitalize(entities.issued_by || '') || null,\n    department_code: subdivision.length === 6 ? subdivision.slice(0, 3) + '-' + subdivision.slice(3) : null\n  };\n\n  const { base64, ...rest } = base;\n  output.push({ json: { ...rest, template, mrz: parseMrz(base.ocrText) } });\n}\n\nreturn output;"
+      },
+      "id": "bf9664e4-889c-4eb2-8d24-baa6af00acba",
+      "name": "Parse passport template",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1168,
+        144
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => ({ json: {\n  fileIndex: 0,\n  hasFile: false,\n  fileName: '',\n  ocrError: null,\n  ocrText: '',\n  numericBlocks: [],\n  regions: [],\n  template: {},\n  mrz: null,\n  freeText: String(item.json.freeText || '')\n} }));"
+      },
+      "id": "e83bed7c-f26a-47b3-821e-84f81a854099",
+      "name": "Text only",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        624,
+        496
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "a916af1a-2c73-49d3-b39b-eec62ec1422a",
+      "name": "Merge sources",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        1392,
+        272
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all().map(item => item.json);\nconst digits = value => String(value || '').replace(/\\D/g, '');\n\nconst freeText = items.map(item => String(item.freeText || '').trim()).find(Boolean) || '';\nconst ocrText = [...new Set(items.map(item => String(item.ocrText || '').trim()).filter(Boolean))].join('\\n');\nconst regions = items.flatMap(item => (Array.isArray(item.regions) ? item.regions : []));\nconst numericBlocks = items.flatMap(item => (Array.isArray(item.numericBlocks) ? item.numericBlocks : []));\nconst templates = items.map(item => item.template).filter(value => value && Object.keys(value).length);\nconst mrzList = items.map(item => item.mrz).filter(Boolean);\nconst ocrErrors = items.map(item => (item.ocrError ? item.fileName + ': ' + item.ocrError : null)).filter(Boolean);\nfor (const item of items) {\n  if (item.fileName && !item.ocrError && !String(item.ocrText || '').trim()) {\n    ocrErrors.push(item.fileName + ': OCR вернул пустой текст');\n  }\n}\n\nconst combinedText = [ocrText, freeText].filter(Boolean).join('\\n\\n--- ТЕКСТ ОТ ПОЛЬЗОВАТЕЛЯ ---\\n');\n// Шаблонная модель может отработать там, где общий OCR вернул пусто (и наоборот),\n// поэтому падаем только когда данных нет вообще ни из одного источника.\nconst hasStructuredData = mrzList.length\n  || templates.some(template => Object.values(template).some(Boolean));\nif (!combinedText && !hasStructuredData) {\n  throw new Error('Не распознан ни один документ и не передан текст.');\n}\n\nconst snilsRegions = regions.filter(region => region.type === 'snils').map(region => region.text);\n// Берём всё, что НЕ опознано как СНИЛС: шапку паспорта OCR часто читает нечитаемо,\n// и опора только на passport-регионы приводит к тому, что настоящий паспорт выпадает целиком.\nconst passportRegions = regions.filter(region => region.type !== 'snils').map(region => region.text);\n// Свободный текст пользователя участвует в поиске ВСЕГДА, иначе он теряется при наличии фото.\nconst passportText = [...passportRegions, ...numericBlocks, freeText].filter(Boolean).join('\\n');\nconst snilsText = [...snilsRegions, freeText].filter(Boolean).join('\\n') || combinedText;\n\nconst dateYears = [...combinedText.matchAll(/\\b\\d{1,2}[.\\/-]\\d{1,2}[.\\/-](\\d{4})\\b/g)].map(match => match[1]);\n\n// NNN-NNN, но только если следом не идёт ещё одна группа цифр: иначе\n// регулярка откусывает первые две группы номера СНИЛС (158-407 из 158-407-745 90).\nconst departmentPattern = /(?<![\\d\\u2013\\u2014-])(\\d{3})\\s*[-\\u2013\\u2014]\\s*(\\d{3})(?![-\\u2013\\u2014\\s]*\\d)/;\nconst departmentMatch = combinedText.match(/код\\s*подразделения[^\\d]{0,10}(\\d{3})\\s*[-\\u2013\\u2014]\\s*(\\d{3})/i)\n  || passportText.match(departmentPattern);\nconst mrzDepartment = mrzList.map(mrz => mrz.department_code).find(Boolean) || null;\nconst templateDepartment = templates.map(template => template.department_code).find(Boolean) || null;\nconst departmentCode = mrzDepartment || templateDepartment\n  || (departmentMatch ? departmentMatch[1] + '-' + departmentMatch[2] : null);\nconst departmentDigits = digits(departmentCode);\n\n// ---- серия и номер: несколько независимых источников, побеждает согласие ----\nconst rawCandidates = [];\nconst addCandidate = (series, number, score, source) => {\n  if (!/^\\d{4}$/.test(String(series || '')) || !/^\\d{6}$/.test(String(number || ''))) return;\n  if (number === departmentDigits) return;\n  const blankYear = Number(String(series).slice(2));\n  let adjusted = score;\n  if (!(blankYear >= 96 || blankYear <= (new Date().getFullYear() % 100) + 1)) adjusted -= 15;\n  if (dateYears.includes(String(series))) adjusted -= 30;\n  rawCandidates.push({ series: String(series), number: String(number), score: adjusted, source });\n};\n\nfor (const mrz of mrzList) addCandidate(mrz.series, mrz.number, mrz.checked ? 100 : 70, 'mrz');\nfor (const template of templates) addCandidate(template.passport_series, template.passport_number, 80, 'yandex-passport-model');\n\nfor (const block of numericBlocks) {\n  const value = digits(block);\n  if (value.length === 10) addCandidate(value.slice(0, 4), value.slice(4), 55, 'ocr-strip');\n  if (value.length === 20 && value.slice(0, 10) === value.slice(10)) addCandidate(value.slice(0, 4), value.slice(4, 10), 65, 'ocr-strip-x2');\n}\n\nconst patterns = [\n  /(?:паспорт[а-я]*[^\\d]{0,30})?(?:серия\\s*)?(\\d{2})[\\s-]*(\\d{2})[^\\d]{0,20}(?:\\u2116|N|номер)?[^\\d]{0,8}((?:\\d[\\s-]*){6})(?!\\d)/gi,\n  /(^|[^\\d])(\\d{2})[\\s\\n-]+(\\d{2})[\\s\\n-]+((?:\\d[\\s-]*){6})(?!\\d)/gim\n];\npatterns.forEach((pattern, patternIndex) => {\n  for (const match of passportText.matchAll(pattern)) {\n    const offset = patternIndex === 0 ? 0 : 1;\n    const series = digits(match[1 + offset] + match[2 + offset]);\n    const number = digits(match[3 + offset]);\n    const around = passportText.slice(Math.max(0, match.index - 40), match.index + match[0].length + 20);\n    const labelled = /паспорт|серия|\\u2116|номер/i.test(around);\n    const fromUserText = match.index >= passportText.indexOf(freeText) && freeText.length > 0;\n    const score = labelled ? (fromUserText ? 90 : 60) : 25;\n    addCandidate(series, number, score, labelled ? 'text-labelled' : 'text-loose');\n  }\n});\n\nconst grouped = new Map();\nfor (const candidate of rawCandidates) {\n  const key = candidate.series + candidate.number;\n  const entry = grouped.get(key) || { series: candidate.series, number: candidate.number, score: 0, sources: [] };\n  entry.score += candidate.score;\n  if (!entry.sources.includes(candidate.source)) entry.sources.push(candidate.source);\n  grouped.set(key, entry);\n}\nconst ranked = [...grouped.values()].sort((a, b) => b.score - a.score);\nconst passport = ranked[0] || null;\nconst conflict = ranked.length > 1 && ranked[1].score >= 55;\n\n// ---- СНИЛС с проверкой контрольной суммы ----\nfunction validSnils(value) {\n  const value11 = digits(value);\n  if (value11.length !== 11 || /^(\\d)\\1{9}/.test(value11)) return false;\n  let sum = 0;\n  for (let i = 0; i < 9; i++) sum += Number(value11[i]) * (9 - i);\n  let control = sum < 100 ? sum : (sum > 101 ? sum % 101 : 0);\n  if (control > 99) control = 0;\n  return control === Number(value11.slice(9));\n}\nconst snilsPattern = /\\b\\d{3}[-\\s]*\\d{3}[-\\s]*\\d{3}[-\\s]*\\d{2}\\b/g;\nconst findSnils = text => [...String(text || '').matchAll(snilsPattern)].map(match => match[0]);\n// Контрольная сумма надёжнее геометрии, поэтому ищем по всему тексту.\nconst snilsWide = findSnils([...snilsRegions, ...numericBlocks, combinedText].filter(Boolean).join('\\n'));\nconst snilsNarrow = findSnils([...snilsRegions, freeText].filter(Boolean).join('\\n'));\nconst snilsValid = snilsWide.find(validSnils) || null;\n// Если OCR перепутал цифру, лучше вернуть номер с пометкой, чем молча потерять его.\nconst snilsGuess = snilsValid ? null : (snilsNarrow.find(value => digits(value).length === 11) || null);\nconst snilsRaw = snilsValid || snilsGuess;\nconst snils = snilsRaw ? digits(snilsRaw).replace(/(\\d{3})(\\d{3})(\\d{3})(\\d{2})/, '$1-$2-$3 $4') : null;\n\n// ---- ФИО из паспорта: MRZ задаёт эталон латиницей, кириллицу берём с разворота ----\n// Первая строка MRZ содержит фамилию и имена транслитом. Ищем на развороте\n// кириллический блок, чья транслитерация совпадает с фамилией, и забираем\n// два блока под ним в той же колонке - это имя и отчество.\nconst TRANSLIT = { А:'A', Б:'B', В:'V', Г:'G', Д:'D', Е:'E', Ё:'E', Ж:'ZH', З:'Z', И:'I', Й:'I',\n  К:'K', Л:'L', М:'M', Н:'N', О:'O', П:'P', Р:'R', С:'S', Т:'T', У:'U', Ф:'F', Х:'KH', Ц:'TS',\n  Ч:'CH', Ш:'SH', Щ:'SHCH', Ъ:'IE', Ы:'Y', Ь:'', Э:'E', Ю:'IU', Я:'IA' };\nconst translit = text => String(text).toUpperCase().split('').map(char => TRANSLIT[char] ?? '').join('');\n\nfunction similarity(first, second) {\n  if (!first || !second) return 0;\n  const rows = first.length + 1;\n  const cols = second.length + 1;\n  const table = Array.from({ length: rows }, () => new Array(cols).fill(0));\n  for (let i = 1; i < rows; i++) {\n    for (let j = 1; j < cols; j++) {\n      table[i][j] = first[i - 1] === second[j - 1]\n        ? table[i - 1][j - 1] + 1\n        : Math.max(table[i - 1][j], table[i][j - 1]);\n    }\n  }\n  return table[first.length][second.length] / Math.max(first.length, second.length);\n}\n\nfunction nameFromRegions() {\n  const mrzLine = combinedText.toUpperCase().match(/PN[A-Z0-9]{3}([A-Z0-9<]{6,})/);\n  if (!mrzLine) return null;\n  const [surnameLatin] = mrzLine[1].split('<<');\n  if (!surnameLatin || surnameLatin.length < 3) return null;\n\n  const words = regions\n    .filter(region => region.type !== 'snils' && /^[А-ЯЁ][А-ЯЁ-]{2,}$/.test(String(region.text).trim()))\n    .map(region => ({\n      text: String(region.text).trim(),\n      file: region.fileName,\n      cx: (region.bbox[0] + region.bbox[2]) / 2,\n      cy: (region.bbox[1] + region.bbox[3]) / 2,\n      width: region.page?.width || 1\n    }));\n  if (!words.length) return null;\n\n  const ranked = words\n    .map(word => ({ word, score: similarity(translit(word.text), surnameLatin) }))\n    .sort((a, b) => b.score - a.score);\n  if (!ranked.length || ranked[0].score < 0.6) return null;\n\n  const surname = ranked[0].word;\n  const column = words\n    .filter(word => word.file === surname.file && word.cy > surname.cy)\n    .filter(word => Math.abs(word.cx - surname.cx) <= surname.width * 0.12)\n    .sort((a, b) => a.cy - b.cy)\n    .slice(0, 2);\n\n  const capitalize = value => value.charAt(0) + value.slice(1).toLowerCase();\n  return [surname, ...column].map(word => capitalize(word.text)).join(' ');\n}\n\n// ---- орган выдачи: якорный блок плюс его продолжение на следующих строках ----\nfunction issuerFromRegions() {\n  const candidates = regions.filter(region =>\n    region.type !== 'snils' && /МВД|УФМС|ФМС|ОВД|УВД|ОТДЕЛ|ОТДЕЛЕНИ/i.test(String(region.text)));\n  if (!candidates.length) return null;\n  const anchor = candidates[0];\n  const height = Math.abs(anchor.bbox[3] - anchor.bbox[1]) || 12;\n  const tail = regions\n    .filter(region => region.fileName === anchor.fileName && region.bbox[1] > anchor.bbox[1])\n    .filter(region => region.bbox[1] - anchor.bbox[3] < height * 2.5)\n    .filter(region => /^[А-ЯЁ\\s.-]{3,}$/.test(String(region.text).trim()))\n    .sort((a, b) => a.bbox[1] - b.bbox[1])\n    .slice(0, 1);\n  return [anchor, ...tail].map(region => String(region.text).trim()).join(' ').replace(/\\s{2,}/g, ' ');\n}\n\n// ---- поля из свободного текста ----\nconst lines = freeText.split(/\\r?\\n/).map(line => line.trim()).filter(Boolean);\nconst nameLine = lines.find(line => /^[А-ЯЁ][а-яё-]+\\s+[А-ЯЁ][а-яё-]+\\s+[А-ЯЁ][а-яё-]+/.test(line));\nconst fullName = (nameLine ? nameLine.replace(/\\(.*?\\)/g, '').replace(/\\s{2,}/g, ' ').trim() : null)\n  || (templates.find(t => t.full_name)?.full_name || null)\n  || nameFromRegions();\n\nconst mrzBirthDate = mrzList.map(mrz => mrz.birth_date).find(Boolean) || null;\nconst mrzIssueDate = mrzList.map(mrz => mrz.issue_date).find(Boolean) || null;\nconst birthDate = mrzBirthDate\n  || (combinedText.match(/дата\\s*рождения\\s*[:\\-]?\\s*(\\d{1,2}[.\\/-]\\d{1,2}[.\\/-]\\d{4})/i) || [])[1]\n  || templates.find(t => t.birth_date)?.birth_date || null;\nconst issueMatch = combinedText.match(/выдан[а-я]*\\s+(.{5,120}?)\\s+(\\d{1,2}[.\\/-]\\d{1,2}[.\\/-]\\d{4})/i);\nconst email = (combinedText.match(/[\\w.+-]+@[\\w-]+\\.[\\w.-]+/) || [])[0] || null;\nconst deliveryAddress = lines.find(line => /^\\d{6}\\s*,/.test(line)) || null;\n\nconst consumed = [nameLine, deliveryAddress].filter(Boolean);\nconst leftoverLines = lines.filter(line =>\n  !consumed.includes(line) &&\n  !/паспорт|снилс/i.test(line) &&\n  !(email && line.includes(email)) &&\n  !/^дата\\s*рождения/i.test(line) &&\n  /[А-Яа-яЁё]{4,}/.test(line)\n);\n\nconst files = items.filter(item => item.fileName).map(item => ({\n  fileName: item.fileName,\n  ocrError: item.ocrError || null,\n  sizeBytes: item.sizeBytes ?? null,\n  textLength: String(item.ocrText || '').length,\n  blockCount: item.blockCount ?? 0,\n  regionTypes: [...new Set((item.regions || []).map(region => region.type))],\n  numericBlocks: (item.numericBlocks || []).length,\n  templateMatched: Boolean(item.template && item.template.passport_number),\n  mrzMatched: Boolean(item.mrz)\n}));\n\nreturn [{ json: {\n  combinedText,\n  regions,\n  files,\n  ocrErrors,\n  leftoverLines,\n  candidates: {\n    full_name: fullName,\n    birth_date: birthDate,\n    birth_place: templates.find(t => t.birth_place)?.birth_place || null,\n    passport_series: passport ? passport.series : null,\n    passport_number: passport ? passport.number : null,\n    passport_sources: passport ? passport.sources : [],\n    passport_conflict: conflict,\n    issue_date: mrzIssueDate || (templates.find(t => t.issue_date)?.issue_date || null) || (issueMatch ? issueMatch[2] : null),\n    issued_by: (issueMatch ? issueMatch[1] : null)\n      || (templates.find(t => t.issued_by)?.issued_by || null)\n      || issuerFromRegions(),\n    department_code: departmentCode,\n    delivery_address: deliveryAddress,\n    email,\n    snils,\n    snils_checksum_ok: Boolean(snilsValid),\n    date_years: dateYears\n  }\n} }];"
+      },
+      "id": "ee924343-76c0-48a0-aa9a-f65e7b32c29e",
+      "name": "Aggregate documents",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1616,
+        272
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const schema = {\n  full_name: null,\n  birth_date: null,\n  birth_place: null,\n  passport_series: null,\n  passport_number: null,\n  issue_date: null,\n  issued_by: null,\n  department_code: null,\n  registration_address: null,\n  delivery_address: null,\n  program_name: null,\n  snils: null,\n  email: null\n};\n\nconst config = $('Config').first().json.config;\n\nconst prompt = [\n  'Ты извлекаешь данные из российского паспорта, СНИЛС и текста заявки на обучение.',\n  'Верни ровно один валидный JSON-объект строго с этими ключами:',\n  JSON.stringify(schema),\n  'Правила:',\n  '- Отсутствующее значение = null. Ничего не додумывай и не вычисляй.',\n  '- Даты копируй как есть в формате ДД.ММ.ГГГГ. Не сдвигай их.',\n  '- full_name: фамилия имя отчество. Убери пометки вида \"(фамилия склоняется)\".',\n  '- passport_series ровно 4 цифры, passport_number ровно 6 цифр, department_code ровно NNN-NNN.',\n  '- Серия и номер на развороте напечатаны вертикально вдоль правого края: первые 4 цифры серия, следующие 6 номер.',\n  '- Никогда не подставляй год из даты в passport_series и department_code в passport_number.',\n  '- program_name: точное название профессии или программы обучения из текста, вместе с разрядом или категорией.',\n  '- delivery_address: почтовый адрес для отправки документов, обычно начинается с шестизначного индекса. Не путай с местом рождения, органом выдачи и адресом регистрации.',\n  '- registration_address: только адрес регистрации со страницы прописки паспорта.',\n  '- Один снимок может содержать несколько документов. Не смешивай значения из разных регионов.',\n  'Блок CANDIDATES получен детерминированным разбором (MRZ, шаблонная модель OCR, контрольные суммы).',\n  'Если значение там не null - копируй его без изменений, оно приоритетнее твоего чтения текста.',\n  'Секция ТЕКСТ ОТ ПОЛЬЗОВАТЕЛЯ приоритетнее OCR при расхождении.',\n  'CANDIDATES:', JSON.stringify($json.candidates),\n  'Строки заявки, которые ещё не разобраны (ищи в них program_name):', JSON.stringify($json.leftoverLines),\n  'OCR-регионы:', JSON.stringify($json.regions),\n  'ВХОД:', $json.combinedText\n].join('\\n\\n');\n\nreturn [{ json: {\n  candidates: $json.candidates,\n  files: $json.files,\n  ocrErrors: $json.ocrErrors,\n  body: {\n    modelUri: 'gpt://' + config.yandexFolderId + '/' + config.gptModel,\n    completionOptions: { stream: false, temperature: 0, maxTokens: '2500' },\n    messages: [\n      { role: 'system', text: 'Возвращай только валидный JSON, без Markdown и пояснений.' },\n      { role: 'user', text: prompt }\n    ]\n  }\n} }];"
+      },
+      "id": "12b283e9-2e98-4c02-bd63-c0c83c035f31",
+      "name": "Build GPT request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1824,
+        272
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://llm.api.cloud.yandex.net/foundationModels/v1/completion",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-folder-id",
+              "value": "={{ $('Config').first().json.config.yandexFolderId }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.body) }}",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 1200
+            }
+          },
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          },
+          "timeout": 120000
+        }
+      },
+      "id": "49cc098e-1349-4cd0-b5d9-89b71e27bf58",
+      "name": "YandexGPT",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2048,
+        272
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000,
+      "alwaysOutputData": true,
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "BeQyQBPwcRZ5qaw2",
+          "name": "Yandex Cloud"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const upstream = $('Build GPT request').first().json;\nconst candidates = upstream.candidates || {};\nconst response = $json;\n\nconst digits = value => String(value || '').replace(/\\D/g, '');\nconst clean = value => {\n  const text = String(value ?? '').trim();\n  return text && text !== '-' && text.toLowerCase() !== 'null' ? text : null;\n};\n\nlet parsed = {};\nlet gptError = null;\ntry {\n  const text = response.result?.alternatives?.[0]?.message?.text\n    || response.alternatives?.[0]?.message?.text\n    || '';\n  const start = text.indexOf('{');\n  const end = text.lastIndexOf('}');\n  if (start < 0 || end <= start) throw new Error('в ответе YandexGPT нет JSON');\n  parsed = JSON.parse(text.slice(start, end + 1));\n} catch (error) {\n  // Модель недоступна или ответила мусором - отдаём детерминированный результат.\n  gptError = String(error.message || error);\n  parsed = {};\n}\n\nconst seriesOf = value => (digits(value).length === 4 ? digits(value) : null);\nconst numberOf = value => (digits(value).length === 6 ? digits(value) : null);\nconst departmentOf = value => {\n  const value6 = digits(value);\n  return value6.length === 6 ? value6.slice(0, 3) + '-' + value6.slice(3) : null;\n};\nconst snilsOf = value => {\n  const value11 = digits(value);\n  return value11.length === 11\n    ? value11.slice(0, 3) + '-' + value11.slice(3, 6) + '-' + value11.slice(6, 9) + ' ' + value11.slice(9)\n    : null;\n};\n\n// Детерминированный разбор приоритетнее модели для всех числовых полей.\nlet passportSeries = seriesOf(candidates.passport_series) || seriesOf(parsed.passport_series);\nlet passportNumber = numberOf(candidates.passport_number) || numberOf(parsed.passport_number);\nlet departmentCode = departmentOf(candidates.department_code) || departmentOf(parsed.department_code);\n\n// Частая ошибка модели: код подразделения и серия меняются местами.\nif (!passportSeries && digits(parsed.department_code).length === 4) passportSeries = seriesOf(parsed.department_code);\nif (!departmentCode && digits(parsed.passport_series).length === 6) departmentCode = departmentOf(parsed.passport_series);\nif (passportNumber && departmentCode && passportNumber === digits(departmentCode)) passportNumber = null;\n\nconst result = {\n  full_name: clean(candidates.full_name) || clean(parsed.full_name),\n  birth_date: clean(candidates.birth_date) || clean(parsed.birth_date),\n  birth_place: clean(parsed.birth_place) || clean(candidates.birth_place),\n  passport_series: passportSeries,\n  passport_number: passportNumber,\n  issue_date: clean(parsed.issue_date) || clean(candidates.issue_date),\n  issued_by: clean(parsed.issued_by) || clean(candidates.issued_by),\n  department_code: departmentCode,\n  registration_address: clean(parsed.registration_address),\n  delivery_address: clean(candidates.delivery_address) || clean(parsed.delivery_address),\n  program_name: clean(parsed.program_name),\n  snils: snilsOf(candidates.snils) || snilsOf(parsed.snils),\n  email: clean(candidates.email) || clean(parsed.email)\n};\n\nconst required = ['full_name', 'birth_date', 'passport_series', 'passport_number', 'issue_date', 'department_code', 'program_name'];\nconst warnings = [];\nfor (const field of required) if (!result[field]) warnings.push('missing:' + field);\nif (candidates.passport_conflict) warnings.push('conflict:passport_series_number');\nif (result.passport_series && (candidates.date_years || []).includes(result.passport_series)) warnings.push('suspicious:passport_series_looks_like_year');\nif (result.snils && !candidates.snils_checksum_ok) warnings.push('suspicious:snils_checksum_failed');\nif (gptError) warnings.push('gpt_unavailable:' + gptError);\nfor (const error of (upstream.ocrErrors || [])) warnings.push('ocr:' + error);\n\nreturn [{ json: {\n  ...result,\n  meta: {\n    files: upstream.files || [],\n    passport_sources: candidates.passport_sources || [],\n    needs_review: warnings.length > 0,\n    warnings\n  }\n} }];"
+      },
+      "id": "9d0f2595-6271-4e75-a9d0-b16f7b03fe66",
+      "name": "Parse result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2272,
+        272
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "id": "f24df4d5-2e37-4738-a231-6d7252444845",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        2496,
+        272
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Prepare inputs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare inputs": {
+      "main": [
+        [
+          {
+            "node": "Has file?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has file?": {
+      "main": [
+        [
+          {
+            "node": "Resize image",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Text only",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resize image": {
+      "main": [
+        [
+          {
+            "node": "Encode base64",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Encode base64": {
+      "main": [
+        [
+          {
+            "node": "OCR page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OCR page": {
+      "main": [
+        [
+          {
+            "node": "Parse page OCR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse page OCR": {
+      "main": [
+        [
+          {
+            "node": "OCR passport template",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OCR passport template": {
+      "main": [
+        [
+          {
+            "node": "Parse passport template",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse passport template": {
+      "main": [
+        [
+          {
+            "node": "Merge sources",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text only": {
+      "main": [
+        [
+          {
+            "node": "Merge sources",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge sources": {
+      "main": [
+        [
+          {
+            "node": "Aggregate documents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate documents": {
+      "main": [
+        [
+          {
+            "node": "Build GPT request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build GPT request": {
+      "main": [
+        [
+          {
+            "node": "YandexGPT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "YandexGPT": {
+      "main": [
+        [
+          {
+            "node": "Parse result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse result": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "versionId": "5f176a21-563f-4438-8800-d009b1db9467",
+  "activeVersionId": null,
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-08-19T11:23:14.232Z",
+      "createdAt": "2026-08-19T11:23:14.232Z",
+      "role": "workflow:owner",
+      "workflowId": "E1A6Ouo4GmBByMWE",
+      "projectId": "OC8FWCQSkQb0Erkk"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
