@@ -1,0 +1,999 @@
+{
+  "updatedAt": "2026-03-31T09:44:16.916Z",
+  "createdAt": "2025-08-26T09:56:57.821Z",
+  "id": "eM592FBhShyLRim0",
+  "name": "study-plans-rs",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/customsearch/v1",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "=key",
+              "value": "AIzaSyAkYdq7sldvAP-VKIIiFF3gM_KbL1zGoRA"
+            },
+            {
+              "name": "cx",
+              "value": "431a0d4bb90a34458"
+            },
+            {
+              "name": "q",
+              "value": "={{ $json[\"Наименование профессий рабочих, должностей служащих, по которым осуществляется профессиональное обучение\"] }} inurl:/etks/etks"
+            },
+            {
+              "name": "num",
+              "value": "1"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -16,
+        432
+      ],
+      "id": "3a592d97-0e5f-44ed-84e2-ee66ad7c03b5",
+      "name": "Поиск по bizlog.ru"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "12rxXmqPfWnySb1_tFfJdo_3hU75fAneIWDlVZAKHjlM",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 175659132,
+          "mode": "list",
+          "cachedResultName": "Выгрузка",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12rxXmqPfWnySb1_tFfJdo_3hU75fAneIWDlVZAKHjlM/edit#gid=175659132"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $('Поиск планов').item.json.row_number }}",
+            "Файл docx": "=https://docs.google.com/document/d/{{ $('Google Docs').item.json.documentId }}",
+            "Файл pdf": "={{ $json.webViewLink }}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "Наименование профессий рабочих, должностей служащих, по которым осуществляется профессиональное обучение",
+              "displayName": "Наименование профессий рабочих, должностей служащих, по которым осуществляется профессиональное обучение",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Квалификационный разряд, класс, категория (при наличии)",
+              "displayName": "Квалификационный разряд, класс, категория (при наличии)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "HTML план",
+              "displayName": "HTML план",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Файл docx",
+              "displayName": "Файл docx",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Файл pdf",
+              "displayName": "Файл pdf",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        2032,
+        128
+      ],
+      "id": "f1bd4c17-f3cf-4e5b-919e-803618237341",
+      "name": "Google Sheets1",
+      "credentials": {
+        "googleApi": {
+          "id": "86ekhh3rUWlEgF4Y",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "12rxXmqPfWnySb1_tFfJdo_3hU75fAneIWDlVZAKHjlM",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 175659132,
+          "mode": "list",
+          "cachedResultName": "Выгрузка",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12rxXmqPfWnySb1_tFfJdo_3hU75fAneIWDlVZAKHjlM/edit#gid=175659132"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "HTML план",
+              "lookupValue": "План"
+            }
+          ]
+        },
+        "options": {
+          "returnFirstMatch": true
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        -240,
+        432
+      ],
+      "id": "c924764d-f545-45b1-a0ec-acd8eff36e45",
+      "name": "Поиск планов",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleApi": {
+          "id": "86ekhh3rUWlEgF4Y",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.queries.request[0].count }}",
+                    "rightValue": 0,
+                    "operator": {
+                      "type": "number",
+                      "operation": "notEquals"
+                    },
+                    "id": "72635135-e380-4645-b416-c05ada5e2ff1"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "6470cb53-71f2-4f77-b1a0-14a5f7be507e",
+                    "leftValue": "={{ $json.queries.request[0].count }}",
+                    "rightValue": 0,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        208,
+        432
+      ],
+      "id": "8ed1b4e4-ff25-41b4-b2ca-7f9621258a6a",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "update",
+        "documentURL": "={{ $('Google Drive').item.json.id }}",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "action": "replaceAll",
+              "text": "{Название_профессии}",
+              "replaceText": "={{ $json[\"{Название_профессии}\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{ч-1}",
+              "replaceText": "={{ $json[\"{ч-1}\"].toString()}}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{ч-2}",
+              "replaceText": "={{ $json[\"{ч-2}\"].toString() }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{ч-3}",
+              "replaceText": "={{ $json[\"{ч-3}\"].toString() }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{ч-4}",
+              "replaceText": "={{ $json[\"{ч-4}\"].toString() }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{ч-5}",
+              "replaceText": "={{ $json[\"{ч-5}\"].toString() }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{ч-6}",
+              "replaceText": "={{ $json[\"{ч-6}\"].toString() }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{ч-7}",
+              "replaceText": "={{ $json[\"{ч-7}\"].toString() }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{ч-8}",
+              "replaceText": "={{ $json[\"{ч-8}\"].toString() }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{ч-9}",
+              "replaceText": "={{ $json[\"{ч-9}\"].toString() }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{л-1}",
+              "replaceText": "={{ $json[\"{л-1}\"].toString() }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{л-2}",
+              "replaceText": "={{ $json[\"{л-2}\"].toString() }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{л-3}",
+              "replaceText": "={{ $json[\"{л-3}\"].toString() }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{л-4}",
+              "replaceText": "={{ $json[\"{л-4}\"].toString() }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{л-5}",
+              "replaceText": "={{ $json[\"{л-5}\"].toString() }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{л-6}",
+              "replaceText": "={{ $json[\"{л-6}\"].toString() }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{л-7}",
+              "replaceText": "={{ $json[\"{л-7}\"].toString() }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{л-8}",
+              "replaceText": "={{ $json[\"{л-8}\"].toString() }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{л-9}",
+              "replaceText": "={{ $json[\"{л-9}\"].toString() }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-1}",
+              "replaceText": "={{ $json[\"{модуль-1}\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-2}",
+              "replaceText": "={{ $json[\"{модуль-2}\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-3}",
+              "replaceText": "={{ $json[\"{модуль-3}\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-4}",
+              "replaceText": "={{ $json[\"{модуль-4}\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-5}",
+              "replaceText": "={{ $json[\"{модуль-5}\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-6}",
+              "replaceText": "={{ $json[\"{модуль-6}\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-7}",
+              "replaceText": "={{ $json[\"{модуль-7}\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-8}",
+              "replaceText": "={{ $json[\"{модуль-8}\"] }}"
+            },
+            {
+              "action": "replaceAll",
+              "text": "{модуль-9}",
+              "replaceText": "={{ $json[\"{модуль-9}\"] }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        1408,
+        128
+      ],
+      "id": "c0808b43-a135-4bfe-80a8-e873fd50dee5",
+      "name": "Google Docs",
+      "credentials": {
+        "googleApi": {
+          "id": "86ekhh3rUWlEgF4Y",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const jsonString = $('ПЛАН JSON').first().json.message.content;\n\n// Более агрессивная очистка строки\nlet cleanedJsonString = jsonString;\n\n// Убираем markdown блоки кода\ncleanedJsonString = cleanedJsonString.replace(/^```json\\s*\\n?/, '').replace(/```$/, '');\n// Убираем возможные префиксы\ncleanedJsonString = cleanedJsonString.replace(/^json\\s*\\n/, '');\ncleanedJsonString = cleanedJsonString.trim();\n\n// Ищем начало и конец JSON объекта\nconst startIndex = cleanedJsonString.indexOf('{');\nconst lastBraceIndex = cleanedJsonString.lastIndexOf('}');\n\nif (startIndex !== -1 && lastBraceIndex !== -1 && lastBraceIndex > startIndex) {\n    // Извлекаем только JSON объект\n    cleanedJsonString = cleanedJsonString.substring(startIndex, lastBraceIndex + 1);\n}\n\n// Дополнительная очистка от возможных невидимых символов\ncleanedJsonString = cleanedJsonString.replace(/[\\u0000-\\u001F\\u007F-\\u009F]/g, '');\n\ntry {\n    console.log('Строка для парсинга:', cleanedJsonString);\n    console.log('Длина строки:', cleanedJsonString.length);\n    \n    const parsedData = JSON.parse(cleanedJsonString);\n    console.log('Распарсенные данные:', parsedData);\n    console.log('Профессия:', parsedData[\"{Название_профессии}\"]);\n    \n    return [{ json: parsedData }];\n} catch (error) {\n    console.error('Ошибка парсинга JSON:', error);\n    console.error('Проблемная часть строки около позиции 1042:');\n    console.error(cleanedJsonString.substring(1035, 1050));\n    throw new Error(`Не удалось распарсить JSON: ${error.message}`);\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1184,
+        128
+      ],
+      "id": "191cf100-45f5-42d8-95aa-e00e1037a70d",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-search-preview",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-SEARCH-PREVIEW"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Создай учебный план для рабочей профессии «[{{ $('Поиск планов').item.json['Наименование профессий рабочих, должностей служащих, по которым осуществляется профессиональное обучение'] }}]» со следующей структурой:\n\nПАРАМЕТРЫ ПРОГРАММЫ:\n- Общий объем: 320 часов\n- Теоретическое обучение: 116 часов (всегда строго 9 модулей)\n- Практическое обучение: всегда 200 часов\n- Итоговая аттестация: всегда 4 часа\n\nТРЕБОВАНИЯ:\n\nАНАЛИЗ ЕТКС:\n1. Используй информацию с URL {{ $json.items[0].link }}\n2. Изучи ВСЕ представленные разряды (от 1 до 8 возможных)\n3. Извлеки из каждого разряда: \"Характеристика работ\", \"Должен знать\", \"Примеры работ\"\n4. Синтезируй информацию всех разрядов для комплексной программы\n\nСОЗДАНИЕ МОДУЛЕЙ:\n1. Разработай 9 теоретических модулей, полностью соответствующих специфике профессии «[НАЗВАНИЕ ПРОФЕССИИ]»\n2. Первый модуль должен быть вводным: \"Введение в профессию [название]\" или аналогичный. По часам не меньше 14 часов.\n3. Остальные 8 модулей должны логично охватывать ВСЕ необходимые знания для данной профессии из всех разрядов\n4. Если профессия связана с производством, опасными условиями труда или специальным оборудованием - обязательно включи модуль по охране труда/технике безопасности. \nВсегда на 16 часов.\n5. Названия модулей должны быть развёрнутыми и информативными (не менее 5-7 слов)\n6. Формулируй через отглагольное существительное (Выполнение..., Организация..., Осуществление...)\n7. Модули должны следовать логике: от базовых знаний низших разрядов к сложным операциям высших разрядов\n8. Общая сумма часов модулей: строго 116 часов\n\nФОРМАТ ВЫВОДА:\n\nФормат: {ключ} = [значение] - для ключа наличие {} обязательно\n\nШаблон:\n{Название_профессии} = [полное название профессии]\n\n{ч-1} = [число]\n{л-1} = [то же число]  \n{модуль-1} = [название первого модуля]\n\n{ч-2} = [число]\n{л-2} = [то же число]\n{модуль-2} = [название второго модуля]\n\n{ч-3} = [число]\n{л-3} = [то же число]\n{модуль-3} = [название третьего модуля]\n\n...и так далее до 9 модуля...\n\n{ч-9} = [число]\n{л-9} = [то же число]\n{модуль-9} = [название девятого модуля]\n\nВАЖНО:\n- Используй именно эти названия переменных (в точности как указано)\n- Значения {ч-N} и {л-N} всегда одинаковые\n- Сумма всех {ч-1} до {ч-9} = 116\n- Выводи в формате: {переменная} = значение\n- Выводи ТОЛЬКО JSON без дополнительных пояснений\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        544,
+        256
+      ],
+      "id": "41b8988c-3b55-4d0e-8d42-5ecc9e67dc72",
+      "name": "ПЛАН JSON",
+      "credentials": {
+        "openAiApi": {
+          "id": "36mFwxxeJbMPxCvV",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Вот план обучения: \n{{ $json.message.content }}\n\nОн сделан под формат:\nФОРМАТ ВЫВОДА:\n\nФормат: {ключ} = [значение] - для ключа наличие {} обязательно\n\nШаблон:\n{Название_профессии} = [полное название профессии]\n\n{ч-1} = [число]\n{л-1} = [то же число]  \n{модуль-1} = [название первого модуля]\n\n{ч-2} = [число]\n{л-2} = [то же число]\n{модуль-2} = [название второго модуля]\n\n{ч-3} = [число]\n{л-3} = [то же число]\n{модуль-3} = [название третьего модуля]\n\n...и так далее до 9 модуля...\n\n{ч-9} = [число]\n{л-9} = [то же число]\n{модуль-9} = [название девятого модуля]\n\nПОЯСНЕНИЯ:\nч - это количество часов и порядковый номер строки\nл - использовать не нужно\nмодуль - это название модуля и порядковый номер строки\n\nТвоя задача переделать его под другой формат, который указан ниже:\n\nФОРМАТ ВЫВОДА (строго)\n\t•\tСоздай HTML-таблицу.\n\t•\tВ <thead> — только заголовок.\n\t•\tВ <tbody> ровно 12 строк в такой последовательности:\n1–9 — девять теоретических модулей (с часами, суммой 116),\n10 — «Практическое обучение» (200),\n11 — «Итоговая аттестация» (4),\n12 — строка «Итого — 320».\n\t•\tНе добавляй лишних строк в <tbody>. <thead> в счёт «12» не входит.\n\nПример структуры (не меняй порядок блоков и классы; подставляй свои названия модулей и часы по правилам выше):\n\n<table class=\"table table-bordered table-full-width\">\n<thead>\n<tr>\n<th>№</th>\n<th>Всего часов</th>\n<th>Название модуля</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>1</td>\n<td>[чётное число, 12–24]</td>\n<td>[Введение в профессию …]</td>\n</tr>\n<tr>\n<td>2</td>\n<td>[12–24]</td>\n<td>[Название модуля]</td>\n</tr>\n<tr>\n<td>3</td>\n<td>[12–24]</td>\n<td>[Название модуля]</td>\n</tr>\n<tr>\n<td>4</td>\n<td>[12–24]</td>\n<td>[Название модуля]</td>\n</tr>\n<tr>\n<td>5</td>\n<td>[12–24]</td>\n<td>[Название модуля]</td>\n</tr>\n<tr>\n<td>6</td>\n<td>[12–24]</td>\n<td>[Название модуля]</td>\n</tr>\n<tr>\n<td>7</td>\n<td>[12–24]</td>\n<td>[Название модуля]</td>\n</tr>\n<tr>\n<td>8</td>\n<td>16</td>\n<td>[Осуществление охраны труда и техники безопасности …]</td>\n</tr>\n<tr>\n<td>9</td>\n<td>[12–24]</td>\n<td>[Название модуля]</td>\n</tr>\n<tr>\n<td>10</td>\n<td>200</td>\n<td>Практическое обучение</td>\n</tr>\n<tr>\n<td>11</td>\n<td>4</td>\n<td>Итоговая аттестация</td>\n</tr>\n<tr>\n<td><strong>Итого</strong></td>\n<td>320</td>\n<td>&nbsp;</td>\n</tr>\n</tbody>\n</table>\n\nПосле таблицы выведи неизменяемое предупреждение (дословно):\n\n<blockquote class=\"blog-blockquote\"><p>💡 Представленный учебный план носит ознакомительный характер, его содержание может изменяться. Точное содержание и количество часов уточняйте у менеджеров нашего центра. Мы можем адаптировать программу под ваши индивидуальные потребности и цели обучения.</p>\n</blockquote>\n\nВАЖНО: выведи данные без лишних символов, например ```html и т.д."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        960,
+        464
+      ],
+      "id": "c0ecbed3-c5ba-42de-aded-446786231794",
+      "name": "OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "36mFwxxeJbMPxCvV",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "copy",
+        "fileId": {
+          "__rl": true,
+          "value": "1G7c2-LEoLLGns5sKcBSwGWVwMYRaTdiYf_RpeRR-EuU",
+          "mode": "id"
+        },
+        "name": "=Учебный план РС {{ $('Поиск планов').item.json[\"Наименование профессий рабочих, должностей служащих, по которым осуществляется профессиональное обучение\"] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        944,
+        128
+      ],
+      "id": "66f80cd7-0230-4a5d-91f4-f630ef0d9895",
+      "name": "Google Drive",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "jzAxR4XiEVWwbE9z",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.documentId }}",
+          "mode": "id"
+        },
+        "options": {
+          "googleFileConversion": {
+            "conversion": {
+              "docsToFormat": "application/pdf"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1600,
+        128
+      ],
+      "id": "c9f1620b-56db-4e94-8b6e-2cee895e550b",
+      "name": "save as pdf",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "jzAxR4XiEVWwbE9z",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -448,
+        432
+      ],
+      "id": "4b8475d0-6f1b-4945-96db-6d24b6194e70",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "name": "=Учебный план РС {{ $('Поиск планов').item.json['Наименование профессий рабочих, должностей служащих, по которым осуществляется профессиональное обучение'] }}",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1lRMsTskKmQTOUKtdLxkTZB1t8VwlHNlP",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1824,
+        128
+      ],
+      "id": "bd484b64-b177-4b90-9cc4-ec61602eadf1",
+      "name": "upload to disk",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "jzAxR4XiEVWwbE9z",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "12rxXmqPfWnySb1_tFfJdo_3hU75fAneIWDlVZAKHjlM",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 175659132,
+          "mode": "list",
+          "cachedResultName": "Выгрузка",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12rxXmqPfWnySb1_tFfJdo_3hU75fAneIWDlVZAKHjlM/edit#gid=175659132"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $('Поиск планов').item.json.row_number }}",
+            "HTML план": "={{ $json.message.content }}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "Наименование профессий рабочих, должностей служащих, по которым осуществляется профессиональное обучение",
+              "displayName": "Наименование профессий рабочих, должностей служащих, по которым осуществляется профессиональное обучение",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Квалификационный разряд, класс, категория (при наличии)",
+              "displayName": "Квалификационный разряд, класс, категория (при наличии)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "HTML план",
+              "displayName": "HTML план",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Файл docx",
+              "displayName": "Файл docx",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Файл pdf",
+              "displayName": "Файл pdf",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        1360,
+        464
+      ],
+      "id": "ddc073b7-2e2c-4c2a-a468-c10cbfc86fdd",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleApi": {
+          "id": "86ekhh3rUWlEgF4Y",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "12rxXmqPfWnySb1_tFfJdo_3hU75fAneIWDlVZAKHjlM",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 175659132,
+          "mode": "list",
+          "cachedResultName": "Выгрузка",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12rxXmqPfWnySb1_tFfJdo_3hU75fAneIWDlVZAKHjlM/edit#gid=175659132"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $('Поиск планов').item.json.row_number }}",
+            "HTML план": "=Нет на bizlog"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "Наименование профессий рабочих, должностей служащих, по которым осуществляется профессиональное обучение",
+              "displayName": "Наименование профессий рабочих, должностей служащих, по которым осуществляется профессиональное обучение",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Квалификационный разряд, класс, категория (при наличии)",
+              "displayName": "Квалификационный разряд, класс, категория (при наличии)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "HTML план",
+              "displayName": "HTML план",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Файл docx",
+              "displayName": "Файл docx",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Файл pdf",
+              "displayName": "Файл pdf",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        512,
+        624
+      ],
+      "id": "6c5df8fa-dc70-4a5b-95e3-f7e461caa7e4",
+      "name": "Google Sheets2",
+      "credentials": {
+        "googleApi": {
+          "id": "86ekhh3rUWlEgF4Y",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Поиск по bizlog.ru": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets1": {
+      "main": [
+        []
+      ]
+    },
+    "Поиск планов": {
+      "main": [
+        [
+          {
+            "node": "Поиск по bizlog.ru",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "ПЛАН JSON",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Google Sheets2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Docs": {
+      "main": [
+        [
+          {
+            "node": "save as pdf",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Google Docs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ПЛАН JSON": {
+      "main": [
+        [
+          {
+            "node": "Google Drive",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "save as pdf": {
+      "main": [
+        [
+          {
+            "node": "upload to disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Поиск планов",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "upload to disk": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets2": {
+      "main": [
+        [
+          {
+            "node": "Поиск планов",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Поиск планов",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "versionId": "eb06130c-1b3d-4f9f-9d4a-39d3ba87e077",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-08-26T09:56:57.821Z",
+      "createdAt": "2025-08-26T09:56:57.821Z",
+      "role": "workflow:owner",
+      "workflowId": "eM592FBhShyLRim0",
+      "projectId": "OC8FWCQSkQb0Erkk"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
