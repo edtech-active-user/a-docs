@@ -1,0 +1,2374 @@
+{
+  "updatedAt": "2026-09-08T08:35:17.552Z",
+  "createdAt": "2026-08-04T06:19:12.483Z",
+  "id": "wBv8SLxHhMibGirf",
+  "name": "logs-monitoring-proxy",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "49851f2e-459a-4e9a-b42e-6b146829cd0e",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -752,
+        -64
+      ],
+      "id": "578d3f11-e15d-413f-976e-b755402d7225",
+      "name": "Webhook",
+      "webhookId": "49851f2e-459a-4e9a-b42e-6b146829cd0e"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Webhook').item.json.body.source }}",
+                    "rightValue": "РС",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "66d662e4-0337-4946-91ed-885200bfcea6"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "b28ce19c-286e-4184-abce-2606683b5a9b",
+                    "leftValue": "={{ $('Webhook').item.json.body.source }}",
+                    "rightValue": "ПКПП",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "8836daea-8ee2-4ce2-98ad-dd5337d3e3b9",
+                    "leftValue": "={{ $('Webhook').item.json.body.source }}",
+                    "rightValue": "ОТ",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "c78d8eb1-f032-4e43-bec3-8b05f4b5360d",
+                    "leftValue": "={{ $('Webhook').item.json.body.source }}",
+                    "rightValue": "АНО РС",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "51eb8029-3f20-4e30-ba17-af56896e03a5",
+                    "leftValue": "={{ $('Webhook').item.json.body.source }}",
+                    "rightValue": "АНО ПКПП",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "a7b21317-9aac-42c3-94cb-2638381de7e3",
+                    "leftValue": "={{ $('Webhook').item.json.body.source }}",
+                    "rightValue": "АНО ОТ",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        432,
+        -224
+      ],
+      "id": "37d993bd-1f1b-4feb-b05d-519cbe04c770",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1VbuUhhS4wBKI3ALocMcOkGGWkCdkazO1_FWSqVzZ0l8",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Лог",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VbuUhhS4wBKI3ALocMcOkGGWkCdkazO1_FWSqVzZ0l8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Проект": "={{ $('Webhook').item.json.body.source }}",
+            "ID": "={{ $('Webhook').item.json.body.id }}",
+            "Статус": "={{ $('Webhook').item.json.body.status }}",
+            "Дата": "={{ $('Webhook').item.json.body.date }}",
+            "Время": "={{ $('Webhook').item.json.body.time }}",
+            "Исполнитель": "={{$('EmailsMap').item.json[$('Webhook').item.json.body.user_email]}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Проект",
+              "displayName": "Проект",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Статус",
+              "displayName": "Статус",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Дата",
+              "displayName": "Дата",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Время",
+              "displayName": "Время",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Исполнитель",
+              "displayName": "Исполнитель",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        672,
+        -384
+      ],
+      "id": "5b3bd74a-7786-4bcf-aa69-50365b033862",
+      "name": "append-logs-stroke-rs",
+      "credentials": {
+        "googleApi": {
+          "id": "qr8hKsQJKcudekLc",
+          "name": "logs-monitoring-proxy"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1_H2f1qBdHVymGvstbARCRHhGyH5pPDc6Lck_0CdHmW8",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Лог",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VbuUhhS4wBKI3ALocMcOkGGWkCdkazO1_FWSqVzZ0l8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Проект": "={{ $('Webhook').item.json.body.source }}",
+            "ID": "={{ $('Webhook').item.json.body.id }}",
+            "Статус": "={{ $('Webhook').item.json.body.status }}",
+            "Дата": "={{ $('Webhook').item.json.body.date }}",
+            "Время": "={{ $('Webhook').item.json.body.time }}",
+            "Исполнитель": "={{$('EmailsMap').item.json[$('Webhook').item.json.body.user_email]}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Проект",
+              "displayName": "Проект",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Статус",
+              "displayName": "Статус",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Дата",
+              "displayName": "Дата",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Время",
+              "displayName": "Время",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Исполнитель",
+              "displayName": "Исполнитель",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "useAppend": false
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        688,
+        -208
+      ],
+      "id": "31a9a5c1-92b1-48a6-82d3-c3566493b727",
+      "name": "append-logs-stroke-pkpp",
+      "credentials": {
+        "googleApi": {
+          "id": "qr8hKsQJKcudekLc",
+          "name": "logs-monitoring-proxy"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "G52RdzdAcbW0fHOF",
+          "mode": "list",
+          "cachedResultName": "logs_queue",
+          "cachedResultUrl": "/projects/OC8FWCQSkQb0Erkk/datatables/G52RdzdAcbW0fHOF"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "status",
+              "keyValue": "free"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -544,
+        -64
+      ],
+      "id": "34e9c54e-0404-4b40-bddf-c1e23cd0079f",
+      "name": "Get row(s)",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "1db9ee0c-f5f9-48f3-8da6-82a8d67492b2",
+              "leftValue": "={{$json}}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -352,
+        -64
+      ],
+      "id": "a3350ede-8c83-40da-92c3-4a49027e776c",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "G52RdzdAcbW0fHOF",
+          "mode": "list",
+          "cachedResultName": "logs_queue",
+          "cachedResultUrl": "/projects/OC8FWCQSkQb0Erkk/datatables/G52RdzdAcbW0fHOF"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "status",
+              "keyValue": "free"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "busy"
+          },
+          "matchingColumns": [
+            "status"
+          ],
+          "schema": [
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -96,
+        -224
+      ],
+      "id": "9d21993c-ab98-4ade-a3cd-e736e1fff245",
+      "name": "Update row(s)",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "G52RdzdAcbW0fHOF",
+          "mode": "list",
+          "cachedResultName": "logs_queue",
+          "cachedResultUrl": "/projects/OC8FWCQSkQb0Erkk/datatables/G52RdzdAcbW0fHOF"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "status",
+              "keyValue": "busy"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "free"
+          },
+          "matchingColumns": [
+            "status"
+          ],
+          "schema": [
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -80,
+        -16
+      ],
+      "id": "82f68c56-6a9f-4caf-b193-dbbb3da00b42",
+      "name": "Update row(s)1",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "amount": 2
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -192,
+        176
+      ],
+      "id": "c8f57169-e39e-4ebc-a6e7-685d265af57f",
+      "name": "Wait",
+      "webhookId": "82bb0697-02a1-4138-b6da-840c6a4024fe"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1Nrl31uqtCw4-93L0AorlQKD5JKOHYYRHTykHbztDAhY",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Лог",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VbuUhhS4wBKI3ALocMcOkGGWkCdkazO1_FWSqVzZ0l8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Проект": "={{ $('Webhook').item.json.body.source }}",
+            "ID": "={{ $('Webhook').item.json.body.id }}",
+            "Статус": "={{ $('Webhook').item.json.body.status }}",
+            "Дата": "={{ $('Webhook').item.json.body.date }}",
+            "Время": "={{ $('Webhook').item.json.body.time }}",
+            "Исполнитель": "={{$('EmailsMap').item.json[$('Webhook').item.json.body.user_email]}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Проект",
+              "displayName": "Проект",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Статус",
+              "displayName": "Статус",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Дата",
+              "displayName": "Дата",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Время",
+              "displayName": "Время",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Исполнитель",
+              "displayName": "Исполнитель",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "useAppend": false
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        704,
+        16
+      ],
+      "id": "8223cb8b-3b3c-4b62-b113-3aed7bbf8b86",
+      "name": "append-logs-stroke-ОТ",
+      "credentials": {
+        "googleApi": {
+          "id": "qr8hKsQJKcudekLc",
+          "name": "logs-monitoring-proxy"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "162-luk8ZzZ_8yMB6RhC-ja8UPCbCPr1MQ5G4ndJqERs",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Лог",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VbuUhhS4wBKI3ALocMcOkGGWkCdkazO1_FWSqVzZ0l8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Проект": "={{ $('Webhook').item.json.body.source }}",
+            "ID": "={{ $('Webhook').item.json.body.id }}",
+            "Статус": "={{ $('Webhook').item.json.body.status }}",
+            "Дата": "={{ $('Webhook').item.json.body.date }}",
+            "Время": "={{ $('Webhook').item.json.body.time }}",
+            "Исполнитель": "={{$('EmailsMap').item.json[$('Webhook').item.json.body.user_email]}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Проект",
+              "displayName": "Проект",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Статус",
+              "displayName": "Статус",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Дата",
+              "displayName": "Дата",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Время",
+              "displayName": "Время",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Исполнитель",
+              "displayName": "Исполнитель",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        704,
+        208
+      ],
+      "id": "29d19845-3247-44e3-9108-d52cdfbb3572",
+      "name": "append-logs-stroke-ANO RS",
+      "credentials": {
+        "googleApi": {
+          "id": "qr8hKsQJKcudekLc",
+          "name": "logs-monitoring-proxy"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1mXlnrLzhx-2E9rxf4KnWwuQglVuvcdS0DP9A-PRfkms",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Лог",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VbuUhhS4wBKI3ALocMcOkGGWkCdkazO1_FWSqVzZ0l8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Проект": "={{ $('Webhook').item.json.body.source }}",
+            "ID": "={{ $('Webhook').item.json.body.id }}",
+            "Статус": "={{ $('Webhook').item.json.body.status }}",
+            "Дата": "={{ $('Webhook').item.json.body.date }}",
+            "Время": "={{ $('Webhook').item.json.body.time }}",
+            "Исполнитель": "={{$('EmailsMap').item.json[$('Webhook').item.json.body.user_email]}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Проект",
+              "displayName": "Проект",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Статус",
+              "displayName": "Статус",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Дата",
+              "displayName": "Дата",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Время",
+              "displayName": "Время",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Исполнитель",
+              "displayName": "Исполнитель",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "useAppend": false
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        704,
+        432
+      ],
+      "id": "4fb1f239-483f-4b07-b692-e919b2ee9682",
+      "name": "append-logs-stroke-ANO pkpp",
+      "credentials": {
+        "googleApi": {
+          "id": "qr8hKsQJKcudekLc",
+          "name": "logs-monitoring-proxy"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1wKq-mjOtr7DjQNv3Di9UYVj29NNStQyXwF0OHnDxWpw",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Лог",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VbuUhhS4wBKI3ALocMcOkGGWkCdkazO1_FWSqVzZ0l8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Проект": "={{ $('Webhook').item.json.body.source }}",
+            "ID": "={{ $('Webhook').item.json.body.id }}",
+            "Статус": "={{ $('Webhook').item.json.body.status }}",
+            "Дата": "={{ $('Webhook').item.json.body.date }}",
+            "Время": "={{ $('Webhook').item.json.body.time }}",
+            "Исполнитель": "={{$('EmailsMap').item.json[$('Webhook').item.json.body.user_email]}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Проект",
+              "displayName": "Проект",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Статус",
+              "displayName": "Статус",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Дата",
+              "displayName": "Дата",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Время",
+              "displayName": "Время",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Исполнитель",
+              "displayName": "Исполнитель",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "useAppend": false
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        704,
+        624
+      ],
+      "id": "782b4d92-6406-4388-9c5b-3f99694849e1",
+      "name": "append-logs-stroke-АНО ОТ",
+      "credentials": {
+        "googleApi": {
+          "id": "qr8hKsQJKcudekLc",
+          "name": "logs-monitoring-proxy"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1mPwStVHKe-QNaHF-71_x1oU3YY69rrb61XYhukNt9aw",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1195136187,
+          "mode": "list",
+          "cachedResultName": "email map",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mPwStVHKe-QNaHF-71_x1oU3YY69rrb61XYhukNt9aw/edit#gid=1195136187"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        80,
+        -224
+      ],
+      "id": "360a2a58-bbe5-4d8f-b96e-50b6902a8af2",
+      "name": "GetEmails1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const employees = $('GetEmails1').all().reduce((acc, item) => {\n  acc[item.json.Email] = item.json[\"Сотрудник\"];\n  return acc;\n}, {});\n\nreturn employees;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        -224
+      ],
+      "id": "e7dfaa5a-2d05-4d5b-97e0-60c51980908d",
+      "name": "EmailsMap"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "append-logs-stroke-rs",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "append-logs-stroke-pkpp",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "append-logs-stroke-ОТ",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "append-logs-stroke-ANO RS",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "append-logs-stroke-ANO pkpp",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "append-logs-stroke-АНО ОТ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Update row(s)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Update row(s)1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row(s)": {
+      "main": [
+        [
+          {
+            "node": "GetEmails1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row(s)1": {
+      "main": [
+        []
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GetEmails1": {
+      "main": [
+        [
+          {
+            "node": "EmailsMap",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "EmailsMap": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "versionId": "13bd7eb4-84d1-4475-9f5f-e7dc8f4c7133",
+  "activeVersionId": "706c3133-c782-42c4-9ed4-0f9b6ed19812",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-08-04T06:19:12.483Z",
+      "createdAt": "2026-08-04T06:19:12.483Z",
+      "role": "workflow:owner",
+      "workflowId": "wBv8SLxHhMibGirf",
+      "projectId": "OC8FWCQSkQb0Erkk"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-09-07T05:53:05.662Z",
+    "createdAt": "2026-09-03T10:52:23.946Z",
+    "versionId": "706c3133-c782-42c4-9ed4-0f9b6ed19812",
+    "workflowId": "wBv8SLxHhMibGirf",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "49851f2e-459a-4e9a-b42e-6b146829cd0e",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -752,
+          -64
+        ],
+        "id": "578d3f11-e15d-413f-976e-b755402d7225",
+        "name": "Webhook",
+        "webhookId": "49851f2e-459a-4e9a-b42e-6b146829cd0e"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $('Webhook').item.json.body.source }}",
+                      "rightValue": "РС",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "66d662e4-0337-4946-91ed-885200bfcea6"
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "b28ce19c-286e-4184-abce-2606683b5a9b",
+                      "leftValue": "={{ $('Webhook').item.json.body.source }}",
+                      "rightValue": "ПКПП",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "8836daea-8ee2-4ce2-98ad-dd5337d3e3b9",
+                      "leftValue": "={{ $('Webhook').item.json.body.source }}",
+                      "rightValue": "ОТ",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "c78d8eb1-f032-4e43-bec3-8b05f4b5360d",
+                      "leftValue": "={{ $('Webhook').item.json.body.source }}",
+                      "rightValue": "АНО РС",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "51eb8029-3f20-4e30-ba17-af56896e03a5",
+                      "leftValue": "={{ $('Webhook').item.json.body.source }}",
+                      "rightValue": "АНО ПКПП",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "a7b21317-9aac-42c3-94cb-2638381de7e3",
+                      "leftValue": "={{ $('Webhook').item.json.body.source }}",
+                      "rightValue": "АНО ОТ",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.4,
+        "position": [
+          432,
+          -224
+        ],
+        "id": "37d993bd-1f1b-4feb-b05d-519cbe04c770",
+        "name": "Switch"
+      },
+      {
+        "parameters": {
+          "authentication": "serviceAccount",
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "1VbuUhhS4wBKI3ALocMcOkGGWkCdkazO1_FWSqVzZ0l8",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Лог",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VbuUhhS4wBKI3ALocMcOkGGWkCdkazO1_FWSqVzZ0l8/edit#gid=0"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "Проект": "={{ $('Webhook').item.json.body.source }}",
+              "ID": "={{ $('Webhook').item.json.body.id }}",
+              "Статус": "={{ $('Webhook').item.json.body.status }}",
+              "Дата": "={{ $('Webhook').item.json.body.date }}",
+              "Время": "={{ $('Webhook').item.json.body.time }}",
+              "Исполнитель": "={{$('EmailsMap').item.json[$('Webhook').item.json.body.user_email]}}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "Проект",
+                "displayName": "Проект",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "ID",
+                "displayName": "ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Статус",
+                "displayName": "Статус",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Дата",
+                "displayName": "Дата",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Время",
+                "displayName": "Время",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Исполнитель",
+                "displayName": "Исполнитель",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          672,
+          -384
+        ],
+        "id": "5b3bd74a-7786-4bcf-aa69-50365b033862",
+        "name": "append-logs-stroke-rs",
+        "credentials": {
+          "googleApi": {
+            "id": "qr8hKsQJKcudekLc",
+            "name": "logs-monitoring-proxy"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "authentication": "serviceAccount",
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "1_H2f1qBdHVymGvstbARCRHhGyH5pPDc6Lck_0CdHmW8",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Лог",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VbuUhhS4wBKI3ALocMcOkGGWkCdkazO1_FWSqVzZ0l8/edit#gid=0"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "Проект": "={{ $('Webhook').item.json.body.source }}",
+              "ID": "={{ $('Webhook').item.json.body.id }}",
+              "Статус": "={{ $('Webhook').item.json.body.status }}",
+              "Дата": "={{ $('Webhook').item.json.body.date }}",
+              "Время": "={{ $('Webhook').item.json.body.time }}",
+              "Исполнитель": "={{$('EmailsMap').item.json[$('Webhook').item.json.body.user_email]}}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "Проект",
+                "displayName": "Проект",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "ID",
+                "displayName": "ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Статус",
+                "displayName": "Статус",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Дата",
+                "displayName": "Дата",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Время",
+                "displayName": "Время",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Исполнитель",
+                "displayName": "Исполнитель",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {
+            "useAppend": false
+          }
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          688,
+          -208
+        ],
+        "id": "31a9a5c1-92b1-48a6-82d3-c3566493b727",
+        "name": "append-logs-stroke-pkpp",
+        "credentials": {
+          "googleApi": {
+            "id": "qr8hKsQJKcudekLc",
+            "name": "logs-monitoring-proxy"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "G52RdzdAcbW0fHOF",
+            "mode": "list",
+            "cachedResultName": "logs_queue",
+            "cachedResultUrl": "/projects/OC8FWCQSkQb0Erkk/datatables/G52RdzdAcbW0fHOF"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "status",
+                "keyValue": "free"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          -544,
+          -64
+        ],
+        "id": "34e9c54e-0404-4b40-bddf-c1e23cd0079f",
+        "name": "Get row(s)",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "1db9ee0c-f5f9-48f3-8da6-82a8d67492b2",
+                "leftValue": "={{$json}}",
+                "rightValue": "",
+                "operator": {
+                  "type": "object",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -352,
+          -64
+        ],
+        "id": "a3350ede-8c83-40da-92c3-4a49027e776c",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "dataTableId": {
+            "__rl": true,
+            "value": "G52RdzdAcbW0fHOF",
+            "mode": "list",
+            "cachedResultName": "logs_queue",
+            "cachedResultUrl": "/projects/OC8FWCQSkQb0Erkk/datatables/G52RdzdAcbW0fHOF"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "status",
+                "keyValue": "free"
+              }
+            ]
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "status": "busy"
+            },
+            "matchingColumns": [
+              "status"
+            ],
+            "schema": [
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          -96,
+          -224
+        ],
+        "id": "9d21993c-ab98-4ade-a3cd-e736e1fff245",
+        "name": "Update row(s)",
+        "retryOnFail": true
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "dataTableId": {
+            "__rl": true,
+            "value": "G52RdzdAcbW0fHOF",
+            "mode": "list",
+            "cachedResultName": "logs_queue",
+            "cachedResultUrl": "/projects/OC8FWCQSkQb0Erkk/datatables/G52RdzdAcbW0fHOF"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "status",
+                "keyValue": "busy"
+              }
+            ]
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "status": "free"
+            },
+            "matchingColumns": [
+              "status"
+            ],
+            "schema": [
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          -80,
+          -16
+        ],
+        "id": "82f68c56-6a9f-4caf-b193-dbbb3da00b42",
+        "name": "Update row(s)1",
+        "retryOnFail": true
+      },
+      {
+        "parameters": {
+          "amount": 2
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          -192,
+          176
+        ],
+        "id": "c8f57169-e39e-4ebc-a6e7-685d265af57f",
+        "name": "Wait",
+        "webhookId": "82bb0697-02a1-4138-b6da-840c6a4024fe"
+      },
+      {
+        "parameters": {
+          "authentication": "serviceAccount",
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "1Nrl31uqtCw4-93L0AorlQKD5JKOHYYRHTykHbztDAhY",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Лог",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VbuUhhS4wBKI3ALocMcOkGGWkCdkazO1_FWSqVzZ0l8/edit#gid=0"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "Проект": "={{ $('Webhook').item.json.body.source }}",
+              "ID": "={{ $('Webhook').item.json.body.id }}",
+              "Статус": "={{ $('Webhook').item.json.body.status }}",
+              "Дата": "={{ $('Webhook').item.json.body.date }}",
+              "Время": "={{ $('Webhook').item.json.body.time }}",
+              "Исполнитель": "={{$('EmailsMap').item.json[$('Webhook').item.json.body.user_email]}}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "Проект",
+                "displayName": "Проект",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "ID",
+                "displayName": "ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Статус",
+                "displayName": "Статус",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Дата",
+                "displayName": "Дата",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Время",
+                "displayName": "Время",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Исполнитель",
+                "displayName": "Исполнитель",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {
+            "useAppend": false
+          }
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          704,
+          16
+        ],
+        "id": "8223cb8b-3b3c-4b62-b113-3aed7bbf8b86",
+        "name": "append-logs-stroke-ОТ",
+        "credentials": {
+          "googleApi": {
+            "id": "qr8hKsQJKcudekLc",
+            "name": "logs-monitoring-proxy"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "authentication": "serviceAccount",
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "162-luk8ZzZ_8yMB6RhC-ja8UPCbCPr1MQ5G4ndJqERs",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Лог",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VbuUhhS4wBKI3ALocMcOkGGWkCdkazO1_FWSqVzZ0l8/edit#gid=0"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "Проект": "={{ $('Webhook').item.json.body.source }}",
+              "ID": "={{ $('Webhook').item.json.body.id }}",
+              "Статус": "={{ $('Webhook').item.json.body.status }}",
+              "Дата": "={{ $('Webhook').item.json.body.date }}",
+              "Время": "={{ $('Webhook').item.json.body.time }}",
+              "Исполнитель": "={{$('EmailsMap').item.json[$('Webhook').item.json.body.user_email]}}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "Проект",
+                "displayName": "Проект",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "ID",
+                "displayName": "ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Статус",
+                "displayName": "Статус",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Дата",
+                "displayName": "Дата",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Время",
+                "displayName": "Время",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Исполнитель",
+                "displayName": "Исполнитель",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          704,
+          208
+        ],
+        "id": "29d19845-3247-44e3-9108-d52cdfbb3572",
+        "name": "append-logs-stroke-ANO RS",
+        "credentials": {
+          "googleApi": {
+            "id": "qr8hKsQJKcudekLc",
+            "name": "logs-monitoring-proxy"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "authentication": "serviceAccount",
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "1mXlnrLzhx-2E9rxf4KnWwuQglVuvcdS0DP9A-PRfkms",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Лог",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VbuUhhS4wBKI3ALocMcOkGGWkCdkazO1_FWSqVzZ0l8/edit#gid=0"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "Проект": "={{ $('Webhook').item.json.body.source }}",
+              "ID": "={{ $('Webhook').item.json.body.id }}",
+              "Статус": "={{ $('Webhook').item.json.body.status }}",
+              "Дата": "={{ $('Webhook').item.json.body.date }}",
+              "Время": "={{ $('Webhook').item.json.body.time }}",
+              "Исполнитель": "={{$('EmailsMap').item.json[$('Webhook').item.json.body.user_email]}}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "Проект",
+                "displayName": "Проект",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "ID",
+                "displayName": "ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Статус",
+                "displayName": "Статус",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Дата",
+                "displayName": "Дата",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Время",
+                "displayName": "Время",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Исполнитель",
+                "displayName": "Исполнитель",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {
+            "useAppend": false
+          }
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          704,
+          432
+        ],
+        "id": "4fb1f239-483f-4b07-b692-e919b2ee9682",
+        "name": "append-logs-stroke-ANO pkpp",
+        "credentials": {
+          "googleApi": {
+            "id": "qr8hKsQJKcudekLc",
+            "name": "logs-monitoring-proxy"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "authentication": "serviceAccount",
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "1wKq-mjOtr7DjQNv3Di9UYVj29NNStQyXwF0OHnDxWpw",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Лог",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VbuUhhS4wBKI3ALocMcOkGGWkCdkazO1_FWSqVzZ0l8/edit#gid=0"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "Проект": "={{ $('Webhook').item.json.body.source }}",
+              "ID": "={{ $('Webhook').item.json.body.id }}",
+              "Статус": "={{ $('Webhook').item.json.body.status }}",
+              "Дата": "={{ $('Webhook').item.json.body.date }}",
+              "Время": "={{ $('Webhook').item.json.body.time }}",
+              "Исполнитель": "={{$('EmailsMap').item.json[$('Webhook').item.json.body.user_email]}}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "Проект",
+                "displayName": "Проект",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "ID",
+                "displayName": "ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Статус",
+                "displayName": "Статус",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Дата",
+                "displayName": "Дата",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Время",
+                "displayName": "Время",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Исполнитель",
+                "displayName": "Исполнитель",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {
+            "useAppend": false
+          }
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          704,
+          624
+        ],
+        "id": "782b4d92-6406-4388-9c5b-3f99694849e1",
+        "name": "append-logs-stroke-АНО ОТ",
+        "credentials": {
+          "googleApi": {
+            "id": "qr8hKsQJKcudekLc",
+            "name": "logs-monitoring-proxy"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "documentId": {
+            "__rl": true,
+            "value": "1mPwStVHKe-QNaHF-71_x1oU3YY69rrb61XYhukNt9aw",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 1195136187,
+            "mode": "list",
+            "cachedResultName": "email map",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mPwStVHKe-QNaHF-71_x1oU3YY69rrb61XYhukNt9aw/edit#gid=1195136187"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          80,
+          -224
+        ],
+        "id": "360a2a58-bbe5-4d8f-b96e-50b6902a8af2",
+        "name": "GetEmails1",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "Xpp4ndWQ84MtD53m",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const employees = $('GetEmails1').all().reduce((acc, item) => {\n  acc[item.json.Email] = item.json[\"Сотрудник\"];\n  return acc;\n}, {});\n\nreturn employees;"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          240,
+          -224
+        ],
+        "id": "e7dfaa5a-2d05-4d5b-97e0-60c51980908d",
+        "name": "EmailsMap"
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Get row(s)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "append-logs-stroke-rs",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "append-logs-stroke-pkpp",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "append-logs-stroke-ОТ",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "append-logs-stroke-ANO RS",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "append-logs-stroke-ANO pkpp",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "append-logs-stroke-АНО ОТ",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get row(s)": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Update row(s)",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Update row(s)1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update row(s)": {
+        "main": [
+          [
+            {
+              "node": "GetEmails1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update row(s)1": {
+        "main": [
+          []
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Get row(s)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "GetEmails1": {
+        "main": [
+          [
+            {
+              "node": "EmailsMap",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "EmailsMap": {
+        "main": [
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Active User",
+    "name": "Version 706c3133",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": []
+}
