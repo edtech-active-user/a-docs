@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-09T10:14:59.850Z",
+  "updatedAt": "2026-09-09T10:23:00.312Z",
   "createdAt": "2026-03-30T10:32:08.822Z",
   "id": "rQgz3YcOV3BEXoXW",
   "name": "github-backup",
@@ -83,7 +83,7 @@
       "name": "Get Download Url for Index File",
       "type": "n8n-nodes-base.github",
       "position": [
-        1296,
+        1280,
         1728
       ],
       "webhookId": "6e7d3020-5558-4a80-9647-3c5a9de59a29",
@@ -170,7 +170,7 @@
       "name": "Set Github Data",
       "type": "n8n-nodes-base.set",
       "position": [
-        1104,
+        1072,
         1728
       ],
       "typeVersion": 3.4
@@ -211,7 +211,7 @@
       "name": "Get All Workflows",
       "type": "n8n-nodes-base.n8n",
       "position": [
-        1680,
+        1712,
         1712
       ],
       "executeOnce": false,
@@ -233,7 +233,7 @@
       "name": "C,E,D Checker",
       "type": "n8n-nodes-base.code",
       "position": [
-        1936,
+        1920,
         1712
       ],
       "typeVersion": 2
@@ -271,7 +271,8 @@
           "id": "gcjm9EIh8O6AjgCe",
           "name": "GitHub seo@active-users.ru"
         }
-      }
+      },
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -635,7 +636,7 @@
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        784,
+        736,
         1136
       ],
       "typeVersion": 1
@@ -1249,7 +1250,7 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "78cefd70-9e92-44fe-b02e-fae2b3caee6b",
+  "versionId": "81e8aa70-43ac-4654-b8de-73f535576dc0",
   "activeVersionId": "a04c9033-4838-4311-9ef3-6a93c034389d",
   "triggerCount": 1,
   "shared": [
