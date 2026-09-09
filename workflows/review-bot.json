@@ -1,0 +1,1586 @@
+{
+  "updatedAt": "2026-03-31T09:42:39.107Z",
+  "createdAt": "2025-12-25T05:22:31.191Z",
+  "id": "ZA1aNYswbNygMsLe",
+  "name": "review-bot",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "chatId": "={{ $('send start').item.json.message.chat.id }}",
+        "text": "=Это бот для размещения отзывов в Яндекс. \n\nК сожалению свободных отзывов на сегодня нет😨\n\nПопробуйте завтра🏃🏻‍♀️ ",
+        "replyMarkup": "replyKeyboard",
+        "replyKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "Получить текст отзыва",
+                    "additionalFields": {}
+                  },
+                  {
+                    "text": "Выход",
+                    "additionalFields": {}
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "replyKeyboardOptions": {
+          "one_time_keyboard": true
+        },
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1072,
+        320
+      ],
+      "id": "7ca9d84e-ccfd-43c0-801f-d466c30b2749",
+      "name": "Отказ работы",
+      "webhookId": "8e3f7049-ae00-4915-a300-8f5bf1facedf",
+      "credentials": {
+        "telegramApi": {
+          "id": "nGoUrfYXGemRgfnO",
+          "name": "Платон"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('send start').item.json.message.chat.id }}",
+        "text": "Это бот для размещения отзывов в Яндекс.   \n\n✔️Для того, чтобы  получить тексты отзыва, выберите опцию «Получить текст отзыва».   \n\n❌Если размещать отзывы не хотите, то нажмите «Выход»",
+        "replyMarkup": "replyKeyboard",
+        "replyKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "Получить текст отзыва",
+                    "additionalFields": {}
+                  },
+                  {
+                    "text": "Выход",
+                    "additionalFields": {}
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "replyKeyboardOptions": {
+          "one_time_keyboard": true
+        },
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1056,
+        80
+      ],
+      "id": "21f205a0-d95e-490f-b6f8-7b2cb3ea9d10",
+      "name": "Выбрать отзыв / выйти",
+      "webhookId": "8e3f7049-ae00-4915-a300-8f5bf1facedf",
+      "alwaysOutputData": false,
+      "executeOnce": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "nGoUrfYXGemRgfnO",
+          "name": "Платон"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "17Jz2sfWmgJ6iDvaars37Yf9l5fyAl37_HIaXGqtTpjY",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2091611820,
+          "mode": "list",
+          "cachedResultName": "Количество отзывов сут n8n",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17Jz2sfWmgJ6iDvaars37Yf9l5fyAl37_HIaXGqtTpjY/edit#gid=2091611820"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        496,
+        96
+      ],
+      "id": "e4d50be3-f279-47df-8152-14ad18eeceac",
+      "name": "Google Sheets1",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleApi": {
+          "id": "86ekhh3rUWlEgF4Y",
+          "name": "with.edtech@gmail.com"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "bae541f0-7d37-4a45-8080-b4464a0ed340",
+              "leftValue": "={{ $json.isEmpty() }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "80f47bf7-39b5-4b15-bd77-d18ec43691e5",
+              "leftValue": "={{ $items().length }}",
+              "rightValue": 4,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        752,
+        96
+      ],
+      "id": "12890b97-b583-4b74-b9d4-93d735192faa",
+      "name": "If",
+      "executeOnce": true,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "17Jz2sfWmgJ6iDvaars37Yf9l5fyAl37_HIaXGqtTpjY",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 718980590,
+          "mode": "list",
+          "cachedResultName": "Отзывы n8n",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17Jz2sfWmgJ6iDvaars37Yf9l5fyAl37_HIaXGqtTpjY/edit#gid=718980590"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Статус",
+              "lookupValue": "Готов к выдаче"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        256,
+        656
+      ],
+      "id": "6248fbfd-81b3-43dd-900b-43c2e3a54510",
+      "name": "get free review",
+      "executeOnce": true,
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleApi": {
+          "id": "86ekhh3rUWlEgF4Y",
+          "name": "with.edtech@gmail.com"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "17Jz2sfWmgJ6iDvaars37Yf9l5fyAl37_HIaXGqtTpjY",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 718980590,
+          "mode": "list",
+          "cachedResultName": "Отзывы n8n",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17Jz2sfWmgJ6iDvaars37Yf9l5fyAl37_HIaXGqtTpjY/edit#gid=718980590"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $json.row_number }}",
+            "Статус": "Выдан, ожидает публикации"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "Отзыв",
+              "displayName": "Отзыв",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Статус",
+              "displayName": "Статус",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        464,
+        656
+      ],
+      "id": "8bc8e049-b464-4d63-b3e3-db6327788077",
+      "name": "update given review status",
+      "executeOnce": true,
+      "credentials": {
+        "googleApi": {
+          "id": "86ekhh3rUWlEgF4Y",
+          "name": "with.edtech@gmail.com"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('send start').item.json.message.chat.id }}",
+        "text": "=Ваш отзыв для публикации:",
+        "replyMarkup": "replyKeyboard",
+        "replyKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "Отзыв отправлен",
+                    "additionalFields": {}
+                  },
+                  {
+                    "text": "Возникла проблема",
+                    "additionalFields": {}
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "replyKeyboardOptions": {
+          "one_time_keyboard": true
+        },
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        704,
+        656
+      ],
+      "id": "ac766e73-694d-4820-a92e-c57f35dca811",
+      "name": "1st message",
+      "webhookId": "e0257ab0-6976-4298-8e7f-23ef5896303a",
+      "credentials": {
+        "telegramApi": {
+          "id": "nGoUrfYXGemRgfnO",
+          "name": "Платон"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('send start').item.json.message.chat.id }}",
+        "text": "={{$('get free review').item.json[\"Отзыв\"]}}",
+        "replyMarkup": "replyKeyboard",
+        "replyKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "Отзыв отправлен",
+                    "additionalFields": {}
+                  },
+                  {
+                    "text": "Возникла проблема",
+                    "additionalFields": {}
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "replyKeyboardOptions": {},
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        896,
+        656
+      ],
+      "id": "ae86de88-3b97-4764-9503-bc43a738fd75",
+      "name": "2nd message",
+      "webhookId": "e0257ab0-6976-4298-8e7f-23ef5896303a",
+      "credentials": {
+        "telegramApi": {
+          "id": "nGoUrfYXGemRgfnO",
+          "name": "Платон"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('send start').item.json.message.chat.id }}",
+        "text": "Опубликовать его можно по [ссылке](https://reviews.yandex.ru/ugcpub/object-digest?object=/site/bmNwby5ydQ==&otype=Site&app_id=iznanka&ranking=by_relevance&disable_termometr_rating_count=0&utm_source=iznanka)\n\nНе забудьте авторизироваться в Яндексе\\!\n",
+        "additionalFields": {
+          "parse_mode": "MarkdownV2"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1072,
+        656
+      ],
+      "id": "0ecb3feb-faf1-4d8b-9315-b5e161203d1e",
+      "name": "3rd message",
+      "webhookId": "62e1a17e-603f-4f78-a7f1-89ab686f93f5",
+      "credentials": {
+        "telegramApi": {
+          "id": "nGoUrfYXGemRgfnO",
+          "name": "Платон"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.text }}",
+                    "rightValue": "/start",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "4f267cd9-610c-4648-996a-43ff54c2ee7d"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "a4c27a66-320e-48c8-8949-ae19ece40e1a",
+                    "leftValue": "={{ $json.message.text }}",
+                    "rightValue": "Получить текст отзыва",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "7268424b-5911-4f4a-b604-7a2658ce8e97",
+                    "leftValue": "={{ $json.message.text }}",
+                    "rightValue": "Отзыв отправлен",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        0,
+        640
+      ],
+      "id": "5bf89c51-916c-4f41-873f-7d7bdfb8e1ab",
+      "name": "Switch",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "17Jz2sfWmgJ6iDvaars37Yf9l5fyAl37_HIaXGqtTpjY",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 718980590,
+          "mode": "list",
+          "cachedResultName": "Отзывы n8n",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17Jz2sfWmgJ6iDvaars37Yf9l5fyAl37_HIaXGqtTpjY/edit#gid=718980590"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Статус",
+              "lookupValue": "Выдан, ожидает публикации"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        240,
+        1008
+      ],
+      "id": "e4853ac4-1d80-4b93-affd-3757eaa8835f",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleApi": {
+          "id": "86ekhh3rUWlEgF4Y",
+          "name": "with.edtech@gmail.com"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "17Jz2sfWmgJ6iDvaars37Yf9l5fyAl37_HIaXGqtTpjY",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 718980590,
+          "mode": "list",
+          "cachedResultName": "Отзывы n8n",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17Jz2sfWmgJ6iDvaars37Yf9l5fyAl37_HIaXGqtTpjY/edit#gid=718980590"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $('Google Sheets').item.json.row_number }}",
+            "Статус": "Отправлен на модерацию"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "Отзыв",
+              "displayName": "Отзыв",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Статус",
+              "displayName": "Статус",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        784,
+        1008
+      ],
+      "id": "ebeb21f0-b353-4565-b4b1-c2b290da368d",
+      "name": "Google Sheets2",
+      "executeOnce": true,
+      "credentials": {
+        "googleApi": {
+          "id": "86ekhh3rUWlEgF4Y",
+          "name": "with.edtech@gmail.com"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('send start').item.json.message.chat.id }}",
+        "text": "Ваше участие учтено, спасибо!",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1008,
+        1008
+      ],
+      "id": "411bb1d3-97a0-4c3b-8299-8ef62657a6eb",
+      "name": "Telegram",
+      "webhookId": "73572505-e709-4a83-b3ba-91b8674a5b3e",
+      "credentials": {
+        "telegramApi": {
+          "id": "nGoUrfYXGemRgfnO",
+          "name": "Платон"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "17Jz2sfWmgJ6iDvaars37Yf9l5fyAl37_HIaXGqtTpjY",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2091611820,
+          "mode": "list",
+          "cachedResultName": "Количество отзывов сут n8n",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17Jz2sfWmgJ6iDvaars37Yf9l5fyAl37_HIaXGqtTpjY/edit#gid=2091611820"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID пользователя": "={{ $('send start').item.json.message.from.username }}"
+          },
+          "matchingColumns": [
+            "ID пользователя"
+          ],
+          "schema": [
+            {
+              "id": "ID пользователя",
+              "displayName": "ID пользователя",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        528,
+        1008
+      ],
+      "id": "c595fbba-0a6f-47af-babe-047e5befd6d1",
+      "name": "Google Sheets3",
+      "executeOnce": true,
+      "credentials": {
+        "googleApi": {
+          "id": "86ekhh3rUWlEgF4Y",
+          "name": "with.edtech@gmail.com"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "language": "python",
+        "pythonCode": "return {'date':_today}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "81e3dc91-076a-439a-a537-7aa79884be25",
+      "name": "Code",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        1168,
+        1808
+      ],
+      "id": "7740407f-7e33-4696-8802-6fe51816fb81",
+      "name": "Telegram Trigger",
+      "webhookId": "4031466d-49c8-4f30-b095-40a4430c8eb3",
+      "credentials": {
+        "telegramApi": {
+          "id": "eQTGKgscHbAY4K60",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "16trekzMWKXfYIt3x7sRZFD9cbhsioOm4GkSKMIhg7Tw",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2073623980,
+          "mode": "list",
+          "cachedResultName": "Количество отзывов в сутки",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/16trekzMWKXfYIt3x7sRZFD9cbhsioOm4GkSKMIhg7Tw/edit#gid=2073623980"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1680,
+        1680
+      ],
+      "id": "3a9a8a47-d3d3-4e8a-8270-96efdbaae32f",
+      "name": "Проверка свободных слотов",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleApi": {
+          "id": "86ekhh3rUWlEgF4Y",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "7c5badff-05a2-493e-a722-123a78b09c6f",
+              "leftValue": "={{ $json.message.text }}",
+              "rightValue": "/start",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1408,
+        1808
+      ],
+      "id": "0cf5e7ab-3d25-4bf3-aef2-31ed1bdd6c03",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "50da0ead-a089-48e2-a429-cd84bf736c6a",
+                    "leftValue": "={{$json.isEmpty()}}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1392,
+        576
+      ],
+      "id": "8f159f57-a404-4f6e-8966-c4e0ec940fef",
+      "name": "Switch1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ec9e11b7-6ca1-4523-9a38-c2379b8eeea6",
+              "leftValue": "={{$json.isEmpty()}}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "a26d9760-6b26-4b32-be2b-fce460eb6f57",
+              "leftValue": "={{$input.all().length}}",
+              "rightValue": 500,
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1888,
+        1680
+      ],
+      "id": "1fdcae71-eaf9-4e67-966d-aad394a47876",
+      "name": "If2",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "К сожалению свободных отзывов на сегодня нет. Приходите завтра!",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2176,
+        1776
+      ],
+      "id": "de0990de-9f6a-43d3-a4b9-0231d87b661f",
+      "name": "Сообщение об отсутствии свободных отзывов",
+      "webhookId": "87d8b79f-eda7-4ab9-be24-92e9c45e7260",
+      "executeOnce": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "eQTGKgscHbAY4K60",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "16trekzMWKXfYIt3x7sRZFD9cbhsioOm4GkSKMIhg7Tw",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Отзывы",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/16trekzMWKXfYIt3x7sRZFD9cbhsioOm4GkSKMIhg7Tw/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Статус",
+              "lookupValue": "Готов к выдаче"
+            }
+          ]
+        },
+        "options": {
+          "returnFirstMatch": true
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2176,
+        1584
+      ],
+      "id": "5270d9cf-a5c9-45f0-8929-71c32177f2ea",
+      "name": "Получение отзыва",
+      "credentials": {
+        "googleApi": {
+          "id": "86ekhh3rUWlEgF4Y",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "17Jz2sfWmgJ6iDvaars37Yf9l5fyAl37_HIaXGqtTpjY",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 718980590,
+          "mode": "list",
+          "cachedResultName": "Отзывы",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17Jz2sfWmgJ6iDvaars37Yf9l5fyAl37_HIaXGqtTpjY/edit#gid=718980590"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ $json.row_number }}",
+            "Статус": "Выдан"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "Отзыв",
+              "displayName": "Отзыв",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Статус",
+              "displayName": "Статус",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2400,
+        1584
+      ],
+      "id": "ab63e737-1fad-4721-8519-774036e78a19",
+      "name": "Обновление статуса",
+      "credentials": {
+        "googleApi": {
+          "id": "86ekhh3rUWlEgF4Y",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "=Ваш отзыв для публикации:",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2624,
+        1584
+      ],
+      "id": "95d869c7-f5de-4e40-a3e7-9f7119db11bd",
+      "name": "Сообщение \"Ваш отзыв\"",
+      "webhookId": "4cd211b9-fe09-40c6-9dda-718729224679",
+      "executeOnce": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "eQTGKgscHbAY4K60",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $('Получение отзыва').item.json['Отзыв'] }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2848,
+        1584
+      ],
+      "id": "c8cc1eff-23c9-4cd5-9461-bda6c03a7496",
+      "name": "Получение отзыва1",
+      "webhookId": "e1b60c7c-fa98-41eb-9baf-1f4afa566089",
+      "executeOnce": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "eQTGKgscHbAY4K60",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "Опубликовать его можно по [ссылке](https://reviews.yandex.ru/ugcpub/object-digest?object=/site/bmNwby5ydQ==&otype=Site&app_id=iznanka&ranking=by_relevance&disable_termometr_rating_count=0&utm_source=iznanka)\nНе забудьте авторизироваться в Яндексе\\!\n\nПосле публикации отзыва нажмите кнопку \"Отзыв отправлен на модерацию\"",
+        "replyMarkup": "replyKeyboard",
+        "replyKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "Отзыв отправлен на модерацию",
+                    "additionalFields": {}
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "replyKeyboardOptions": {
+          "one_time_keyboard": true
+        },
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "MarkdownV2"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3056,
+        1584
+      ],
+      "id": "eea4c5e7-7ff2-4317-a6ae-6ac84bac6c46",
+      "name": "Инструкция",
+      "webhookId": "4c8b39ba-849a-4cd4-b0fd-e4fabd7f870b",
+      "executeOnce": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "eQTGKgscHbAY4K60",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "16trekzMWKXfYIt3x7sRZFD9cbhsioOm4GkSKMIhg7Tw",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2073623980,
+          "mode": "list",
+          "cachedResultName": "Количество отзывов в сутки",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/16trekzMWKXfYIt3x7sRZFD9cbhsioOm4GkSKMIhg7Tw/edit#gid=2073623980"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID пользователя": "={{ $('Telegram Trigger').item.json.message.chat.username }}"
+          },
+          "matchingColumns": [
+            "ID пользователя"
+          ],
+          "schema": [
+            {
+              "id": "ID пользователя",
+              "displayName": "ID пользователя",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2400,
+        1408
+      ],
+      "id": "f1671d76-c56f-4053-8f4c-37a6b91b585a",
+      "name": "Добавление занятый слот",
+      "credentials": {
+        "googleApi": {
+          "id": "86ekhh3rUWlEgF4Y",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "Проверяю наличие свободных мест на отправку отзыва",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1680,
+        1504
+      ],
+      "id": "99c73e04-767a-4231-92a6-ed660fa5cd5d",
+      "name": "Проверка на наличия слотов",
+      "webhookId": "715cbcc4-d6f0-4d12-ad21-1f3b1fbe353e",
+      "executeOnce": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "eQTGKgscHbAY4K60",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "Формирую текст отзыва, пожалуйста подождите!",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2176,
+        1408
+      ],
+      "id": "6a4e38cd-916e-40dd-bdbc-d7be97ba238c",
+      "name": "Проверка на наличия слотов1",
+      "webhookId": "715cbcc4-d6f0-4d12-ad21-1f3b1fbe353e",
+      "executeOnce": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "eQTGKgscHbAY4K60",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6006e342-3c7b-4a26-b420-5d3a858e93ef",
+              "leftValue": "={{ $json.message.text }}",
+              "rightValue": "Отзыв отправлен на модерацию",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1424,
+        1984
+      ],
+      "id": "09031a2c-cd30-41c2-a24e-eb774fb27e40",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "=Спасибо большое за участие 😉\n💙 от команды НЦПО",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1696,
+        1968
+      ],
+      "id": "e975869f-6b7c-46a1-8076-939f29e9fef9",
+      "name": "Спасибо за отзыв",
+      "webhookId": "670eebde-f631-41e2-a741-591f4567715a",
+      "executeOnce": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "eQTGKgscHbAY4K60",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Google Sheets1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Выбрать отзыв / выйти",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Отказ работы",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get free review": {
+      "main": [
+        [
+          {
+            "node": "update given review status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update given review status": {
+      "main": [
+        [
+          {
+            "node": "1st message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "1st message": {
+      "main": [
+        [
+          {
+            "node": "2nd message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2nd message": {
+      "main": [
+        [
+          {
+            "node": "3rd message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "get free review",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets2": {
+      "main": [
+        [
+          {
+            "node": "Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets3": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Проверка свободных слотов": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Проверка свободных слотов",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Проверка на наличия слотов",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Получение отзыва",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Проверка на наличия слотов1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Сообщение об отсутствии свободных отзывов",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Получение отзыва": {
+      "main": [
+        [
+          {
+            "node": "Обновление статуса",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Добавление занятый слот",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Обновление статуса": {
+      "main": [
+        [
+          {
+            "node": "Сообщение \"Ваш отзыв\"",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Сообщение \"Ваш отзыв\"": {
+      "main": [
+        [
+          {
+            "node": "Получение отзыва1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Получение отзыва1": {
+      "main": [
+        [
+          {
+            "node": "Инструкция",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Спасибо за отзыв",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "versionId": "e80b0f0d-0573-4dee-8a05-9f0e0280ebc9",
+  "activeVersionId": null,
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2025-12-25T05:22:31.191Z",
+      "createdAt": "2025-12-25T05:22:31.191Z",
+      "role": "workflow:owner",
+      "workflowId": "ZA1aNYswbNygMsLe",
+      "projectId": "OC8FWCQSkQb0Erkk"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
