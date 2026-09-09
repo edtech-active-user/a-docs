@@ -1,0 +1,172 @@
+{
+  "updatedAt": "2026-04-13T13:53:23.932Z",
+  "createdAt": "2026-03-27T12:29:10.722Z",
+  "id": "hX15tKh83Gq3N9El",
+  "name": "errors-handler",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -416,
+        16
+      ],
+      "id": "4b42eddf-8217-4d58-b58b-ed65476a5802",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://edtech-automatic.ru/webhook/43e4f7ce-962b-4bf2-80c8-2e819ac41981",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "=date",
+              "value": "={{$now.format('dd-MM-yyyy')}}"
+            },
+            {
+              "name": "workflowName",
+              "value": "={{ $json.workflow.name }}"
+            },
+            {
+              "name": "error_message",
+              "value": "={{ $json.execution.error.message }}"
+            },
+            {
+              "name": "check_url",
+              "value": "={{ $json.execution.url }}"
+            },
+            {
+              "name": "node",
+              "value": "={{ $json.execution.lastNodeExecuted }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -240,
+        16
+      ],
+      "id": "5ae9df04-31ed-44ba-b8fd-2d57d576efd4",
+      "name": "SendHookToEdtech"
+    }
+  ],
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "SendHookToEdtech",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "versionId": "2711d517-7f9a-4183-8aa5-f3ee68064f5b",
+  "activeVersionId": "2711d517-7f9a-4183-8aa5-f3ee68064f5b",
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-03-27T12:29:10.722Z",
+      "createdAt": "2026-03-27T12:29:10.722Z",
+      "role": "workflow:owner",
+      "workflowId": "hX15tKh83Gq3N9El",
+      "projectId": "OC8FWCQSkQb0Erkk"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-04-13T13:53:24.966Z",
+    "createdAt": "2026-04-13T13:53:23.933Z",
+    "versionId": "2711d517-7f9a-4183-8aa5-f3ee68064f5b",
+    "workflowId": "hX15tKh83Gq3N9El",
+    "nodes": [
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.errorTrigger",
+        "typeVersion": 1,
+        "position": [
+          -416,
+          16
+        ],
+        "id": "4b42eddf-8217-4d58-b58b-ed65476a5802",
+        "name": "Error Trigger"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://edtech-automatic.ru/webhook/43e4f7ce-962b-4bf2-80c8-2e819ac41981",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "=date",
+                "value": "={{$now.format('dd-MM-yyyy')}}"
+              },
+              {
+                "name": "workflowName",
+                "value": "={{ $json.workflow.name }}"
+              },
+              {
+                "name": "error_message",
+                "value": "={{ $json.execution.error.message }}"
+              },
+              {
+                "name": "check_url",
+                "value": "={{ $json.execution.url }}"
+              },
+              {
+                "name": "node",
+                "value": "={{ $json.execution.lastNodeExecuted }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          -240,
+          16
+        ],
+        "id": "5ae9df04-31ed-44ba-b8fd-2d57d576efd4",
+        "name": "SendHookToEdtech"
+      }
+    ],
+    "connections": {
+      "Error Trigger": {
+        "main": [
+          [
+            {
+              "node": "SendHookToEdtech",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Active User",
+    "name": "Version 2711d517",
+    "description": "",
+    "autosaved": false
+  },
+  "tags": []
+}
