@@ -1,1 +1,10 @@
-{}
+{
+  "tGYA9C07smM2Nmaj": {
+    "name": "recognize_photo",
+    "file_path": "workflows/recognize_photo.json"
+  },
+  "81NWJUFC56lNEbV1": {
+    "name": "recognize_text",
+    "file_path": "workflows/recognize_text.json"
+  }
+}
