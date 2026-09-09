@@ -1,0 +1,131 @@
+{
+  "updatedAt": "2026-08-18T06:08:50.737Z",
+  "createdAt": "2026-08-14T06:06:54.471Z",
+  "id": "0heiC3ZuoxxoDXf0",
+  "name": "My workflow",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c65a246b-93c4-4a4b-b684-bd8ae7b2fc5d",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://ncpoedu.amocrm.ru/api/v4/leads/24924848?with=contacts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImQ2YmUzZTQ1ZjEwYjU2MTE4YjRmMTM4NTk3YjRlNGRmZmIyZjc4ZmYxNGUzZjVhMWRhMjJjNjMyYTkwY2JkODdkZDE4ZTRmYzIyMTMwNmY3In0.eyJhdWQiOiJmMzZjNGJiNi1kNmMyLTQyMzgtYWQ0Mi1lYzE0ODVjOTQ1ZTgiLCJqdGkiOiJkNmJlM2U0NWYxMGI1NjExOGI0ZjEzODU5N2I0ZTRkZmZiMmY3OGZmMTRlM2Y1YTFkYTIyYzYzMmE5MGNiZDg3ZGQxOGU0ZmMyMjEzMDZmNyIsImlhdCI6MTc4NjY4Nzk2MywibmJmIjoxNzg2Njg3OTYzLCJleHAiOjE3ODY4Mzg0MDAsInN1YiI6IjEwOTc4MjUwIiwiZ3JhbnRfdHlwZSI6IiIsImFjY291bnRfaWQiOjMxNjc2Mjg2LCJiYXNlX2RvbWFpbiI6ImFtb2NybS5ydSIsInZlcnNpb24iOjIsInNjb3BlcyI6WyJwdXNoX25vdGlmaWNhdGlvbnMiLCJmaWxlcyIsImNybSIsIm5vdGlmaWNhdGlvbnMiXSwiaGFzaF91dWlkIjoiYjEwMGQyMTEtYWQ2ZC00NmYyLThlNTAtYzNhNjVjZmNlYjBlIiwiYXBpX2RvbWFpbiI6ImFwaS1hLmFtb2NybS5ydSJ9.QlbJ6WWsuyJGVay9sB07lwPttxP2Dpi408EUC1zBUkElOwVNYdgFfjJh1GwB43vFqvxNBaSQx6alKj02luRfU_dwChzjF51m2NSvoByeMaR1kkzBBEIFCgIOW-hHZoALfJSHHL5UsTyG1XSdUSqPsae5Le5T7Ihhc8p3z99nRh5VJriYV044aD5FQLIvxZllBuukykroBV-6eqZkk5U3kpl5b6oLRp9bQlAMOPk3twg4FmAL4UOugJRB-s5BTb6otzc_O9AlwVKIZGDQxFxCfMsXRGHES5yhg7zGyHn39NE380rm6kSJtLkN_U5D2QbzDfuCQtuozAaIA3lOq4Q8WA"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        176,
+        -224
+      ],
+      "id": "ca241877-2c6e-4884-b9a1-2d3d86cb0811",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "url": "=https://ncpoedu.amocrm.ru/api/v4/contacts/{{ JSON.parse($json.data)._embedded.contacts.find(c => c.is_main)?.id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImQ2YmUzZTQ1ZjEwYjU2MTE4YjRmMTM4NTk3YjRlNGRmZmIyZjc4ZmYxNGUzZjVhMWRhMjJjNjMyYTkwY2JkODdkZDE4ZTRmYzIyMTMwNmY3In0.eyJhdWQiOiJmMzZjNGJiNi1kNmMyLTQyMzgtYWQ0Mi1lYzE0ODVjOTQ1ZTgiLCJqdGkiOiJkNmJlM2U0NWYxMGI1NjExOGI0ZjEzODU5N2I0ZTRkZmZiMmY3OGZmMTRlM2Y1YTFkYTIyYzYzMmE5MGNiZDg3ZGQxOGU0ZmMyMjEzMDZmNyIsImlhdCI6MTc4NjY4Nzk2MywibmJmIjoxNzg2Njg3OTYzLCJleHAiOjE3ODY4Mzg0MDAsInN1YiI6IjEwOTc4MjUwIiwiZ3JhbnRfdHlwZSI6IiIsImFjY291bnRfaWQiOjMxNjc2Mjg2LCJiYXNlX2RvbWFpbiI6ImFtb2NybS5ydSIsInZlcnNpb24iOjIsInNjb3BlcyI6WyJwdXNoX25vdGlmaWNhdGlvbnMiLCJmaWxlcyIsImNybSIsIm5vdGlmaWNhdGlvbnMiXSwiaGFzaF91dWlkIjoiYjEwMGQyMTEtYWQ2ZC00NmYyLThlNTAtYzNhNjVjZmNlYjBlIiwiYXBpX2RvbWFpbiI6ImFwaS1hLmFtb2NybS5ydSJ9.QlbJ6WWsuyJGVay9sB07lwPttxP2Dpi408EUC1zBUkElOwVNYdgFfjJh1GwB43vFqvxNBaSQx6alKj02luRfU_dwChzjF51m2NSvoByeMaR1kkzBBEIFCgIOW-hHZoALfJSHHL5UsTyG1XSdUSqPsae5Le5T7Ihhc8p3z99nRh5VJriYV044aD5FQLIvxZllBuukykroBV-6eqZkk5U3kpl5b6oLRp9bQlAMOPk3twg4FmAL4UOugJRB-s5BTb6otzc_O9AlwVKIZGDQxFxCfMsXRGHES5yhg7zGyHn39NE380rm6kSJtLkN_U5D2QbzDfuCQtuozAaIA3lOq4Q8WA"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        400,
+        -224
+      ],
+      "id": "bd44c85b-ead2-423d-8215-69d4a0c3ebdb",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "url": "https://api.pact.im/api/p2/conversations",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"private_api_token\": \"9997f342ab8d5349956ad57f49b2b7a9a84ea71feeec9e3d21fbd7c4168f0bb3c060dcd49771d7babda7a0630fef90d772ff31d21758964c8533022eaf71b6da\",\n  \"company_id\": 76312,\n  \"search_string\": \"79006556641\"\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "5294a601-34f9-4843-bebe-c52e322da65b",
+      "name": "HTTP Request2"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "versionId": "81fabe6d-41ca-4d8f-8f17-8bff9f069bbc",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-08-14T06:06:54.471Z",
+      "createdAt": "2026-08-14T06:06:54.471Z",
+      "role": "workflow:owner",
+      "workflowId": "0heiC3ZuoxxoDXf0",
+      "projectId": "OC8FWCQSkQb0Erkk"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
