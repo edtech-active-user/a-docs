@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-09T10:23:00.312Z",
+  "updatedAt": "2026-09-09T10:25:18.767Z",
   "createdAt": "2026-03-30T10:32:08.822Z",
   "id": "rQgz3YcOV3BEXoXW",
   "name": "github-backup",
@@ -51,7 +51,7 @@
         1888
       ],
       "webhookId": "b1c00612-30d6-402d-a737-b9d06e473053",
-      "retryOnFail": false,
+      "retryOnFail": true,
       "typeVersion": 1.1,
       "credentials": {
         "githubOAuth2Api": {
@@ -261,18 +261,17 @@
       "type": "n8n-nodes-base.github",
       "position": [
         2480,
-        1424
+        1392
       ],
       "webhookId": "b1c00612-30d6-402d-a737-b9d06e473053",
-      "retryOnFail": false,
+      "retryOnFail": true,
       "typeVersion": 1.1,
       "credentials": {
         "githubOAuth2Api": {
           "id": "gcjm9EIh8O6AjgCe",
           "name": "GitHub seo@active-users.ru"
         }
-      },
-      "onError": "continueRegularOutput"
+      }
     },
     {
       "parameters": {
@@ -612,7 +611,7 @@
       "name": "Edit Files",
       "type": "n8n-nodes-base.github",
       "position": [
-        3760,
+        3856,
         1600
       ],
       "webhookId": "0cfd3844-d625-413e-9760-c352d50d4c79",
@@ -637,7 +636,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         736,
-        1136
+        1104
       ],
       "typeVersion": 1
     },
@@ -1250,8 +1249,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "81e8aa70-43ac-4654-b8de-73f535576dc0",
-  "activeVersionId": "a04c9033-4838-4311-9ef3-6a93c034389d",
+  "versionId": "04ada36f-1656-4c2d-b7bf-578a04644b07",
+  "activeVersionId": "0963716e-e541-4604-8578-13ca4a92d01d",
   "triggerCount": 1,
   "shared": [
     {
@@ -1263,9 +1262,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-09-09T09:38:19.343Z",
-    "createdAt": "2026-09-09T09:37:31.807Z",
-    "versionId": "a04c9033-4838-4311-9ef3-6a93c034389d",
+    "updatedAt": "2026-09-09T10:25:02.987Z",
+    "createdAt": "2026-09-09T10:24:21.850Z",
+    "versionId": "0963716e-e541-4604-8578-13ca4a92d01d",
     "workflowId": "rQgz3YcOV3BEXoXW",
     "nodes": [
       {
@@ -1345,7 +1344,7 @@
         "name": "Get Download Url for Index File",
         "type": "n8n-nodes-base.github",
         "position": [
-          1296,
+          1280,
           1728
         ],
         "webhookId": "6e7d3020-5558-4a80-9647-3c5a9de59a29",
@@ -1432,7 +1431,7 @@
         "name": "Set Github Data",
         "type": "n8n-nodes-base.set",
         "position": [
-          1104,
+          1072,
           1728
         ],
         "typeVersion": 3.4
@@ -1473,7 +1472,7 @@
         "name": "Get All Workflows",
         "type": "n8n-nodes-base.n8n",
         "position": [
-          1728,
+          1712,
           1712
         ],
         "executeOnce": false,
@@ -1495,7 +1494,7 @@
         "name": "C,E,D Checker",
         "type": "n8n-nodes-base.code",
         "position": [
-          1952,
+          1920,
           1712
         ],
         "typeVersion": 2
@@ -1523,7 +1522,7 @@
         "type": "n8n-nodes-base.github",
         "position": [
           2480,
-          1424
+          1392
         ],
         "webhookId": "b1c00612-30d6-402d-a737-b9d06e473053",
         "retryOnFail": false,
@@ -1533,7 +1532,8 @@
             "id": "gcjm9EIh8O6AjgCe",
             "name": "GitHub seo@active-users.ru"
           }
-        }
+        },
+        "onError": "continueRegularOutput"
       },
       {
         "parameters": {
@@ -1873,7 +1873,7 @@
         "name": "Edit Files",
         "type": "n8n-nodes-base.github",
         "position": [
-          3760,
+          3856,
           1600
         ],
         "webhookId": "0cfd3844-d625-413e-9760-c352d50d4c79",
@@ -1897,8 +1897,8 @@
         "name": "Sticky Note2",
         "type": "n8n-nodes-base.stickyNote",
         "position": [
-          432,
-          1232
+          736,
+          1104
         ],
         "typeVersion": 1
       },
@@ -2499,7 +2499,7 @@
       }
     },
     "authors": "Active User",
-    "name": "Version a04c9033",
+    "name": "Version 0963716e",
     "description": "",
     "autosaved": true
   },
