@@ -1250,7 +1250,7 @@
     "templateCredsSetupCompleted": true
   },
   "versionId": "04ada36f-1656-4c2d-b7bf-578a04644b07",
-  "activeVersionId": "0963716e-e541-4604-8578-13ca4a92d01d",
+  "activeVersionId": "04ada36f-1656-4c2d-b7bf-578a04644b07",
   "triggerCount": 1,
   "shared": [
     {
@@ -1262,9 +1262,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-09-09T10:25:02.987Z",
-    "createdAt": "2026-09-09T10:24:21.850Z",
-    "versionId": "0963716e-e541-4604-8578-13ca4a92d01d",
+    "updatedAt": "2026-09-09T10:25:53.803Z",
+    "createdAt": "2026-09-09T10:25:18.768Z",
+    "versionId": "04ada36f-1656-4c2d-b7bf-578a04644b07",
     "workflowId": "rQgz3YcOV3BEXoXW",
     "nodes": [
       {
@@ -1312,7 +1312,7 @@
           1888
         ],
         "webhookId": "b1c00612-30d6-402d-a737-b9d06e473053",
-        "retryOnFail": false,
+        "retryOnFail": true,
         "typeVersion": 1.1,
         "credentials": {
           "githubOAuth2Api": {
@@ -1525,15 +1525,14 @@
           1392
         ],
         "webhookId": "b1c00612-30d6-402d-a737-b9d06e473053",
-        "retryOnFail": false,
+        "retryOnFail": true,
         "typeVersion": 1.1,
         "credentials": {
           "githubOAuth2Api": {
             "id": "gcjm9EIh8O6AjgCe",
             "name": "GitHub seo@active-users.ru"
           }
-        },
-        "onError": "continueRegularOutput"
+        }
       },
       {
         "parameters": {
@@ -2499,7 +2498,7 @@
       }
     },
     "authors": "Active User",
-    "name": "Version 0963716e",
+    "name": "Version 04ada36f",
     "description": "",
     "autosaved": true
   },
