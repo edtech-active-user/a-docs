@@ -1,1 +1,158 @@
-{}
+{
+  "OqgfapoZ7XWO2FJW": {
+    "name": "ANO autodoc PK-PP",
+    "file_path": "workflows/ANO autodoc PK-PP.json"
+  },
+  "PWvm7ssLmLAV7lWT": {
+    "name": "autodoc-OT-vypiska-inner-loop",
+    "file_path": "workflows/autodoc-OT-vypiska-inner-loop.json"
+  },
+  "oKNPNF7epqCw7K9O": {
+    "name": "Определение региона по номеру",
+    "file_path": "workflows/Определение региона по номеру.json"
+  },
+  "vHM7d8SJtPoHmfKF": {
+    "name": "ANO autodoc PK-PP FRDO",
+    "file_path": "workflows/ANO autodoc PK-PP FRDO.json"
+  },
+  "9IRG2pEZBGn7MonU": {
+    "name": "mark-ready-strokes",
+    "file_path": "workflows/mark-ready-strokes.json"
+  },
+  "QWI21fLoL57P1I0B": {
+    "name": "ANO autodoc OT MINTRUD file to",
+    "file_path": "workflows/ANO autodoc OT MINTRUD file to.json"
+  },
+  "ZA1aNYswbNygMsLe": {
+    "name": "review-bot",
+    "file_path": "workflows/review-bot.json"
+  },
+  "Hyr2yN9pjZc4BsRZ": {
+    "name": "ANO autodoc OT",
+    "file_path": "workflows/ANO autodoc OT.json"
+  },
+  "GH7moINZwDUlmWbK": {
+    "name": "NCPO autodoc OT",
+    "file_path": "workflows/NCPO autodoc OT.json"
+  },
+  "phRrUh556uvizS7T": {
+    "name": "NCPO autodoc PK-PP FRDO",
+    "file_path": "workflows/NCPO autodoc PK-PP FRDO.json"
+  },
+  "wBv8SLxHhMibGirf": {
+    "name": "logs-monitoring-proxy",
+    "file_path": "workflows/logs-monitoring-proxy.json"
+  },
+  "DDvnEY8x5NXjFhDO": {
+    "name": "Распознавание данных документов Yandex OCR v4",
+    "file_path": "workflows/Распознавание данных документов Yandex OCR v4.json"
+  },
+  "L2MFLBVRIYuaZ84O": {
+    "name": "debug-test",
+    "file_path": "workflows/debug-test.json"
+  },
+  "wMz0FzNx6GsO8tah": {
+    "name": "ANO autodoc RS FRDO",
+    "file_path": "workflows/ANO autodoc RS FRDO.json"
+  },
+  "bW5C7J4327CR8Kkq": {
+    "name": "NCPO autodoc PK-PP",
+    "file_path": "workflows/NCPO autodoc PK-PP.json"
+  },
+  "SqPr4m6mASc1ILN8": {
+    "name": "NCPO autodoc OT MINTRUD file from",
+    "file_path": "workflows/NCPO autodoc OT MINTRUD file from.json"
+  },
+  "4LntIQeZ4iQ3w0kW": {
+    "name": "ErrorHandlerPKPP",
+    "file_path": "workflows/ErrorHandlerPKPP.json"
+  },
+  "E1A6Ouo4GmBByMWE": {
+    "name": "Распознавание данных документов Yandex OCR v2",
+    "file_path": "workflows/Распознавание данных документов Yandex OCR v2.json"
+  },
+  "GDHzhxJrGwLKAYcD": {
+    "name": "Выбор шаблона на основании услуги АМО",
+    "file_path": "workflows/Выбор шаблона на основании услуги АМО.json"
+  },
+  "hj2Eq6rOJJBNOWLs": {
+    "name": "autodoc-OT-remove-loop",
+    "file_path": "workflows/autodoc-OT-remove-loop.json"
+  },
+  "PNwggetcKcsuEyBH": {
+    "name": "autodoc-OT-refresh-loop",
+    "file_path": "workflows/autodoc-OT-refresh-loop.json"
+  },
+  "rQgz3YcOV3BEXoXW": {
+    "name": "github-backup",
+    "file_path": "workflows/github-backup.json"
+  },
+  "LVDC6da2JfAxsblA": {
+    "name": "NCPO autodoc RS FRDO",
+    "file_path": "workflows/NCPO autodoc RS FRDO.json"
+  },
+  "WHZVlIfLFK9dyFUq": {
+    "name": "clear-queue",
+    "file_path": "workflows/clear-queue.json"
+  },
+  "VwV1izesFikAoFYR": {
+    "name": "Распознавание данных документов Yandex OCR v3",
+    "file_path": "workflows/Распознавание данных документов Yandex OCR v3.json"
+  },
+  "0heiC3ZuoxxoDXf0": {
+    "name": "My workflow",
+    "file_path": "workflows/My workflow.json"
+  },
+  "WxQNDRBvNRBFSLcD": {
+    "name": "autodoc-PK-PP - newReestr",
+    "file_path": "workflows/autodoc-PK-PP - newReestr.json"
+  },
+  "tUjwi1OXuGq60XAe": {
+    "name": "ANO autodoc OT MINTRUD file from",
+    "file_path": "workflows/ANO autodoc OT MINTRUD file from.json"
+  },
+  "q02qpzB5xGdlK6Od": {
+    "name": "NCPO autodoc RS",
+    "file_path": "workflows/NCPO autodoc RS.json"
+  },
+  "0L55O4B7Fx63CFnD": {
+    "name": "Autodoc - upload DOCX to Yandex Disk",
+    "file_path": "workflows/Autodoc - upload DOCX to Yandex Disk.json"
+  },
+  "qyYrnmSEejsXVWsv": {
+    "name": "Тест сбора сотрудников из таблицы",
+    "file_path": "workflows/Тест сбора сотрудников из таблицы.json"
+  },
+  "dxm3YMctZqt3GOxy": {
+    "name": "NCPO autodoc OT MINTRUD file to",
+    "file_path": "workflows/NCPO autodoc OT MINTRUD file to.json"
+  },
+  "hX15tKh83Gq3N9El": {
+    "name": "errors-handler",
+    "file_path": "workflows/errors-handler.json"
+  },
+  "l3umusa7UyEF1jFT": {
+    "name": "ANO autodoc RS",
+    "file_path": "workflows/ANO autodoc RS.json"
+  },
+  "eM592FBhShyLRim0": {
+    "name": "study-plans-rs",
+    "file_path": "workflows/study-plans-rs.json"
+  },
+  "UW7rVNtMXXQajD4T": {
+    "name": "study-plans-pp",
+    "file_path": "workflows/study-plans-pp.json"
+  },
+  "u8DK2pcysZZbW5vT": {
+    "name": "review-bot-garbage-collector",
+    "file_path": "workflows/review-bot-garbage-collector.json"
+  },
+  "FLI5f6y1mvQZkLom": {
+    "name": "Распознавание данных документов Yandex OCR",
+    "file_path": "workflows/Распознавание данных документов Yandex OCR.json"
+  },
+  "qEjEz3ATzDQY0Y25": {
+    "name": "autodoc-OT-add-loop",
+    "file_path": "workflows/autodoc-OT-add-loop.json"
+  }
+}
