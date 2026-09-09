@@ -1,0 +1,362 @@
+{
+  "updatedAt": "2026-09-09T09:27:22.758Z",
+  "createdAt": "2026-08-14T12:29:20.166Z",
+  "id": "0L55O4B7Fx63CFnD",
+  "name": "Autodoc - upload DOCX to Yandex Disk",
+  "active": false,
+  "isArchived": true,
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://cloud-api.yandex.net/v1/disk/resources",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "path",
+              "value": "=disk:/Genezis Drive/Cделки"
+            },
+            {
+              "name": "limit",
+              "value": "1000"
+            },
+            {
+              "name": "fields",
+              "value": "_embedded.items.name,_embedded.items.path,_embedded.items.type"
+            },
+            {
+              "name": "Authorization",
+              "value": "OAuth y0__wgBEIrd5NkEGITVRiCx0OHDGH5Iwq_gLVda6lFaRvAa7A-uin_r"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=OAuth y0__wgBEIrd5NkEGITVRiCx0OHDGH5Iwq_gLVda6lFaRvAa7A-uin_r"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f49ef5f5-86d8-4ce1-b8ac-d91006961494",
+      "name": "List client folders",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1648,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const source = $('Prepare upload').first();\nconst items = $input.all().flatMap(item => item.json._embedded?.items || []);\nconst markers = [`(${source.json.dealId})`];\nif (source.json.contractNumber && source.json.contractNumber !== source.json.dealId) {\n  markers.push(`(${source.json.contractNumber})`);\n}\nconst folders = items.filter(item =>\n  item.type === 'dir' && markers.some(marker => String(item.name || '').includes(marker))\n);\nif (!folders.length) {\n  throw new Error(`Client folder not found in ${source.json.parentPath}: ${markers.join(' or ')}`);\n}\nif (folders.length > 1) {\n  throw new Error(`More than one client folder found: ${folders.map(item => item.name).join(', ')}`);\n}\nconst folder = folders[0];\nreturn [{\n  json: {\n    folderPath: folder.path,\n    folderName: folder.name,\n    fileName: source.json.fileName,\n    targetPath: `${folder.path}/${source.json.fileName}`\n  },\n  binary: source.binary\n}];"
+      },
+      "id": "09b83027-0c85-4822-961d-07cff6b9abf4",
+      "name": "Find client folder",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1872,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://cloud-api.yandex.net/v1/disk/resources/upload",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "path",
+              "value": "={{ $json.targetPath }}"
+            },
+            {
+              "name": "overwrite",
+              "value": "true"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ 'OAuth ' + $env.YANDEX_DISK_TOKEN }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7ac66a45-b8c2-4cb6-bdc5-e6b0ea8fe62f",
+      "name": "Get upload URL",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2096,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const source = $('Find client folder').first();\nif (!$json.href) throw new Error('Yandex Disk did not return an upload URL.');\nreturn [{ json: {\n  href: $json.href,\n  targetPath: source.json.targetPath,\n  folderPath: source.json.folderPath,\n  folderName: source.json.folderName,\n  fileName: source.json.fileName\n}, binary: source.binary }];"
+      },
+      "id": "f58563eb-5ff6-4d54-8eb1-4ce685282272",
+      "name": "Restore DOCX binary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2336,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{ $json.href }}",
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "file",
+        "options": {}
+      },
+      "id": "df67fdf7-1fed-4adc-b0d7-b716cb4aa703",
+      "name": "Upload DOCX",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2560,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "https://cloud-api.yandex.net/v1/disk/resources/publish",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "p",
+              "value": "a"
+            },
+            {
+              "name": "=",
+              "value": "{"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ 'OAuth ' + $env.YANDEX_DISK_TOKEN }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "175834b0-0eac-43b0-9ea9-ea4101a9916a",
+      "name": "Publish DOCX",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2800,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://cloud-api.yandex.net/v1/disk/resources",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "path",
+              "value": "={{ Find client folder.first().json.targetPath }}"
+            },
+            {
+              "name": "fields",
+              "value": "name,path,public_url"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ 'OAuth ' + $env.YANDEX_DISK_TOKEN }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "690c3b75-a6cc-4c4f-804e-12b22ca3d7d7",
+      "name": "Get public link",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3024,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const source = $('Find client folder').first().json;\nconst publicUrl = String($json.public_url || '');\nif (!publicUrl) throw new Error('Yandex Disk did not return public_url after publishing the DOCX.');\nreturn [{ json: {\n  success: true,\n  docx_url: publicUrl,\n  public_url: publicUrl,\n  disk_path: $json.path || source.targetPath,\n  file_name: $json.name || source.fileName,\n  folder_path: source.folderPath,\n  folder_name: source.folderName\n} }];"
+      },
+      "id": "2608be52-35a0-4356-b62d-bedceeb0bc3c",
+      "name": "Build response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3248,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "id": "c83ddca4-c3c1-4f87-9321-0526216c1542",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        3488,
+        112
+      ]
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        1376,
+        112
+      ],
+      "id": "a938d6c1-94de-406c-b05f-600e8aead61d",
+      "name": "When clicking ‘Execute workflow’"
+    }
+  ],
+  "connections": {
+    "List client folders": {
+      "main": [
+        [
+          {
+            "node": "Find client folder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find client folder": {
+      "main": [
+        []
+      ]
+    },
+    "Get upload URL": {
+      "main": [
+        [
+          {
+            "node": "Restore DOCX binary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Restore DOCX binary": {
+      "main": [
+        [
+          {
+            "node": "Upload DOCX",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload DOCX": {
+      "main": [
+        [
+          {
+            "node": "Publish DOCX",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Publish DOCX": {
+      "main": [
+        [
+          {
+            "node": "Get public link",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get public link": {
+      "main": [
+        [
+          {
+            "node": "Build response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build response": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "List client folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "versionId": "62556657-3ef1-4fed-9ef1-8de20abf428c",
+  "activeVersionId": null,
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-08-14T12:29:20.166Z",
+      "createdAt": "2026-08-14T12:29:20.166Z",
+      "role": "workflow:owner",
+      "workflowId": "0L55O4B7Fx63CFnD",
+      "projectId": "OC8FWCQSkQb0Erkk"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
