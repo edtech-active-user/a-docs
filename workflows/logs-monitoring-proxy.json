@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-08T08:35:17.552Z",
+  "updatedAt": "2026-09-10T10:19:42.043Z",
   "createdAt": "2026-08-04T06:19:12.483Z",
   "id": "wBv8SLxHhMibGirf",
   "name": "logs-monitoring-proxy",
@@ -170,8 +170,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        432,
-        -224
+        320,
+        -368
       ],
       "id": "37d993bd-1f1b-4feb-b05d-519cbe04c770",
       "name": "Switch"
@@ -272,12 +272,17 @@
       ],
       "id": "5b3bd74a-7786-4bcf-aa69-50365b033862",
       "name": "append-logs-stroke-rs",
+      "executeOnce": false,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleApi": {
           "id": "qr8hKsQJKcudekLc",
           "name": "logs-monitoring-proxy"
         }
-      }
+      },
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -377,12 +382,16 @@
       ],
       "id": "31a9a5c1-92b1-48a6-82d3-c3566493b727",
       "name": "append-logs-stroke-pkpp",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleApi": {
           "id": "qr8hKsQJKcudekLc",
           "name": "logs-monitoring-proxy"
         }
-      }
+      },
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -441,8 +450,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -352,
-        -64
+        -464,
+        -208
       ],
       "id": "a3350ede-8c83-40da-92c3-4a49027e776c",
       "name": "If"
@@ -493,12 +502,14 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        -96,
-        -224
+        -208,
+        -368
       ],
       "id": "9d21993c-ab98-4ade-a3cd-e736e1fff245",
       "name": "Update row(s)",
-      "retryOnFail": true
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
     },
     {
       "parameters": {
@@ -546,8 +557,8 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        -80,
-        -16
+        -192,
+        -160
       ],
       "id": "82f68c56-6a9f-4caf-b193-dbbb3da00b42",
       "name": "Update row(s)1",
@@ -665,12 +676,16 @@
       ],
       "id": "8223cb8b-3b3c-4b62-b113-3aed7bbf8b86",
       "name": "append-logs-stroke-ОТ",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "maxTries": 5,
       "credentials": {
         "googleApi": {
           "id": "qr8hKsQJKcudekLc",
           "name": "logs-monitoring-proxy"
         }
-      }
+      },
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -768,12 +783,16 @@
       ],
       "id": "29d19845-3247-44e3-9108-d52cdfbb3572",
       "name": "append-logs-stroke-ANO RS",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleApi": {
           "id": "qr8hKsQJKcudekLc",
           "name": "logs-monitoring-proxy"
         }
-      }
+      },
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -873,12 +892,16 @@
       ],
       "id": "4fb1f239-483f-4b07-b692-e919b2ee9682",
       "name": "append-logs-stroke-ANO pkpp",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleApi": {
           "id": "qr8hKsQJKcudekLc",
           "name": "logs-monitoring-proxy"
         }
-      }
+      },
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -978,12 +1001,16 @@
       ],
       "id": "782b4d92-6406-4388-9c5b-3f99694849e1",
       "name": "append-logs-stroke-АНО ОТ",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleApi": {
           "id": "qr8hKsQJKcudekLc",
           "name": "logs-monitoring-proxy"
         }
-      }
+      },
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1004,17 +1031,21 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        80,
-        -224
+        -32,
+        -368
       ],
       "id": "360a2a58-bbe5-4d8f-b96e-50b6902a8af2",
       "name": "GetEmails1",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
           "name": "with.edtech@gmail.com"
         }
-      }
+      },
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -1023,11 +1054,64 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        240,
-        -224
+        128,
+        -368
       ],
       "id": "e7dfaa5a-2d05-4d5b-97e0-60c51980908d",
       "name": "EmailsMap"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "G52RdzdAcbW0fHOF",
+          "mode": "list",
+          "cachedResultName": "logs_queue",
+          "cachedResultUrl": "/projects/OC8FWCQSkQb0Erkk/datatables/G52RdzdAcbW0fHOF"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "status",
+              "keyValue": "busy"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "free"
+          },
+          "matchingColumns": [
+            "status"
+          ],
+          "schema": [
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1488,
+        64
+      ],
+      "id": "6d7aaaa5-faed-426b-aadb-f76d3d8c0d06",
+      "name": "Update row(s)2",
+      "retryOnFail": true
     }
   ],
   "connections": {
@@ -1157,6 +1241,13 @@
             "type": "main",
             "index": 0
           }
+        ],
+        [
+          {
+            "node": "Update row(s)2",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
@@ -1165,6 +1256,78 @@
         [
           {
             "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "append-logs-stroke-rs": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Update row(s)2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "append-logs-stroke-pkpp": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Update row(s)2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "append-logs-stroke-ОТ": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Update row(s)2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "append-logs-stroke-ANO RS": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Update row(s)2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "append-logs-stroke-ANO pkpp": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Update row(s)2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "append-logs-stroke-АНО ОТ": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Update row(s)2",
             "type": "main",
             "index": 0
           }
@@ -1181,8 +1344,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "13bd7eb4-84d1-4475-9f5f-e7dc8f4c7133",
-  "activeVersionId": "706c3133-c782-42c4-9ed4-0f9b6ed19812",
+  "versionId": "2d06b027-f3ac-46c3-90cd-dc44508a05dd",
+  "activeVersionId": "2d06b027-f3ac-46c3-90cd-dc44508a05dd",
   "triggerCount": 1,
   "shared": [
     {
@@ -1194,9 +1357,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-09-07T05:53:05.662Z",
-    "createdAt": "2026-09-03T10:52:23.946Z",
-    "versionId": "706c3133-c782-42c4-9ed4-0f9b6ed19812",
+    "updatedAt": "2026-09-10T10:20:42.727Z",
+    "createdAt": "2026-09-10T10:19:42.044Z",
+    "versionId": "2d06b027-f3ac-46c3-90cd-dc44508a05dd",
     "workflowId": "wBv8SLxHhMibGirf",
     "nodes": [
       {
@@ -1363,8 +1526,8 @@
         "type": "n8n-nodes-base.switch",
         "typeVersion": 3.4,
         "position": [
-          432,
-          -224
+          320,
+          -368
         ],
         "id": "37d993bd-1f1b-4feb-b05d-519cbe04c770",
         "name": "Switch"
@@ -1465,12 +1628,17 @@
         ],
         "id": "5b3bd74a-7786-4bcf-aa69-50365b033862",
         "name": "append-logs-stroke-rs",
+        "executeOnce": false,
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleApi": {
             "id": "qr8hKsQJKcudekLc",
             "name": "logs-monitoring-proxy"
           }
-        }
+        },
+        "onError": "continueErrorOutput"
       },
       {
         "parameters": {
@@ -1570,12 +1738,16 @@
         ],
         "id": "31a9a5c1-92b1-48a6-82d3-c3566493b727",
         "name": "append-logs-stroke-pkpp",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleApi": {
             "id": "qr8hKsQJKcudekLc",
             "name": "logs-monitoring-proxy"
           }
-        }
+        },
+        "onError": "continueErrorOutput"
       },
       {
         "parameters": {
@@ -1634,8 +1806,8 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          -352,
-          -64
+          -464,
+          -208
         ],
         "id": "a3350ede-8c83-40da-92c3-4a49027e776c",
         "name": "If"
@@ -1686,12 +1858,14 @@
         "type": "n8n-nodes-base.dataTable",
         "typeVersion": 1.1,
         "position": [
-          -96,
-          -224
+          -208,
+          -368
         ],
         "id": "9d21993c-ab98-4ade-a3cd-e736e1fff245",
         "name": "Update row(s)",
-        "retryOnFail": true
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000
       },
       {
         "parameters": {
@@ -1739,8 +1913,8 @@
         "type": "n8n-nodes-base.dataTable",
         "typeVersion": 1.1,
         "position": [
-          -80,
-          -16
+          -192,
+          -160
         ],
         "id": "82f68c56-6a9f-4caf-b193-dbbb3da00b42",
         "name": "Update row(s)1",
@@ -1858,12 +2032,16 @@
         ],
         "id": "8223cb8b-3b3c-4b62-b113-3aed7bbf8b86",
         "name": "append-logs-stroke-ОТ",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
+        "maxTries": 5,
         "credentials": {
           "googleApi": {
             "id": "qr8hKsQJKcudekLc",
             "name": "logs-monitoring-proxy"
           }
-        }
+        },
+        "onError": "continueErrorOutput"
       },
       {
         "parameters": {
@@ -1961,12 +2139,16 @@
         ],
         "id": "29d19845-3247-44e3-9108-d52cdfbb3572",
         "name": "append-logs-stroke-ANO RS",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleApi": {
             "id": "qr8hKsQJKcudekLc",
             "name": "logs-monitoring-proxy"
           }
-        }
+        },
+        "onError": "continueErrorOutput"
       },
       {
         "parameters": {
@@ -2066,12 +2248,16 @@
         ],
         "id": "4fb1f239-483f-4b07-b692-e919b2ee9682",
         "name": "append-logs-stroke-ANO pkpp",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleApi": {
             "id": "qr8hKsQJKcudekLc",
             "name": "logs-monitoring-proxy"
           }
-        }
+        },
+        "onError": "continueErrorOutput"
       },
       {
         "parameters": {
@@ -2171,12 +2357,16 @@
         ],
         "id": "782b4d92-6406-4388-9c5b-3f99694849e1",
         "name": "append-logs-stroke-АНО ОТ",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleApi": {
             "id": "qr8hKsQJKcudekLc",
             "name": "logs-monitoring-proxy"
           }
-        }
+        },
+        "onError": "continueErrorOutput"
       },
       {
         "parameters": {
@@ -2197,17 +2387,21 @@
         "type": "n8n-nodes-base.googleSheets",
         "typeVersion": 4.7,
         "position": [
-          80,
-          -224
+          -32,
+          -368
         ],
         "id": "360a2a58-bbe5-4d8f-b96e-50b6902a8af2",
         "name": "GetEmails1",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
             "name": "with.edtech@gmail.com"
           }
-        }
+        },
+        "onError": "continueErrorOutput"
       },
       {
         "parameters": {
@@ -2216,11 +2410,64 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          240,
-          -224
+          128,
+          -368
         ],
         "id": "e7dfaa5a-2d05-4d5b-97e0-60c51980908d",
         "name": "EmailsMap"
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "dataTableId": {
+            "__rl": true,
+            "value": "G52RdzdAcbW0fHOF",
+            "mode": "list",
+            "cachedResultName": "logs_queue",
+            "cachedResultUrl": "/projects/OC8FWCQSkQb0Erkk/datatables/G52RdzdAcbW0fHOF"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "status",
+                "keyValue": "busy"
+              }
+            ]
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "status": "free"
+            },
+            "matchingColumns": [
+              "status"
+            ],
+            "schema": [
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          1488,
+          64
+        ],
+        "id": "6d7aaaa5-faed-426b-aadb-f76d3d8c0d06",
+        "name": "Update row(s)2",
+        "retryOnFail": true
       }
     ],
     "connections": {
@@ -2350,6 +2597,13 @@
               "type": "main",
               "index": 0
             }
+          ],
+          [
+            {
+              "node": "Update row(s)2",
+              "type": "main",
+              "index": 0
+            }
           ]
         ]
       },
@@ -2363,10 +2617,82 @@
             }
           ]
         ]
+      },
+      "append-logs-stroke-rs": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Update row(s)2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "append-logs-stroke-pkpp": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Update row(s)2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "append-logs-stroke-ОТ": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Update row(s)2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "append-logs-stroke-ANO RS": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Update row(s)2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "append-logs-stroke-ANO pkpp": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Update row(s)2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "append-logs-stroke-АНО ОТ": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Update row(s)2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "Active User",
-    "name": "Version 706c3133",
+    "name": "Version 2d06b027",
     "description": "",
     "autosaved": true
   },
