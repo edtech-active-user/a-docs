@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-09T09:48:16.860Z",
+  "updatedAt": "2026-09-11T10:58:54.032Z",
   "createdAt": "2026-08-18T06:11:48.788Z",
   "id": "oKNPNF7epqCw7K9O",
   "name": "Определение региона по номеру",
@@ -281,7 +281,8 @@
         416
       ],
       "id": "abf57fb9-314a-4f45-81cb-98e4f039e7b1",
-      "name": "Обработка формата"
+      "name": "Обработка формата",
+      "onError": "continueErrorOutput"
     },
     {
       "parameters": {
@@ -471,6 +472,13 @@
             "type": "main",
             "index": 0
           }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
@@ -528,8 +536,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "be46c946-1958-45f0-970b-d5565d7aa520",
-  "activeVersionId": "be46c946-1958-45f0-970b-d5565d7aa520",
+  "versionId": "162d4821-9d53-41af-9a78-ef84f545ae16",
+  "activeVersionId": "162d4821-9d53-41af-9a78-ef84f545ae16",
   "triggerCount": 1,
   "shared": [
     {
@@ -541,9 +549,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-09-09T09:48:18.123Z",
-    "createdAt": "2026-09-09T09:48:16.863Z",
-    "versionId": "be46c946-1958-45f0-970b-d5565d7aa520",
+    "updatedAt": "2026-09-11T10:58:55.611Z",
+    "createdAt": "2026-09-11T10:58:54.033Z",
+    "versionId": "162d4821-9d53-41af-9a78-ef84f545ae16",
     "workflowId": "oKNPNF7epqCw7K9O",
     "nodes": [
       {
@@ -821,7 +829,8 @@
           416
         ],
         "id": "abf57fb9-314a-4f45-81cb-98e4f039e7b1",
-        "name": "Обработка формата"
+        "name": "Обработка формата",
+        "onError": "continueErrorOutput"
       },
       {
         "parameters": {
@@ -1011,6 +1020,13 @@
               "type": "main",
               "index": 0
             }
+          ],
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
           ]
         ]
       },
@@ -1060,7 +1076,7 @@
       }
     },
     "authors": "Active User",
-    "name": "Version be46c946",
+    "name": "Version 162d4821",
     "description": "",
     "autosaved": true
   },
