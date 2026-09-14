@@ -1,0 +1,83 @@
+{
+  "updatedAt": "2026-09-14T09:55:14.365Z",
+  "createdAt": "2026-09-14T09:54:50.547Z",
+  "id": "7jfj6XG4D4ggULcc",
+  "name": "My workflow 2",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "93ebcabb-0b6c-4d7b-bf34-8eaf6dbd0062",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "path": "95bf705f-5293-4986-8c12-187c61d1bdec",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        192
+      ],
+      "id": "4d688c13-1b01-47aa-b5fd-7a51969e82e3",
+      "name": "Webhook",
+      "webhookId": "95bf705f-5293-4986-8c12-187c61d1bdec"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "402520a9-db7e-40cf-8258-7844c4197ee4",
+      "name": "HTTP Request"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "versionId": "9fb7c794-a268-462c-826d-4ae3044a28dc",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-09-14T09:54:50.547Z",
+      "createdAt": "2026-09-14T09:54:50.547Z",
+      "role": "workflow:owner",
+      "workflowId": "7jfj6XG4D4ggULcc",
+      "projectId": "OC8FWCQSkQb0Erkk"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
