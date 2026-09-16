@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-10T10:19:42.043Z",
+  "updatedAt": "2026-09-16T06:35:44.291Z",
   "createdAt": "2026-08-04T06:19:12.483Z",
   "id": "wBv8SLxHhMibGirf",
   "name": "logs-monitoring-proxy",
@@ -15,7 +15,7 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -752,
+        -800,
         -64
       ],
       "id": "578d3f11-e15d-413f-976e-b755402d7225",
@@ -1106,8 +1106,8 @@
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        1488,
-        64
+        1456,
+        144
       ],
       "id": "6d7aaaa5-faed-426b-aadb-f76d3d8c0d06",
       "name": "Update row(s)2",
@@ -1344,8 +1344,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "2d06b027-f3ac-46c3-90cd-dc44508a05dd",
-  "activeVersionId": "2d06b027-f3ac-46c3-90cd-dc44508a05dd",
+  "versionId": "7e6cc432-c8bc-4722-9507-e99a863969ae",
+  "activeVersionId": "7e6cc432-c8bc-4722-9507-e99a863969ae",
   "triggerCount": 1,
   "shared": [
     {
@@ -1357,9 +1357,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-09-10T10:20:42.727Z",
-    "createdAt": "2026-09-10T10:19:42.044Z",
-    "versionId": "2d06b027-f3ac-46c3-90cd-dc44508a05dd",
+    "updatedAt": "2026-09-16T06:35:45.845Z",
+    "createdAt": "2026-09-16T06:35:44.292Z",
+    "versionId": "7e6cc432-c8bc-4722-9507-e99a863969ae",
     "workflowId": "wBv8SLxHhMibGirf",
     "nodes": [
       {
@@ -1371,7 +1371,7 @@
         "type": "n8n-nodes-base.webhook",
         "typeVersion": 2.1,
         "position": [
-          -752,
+          -800,
           -64
         ],
         "id": "578d3f11-e15d-413f-976e-b755402d7225",
@@ -2462,8 +2462,8 @@
         "type": "n8n-nodes-base.dataTable",
         "typeVersion": 1.1,
         "position": [
-          1488,
-          64
+          1456,
+          144
         ],
         "id": "6d7aaaa5-faed-426b-aadb-f76d3d8c0d06",
         "name": "Update row(s)2",
@@ -2692,9 +2692,9 @@
       }
     },
     "authors": "Active User",
-    "name": "Version 2d06b027",
+    "name": "Version 7e6cc432",
     "description": "",
-    "autosaved": true
+    "autosaved": false
   },
   "tags": []
 }
