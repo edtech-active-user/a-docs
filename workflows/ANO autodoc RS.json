@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-09T04:01:29.139Z",
+  "updatedAt": "2026-09-16T10:36:21.519Z",
   "createdAt": "2026-07-13T12:44:45.409Z",
   "id": "l3umusa7UyEF1jFT",
   "name": "ANO autodoc RS",
@@ -765,8 +765,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -2064,
-        960
+        -2048,
+        848
       ],
       "id": "0884b81e-d46e-498a-9b94-adca1c37825a",
       "name": "UpdateGeneratingInReestr",
@@ -9887,6 +9887,229 @@
       ],
       "id": "1ee9e2da-dc05-48ec-aa07-8b5eaa7e4f93",
       "name": "MakeEmpolye"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "162-luk8ZzZ_8yMB6RhC-ja8UPCbCPr1MQ5G4ndJqERs",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Лог",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_H2f1qBdHVymGvstbARCRHhGyH5pPDc6Lck_0CdHmW8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $json.ID }}",
+            "Статус": "=Генерируется",
+            "Дата": "={{$now.format('dd.MM.yyyy')}}",
+            "Время": "={{$now.format('HH:mm')}}",
+            "Проект": "АНО РС",
+            "Исполнитель": "={{ $json[\"Макеты\"] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Проект",
+              "displayName": "Проект",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Статус",
+              "displayName": "Статус",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Дата",
+              "displayName": "Дата",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Время",
+              "displayName": "Время",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Исполнитель",
+              "displayName": "Исполнитель",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -2048,
+        1008
+      ],
+      "id": "fbbb647b-2831-4dcf-a5c7-85ebeb531734",
+      "name": "UpdateLogs3",
+      "retryOnFail": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const incomplete = $(\"update data: incomplete\").all().map(item => item.json);\nconst rows = $(\"checkTable\").all().map(item => item.json);\n\n// Для быстрого поиска полной строки по row_number\nconst rowsByNumber = new Map(\n  rows.map(row => [row.row_number, row])\n);\n\nreturn incomplete\n  .map(item => {\n    const row = rowsByNumber.get(item.row_number);\n\n    // Если соответствующей строки нет\n    if (!row) return null;\n\n    return {\n      json: {\n        row_number: item.row_number,\n        \"Макеты\": row[\"Макеты\"],\n        \"Фамилия Имя Отчество\": row[\"Фамилия Имя Отчество\"],\n        \"Статус заявки\": item[\"Статус заявки\"],\n        \"Дата последнего изменения\": item[\"Дата последнего изменения\"],\n        \"Незаполненные поля\": item[\"Незаполненные поля\"],\n      }\n    };\n  })\n  .filter(Boolean);"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        640,
+        384
+      ],
+      "id": "a2d5bc98-26f8-4339-8ad0-07a55713bc81",
+      "name": "handleincomplete"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "162-luk8ZzZ_8yMB6RhC-ja8UPCbCPr1MQ5G4ndJqERs",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Лог",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_H2f1qBdHVymGvstbARCRHhGyH5pPDc6Lck_0CdHmW8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Статус": "={{ $json[\"Статус заявки\"] }}",
+            "Дата": "={{$now.format('dd.MM.yyyy')}}",
+            "Время": "={{$now.format('HH:mm')}}",
+            "Проект": "АНО РС",
+            "Исполнитель": "={{ $json[\"Макеты\"] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Проект",
+              "displayName": "Проект",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Статус",
+              "displayName": "Статус",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Дата",
+              "displayName": "Дата",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Время",
+              "displayName": "Время",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Исполнитель",
+              "displayName": "Исполнитель",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        832,
+        384
+      ],
+      "id": "4c544a74-5e76-47e4-8901-676d089b213c",
+      "name": "UpdateLogs4",
+      "retryOnFail": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      }
     }
   ],
   "connections": {
@@ -9993,6 +10216,11 @@
         [
           {
             "node": "UpdateGeneratingInReestr",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "UpdateLogs3",
             "type": "main",
             "index": 0
           }
@@ -10581,6 +10809,28 @@
           }
         ]
       ]
+    },
+    "handleincomplete": {
+      "main": [
+        [
+          {
+            "node": "UpdateLogs4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update data: incomplete": {
+      "main": [
+        [
+          {
+            "node": "handleincomplete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -10590,8 +10840,8 @@
   },
   "staticData": null,
   "meta": null,
-  "versionId": "376963a4-71f0-4125-b8c1-46e31da59600",
-  "activeVersionId": "5314a4b4-8015-4b61-a9ce-37cdeaeb2934",
+  "versionId": "52f5bff5-a0d6-4cb7-8241-47a6c6dcf106",
+  "activeVersionId": "52f5bff5-a0d6-4cb7-8241-47a6c6dcf106",
   "triggerCount": 1,
   "shared": [
     {
@@ -10603,9 +10853,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-09-02T09:45:02.396Z",
-    "createdAt": "2026-09-02T09:45:00.170Z",
-    "versionId": "5314a4b4-8015-4b61-a9ce-37cdeaeb2934",
+    "updatedAt": "2026-09-16T10:36:25.259Z",
+    "createdAt": "2026-09-16T10:36:21.523Z",
+    "versionId": "52f5bff5-a0d6-4cb7-8241-47a6c6dcf106",
     "workflowId": "l3umusa7UyEF1jFT",
     "nodes": [
       {
@@ -11367,8 +11617,8 @@
         "type": "n8n-nodes-base.googleSheets",
         "typeVersion": 4.7,
         "position": [
-          -2064,
-          960
+          -2048,
+          848
         ],
         "id": "0884b81e-d46e-498a-9b94-adca1c37825a",
         "name": "UpdateGeneratingInReestr",
@@ -20484,11 +20734,234 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          -2112,
+          -2096,
           1168
         ],
         "id": "1ee9e2da-dc05-48ec-aa07-8b5eaa7e4f93",
         "name": "MakeEmpolye"
+      },
+      {
+        "parameters": {
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "162-luk8ZzZ_8yMB6RhC-ja8UPCbCPr1MQ5G4ndJqERs",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Лог",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_H2f1qBdHVymGvstbARCRHhGyH5pPDc6Lck_0CdHmW8/edit#gid=0"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "ID": "={{ $json.ID }}",
+              "Статус": "=Генерируется",
+              "Дата": "={{$now.format('dd.MM.yyyy')}}",
+              "Время": "={{$now.format('HH:mm')}}",
+              "Проект": "АНО РС",
+              "Исполнитель": "={{ $json[\"Макеты\"] }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "Проект",
+                "displayName": "Проект",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "ID",
+                "displayName": "ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Статус",
+                "displayName": "Статус",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Дата",
+                "displayName": "Дата",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Время",
+                "displayName": "Время",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Исполнитель",
+                "displayName": "Исполнитель",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          -2048,
+          1008
+        ],
+        "id": "fbbb647b-2831-4dcf-a5c7-85ebeb531734",
+        "name": "UpdateLogs3",
+        "retryOnFail": true,
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "Xpp4ndWQ84MtD53m",
+            "name": "with.edtech@gmail.com"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const incomplete = $(\"update data: incomplete\").all().map(item => item.json);\nconst rows = $(\"checkTable\").all().map(item => item.json);\n\n// Для быстрого поиска полной строки по row_number\nconst rowsByNumber = new Map(\n  rows.map(row => [row.row_number, row])\n);\n\nreturn incomplete\n  .map(item => {\n    const row = rowsByNumber.get(item.row_number);\n\n    // Если соответствующей строки нет\n    if (!row) return null;\n\n    return {\n      json: {\n        row_number: item.row_number,\n        \"Макеты\": row[\"Макеты\"],\n        \"Фамилия Имя Отчество\": row[\"Фамилия Имя Отчество\"],\n        \"Статус заявки\": item[\"Статус заявки\"],\n        \"Дата последнего изменения\": item[\"Дата последнего изменения\"],\n        \"Незаполненные поля\": item[\"Незаполненные поля\"],\n      }\n    };\n  })\n  .filter(Boolean);"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          640,
+          384
+        ],
+        "id": "a2d5bc98-26f8-4339-8ad0-07a55713bc81",
+        "name": "handleincomplete"
+      },
+      {
+        "parameters": {
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "162-luk8ZzZ_8yMB6RhC-ja8UPCbCPr1MQ5G4ndJqERs",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Лог",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1_H2f1qBdHVymGvstbARCRHhGyH5pPDc6Lck_0CdHmW8/edit#gid=0"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "Статус": "={{ $json[\"Статус заявки\"] }}",
+              "Дата": "={{$now.format('dd.MM.yyyy')}}",
+              "Время": "={{$now.format('HH:mm')}}",
+              "Проект": "АНО РС",
+              "Исполнитель": "={{ $json[\"Макеты\"] }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "Проект",
+                "displayName": "Проект",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "ID",
+                "displayName": "ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Статус",
+                "displayName": "Статус",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Дата",
+                "displayName": "Дата",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Время",
+                "displayName": "Время",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Исполнитель",
+                "displayName": "Исполнитель",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          832,
+          384
+        ],
+        "id": "4c544a74-5e76-47e4-8901-676d089b213c",
+        "name": "UpdateLogs4",
+        "retryOnFail": true,
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "Xpp4ndWQ84MtD53m",
+            "name": "with.edtech@gmail.com"
+          }
+        }
       }
     ],
     "connections": {
@@ -20595,6 +21068,11 @@
           [
             {
               "node": "UpdateGeneratingInReestr",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "UpdateLogs3",
               "type": "main",
               "index": 0
             }
@@ -21183,10 +21661,32 @@
             }
           ]
         ]
+      },
+      "handleincomplete": {
+        "main": [
+          [
+            {
+              "node": "UpdateLogs4",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "update data: incomplete": {
+        "main": [
+          [
+            {
+              "node": "handleincomplete",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "Active User",
-    "name": "Version 5314a4b4",
+    "name": "Version 52f5bff5",
     "description": "",
     "autosaved": true
   },
