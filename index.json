@@ -158,5 +158,9 @@
   "7jfj6XG4D4ggULcc": {
     "name": "My workflow 2",
     "file_path": "workflows/My workflow 2.json"
+  },
+  "581bIqfgSbiNYTnm": {
+    "name": "logs-monitoring-proxy (inqueue status)",
+    "file_path": "workflows/logs-monitoring-proxy (inqueue status).json"
   }
 }
