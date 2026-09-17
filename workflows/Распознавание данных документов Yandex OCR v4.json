@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-09T09:59:12.375Z",
+  "updatedAt": "2026-09-17T06:29:16.228Z",
   "createdAt": "2026-08-24T10:05:28.988Z",
   "id": "DDvnEY8x5NXjFhDO",
   "name": "Распознавание данных документов Yandex OCR v4",
@@ -27,7 +27,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const config = {\n  yandexFolderId: 'b1gk4dm4vthtnce2m2ip',\n  gptModel: 'yandexgpt-5-lite'\n};\n// ВАЖНО: нода стоит в разрыве между Webhook и Prepare inputs, поэтому она обязана\n// пропускать через себя и json, и binary вебхука. Иначе файлы и текст теряются здесь.\nconst items = $input.all();\nif (!items.length) return [{ json: { config } }];\n\nreturn items.map(item => ({\n  json: { ...item.json, config },\n  binary: item.binary\n}));"
+        "jsCode": "const config = {\n  yandexFolderId: 'b1gk4dm4vthtnce2m2ip',\n  //yandexFolderId:'b1gmo76fgrrf6smfaar2', \n  gptModel: 'yandexgpt-5-lite'\n};\n// ВАЖНО: нода стоит в разрыве между Webhook и Prepare inputs, поэтому она обязана\n// пропускать через себя и json, и binary вебхука. Иначе файлы и текст теряются здесь.\nconst items = $input.all();\nif (!items.length) return [{ json: { config } }];\n\nreturn items.map(item => ({\n  json: { ...item.json, config },\n  binary: item.binary\n}));"
       },
       "id": "ceb132e2-1f8a-4525-ac49-ece6292a857b",
       "name": "Config",
@@ -658,8 +658,8 @@
   },
   "staticData": null,
   "meta": null,
-  "versionId": "de9347e1-240f-4393-8474-5b3c9f6daa8c",
-  "activeVersionId": "de9347e1-240f-4393-8474-5b3c9f6daa8c",
+  "versionId": "6663d9ef-a170-4811-bec9-02eae9d8a979",
+  "activeVersionId": "6663d9ef-a170-4811-bec9-02eae9d8a979",
   "triggerCount": 1,
   "shared": [
     {
@@ -671,9 +671,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-09-09T09:59:15.451Z",
-    "createdAt": "2026-09-09T09:59:12.380Z",
-    "versionId": "de9347e1-240f-4393-8474-5b3c9f6daa8c",
+    "updatedAt": "2026-09-17T06:29:17.826Z",
+    "createdAt": "2026-09-17T06:29:16.232Z",
+    "versionId": "6663d9ef-a170-4811-bec9-02eae9d8a979",
     "workflowId": "DDvnEY8x5NXjFhDO",
     "nodes": [
       {
@@ -697,7 +697,7 @@
       },
       {
         "parameters": {
-          "jsCode": "const config = {\n  yandexFolderId: 'b1gk4dm4vthtnce2m2ip',\n  gptModel: 'yandexgpt-5-lite'\n};\n// ВАЖНО: нода стоит в разрыве между Webhook и Prepare inputs, поэтому она обязана\n// пропускать через себя и json, и binary вебхука. Иначе файлы и текст теряются здесь.\nconst items = $input.all();\nif (!items.length) return [{ json: { config } }];\n\nreturn items.map(item => ({\n  json: { ...item.json, config },\n  binary: item.binary\n}));"
+          "jsCode": "const config = {\n  yandexFolderId: 'b1gk4dm4vthtnce2m2ip',\n  //yandexFolderId:'b1gmo76fgrrf6smfaar2', \n  gptModel: 'yandexgpt-5-lite'\n};\n// ВАЖНО: нода стоит в разрыве между Webhook и Prepare inputs, поэтому она обязана\n// пропускать через себя и json, и binary вебхука. Иначе файлы и текст теряются здесь.\nconst items = $input.all();\nif (!items.length) return [{ json: { config } }];\n\nreturn items.map(item => ({\n  json: { ...item.json, config },\n  binary: item.binary\n}));"
         },
         "id": "ceb132e2-1f8a-4525-ac49-ece6292a857b",
         "name": "Config",
@@ -1322,9 +1322,9 @@
       }
     },
     "authors": "Active User",
-    "name": "Version de9347e1",
+    "name": "Version 6663d9ef",
     "description": "",
-    "autosaved": true
+    "autosaved": false
   },
   "tags": []
 }
