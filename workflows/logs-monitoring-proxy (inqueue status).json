@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-16T09:06:03.783Z",
+  "updatedAt": "2026-09-17T11:53:03.216Z",
   "createdAt": "2026-09-16T06:36:27.095Z",
   "id": "581bIqfgSbiNYTnm",
   "name": "logs-monitoring-proxy (inqueue status)",
@@ -396,9 +396,9 @@
           "value": {
             "Проект": "={{ $('parse response').item.json.type }}",
             "ID": "={{ $('parse response').item.json.request_id}}",
-            "Статус": "={{ $('parse response').item.json.status }}",
+            "Статус": "=В очереди",
             "Дата": "={{ $('parse response').item.json.dt }}",
-            "Время": "={{ $('Webhook').item.json.body.tm }}",
+            "Время": "={{ $('parse response').item.json.tm }}",
             "Исполнитель": "={{ $('parse response').item.json.employee }}"
           },
           "matchingColumns": [],
@@ -722,7 +722,7 @@
           "value": {
             "Проект": "={{ $('parse response').item.json.type }}",
             "ID": "={{ $('parse response').item.json.request_id }}",
-            "Статус": "={{ $('parse response').item.json.status }}",
+            "Статус": "=В очереди",
             "Дата": "={{ $('parse response').item.json.dt }}",
             "Время": "={{ $('parse response').item.json.tm }}",
             "Исполнитель": "={{ $('parse response').item.json.employee }}"
@@ -939,7 +939,7 @@
             "Проект": "={{ $('parse response').item.json.type }}",
             "ID": "={{ $('parse response').item.json.request_id }}",
             "Статус": "={{ $('parse response').item.json.status }}",
-            "Дата": "={{ $('Webhook').item.json.body.dt }}",
+            "Дата": "={{ $('parse response').item.json.dt }}",
             "Время": "={{ $('parse response').item.json.tm }}",
             "Исполнитель": "={{ $('parse response').item.json.employee }}"
           },
@@ -1292,8 +1292,8 @@
   },
   "staticData": null,
   "meta": null,
-  "versionId": "3f128688-50c3-4fdb-b49b-4a59ddcb25d5",
-  "activeVersionId": "3f128688-50c3-4fdb-b49b-4a59ddcb25d5",
+  "versionId": "3951e691-bc78-4871-93d8-3ff98d108769",
+  "activeVersionId": "3951e691-bc78-4871-93d8-3ff98d108769",
   "triggerCount": 1,
   "shared": [
     {
@@ -1305,9 +1305,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-09-16T09:06:08.471Z",
-    "createdAt": "2026-09-16T09:06:03.784Z",
-    "versionId": "3f128688-50c3-4fdb-b49b-4a59ddcb25d5",
+    "updatedAt": "2026-09-17T11:53:09.435Z",
+    "createdAt": "2026-09-17T11:53:03.219Z",
+    "versionId": "3951e691-bc78-4871-93d8-3ff98d108769",
     "workflowId": "581bIqfgSbiNYTnm",
     "nodes": [
       {
@@ -1700,9 +1700,9 @@
             "value": {
               "Проект": "={{ $('parse response').item.json.type }}",
               "ID": "={{ $('parse response').item.json.request_id}}",
-              "Статус": "={{ $('parse response').item.json.status }}",
+              "Статус": "=В очереди",
               "Дата": "={{ $('parse response').item.json.dt }}",
-              "Время": "={{ $('Webhook').item.json.body.tm }}",
+              "Время": "={{ $('parse response').item.json.tm }}",
               "Исполнитель": "={{ $('parse response').item.json.employee }}"
             },
             "matchingColumns": [],
@@ -2026,7 +2026,7 @@
             "value": {
               "Проект": "={{ $('parse response').item.json.type }}",
               "ID": "={{ $('parse response').item.json.request_id }}",
-              "Статус": "={{ $('parse response').item.json.status }}",
+              "Статус": "=В очереди",
               "Дата": "={{ $('parse response').item.json.dt }}",
               "Время": "={{ $('parse response').item.json.tm }}",
               "Исполнитель": "={{ $('parse response').item.json.employee }}"
@@ -2243,7 +2243,7 @@
               "Проект": "={{ $('parse response').item.json.type }}",
               "ID": "={{ $('parse response').item.json.request_id }}",
               "Статус": "={{ $('parse response').item.json.status }}",
-              "Дата": "={{ $('Webhook').item.json.body.dt }}",
+              "Дата": "={{ $('parse response').item.json.dt }}",
               "Время": "={{ $('parse response').item.json.tm }}",
               "Исполнитель": "={{ $('parse response').item.json.employee }}"
             },
@@ -2590,7 +2590,7 @@
       }
     },
     "authors": "Active User",
-    "name": "Version 3f128688",
+    "name": "Version 3951e691",
     "description": "",
     "autosaved": true
   },
