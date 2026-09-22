@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-16T10:34:50.131Z",
+  "updatedAt": "2026-09-22T07:41:29.043Z",
   "createdAt": "2026-07-13T13:41:18.987Z",
   "id": "OqgfapoZ7XWO2FJW",
   "name": "ANO autodoc PK-PP",
@@ -2981,8 +2981,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -848,
-        992
+        -864,
+        752
       ],
       "id": "8991f919-98e6-4df9-ae20-b9bc32376a5d",
       "name": "update data: complete1",
@@ -2999,8 +2999,8 @@
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        -1728,
-        1200
+        -1984,
+        592
       ],
       "id": "26ec0326-e79d-4ff4-a8bb-298e5a83ff1e",
       "name": "When clicking ‘Execute workflow’"
@@ -3012,8 +3012,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        144,
-        1392
+        160,
+        816
       ],
       "id": "ec513893-6a85-4536-bb65-5ba42f728783",
       "name": "dataForGenerating1",
@@ -10534,7 +10534,7 @@
   },
   "staticData": null,
   "meta": null,
-  "versionId": "e902b514-9de9-493b-8859-9d8b0d55c789",
+  "versionId": "d8a73f78-8590-4489-a5e7-c4dd5343fd3c",
   "activeVersionId": "e902b514-9de9-493b-8859-9d8b0d55c789",
   "triggerCount": 1,
   "shared": [
