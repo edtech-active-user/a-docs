@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-16T06:35:44.291Z",
+  "updatedAt": "2026-09-23T05:05:20.580Z",
   "createdAt": "2026-08-04T06:19:12.483Z",
   "id": "wBv8SLxHhMibGirf",
   "name": "logs-monitoring-proxy",
@@ -37,7 +37,7 @@
                 "conditions": [
                   {
                     "leftValue": "={{ $('Webhook').item.json.body.source }}",
-                    "rightValue": "РС",
+                    "rightValue": "НЦПО РС",
                     "operator": {
                       "type": "string",
                       "operation": "equals"
@@ -60,7 +60,7 @@
                   {
                     "id": "b28ce19c-286e-4184-abce-2606683b5a9b",
                     "leftValue": "={{ $('Webhook').item.json.body.source }}",
-                    "rightValue": "ПКПП",
+                    "rightValue": "НЦПО ПКПП",
                     "operator": {
                       "type": "string",
                       "operation": "equals",
@@ -83,7 +83,7 @@
                   {
                     "id": "8836daea-8ee2-4ce2-98ad-dd5337d3e3b9",
                     "leftValue": "={{ $('Webhook').item.json.body.source }}",
-                    "rightValue": "ОТ",
+                    "rightValue": "НЦПО ОТ",
                     "operator": {
                       "type": "string",
                       "operation": "equals",
@@ -1344,8 +1344,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "7e6cc432-c8bc-4722-9507-e99a863969ae",
-  "activeVersionId": "7e6cc432-c8bc-4722-9507-e99a863969ae",
+  "versionId": "dd577b18-5c0f-40c0-b6bc-0bba6c00b6b6",
+  "activeVersionId": "dd577b18-5c0f-40c0-b6bc-0bba6c00b6b6",
   "triggerCount": 1,
   "shared": [
     {
@@ -1357,9 +1357,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-09-16T06:35:45.845Z",
-    "createdAt": "2026-09-16T06:35:44.292Z",
-    "versionId": "7e6cc432-c8bc-4722-9507-e99a863969ae",
+    "updatedAt": "2026-09-23T05:05:23.643Z",
+    "createdAt": "2026-09-23T05:05:20.583Z",
+    "versionId": "dd577b18-5c0f-40c0-b6bc-0bba6c00b6b6",
     "workflowId": "wBv8SLxHhMibGirf",
     "nodes": [
       {
@@ -1393,7 +1393,7 @@
                   "conditions": [
                     {
                       "leftValue": "={{ $('Webhook').item.json.body.source }}",
-                      "rightValue": "РС",
+                      "rightValue": "НЦПО РС",
                       "operator": {
                         "type": "string",
                         "operation": "equals"
@@ -1416,7 +1416,7 @@
                     {
                       "id": "b28ce19c-286e-4184-abce-2606683b5a9b",
                       "leftValue": "={{ $('Webhook').item.json.body.source }}",
-                      "rightValue": "ПКПП",
+                      "rightValue": "НЦПО ПКПП",
                       "operator": {
                         "type": "string",
                         "operation": "equals",
@@ -1439,7 +1439,7 @@
                     {
                       "id": "8836daea-8ee2-4ce2-98ad-dd5337d3e3b9",
                       "leftValue": "={{ $('Webhook').item.json.body.source }}",
-                      "rightValue": "ОТ",
+                      "rightValue": "НЦПО ОТ",
                       "operator": {
                         "type": "string",
                         "operation": "equals",
@@ -2692,9 +2692,9 @@
       }
     },
     "authors": "Active User",
-    "name": "Version 7e6cc432",
+    "name": "Version dd577b18",
     "description": "",
-    "autosaved": false
+    "autosaved": true
   },
   "tags": []
 }
