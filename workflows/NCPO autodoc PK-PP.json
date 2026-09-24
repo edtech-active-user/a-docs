@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-16T10:31:04.141Z",
+  "updatedAt": "2026-09-24T11:57:18.412Z",
   "createdAt": "2025-10-23T04:12:51.205Z",
   "id": "bW5C7J4327CR8Kkq",
   "name": "NCPO autodoc PK-PP",
@@ -8175,7 +8175,8 @@
             "Дата": "={{$now.format('dd.MM.yyyy')}}",
             "Время": "={{$now.format('HH:mm')}}",
             "Исполнитель": "={{ $('GetQueue').first().json.Работник }}",
-            "Проект": "НЦПО ПКПП"
+            "Проект": "НЦПО ПКПП",
+            "Сценарий": "={{$('ID_documents_data').item.json.scenario  }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -8228,6 +8229,16 @@
             {
               "id": "Исполнитель",
               "displayName": "Исполнитель",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Сценарий",
+              "displayName": "Сценарий",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -8897,7 +8908,8 @@
             "Дата": "={{$now.format('dd.MM.yyyy')}}",
             "Время": "={{$now.format('HH:mm')}}",
             "Проект": "НЦПО ПКПП",
-            "Исполнитель": "={{ $('GetQueue').first().json.Работник }}"
+            "Исполнитель": "={{ $('GetQueue').first().json.Работник }}",
+            "Сценарий": "={{$('If3').item.json.scenario}}"
           },
           "matchingColumns": [],
           "schema": [
@@ -8950,6 +8962,16 @@
             {
               "id": "Исполнитель",
               "displayName": "Исполнитель",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Сценарий",
+              "displayName": "Сценарий",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -9467,7 +9489,8 @@
             "Дата": "={{$now.format('dd.MM.yyyy')}}",
             "Время": "={{$now.format('HH:mm')}}",
             "Проект": "НЦПО ПКПП",
-            "Исполнитель": "={{ $('GetQueue').first().json.Работник }}"
+            "Исполнитель": "={{ $('GetQueue').first().json.Работник }}",
+            "Сценарий": "={{$('If4').item.json.scenario}}"
           },
           "matchingColumns": [],
           "schema": [
@@ -9520,6 +9543,16 @@
             {
               "id": "Исполнитель",
               "displayName": "Исполнитель",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Сценарий",
+              "displayName": "Сценарий",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -9616,7 +9649,8 @@
             "Дата": "={{$now.format('dd.MM.yyyy')}}",
             "Время": "={{$now.format('HH:mm')}}",
             "Проект": "НЦПО ПКПП",
-            "Исполнитель": "={{ $json[\"Макеты\"] }}"
+            "Исполнитель": "={{ $json[\"Макеты\"] }}",
+            "Сценарий": "={{ $json[\"Сценарий\"] }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -9675,6 +9709,16 @@
               "type": "string",
               "canBeUsedToMatch": true,
               "removed": false
+            },
+            {
+              "id": "Сценарий",
+              "displayName": "Сценарий",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
             }
           ],
           "attemptToConvertTypes": false,
@@ -9700,7 +9744,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const incomplete = $(\"update data: incomplete\").all().map(item => item.json);\nconst rows = $(\"checkTable\").all().map(item => item.json);\n\n// Для быстрого поиска полной строки по row_number\nconst rowsByNumber = new Map(\n  rows.map(row => [row.row_number, row])\n);\n\nreturn incomplete\n  .map(item => {\n    const row = rowsByNumber.get(item.row_number);\n\n    // Если соответствующей строки нет\n    if (!row) return null;\n\n    return {\n      json: {\n        row_number: item.row_number,\n        \"Макеты\": row[\"Макеты\"],\n        \"Фамилия Имя Отчество\": row[\"Фамилия Имя Отчество\"],\n        \"Статус заявки\": item[\"Статус заявки\"],\n        \"Дата последнего изменения\": item[\"Дата последнего изменения\"],\n        \"Незаполненные поля\": item[\"Незаполненные поля\"],\n      }\n    };\n  })\n  .filter(Boolean);"
+        "jsCode": "const incomplete = $(\"update data: incomplete\").all().map(item => item.json);\nconst rows = $(\"checkTable\").all().map(item => item.json);\n\n// Для быстрого поиска полной строки по row_number\nconst rowsByNumber = new Map(\n  rows.map(row => [row.row_number, row])\n);\n\nreturn incomplete\n  .map(item => {\n    const row = rowsByNumber.get(item.row_number);\n\n    // Если соответствующей строки нет\n    if (!row) return null;\n\n    return {\n      json: {\n        row_number: item.row_number,\n        \"Макеты\": row[\"Макеты\"],\n        \"Фамилия Имя Отчество\": row[\"Фамилия Имя Отчество\"],\n        \"Статус заявки\": item[\"Статус заявки\"],\n        \"Cценарий\": item[\"Сценарий\"],\n        \"Дата последнего изменения\": item[\"Дата последнего изменения\"],\n        \"Незаполненные поля\": item[\"Незаполненные поля\"],\n      }\n    };\n  })\n  .filter(Boolean);"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -9733,7 +9777,8 @@
             "Дата": "={{$now.format('dd.MM.yyyy')}}",
             "Время": "={{$now.format('HH:mm')}}",
             "Проект": "НЦПО ПКПП",
-            "Исполнитель": "={{ $json[\"Макеты\"] }}"
+            "Исполнитель": "={{ $json[\"Макеты\"] }}",
+            "Сценарий": "={{ $json[\"Сценарий\"] }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -9787,6 +9832,16 @@
             {
               "id": "Исполнитель",
               "displayName": "Исполнитель",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Сценарий",
+              "displayName": "Сценарий",
               "required": false,
               "defaultMatch": false,
               "display": true,
@@ -10554,8 +10609,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "f8c1b21f-9d14-4458-9df3-338d3ea52148",
-  "activeVersionId": "f8c1b21f-9d14-4458-9df3-338d3ea52148",
+  "versionId": "ab272f5e-ab9d-41a9-a396-d11096090676",
+  "activeVersionId": "ab272f5e-ab9d-41a9-a396-d11096090676",
   "triggerCount": 1,
   "shared": [
     {
@@ -10567,9 +10622,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-09-16T10:31:13.641Z",
-    "createdAt": "2026-09-16T10:31:04.145Z",
-    "versionId": "f8c1b21f-9d14-4458-9df3-338d3ea52148",
+    "updatedAt": "2026-09-24T11:57:21.541Z",
+    "createdAt": "2026-09-24T11:57:18.416Z",
+    "versionId": "ab272f5e-ab9d-41a9-a396-d11096090676",
     "workflowId": "bW5C7J4327CR8Kkq",
     "nodes": [
       {
@@ -18741,7 +18796,8 @@
               "Дата": "={{$now.format('dd.MM.yyyy')}}",
               "Время": "={{$now.format('HH:mm')}}",
               "Исполнитель": "={{ $('GetQueue').first().json.Работник }}",
-              "Проект": "НЦПО ПКПП"
+              "Проект": "НЦПО ПКПП",
+              "Сценарий": "={{$('ID_documents_data').item.json.scenario  }}"
             },
             "matchingColumns": [],
             "schema": [
@@ -18794,6 +18850,16 @@
               {
                 "id": "Исполнитель",
                 "displayName": "Исполнитель",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Сценарий",
+                "displayName": "Сценарий",
                 "required": false,
                 "defaultMatch": false,
                 "display": true,
@@ -19463,7 +19529,8 @@
               "Дата": "={{$now.format('dd.MM.yyyy')}}",
               "Время": "={{$now.format('HH:mm')}}",
               "Проект": "НЦПО ПКПП",
-              "Исполнитель": "={{ $('GetQueue').first().json.Работник }}"
+              "Исполнитель": "={{ $('GetQueue').first().json.Работник }}",
+              "Сценарий": "={{$('If3').item.json.scenario}}"
             },
             "matchingColumns": [],
             "schema": [
@@ -19516,6 +19583,16 @@
               {
                 "id": "Исполнитель",
                 "displayName": "Исполнитель",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Сценарий",
+                "displayName": "Сценарий",
                 "required": false,
                 "defaultMatch": false,
                 "display": true,
@@ -20033,7 +20110,8 @@
               "Дата": "={{$now.format('dd.MM.yyyy')}}",
               "Время": "={{$now.format('HH:mm')}}",
               "Проект": "НЦПО ПКПП",
-              "Исполнитель": "={{ $('GetQueue').first().json.Работник }}"
+              "Исполнитель": "={{ $('GetQueue').first().json.Работник }}",
+              "Сценарий": "={{$('If4').item.json.scenario}}"
             },
             "matchingColumns": [],
             "schema": [
@@ -20086,6 +20164,16 @@
               {
                 "id": "Исполнитель",
                 "displayName": "Исполнитель",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Сценарий",
+                "displayName": "Сценарий",
                 "required": false,
                 "defaultMatch": false,
                 "display": true,
@@ -20182,7 +20270,8 @@
               "Дата": "={{$now.format('dd.MM.yyyy')}}",
               "Время": "={{$now.format('HH:mm')}}",
               "Проект": "НЦПО ПКПП",
-              "Исполнитель": "={{ $json[\"Макеты\"] }}"
+              "Исполнитель": "={{ $json[\"Макеты\"] }}",
+              "Сценарий": "={{ $json[\"Сценарий\"] }}"
             },
             "matchingColumns": [],
             "schema": [
@@ -20241,6 +20330,16 @@
                 "type": "string",
                 "canBeUsedToMatch": true,
                 "removed": false
+              },
+              {
+                "id": "Сценарий",
+                "displayName": "Сценарий",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
               }
             ],
             "attemptToConvertTypes": false,
@@ -20266,7 +20365,7 @@
       },
       {
         "parameters": {
-          "jsCode": "const incomplete = $(\"update data: incomplete\").all().map(item => item.json);\nconst rows = $(\"checkTable\").all().map(item => item.json);\n\n// Для быстрого поиска полной строки по row_number\nconst rowsByNumber = new Map(\n  rows.map(row => [row.row_number, row])\n);\n\nreturn incomplete\n  .map(item => {\n    const row = rowsByNumber.get(item.row_number);\n\n    // Если соответствующей строки нет\n    if (!row) return null;\n\n    return {\n      json: {\n        row_number: item.row_number,\n        \"Макеты\": row[\"Макеты\"],\n        \"Фамилия Имя Отчество\": row[\"Фамилия Имя Отчество\"],\n        \"Статус заявки\": item[\"Статус заявки\"],\n        \"Дата последнего изменения\": item[\"Дата последнего изменения\"],\n        \"Незаполненные поля\": item[\"Незаполненные поля\"],\n      }\n    };\n  })\n  .filter(Boolean);"
+          "jsCode": "const incomplete = $(\"update data: incomplete\").all().map(item => item.json);\nconst rows = $(\"checkTable\").all().map(item => item.json);\n\n// Для быстрого поиска полной строки по row_number\nconst rowsByNumber = new Map(\n  rows.map(row => [row.row_number, row])\n);\n\nreturn incomplete\n  .map(item => {\n    const row = rowsByNumber.get(item.row_number);\n\n    // Если соответствующей строки нет\n    if (!row) return null;\n\n    return {\n      json: {\n        row_number: item.row_number,\n        \"Макеты\": row[\"Макеты\"],\n        \"Фамилия Имя Отчество\": row[\"Фамилия Имя Отчество\"],\n        \"Статус заявки\": item[\"Статус заявки\"],\n        \"Cценарий\": item[\"Сценарий\"],\n        \"Дата последнего изменения\": item[\"Дата последнего изменения\"],\n        \"Незаполненные поля\": item[\"Незаполненные поля\"],\n      }\n    };\n  })\n  .filter(Boolean);"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
@@ -20299,7 +20398,8 @@
               "Дата": "={{$now.format('dd.MM.yyyy')}}",
               "Время": "={{$now.format('HH:mm')}}",
               "Проект": "НЦПО ПКПП",
-              "Исполнитель": "={{ $json[\"Макеты\"] }}"
+              "Исполнитель": "={{ $json[\"Макеты\"] }}",
+              "Сценарий": "={{ $json[\"Сценарий\"] }}"
             },
             "matchingColumns": [],
             "schema": [
@@ -20353,6 +20453,16 @@
               {
                 "id": "Исполнитель",
                 "displayName": "Исполнитель",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Сценарий",
+                "displayName": "Сценарий",
                 "required": false,
                 "defaultMatch": false,
                 "display": true,
@@ -21109,7 +21219,7 @@
       }
     },
     "authors": "Active User",
-    "name": "Version f8c1b21f",
+    "name": "Version ab272f5e",
     "description": "",
     "autosaved": true
   },
