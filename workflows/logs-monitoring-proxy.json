@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-23T05:05:20.580Z",
+  "updatedAt": "2026-09-24T12:16:57.212Z",
   "createdAt": "2026-08-04T06:19:12.483Z",
   "id": "wBv8SLxHhMibGirf",
   "name": "logs-monitoring-proxy",
@@ -200,7 +200,8 @@
             "Статус": "={{ $('Webhook').item.json.body.status }}",
             "Дата": "={{ $('Webhook').item.json.body.date }}",
             "Время": "={{ $('Webhook').item.json.body.time }}",
-            "Исполнитель": "={{$('EmailsMap').item.json[$('Webhook').item.json.body.user_email]}}"
+            "Исполнитель": "={{$('EmailsMap').item.json[$('Webhook').item.json.body.user_email]}}",
+            "Сценарий": "={{ $('Webhook').item.json.body.scen }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -257,6 +258,16 @@
               "display": true,
               "type": "string",
               "canBeUsedToMatch": true
+            },
+            {
+              "id": "Сценарий",
+              "displayName": "Сценарий",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
             }
           ],
           "attemptToConvertTypes": false,
@@ -308,7 +319,8 @@
             "Статус": "={{ $('Webhook').item.json.body.status }}",
             "Дата": "={{ $('Webhook').item.json.body.date }}",
             "Время": "={{ $('Webhook').item.json.body.time }}",
-            "Исполнитель": "={{$('EmailsMap').item.json[$('Webhook').item.json.body.user_email]}}"
+            "Исполнитель": "={{$('EmailsMap').item.json[$('Webhook').item.json.body.user_email]}}",
+            "Сценарий": "={{ $('Webhook').item.json.body.scen }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -365,6 +377,16 @@
               "display": true,
               "type": "string",
               "canBeUsedToMatch": true
+            },
+            {
+              "id": "Сценарий",
+              "displayName": "Сценарий",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
             }
           ],
           "attemptToConvertTypes": false,
@@ -711,7 +733,8 @@
             "Статус": "={{ $('Webhook').item.json.body.status }}",
             "Дата": "={{ $('Webhook').item.json.body.date }}",
             "Время": "={{ $('Webhook').item.json.body.time }}",
-            "Исполнитель": "={{$('EmailsMap').item.json[$('Webhook').item.json.body.user_email]}}"
+            "Исполнитель": "={{$('EmailsMap').item.json[$('Webhook').item.json.body.user_email]}}",
+            "Сценарий": "={{ $('Webhook').item.json.body.scen }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -768,6 +791,16 @@
               "display": true,
               "type": "string",
               "canBeUsedToMatch": true
+            },
+            {
+              "id": "Сценарий",
+              "displayName": "Сценарий",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
             }
           ],
           "attemptToConvertTypes": false,
@@ -818,7 +851,8 @@
             "Статус": "={{ $('Webhook').item.json.body.status }}",
             "Дата": "={{ $('Webhook').item.json.body.date }}",
             "Время": "={{ $('Webhook').item.json.body.time }}",
-            "Исполнитель": "={{$('EmailsMap').item.json[$('Webhook').item.json.body.user_email]}}"
+            "Исполнитель": "={{$('EmailsMap').item.json[$('Webhook').item.json.body.user_email]}}",
+            "Сценарий": "={{ $('Webhook').item.json.body.scen }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -875,6 +909,16 @@
               "display": true,
               "type": "string",
               "canBeUsedToMatch": true
+            },
+            {
+              "id": "Сценарий",
+              "displayName": "Сценарий",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
             }
           ],
           "attemptToConvertTypes": false,
@@ -1344,8 +1388,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "dd577b18-5c0f-40c0-b6bc-0bba6c00b6b6",
-  "activeVersionId": "dd577b18-5c0f-40c0-b6bc-0bba6c00b6b6",
+  "versionId": "6160b43e-a477-42bc-9d77-edfb207b40cc",
+  "activeVersionId": "6160b43e-a477-42bc-9d77-edfb207b40cc",
   "triggerCount": 1,
   "shared": [
     {
@@ -1357,9 +1401,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-09-23T05:05:23.643Z",
-    "createdAt": "2026-09-23T05:05:20.583Z",
-    "versionId": "dd577b18-5c0f-40c0-b6bc-0bba6c00b6b6",
+    "updatedAt": "2026-09-24T12:17:00.352Z",
+    "createdAt": "2026-09-24T12:16:57.213Z",
+    "versionId": "6160b43e-a477-42bc-9d77-edfb207b40cc",
     "workflowId": "wBv8SLxHhMibGirf",
     "nodes": [
       {
@@ -1556,7 +1600,8 @@
               "Статус": "={{ $('Webhook').item.json.body.status }}",
               "Дата": "={{ $('Webhook').item.json.body.date }}",
               "Время": "={{ $('Webhook').item.json.body.time }}",
-              "Исполнитель": "={{$('EmailsMap').item.json[$('Webhook').item.json.body.user_email]}}"
+              "Исполнитель": "={{$('EmailsMap').item.json[$('Webhook').item.json.body.user_email]}}",
+              "Сценарий": "={{ $('Webhook').item.json.body.scen }}"
             },
             "matchingColumns": [],
             "schema": [
@@ -1613,6 +1658,16 @@
                 "display": true,
                 "type": "string",
                 "canBeUsedToMatch": true
+              },
+              {
+                "id": "Сценарий",
+                "displayName": "Сценарий",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
               }
             ],
             "attemptToConvertTypes": false,
@@ -1664,7 +1719,8 @@
               "Статус": "={{ $('Webhook').item.json.body.status }}",
               "Дата": "={{ $('Webhook').item.json.body.date }}",
               "Время": "={{ $('Webhook').item.json.body.time }}",
-              "Исполнитель": "={{$('EmailsMap').item.json[$('Webhook').item.json.body.user_email]}}"
+              "Исполнитель": "={{$('EmailsMap').item.json[$('Webhook').item.json.body.user_email]}}",
+              "Сценарий": "={{ $('Webhook').item.json.body.scen }}"
             },
             "matchingColumns": [],
             "schema": [
@@ -1721,6 +1777,16 @@
                 "display": true,
                 "type": "string",
                 "canBeUsedToMatch": true
+              },
+              {
+                "id": "Сценарий",
+                "displayName": "Сценарий",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
               }
             ],
             "attemptToConvertTypes": false,
@@ -2067,7 +2133,8 @@
               "Статус": "={{ $('Webhook').item.json.body.status }}",
               "Дата": "={{ $('Webhook').item.json.body.date }}",
               "Время": "={{ $('Webhook').item.json.body.time }}",
-              "Исполнитель": "={{$('EmailsMap').item.json[$('Webhook').item.json.body.user_email]}}"
+              "Исполнитель": "={{$('EmailsMap').item.json[$('Webhook').item.json.body.user_email]}}",
+              "Сценарий": "={{ $('Webhook').item.json.body.scen }}"
             },
             "matchingColumns": [],
             "schema": [
@@ -2124,6 +2191,16 @@
                 "display": true,
                 "type": "string",
                 "canBeUsedToMatch": true
+              },
+              {
+                "id": "Сценарий",
+                "displayName": "Сценарий",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
               }
             ],
             "attemptToConvertTypes": false,
@@ -2174,7 +2251,8 @@
               "Статус": "={{ $('Webhook').item.json.body.status }}",
               "Дата": "={{ $('Webhook').item.json.body.date }}",
               "Время": "={{ $('Webhook').item.json.body.time }}",
-              "Исполнитель": "={{$('EmailsMap').item.json[$('Webhook').item.json.body.user_email]}}"
+              "Исполнитель": "={{$('EmailsMap').item.json[$('Webhook').item.json.body.user_email]}}",
+              "Сценарий": "={{ $('Webhook').item.json.body.scen }}"
             },
             "matchingColumns": [],
             "schema": [
@@ -2231,6 +2309,16 @@
                 "display": true,
                 "type": "string",
                 "canBeUsedToMatch": true
+              },
+              {
+                "id": "Сценарий",
+                "displayName": "Сценарий",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
               }
             ],
             "attemptToConvertTypes": false,
@@ -2692,7 +2780,7 @@
       }
     },
     "authors": "Active User",
-    "name": "Version dd577b18",
+    "name": "Version 6160b43e",
     "description": "",
     "autosaved": true
   },
