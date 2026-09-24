@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-17T11:53:03.216Z",
+  "updatedAt": "2026-09-24T12:06:14.727Z",
   "createdAt": "2026-09-16T06:36:27.095Z",
   "id": "581bIqfgSbiNYTnm",
   "name": "logs-monitoring-proxy (inqueue status)",
@@ -399,7 +399,8 @@
             "Статус": "=В очереди",
             "Дата": "={{ $('parse response').item.json.dt }}",
             "Время": "={{ $('parse response').item.json.tm }}",
-            "Исполнитель": "={{ $('parse response').item.json.employee }}"
+            "Исполнитель": "={{ $('parse response').item.json.employee }}",
+            "Сценарий": "={{ $json.document_type }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -456,6 +457,16 @@
               "display": true,
               "type": "string",
               "canBeUsedToMatch": true
+            },
+            {
+              "id": "Сценарий",
+              "displayName": "Сценарий",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
             }
           ],
           "attemptToConvertTypes": false,
@@ -504,10 +515,11 @@
           "value": {
             "Проект": "={{ $('parse response').item.json.type }}",
             "ID": "={{ $('parse response').item.json.request_id }}",
-            "Статус": "={{ $('parse response').item.json.status }}",
+            "Статус": "=В очереди",
             "Дата": "={{ $('parse response').item.json.dt }}",
             "Время": "={{ $('parse response').item.json.tm }}",
-            "Исполнитель": "={{ $('parse response').item.json.employee }}"
+            "Исполнитель": "={{ $('parse response').item.json.employee }}",
+            "Сценарий": "={{ $json.document_type }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -564,6 +576,16 @@
               "display": true,
               "type": "string",
               "canBeUsedToMatch": true
+            },
+            {
+              "id": "Сценарий",
+              "displayName": "Сценарий",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
             }
           ],
           "attemptToConvertTypes": false,
@@ -613,7 +635,7 @@
           "value": {
             "Проект": "={{ $('parse response').item.json.type }}",
             "ID": "={{ $('parse response').item.json.request_id }}",
-            "Статус": "={{ $('parse response').item.json.status }}",
+            "Статус": "=В очереди",
             "Дата": "={{ $('parse response').item.json.dt }}",
             "Время": "={{ $('parse response').item.json.tm }}",
             "Исполнитель": "={{ $('parse response').item.json.employee }}"
@@ -725,7 +747,8 @@
             "Статус": "=В очереди",
             "Дата": "={{ $('parse response').item.json.dt }}",
             "Время": "={{ $('parse response').item.json.tm }}",
-            "Исполнитель": "={{ $('parse response').item.json.employee }}"
+            "Исполнитель": "={{ $('parse response').item.json.employee }}",
+            "Сценарий": "={{ $json.document_type }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -782,6 +805,16 @@
               "display": true,
               "type": "string",
               "canBeUsedToMatch": true
+            },
+            {
+              "id": "Сценарий",
+              "displayName": "Сценарий",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
             }
           ],
           "attemptToConvertTypes": false,
@@ -829,10 +862,11 @@
           "value": {
             "Проект": "={{ $('parse response').item.json.type }}",
             "ID": "={{ $('parse response').item.json.request_id }}",
-            "Статус": "={{ $('parse response').item.json.status }}",
+            "Статус": "=В очереди",
             "Дата": "={{ $('parse response').item.json.dt }}",
             "Время": "={{ $('parse response').item.json.tm }}",
-            "Исполнитель": "={{ $('parse response').item.json.employee }}"
+            "Исполнитель": "={{ $('parse response').item.json.employee }}",
+            "Сценарий": "={{ $json.document_type }}"
           },
           "matchingColumns": [],
           "schema": [
@@ -889,6 +923,16 @@
               "display": true,
               "type": "string",
               "canBeUsedToMatch": true
+            },
+            {
+              "id": "Сценарий",
+              "displayName": "Сценарий",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
             }
           ],
           "attemptToConvertTypes": false,
@@ -938,7 +982,7 @@
           "value": {
             "Проект": "={{ $('parse response').item.json.type }}",
             "ID": "={{ $('parse response').item.json.request_id }}",
-            "Статус": "={{ $('parse response').item.json.status }}",
+            "Статус": "=В очереди",
             "Дата": "={{ $('parse response').item.json.dt }}",
             "Время": "={{ $('parse response').item.json.tm }}",
             "Исполнитель": "={{ $('parse response').item.json.employee }}"
@@ -1292,8 +1336,8 @@
   },
   "staticData": null,
   "meta": null,
-  "versionId": "3951e691-bc78-4871-93d8-3ff98d108769",
-  "activeVersionId": "3951e691-bc78-4871-93d8-3ff98d108769",
+  "versionId": "ddc6c8d6-0707-4f3d-8e8a-8653ba250ed1",
+  "activeVersionId": "ddc6c8d6-0707-4f3d-8e8a-8653ba250ed1",
   "triggerCount": 1,
   "shared": [
     {
@@ -1305,9 +1349,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-09-17T11:53:09.435Z",
-    "createdAt": "2026-09-17T11:53:03.219Z",
-    "versionId": "3951e691-bc78-4871-93d8-3ff98d108769",
+    "updatedAt": "2026-09-24T12:06:16.696Z",
+    "createdAt": "2026-09-24T12:06:14.730Z",
+    "versionId": "ddc6c8d6-0707-4f3d-8e8a-8653ba250ed1",
     "workflowId": "581bIqfgSbiNYTnm",
     "nodes": [
       {
@@ -1703,7 +1747,8 @@
               "Статус": "=В очереди",
               "Дата": "={{ $('parse response').item.json.dt }}",
               "Время": "={{ $('parse response').item.json.tm }}",
-              "Исполнитель": "={{ $('parse response').item.json.employee }}"
+              "Исполнитель": "={{ $('parse response').item.json.employee }}",
+              "Сценарий": "={{ $json.document_type }}"
             },
             "matchingColumns": [],
             "schema": [
@@ -1760,6 +1805,16 @@
                 "display": true,
                 "type": "string",
                 "canBeUsedToMatch": true
+              },
+              {
+                "id": "Сценарий",
+                "displayName": "Сценарий",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
               }
             ],
             "attemptToConvertTypes": false,
@@ -1808,10 +1863,11 @@
             "value": {
               "Проект": "={{ $('parse response').item.json.type }}",
               "ID": "={{ $('parse response').item.json.request_id }}",
-              "Статус": "={{ $('parse response').item.json.status }}",
+              "Статус": "=В очереди",
               "Дата": "={{ $('parse response').item.json.dt }}",
               "Время": "={{ $('parse response').item.json.tm }}",
-              "Исполнитель": "={{ $('parse response').item.json.employee }}"
+              "Исполнитель": "={{ $('parse response').item.json.employee }}",
+              "Сценарий": "={{ $json.document_type }}"
             },
             "matchingColumns": [],
             "schema": [
@@ -1868,6 +1924,16 @@
                 "display": true,
                 "type": "string",
                 "canBeUsedToMatch": true
+              },
+              {
+                "id": "Сценарий",
+                "displayName": "Сценарий",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
               }
             ],
             "attemptToConvertTypes": false,
@@ -1917,7 +1983,7 @@
             "value": {
               "Проект": "={{ $('parse response').item.json.type }}",
               "ID": "={{ $('parse response').item.json.request_id }}",
-              "Статус": "={{ $('parse response').item.json.status }}",
+              "Статус": "=В очереди",
               "Дата": "={{ $('parse response').item.json.dt }}",
               "Время": "={{ $('parse response').item.json.tm }}",
               "Исполнитель": "={{ $('parse response').item.json.employee }}"
@@ -2029,7 +2095,8 @@
               "Статус": "=В очереди",
               "Дата": "={{ $('parse response').item.json.dt }}",
               "Время": "={{ $('parse response').item.json.tm }}",
-              "Исполнитель": "={{ $('parse response').item.json.employee }}"
+              "Исполнитель": "={{ $('parse response').item.json.employee }}",
+              "Сценарий": "={{ $json.document_type }}"
             },
             "matchingColumns": [],
             "schema": [
@@ -2086,6 +2153,16 @@
                 "display": true,
                 "type": "string",
                 "canBeUsedToMatch": true
+              },
+              {
+                "id": "Сценарий",
+                "displayName": "Сценарий",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
               }
             ],
             "attemptToConvertTypes": false,
@@ -2133,10 +2210,11 @@
             "value": {
               "Проект": "={{ $('parse response').item.json.type }}",
               "ID": "={{ $('parse response').item.json.request_id }}",
-              "Статус": "={{ $('parse response').item.json.status }}",
+              "Статус": "=В очереди",
               "Дата": "={{ $('parse response').item.json.dt }}",
               "Время": "={{ $('parse response').item.json.tm }}",
-              "Исполнитель": "={{ $('parse response').item.json.employee }}"
+              "Исполнитель": "={{ $('parse response').item.json.employee }}",
+              "Сценарий": "={{ $json.document_type }}"
             },
             "matchingColumns": [],
             "schema": [
@@ -2193,6 +2271,16 @@
                 "display": true,
                 "type": "string",
                 "canBeUsedToMatch": true
+              },
+              {
+                "id": "Сценарий",
+                "displayName": "Сценарий",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
               }
             ],
             "attemptToConvertTypes": false,
@@ -2242,7 +2330,7 @@
             "value": {
               "Проект": "={{ $('parse response').item.json.type }}",
               "ID": "={{ $('parse response').item.json.request_id }}",
-              "Статус": "={{ $('parse response').item.json.status }}",
+              "Статус": "=В очереди",
               "Дата": "={{ $('parse response').item.json.dt }}",
               "Время": "={{ $('parse response').item.json.tm }}",
               "Исполнитель": "={{ $('parse response').item.json.employee }}"
@@ -2590,7 +2678,7 @@
       }
     },
     "authors": "Active User",
-    "name": "Version 3951e691",
+    "name": "Version ddc6c8d6",
     "description": "",
     "autosaved": true
   },
