@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-24T11:57:18.412Z",
+  "updatedAt": "2026-09-24T14:36:40.402Z",
   "createdAt": "2025-10-23T04:12:51.205Z",
   "id": "bW5C7J4327CR8Kkq",
   "name": "NCPO autodoc PK-PP",
@@ -9744,7 +9744,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const incomplete = $(\"update data: incomplete\").all().map(item => item.json);\nconst rows = $(\"checkTable\").all().map(item => item.json);\n\n// Для быстрого поиска полной строки по row_number\nconst rowsByNumber = new Map(\n  rows.map(row => [row.row_number, row])\n);\n\nreturn incomplete\n  .map(item => {\n    const row = rowsByNumber.get(item.row_number);\n\n    // Если соответствующей строки нет\n    if (!row) return null;\n\n    return {\n      json: {\n        row_number: item.row_number,\n        \"Макеты\": row[\"Макеты\"],\n        \"Фамилия Имя Отчество\": row[\"Фамилия Имя Отчество\"],\n        \"Статус заявки\": item[\"Статус заявки\"],\n        \"Cценарий\": item[\"Сценарий\"],\n        \"Дата последнего изменения\": item[\"Дата последнего изменения\"],\n        \"Незаполненные поля\": item[\"Незаполненные поля\"],\n      }\n    };\n  })\n  .filter(Boolean);"
+        "jsCode": "const incomplete = $(\"update data: incomplete\").all().map(item => item.json);\nconst rows = $(\"checkTable\").all().map(item => item.json);\n\n// Для быстрого поиска полной строки по row_number\nconst rowsByNumber = new Map(\n  rows.map(row => [row.row_number, row])\n);\n\nreturn incomplete\n  .map(item => {\n    const row = rowsByNumber.get(item.row_number);\n\n    // Если соответствующей строки нет\n    if (!row) return null;\n\n    return {\n      json: {\n        row_number: item.row_number,\n        \"Макеты\": row[\"Макеты\"],\n        \"Фамилия Имя Отчество\": row[\"Фамилия Имя Отчество\"],\n        \"Статус заявки\": item[\"Статус заявки\"],\n        \"Cценарий\": row[\"Сценарий\"],\n        \"Дата последнего изменения\": item[\"Дата последнего изменения\"],\n        \"Незаполненные поля\": item[\"Незаполненные поля\"],\n      }\n    };\n  })\n  .filter(Boolean);"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -10609,8 +10609,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "ab272f5e-ab9d-41a9-a396-d11096090676",
-  "activeVersionId": "ab272f5e-ab9d-41a9-a396-d11096090676",
+  "versionId": "16619be6-f86f-463b-a8d1-63416d86b098",
+  "activeVersionId": "16619be6-f86f-463b-a8d1-63416d86b098",
   "triggerCount": 1,
   "shared": [
     {
@@ -10622,9 +10622,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-09-24T11:57:21.541Z",
-    "createdAt": "2026-09-24T11:57:18.416Z",
-    "versionId": "ab272f5e-ab9d-41a9-a396-d11096090676",
+    "updatedAt": "2026-09-24T14:36:41.899Z",
+    "createdAt": "2026-09-24T14:36:40.410Z",
+    "versionId": "16619be6-f86f-463b-a8d1-63416d86b098",
     "workflowId": "bW5C7J4327CR8Kkq",
     "nodes": [
       {
@@ -20365,7 +20365,7 @@
       },
       {
         "parameters": {
-          "jsCode": "const incomplete = $(\"update data: incomplete\").all().map(item => item.json);\nconst rows = $(\"checkTable\").all().map(item => item.json);\n\n// Для быстрого поиска полной строки по row_number\nconst rowsByNumber = new Map(\n  rows.map(row => [row.row_number, row])\n);\n\nreturn incomplete\n  .map(item => {\n    const row = rowsByNumber.get(item.row_number);\n\n    // Если соответствующей строки нет\n    if (!row) return null;\n\n    return {\n      json: {\n        row_number: item.row_number,\n        \"Макеты\": row[\"Макеты\"],\n        \"Фамилия Имя Отчество\": row[\"Фамилия Имя Отчество\"],\n        \"Статус заявки\": item[\"Статус заявки\"],\n        \"Cценарий\": item[\"Сценарий\"],\n        \"Дата последнего изменения\": item[\"Дата последнего изменения\"],\n        \"Незаполненные поля\": item[\"Незаполненные поля\"],\n      }\n    };\n  })\n  .filter(Boolean);"
+          "jsCode": "const incomplete = $(\"update data: incomplete\").all().map(item => item.json);\nconst rows = $(\"checkTable\").all().map(item => item.json);\n\n// Для быстрого поиска полной строки по row_number\nconst rowsByNumber = new Map(\n  rows.map(row => [row.row_number, row])\n);\n\nreturn incomplete\n  .map(item => {\n    const row = rowsByNumber.get(item.row_number);\n\n    // Если соответствующей строки нет\n    if (!row) return null;\n\n    return {\n      json: {\n        row_number: item.row_number,\n        \"Макеты\": row[\"Макеты\"],\n        \"Фамилия Имя Отчество\": row[\"Фамилия Имя Отчество\"],\n        \"Статус заявки\": item[\"Статус заявки\"],\n        \"Cценарий\": row[\"Сценарий\"],\n        \"Дата последнего изменения\": item[\"Дата последнего изменения\"],\n        \"Незаполненные поля\": item[\"Незаполненные поля\"],\n      }\n    };\n  })\n  .filter(Boolean);"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
@@ -21219,7 +21219,7 @@
       }
     },
     "authors": "Active User",
-    "name": "Version ab272f5e",
+    "name": "Version 16619be6",
     "description": "",
     "autosaved": true
   },
