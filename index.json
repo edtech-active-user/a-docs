@@ -162,5 +162,9 @@
   "581bIqfgSbiNYTnm": {
     "name": "logs-monitoring-proxy (inqueue status)",
     "file_path": "workflows/logs-monitoring-proxy (inqueue status).json"
+  },
+  "MY0Mu7gjyyuGhiDC": {
+    "name": "POST_Регистрация отправления",
+    "file_path": "workflows/POST_Регистрация отправления.json"
   }
 }
