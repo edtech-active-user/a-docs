@@ -1,0 +1,197 @@
+{
+  "updatedAt": "2026-10-02T12:55:48.256Z",
+  "createdAt": "2026-10-01T13:28:41.807Z",
+  "id": "MY0Mu7gjyyuGhiDC",
+  "name": "POST_Регистрация отправления",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        -160
+      ],
+      "id": "c5a2d649-c00a-46a7-88d2-a4eb546f7a84",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://ncpoedu.amocrm.ru/api/v4/leads/24454410",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        208,
+        -160
+      ],
+      "id": "99254c7c-c46a-4a6f-9861-8a4b99fe25b3",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "zDU26ERMW0EUKpKI",
+          "name": "Header Auth account"
+        },
+        "httpBearerAuth": {
+          "id": "YayaDNqJs4eqegB6",
+          "name": "AMO CRM LONG TOKEN"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "post-register",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        192,
+        0
+      ],
+      "id": "e439abdf-fa51-4a9d-b487-437c983fcbd2",
+      "name": "Webhook",
+      "webhookId": "cfbd99dc-44df-4aed-8801-4921905d556f"
+    },
+    {
+      "parameters": {
+        "jsCode": "const d = $input.first().json.body || {};\n\nconst TYPES = { \"Бандероль\": \"BANDEROL\", \"Посылка\": \"POSTAL_PARCEL\" };\nconst CATS  = { \"Заказное\": \"ORDERED\", \"Простое\": \"SIMPLE\",\n                \"С объявленной ценностью\": \"DECLARED\" };\nconst PAY   = { \"Знак онлайн оплаты\": \"ONLINE_PAYMENT_MARK\",\n                \"Безналичный расчет\": \"CASHLESS\" };\n\nconst addr = d.address || \"\";\nif (!addr) throw new Error(\"Нет поля address. Пришло: \" + JSON.stringify(d));\n\nconst index = (addr.match(/\\d{6}/) || [\"\"])[0];\nif (!index) throw new Error(\"В адресе нет индекса (6 цифр): \" + addr);\n\nconst body = { orders: [{\n  \"order-num\": String(d.lead_id),\n  \"recipient-name\": d.recipient_name,\n  \"index-to\": Number(index),\n  \"raw-address\": addr,\n  \"mail-direct\": 643,\n  \"mail-type\": TYPES[d.mail_type] || \"BANDEROL\",\n  \"mail-category\": CATS[d.mail_category] || \"ORDERED\",\n  \"mass\": Number(d.mass),\n  \"payment-method\": PAY[d.payment] || \"CASHLESS\"\n}]};\n\nreturn [{ json: body }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "3bed0fa6-deef-45be-97df-7ae100bc41ba",
+      "name": "собрать заказ"
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "https://otpravka-api.pochta.ru/2.0/user/backlog",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "AccessToken AjfPm8Zrg5yk_OCAckXJUIGOCf6OlIpN"
+            },
+            {
+              "name": "X-User-Authorization",
+              "value": "Basic ZG9rdW1ldEBuY3BvLnJ1OjhIWGViNGFOOHM="
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json;charset=UTF-8"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        624,
+        0
+      ],
+      "id": "918e39e5-d5d9-4435-840a-e69b0e128cf6",
+      "name": "создать отправление"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://otpravka-api.pochta.ru/1.0/tariff",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "AccessToken AjfPm8Zrg5yk_OCAckXJUIGOCf6OlIpN"
+            },
+            {
+              "name": "X-User-Authorization",
+              "value": "Basic ZG9rdW1ldEBuY3BvLnJ1OjhIWGViNGFOOHM="
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json;charset=UTF-8"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n    \"mail-category\": \"ORDINARY\",\n    \"mail-type\": \"POSTAL_PARCEL\",\n    \"index-from\": \"117152\",\n    \"index-to\": \"101000\",\n    \"mail-direct\": 643,\n    \"mass\": 100\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        496,
+        -176
+      ],
+      "id": "cc695a70-6afe-4f84-87c9-1e3df84f5279",
+      "name": "создать отправление1"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        []
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "собрать заказ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "собрать заказ": {
+      "main": [
+        [
+          {
+            "node": "создать отправление",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "versionId": "5624e543-13f4-4aba-acbc-322e0c964c30",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-10-01T13:28:41.807Z",
+      "createdAt": "2026-10-01T13:28:41.807Z",
+      "role": "workflow:owner",
+      "workflowId": "MY0Mu7gjyyuGhiDC",
+      "projectId": "OC8FWCQSkQb0Erkk"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
