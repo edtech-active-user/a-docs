@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-02T12:55:48.256Z",
+  "updatedAt": "2026-10-05T11:11:11.278Z",
   "createdAt": "2026-10-01T13:28:41.807Z",
   "id": "MY0Mu7gjyyuGhiDC",
   "name": "POST_Регистрация отправления",
@@ -62,7 +62,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const d = $input.first().json.body || {};\n\nconst TYPES = { \"Бандероль\": \"BANDEROL\", \"Посылка\": \"POSTAL_PARCEL\" };\nconst CATS  = { \"Заказное\": \"ORDERED\", \"Простое\": \"SIMPLE\",\n                \"С объявленной ценностью\": \"DECLARED\" };\nconst PAY   = { \"Знак онлайн оплаты\": \"ONLINE_PAYMENT_MARK\",\n                \"Безналичный расчет\": \"CASHLESS\" };\n\nconst addr = d.address || \"\";\nif (!addr) throw new Error(\"Нет поля address. Пришло: \" + JSON.stringify(d));\n\nconst index = (addr.match(/\\d{6}/) || [\"\"])[0];\nif (!index) throw new Error(\"В адресе нет индекса (6 цифр): \" + addr);\n\nconst body = { orders: [{\n  \"order-num\": String(d.lead_id),\n  \"recipient-name\": d.recipient_name,\n  \"index-to\": Number(index),\n  \"raw-address\": addr,\n  \"mail-direct\": 643,\n  \"mail-type\": TYPES[d.mail_type] || \"BANDEROL\",\n  \"mail-category\": CATS[d.mail_category] || \"ORDERED\",\n  \"mass\": Number(d.mass),\n  \"payment-method\": PAY[d.payment] || \"CASHLESS\"\n}]};\n\nreturn [{ json: body }];"
+        "jsCode": "const d = $input.first().json.body || {};\n\nconst TYPES = { \"Бандероль\": \"BANDEROL\", \"Посылка\": \"POSTAL_PARCEL\" };\nconst CATS  = { \"Заказное\": \"ORDERED\", \"Простое\": \"SIMPLE\",\n                \"С объявленной ценностью\": \"DECLARED\" };\nconst PAY   = { \"Знак онлайн оплаты\": \"ONLINE_PAYMENT_MARK\",\n                \"Безналичный расчет\": \"CASHLESS\" };\n\n// проверка обязательных полей - пусть узел говорит, чего не хватает\nconst need = [\"surname\", \"given_name\", \"index_to\", \"place_to\", \"street_to\", \"house_to\", \"mass\"];\nfor (const k of need) {\n  if (!d[k]) throw new Error(\"Нет поля \" + k + \". Пришло: \" + JSON.stringify(d));\n}\n\nconst order = {\n  \"address-type-to\": \"DEFAULT\",\n  \"surname\": d.surname,\n  \"given-name\": d.given_name,\n  \"middle-name\": d.middle_name || \"\",\n  \"index-to\": Number(d.index_to),\n  \"region-to\": d.region_to || \"\",\n  \"place-to\": d.place_to,\n  \"street-to\": d.street_to,\n  \"house-to\": d.house_to,\n  \"mail-direct\": 643,\n  \"mail-type\": TYPES[d.mail_type] || \"BANDEROL\",\n  \"mail-category\": CATS[d.mail_category] || \"ORDERED\",\n  \"mass\": Number(d.mass),\n  \"order-num\": String(d.lead_id),\n  \"payment-method\": PAY[d.payment] || \"CASHLESS\",\n  \"transport-type\": \"SURFACE\",\n  \"postoffice-code\": String(d.postoffice_code || \"191036\")\n};\n\nreturn [order];   // массив без обёртки - как в рабочем примере!"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -96,7 +96,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify($json) }}",
+        "jsonBody": "={{ JSON.stringify([$json]) }}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -142,6 +142,36 @@
       ],
       "id": "cc695a70-6afe-4f84-87c9-1e3df84f5279",
       "name": "создать отправление1"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://ncpoedu.amocrm.ru/api/v4/leads/{{ $json.orders[0].order-num }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"custom_fields_values\": [\n    { \"field_id\": 396813, \"values\": [ { \"value\": \"{{ $json.orders[0].barcode }}\" } ] }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        832,
+        0
+      ],
+      "id": "2f82aa8c-e352-497b-95da-4c2290d86346",
+      "name": "HTTP Request1",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "zDU26ERMW0EUKpKI",
+          "name": "Header Auth account"
+        },
+        "httpBearerAuth": {
+          "id": "YayaDNqJs4eqegB6",
+          "name": "AMO CRM LONG TOKEN"
+        }
+      }
     }
   ],
   "connections": {
@@ -171,6 +201,17 @@
           }
         ]
       ]
+    },
+    "создать отправление": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "settings": {
@@ -180,7 +221,7 @@
   },
   "staticData": null,
   "meta": null,
-  "versionId": "5624e543-13f4-4aba-acbc-322e0c964c30",
+  "versionId": "551b42ae-7a5a-49cc-874e-aef088c12d33",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [
