@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-05T11:11:11.278Z",
+  "updatedAt": "2026-10-06T09:45:53.964Z",
   "createdAt": "2026-10-01T13:28:41.807Z",
   "id": "MY0Mu7gjyyuGhiDC",
   "name": "POST_Регистрация отправления",
@@ -11,15 +11,15 @@
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        -16,
-        -160
+        112,
+        -272
       ],
       "id": "c5a2d649-c00a-46a7-88d2-a4eb546f7a84",
       "name": "When clicking ‘Execute workflow’"
     },
     {
       "parameters": {
-        "url": "https://ncpoedu.amocrm.ru/api/v4/leads/24454410",
+        "url": "https://ncpoedu.amocrm.ru/api/v4/account?with=drive_url",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpBearerAuth",
         "options": {}
@@ -27,8 +27,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        208,
-        -160
+        304,
+        -272
       ],
       "id": "99254c7c-c46a-4a6f-9861-8a4b99fe25b3",
       "name": "HTTP Request",
@@ -47,14 +47,14 @@
       "parameters": {
         "httpMethod": "POST",
         "path": "post-register",
-        "responseMode": "lastNode",
+        "responseMode": "responseNode",
         "options": {}
       },
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        192,
-        0
+        48,
+        16
       ],
       "id": "e439abdf-fa51-4a9d-b487-437c983fcbd2",
       "name": "Webhook",
@@ -77,13 +77,11 @@
       "parameters": {
         "method": "PUT",
         "url": "https://otpravka-api.pochta.ru/2.0/user/backlog",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            {
-              "name": "Authorization",
-              "value": "AccessToken AjfPm8Zrg5yk_OCAckXJUIGOCf6OlIpN"
-            },
             {
               "name": "X-User-Authorization",
               "value": "Basic ZG9rdW1ldEBuY3BvLnJ1OjhIWGViNGFOOHM="
@@ -106,12 +104,18 @@
         0
       ],
       "id": "918e39e5-d5d9-4435-840a-e69b0e128cf6",
-      "name": "создать отправление"
+      "name": "создать отправление",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "djJ5ToTibdhS9YoQ",
+          "name": "Pochta Rossii Token"
+        }
+      }
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "https://otpravka-api.pochta.ru/1.0/tariff",
+        "url": "{{ $json.drive_url }}/v1.0/sessions",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
@@ -137,8 +141,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        496,
-        -176
+        880,
+        -224
       ],
       "id": "cc695a70-6afe-4f84-87c9-1e3df84f5279",
       "name": "создать отправление1"
@@ -146,7 +150,7 @@
     {
       "parameters": {
         "method": "PATCH",
-        "url": "=https://ncpoedu.amocrm.ru/api/v4/leads/{{ $json.orders[0].order-num }}",
+        "url": "=https://ncpoedu.amocrm.ru/api/v4/leads/{{ $json.orders[0]['order-num'] }}",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpBearerAuth",
         "sendBody": true,
@@ -161,11 +165,120 @@
         0
       ],
       "id": "2f82aa8c-e352-497b-95da-4c2290d86346",
-      "name": "HTTP Request1",
+      "name": "записать в АМО",
       "credentials": {
         "httpHeaderAuth": {
           "id": "zDU26ERMW0EUKpKI",
           "name": "Header Auth account"
+        },
+        "httpBearerAuth": {
+          "id": "YayaDNqJs4eqegB6",
+          "name": "AMO CRM LONG TOKEN"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "e1f2df8c-5e93-4519-9c93-8871868d690e",
+              "leftValue": "={{ $json.headers[\"x-api-key\"] || \"\" }}",
+              "rightValue": "9d0cfca507eb651e9f87cc60fa4d28c24b5a7c984577f9ef9df5d9bcb3d731b7",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        224,
+        16
+      ],
+      "id": "be7fe15a-5c4d-4afa-9fc3-722d06ce78a3",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"error\": \"unauthorized\"}",
+        "options": {
+          "responseCode": 403
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        336,
+        144
+      ],
+      "id": "dad02c58-86ed-4e3b-90a3-531900e34a35",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "const created = $('создать отправление').item.json;\nreturn [{ json: { track: created.orders[0].barcode } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        0
+      ],
+      "id": "4d2663a4-71dd-42d7-a7ff-a487d1b25721",
+      "name": "ответ виджету (трек)"
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1248,
+        0
+      ],
+      "id": "8bbb2a62-178d-43ce-9cc9-ce1fbcf286ae",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://drive-a.amocrm.ru/v1.0/sessions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"file_name\": \"probe.txt\",\n  \"file_size\": 1000,\n  \"content_type\": \"text/plain\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        512,
+        -272
+      ],
+      "id": "656d6a15-c351-42c7-a88e-db6e1c8e6a7d",
+      "name": "HTTP Request1",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "djJ5ToTibdhS9YoQ",
+          "name": "Pochta Rossii Token"
         },
         "httpBearerAuth": {
           "id": "YayaDNqJs4eqegB6",
@@ -184,7 +297,7 @@
       "main": [
         [
           {
-            "node": "собрать заказ",
+            "node": "If",
             "type": "main",
             "index": 0
           }
@@ -206,6 +319,57 @@
       "main": [
         [
           {
+            "node": "записать в АМО",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "записать в АМО": {
+      "main": [
+        [
+          {
+            "node": "ответ виджету (трек)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "собрать заказ",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ответ виджету (трек)": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
             "node": "HTTP Request1",
             "type": "main",
             "index": 0
@@ -221,7 +385,7 @@
   },
   "staticData": null,
   "meta": null,
-  "versionId": "551b42ae-7a5a-49cc-874e-aef088c12d33",
+  "versionId": "dfe49701-9484-48dc-a638-09a68285465f",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [
