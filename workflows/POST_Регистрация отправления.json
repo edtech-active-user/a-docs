@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-06T09:45:53.964Z",
+  "updatedAt": "2026-10-07T12:04:26.245Z",
   "createdAt": "2026-10-01T13:28:41.807Z",
   "id": "MY0Mu7gjyyuGhiDC",
   "name": "POST_Регистрация отправления",
@@ -141,8 +141,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        880,
-        -224
+        736,
+        -272
       ],
       "id": "cc695a70-6afe-4f84-87c9-1e3df84f5279",
       "name": "создать отправление1"
@@ -285,6 +285,78 @@
           "name": "AMO CRM LONG TOKEN"
         }
       }
+    },
+    {
+      "parameters": {
+        "url": "https://postapi.russianpost.ru/api/external/v1/info",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "barcode",
+              "value": "80203923398841"
+            },
+            {
+              "name": "language",
+              "value": "RU"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1008,
+        -192
+      ],
+      "id": "58257aa9-070e-4097-bad0-f67777cc7d1f",
+      "name": "HTTP Request2",
+      "retryOnFail": false,
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "NrkvPkn8eA0MxS9P",
+          "name": "Апи трекинг почта россии"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://cloudflare-dns.com/dns-query",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "name",
+              "value": "postapi.russianpost.ru"
+            },
+            {
+              "name": "type",
+              "value": "A"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/dns-json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1248,
+        -160
+      ],
+      "id": "551136b7-7b25-4c80-af0a-06859cb6a98d",
+      "name": "HTTP Request3"
     }
   ],
   "connections": {
@@ -385,7 +457,7 @@
   },
   "staticData": null,
   "meta": null,
-  "versionId": "dfe49701-9484-48dc-a638-09a68285465f",
+  "versionId": "6930a55f-b433-47f2-a0bd-4ac724f7a7c9",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [
