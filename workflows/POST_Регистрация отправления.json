@@ -1,48 +1,11 @@
 {
-  "updatedAt": "2026-10-07T12:04:26.245Z",
+  "updatedAt": "2026-10-08T10:19:42.148Z",
   "createdAt": "2026-10-01T13:28:41.807Z",
   "id": "MY0Mu7gjyyuGhiDC",
   "name": "POST_Регистрация отправления",
-  "active": false,
+  "active": true,
   "isArchived": false,
   "nodes": [
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.manualTrigger",
-      "typeVersion": 1,
-      "position": [
-        112,
-        -272
-      ],
-      "id": "c5a2d649-c00a-46a7-88d2-a4eb546f7a84",
-      "name": "When clicking ‘Execute workflow’"
-    },
-    {
-      "parameters": {
-        "url": "https://ncpoedu.amocrm.ru/api/v4/account?with=drive_url",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpBearerAuth",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.4,
-      "position": [
-        304,
-        -272
-      ],
-      "id": "99254c7c-c46a-4a6f-9861-8a4b99fe25b3",
-      "name": "HTTP Request",
-      "credentials": {
-        "httpHeaderAuth": {
-          "id": "zDU26ERMW0EUKpKI",
-          "name": "Header Auth account"
-        },
-        "httpBearerAuth": {
-          "id": "YayaDNqJs4eqegB6",
-          "name": "AMO CRM LONG TOKEN"
-        }
-      }
-    },
     {
       "parameters": {
         "httpMethod": "POST",
@@ -111,41 +74,6 @@
           "name": "Pochta Rossii Token"
         }
       }
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "{{ $json.drive_url }}/v1.0/sessions",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "Authorization",
-              "value": "AccessToken AjfPm8Zrg5yk_OCAckXJUIGOCf6OlIpN"
-            },
-            {
-              "name": "X-User-Authorization",
-              "value": "Basic ZG9rdW1ldEBuY3BvLnJ1OjhIWGViNGFOOHM="
-            },
-            {
-              "name": "Content-Type",
-              "value": "application/json;charset=UTF-8"
-            }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "{\n    \"mail-category\": \"ORDINARY\",\n    \"mail-type\": \"POSTAL_PARCEL\",\n    \"index-from\": \"117152\",\n    \"index-to\": \"101000\",\n    \"mail-direct\": 643,\n    \"mass\": 100\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.4,
-      "position": [
-        736,
-        -272
-      ],
-      "id": "cc695a70-6afe-4f84-87c9-1e3df84f5279",
-      "name": "создать отправление1"
     },
     {
       "parameters": {
@@ -255,116 +183,9 @@
       ],
       "id": "8bbb2a62-178d-43ce-9cc9-ce1fbcf286ae",
       "name": "Respond to Webhook1"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "=https://drive-a.amocrm.ru/v1.0/sessions",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpBearerAuth",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "{\n  \"file_name\": \"probe.txt\",\n  \"file_size\": 1000,\n  \"content_type\": \"text/plain\"\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.4,
-      "position": [
-        512,
-        -272
-      ],
-      "id": "656d6a15-c351-42c7-a88e-db6e1c8e6a7d",
-      "name": "HTTP Request1",
-      "credentials": {
-        "httpHeaderAuth": {
-          "id": "djJ5ToTibdhS9YoQ",
-          "name": "Pochta Rossii Token"
-        },
-        "httpBearerAuth": {
-          "id": "YayaDNqJs4eqegB6",
-          "name": "AMO CRM LONG TOKEN"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "url": "https://postapi.russianpost.ru/api/external/v1/info",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpBasicAuth",
-        "sendQuery": true,
-        "queryParameters": {
-          "parameters": [
-            {
-              "name": "barcode",
-              "value": "80203923398841"
-            },
-            {
-              "name": "language",
-              "value": "RU"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.4,
-      "position": [
-        1008,
-        -192
-      ],
-      "id": "58257aa9-070e-4097-bad0-f67777cc7d1f",
-      "name": "HTTP Request2",
-      "retryOnFail": false,
-      "credentials": {
-        "httpBasicAuth": {
-          "id": "NrkvPkn8eA0MxS9P",
-          "name": "Апи трекинг почта россии"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "url": "https://cloudflare-dns.com/dns-query",
-        "sendQuery": true,
-        "queryParameters": {
-          "parameters": [
-            {
-              "name": "name",
-              "value": "postapi.russianpost.ru"
-            },
-            {
-              "name": "type",
-              "value": "A"
-            }
-          ]
-        },
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "accept",
-              "value": "application/dns-json"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.4,
-      "position": [
-        1248,
-        -160
-      ],
-      "id": "551136b7-7b25-4c80-af0a-06859cb6a98d",
-      "name": "HTTP Request3"
     }
   ],
   "connections": {
-    "When clicking ‘Execute workflow’": {
-      "main": [
-        []
-      ]
-    },
     "Webhook": {
       "main": [
         [
@@ -437,17 +258,6 @@
           }
         ]
       ]
-    },
-    "HTTP Request": {
-      "main": [
-        [
-          {
-            "node": "HTTP Request1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
     }
   },
   "settings": {
@@ -457,9 +267,9 @@
   },
   "staticData": null,
   "meta": null,
-  "versionId": "6930a55f-b433-47f2-a0bd-4ac724f7a7c9",
-  "activeVersionId": null,
-  "triggerCount": 0,
+  "versionId": "e5079fcb-621d-4750-aaf8-d2fadf589a79",
+  "activeVersionId": "e5079fcb-621d-4750-aaf8-d2fadf589a79",
+  "triggerCount": 1,
   "shared": [
     {
       "updatedAt": "2026-10-01T13:28:41.807Z",
@@ -469,6 +279,270 @@
       "projectId": "OC8FWCQSkQb0Erkk"
     }
   ],
-  "activeVersion": null,
+  "activeVersion": {
+    "updatedAt": "2026-10-08T10:20:07.835Z",
+    "createdAt": "2026-10-08T10:19:42.148Z",
+    "versionId": "e5079fcb-621d-4750-aaf8-d2fadf589a79",
+    "workflowId": "MY0Mu7gjyyuGhiDC",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "post-register",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          48,
+          16
+        ],
+        "id": "e439abdf-fa51-4a9d-b487-437c983fcbd2",
+        "name": "Webhook",
+        "webhookId": "cfbd99dc-44df-4aed-8801-4921905d556f"
+      },
+      {
+        "parameters": {
+          "jsCode": "const d = $input.first().json.body || {};\n\nconst TYPES = { \"Бандероль\": \"BANDEROL\", \"Посылка\": \"POSTAL_PARCEL\" };\nconst CATS  = { \"Заказное\": \"ORDERED\", \"Простое\": \"SIMPLE\",\n                \"С объявленной ценностью\": \"DECLARED\" };\nconst PAY   = { \"Знак онлайн оплаты\": \"ONLINE_PAYMENT_MARK\",\n                \"Безналичный расчет\": \"CASHLESS\" };\n\n// проверка обязательных полей - пусть узел говорит, чего не хватает\nconst need = [\"surname\", \"given_name\", \"index_to\", \"place_to\", \"street_to\", \"house_to\", \"mass\"];\nfor (const k of need) {\n  if (!d[k]) throw new Error(\"Нет поля \" + k + \". Пришло: \" + JSON.stringify(d));\n}\n\nconst order = {\n  \"address-type-to\": \"DEFAULT\",\n  \"surname\": d.surname,\n  \"given-name\": d.given_name,\n  \"middle-name\": d.middle_name || \"\",\n  \"index-to\": Number(d.index_to),\n  \"region-to\": d.region_to || \"\",\n  \"place-to\": d.place_to,\n  \"street-to\": d.street_to,\n  \"house-to\": d.house_to,\n  \"mail-direct\": 643,\n  \"mail-type\": TYPES[d.mail_type] || \"BANDEROL\",\n  \"mail-category\": CATS[d.mail_category] || \"ORDERED\",\n  \"mass\": Number(d.mass),\n  \"order-num\": String(d.lead_id),\n  \"payment-method\": PAY[d.payment] || \"CASHLESS\",\n  \"transport-type\": \"SURFACE\",\n  \"postoffice-code\": String(d.postoffice_code || \"191036\")\n};\n\nreturn [order];   // массив без обёртки - как в рабочем примере!"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          416,
+          0
+        ],
+        "id": "3bed0fa6-deef-45be-97df-7ae100bc41ba",
+        "name": "собрать заказ"
+      },
+      {
+        "parameters": {
+          "method": "PUT",
+          "url": "https://otpravka-api.pochta.ru/2.0/user/backlog",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "X-User-Authorization",
+                "value": "Basic ZG9rdW1ldEBuY3BvLnJ1OjhIWGViNGFOOHM="
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json;charset=UTF-8"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ JSON.stringify([$json]) }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          624,
+          0
+        ],
+        "id": "918e39e5-d5d9-4435-840a-e69b0e128cf6",
+        "name": "создать отправление",
+        "credentials": {
+          "httpHeaderAuth": {
+            "id": "djJ5ToTibdhS9YoQ",
+            "name": "Pochta Rossii Token"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "PATCH",
+          "url": "=https://ncpoedu.amocrm.ru/api/v4/leads/{{ $json.orders[0]['order-num'] }}",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpBearerAuth",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"custom_fields_values\": [\n    { \"field_id\": 396813, \"values\": [ { \"value\": \"{{ $json.orders[0].barcode }}\" } ] }\n  ]\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.4,
+        "position": [
+          832,
+          0
+        ],
+        "id": "2f82aa8c-e352-497b-95da-4c2290d86346",
+        "name": "записать в АМО",
+        "credentials": {
+          "httpHeaderAuth": {
+            "id": "zDU26ERMW0EUKpKI",
+            "name": "Header Auth account"
+          },
+          "httpBearerAuth": {
+            "id": "YayaDNqJs4eqegB6",
+            "name": "AMO CRM LONG TOKEN"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "e1f2df8c-5e93-4519-9c93-8871868d690e",
+                "leftValue": "={{ $json.headers[\"x-api-key\"] || \"\" }}",
+                "rightValue": "9d0cfca507eb651e9f87cc60fa4d28c24b5a7c984577f9ef9df5d9bcb3d731b7",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals",
+                  "name": "filter.operator.equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          224,
+          16
+        ],
+        "id": "be7fe15a-5c4d-4afa-9fc3-722d06ce78a3",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "{\"error\": \"unauthorized\"}",
+          "options": {
+            "responseCode": 403
+          }
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          336,
+          144
+        ],
+        "id": "dad02c58-86ed-4e3b-90a3-531900e34a35",
+        "name": "Respond to Webhook"
+      },
+      {
+        "parameters": {
+          "jsCode": "const created = $('создать отправление').item.json;\nreturn [{ json: { track: created.orders[0].barcode } }];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1040,
+          0
+        ],
+        "id": "4d2663a4-71dd-42d7-a7ff-a487d1b25721",
+        "name": "ответ виджету (трек)"
+      },
+      {
+        "parameters": {
+          "options": {
+            "responseCode": 200
+          }
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          1248,
+          0
+        ],
+        "id": "8bbb2a62-178d-43ce-9cc9-ce1fbcf286ae",
+        "name": "Respond to Webhook1"
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "собрать заказ": {
+        "main": [
+          [
+            {
+              "node": "создать отправление",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "создать отправление": {
+        "main": [
+          [
+            {
+              "node": "записать в АМО",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "записать в АМО": {
+        "main": [
+          [
+            {
+              "node": "ответ виджету (трек)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "собрать заказ",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Respond to Webhook",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "ответ виджету (трек)": {
+        "main": [
+          [
+            {
+              "node": "Respond to Webhook1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Active User",
+    "name": "Version e5079fcb-081026",
+    "description": "",
+    "autosaved": true
+  },
   "tags": []
 }
