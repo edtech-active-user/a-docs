@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-08T10:19:42.148Z",
+  "updatedAt": "2026-10-09T12:56:13.535Z",
   "createdAt": "2026-10-01T13:28:41.807Z",
   "id": "MY0Mu7gjyyuGhiDC",
   "name": "POST_Регистрация отправления",
@@ -25,7 +25,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const d = $input.first().json.body || {};\n\nconst TYPES = { \"Бандероль\": \"BANDEROL\", \"Посылка\": \"POSTAL_PARCEL\" };\nconst CATS  = { \"Заказное\": \"ORDERED\", \"Простое\": \"SIMPLE\",\n                \"С объявленной ценностью\": \"DECLARED\" };\nconst PAY   = { \"Знак онлайн оплаты\": \"ONLINE_PAYMENT_MARK\",\n                \"Безналичный расчет\": \"CASHLESS\" };\n\n// проверка обязательных полей - пусть узел говорит, чего не хватает\nconst need = [\"surname\", \"given_name\", \"index_to\", \"place_to\", \"street_to\", \"house_to\", \"mass\"];\nfor (const k of need) {\n  if (!d[k]) throw new Error(\"Нет поля \" + k + \". Пришло: \" + JSON.stringify(d));\n}\n\nconst order = {\n  \"address-type-to\": \"DEFAULT\",\n  \"surname\": d.surname,\n  \"given-name\": d.given_name,\n  \"middle-name\": d.middle_name || \"\",\n  \"index-to\": Number(d.index_to),\n  \"region-to\": d.region_to || \"\",\n  \"place-to\": d.place_to,\n  \"street-to\": d.street_to,\n  \"house-to\": d.house_to,\n  \"mail-direct\": 643,\n  \"mail-type\": TYPES[d.mail_type] || \"BANDEROL\",\n  \"mail-category\": CATS[d.mail_category] || \"ORDERED\",\n  \"mass\": Number(d.mass),\n  \"order-num\": String(d.lead_id),\n  \"payment-method\": PAY[d.payment] || \"CASHLESS\",\n  \"transport-type\": \"SURFACE\",\n  \"postoffice-code\": String(d.postoffice_code || \"191036\")\n};\n\nreturn [order];   // массив без обёртки - как в рабочем примере!"
+        "jsCode": "const d = $input.first().json.body || {};\n\nconst TYPES = {\n  \"Бандероль\": \"BANDEROL\",\n  \"Письмо\": \"LETTER\",\n  \"Бандероль 1 класса\": \"BANDEROL_CLASS_1\",\n  \"Письмо 1 класса\": \"LETTER_CLASS_1\",\n  \"Посылка\": \"POSTAL_PARCEL\"\n};\nconst CATS  = { \"Заказное\": \"ORDERED\", \"Простое\": \"SIMPLE\",\n                \"С объявленной ценностью\": \"DECLARED\" };\nconst PAY   = { \"Знак онлайн оплаты\": \"ONLINE_PAYMENT_MARK\",\n                \"Безналичный расчет\": \"CASHLESS\" };\n\n// проверка обязательных полей - пусть узел говорит, чего не хватает\nconst need = [\"surname\", \"given_name\", \"index_to\", \"place_to\", \"street_to\", \"house_to\", \"mass\"];\nfor (const k of need) {\n  if (!d[k]) throw new Error(\"Нет поля \" + k + \". Пришло: \" + JSON.stringify(d));\n}\n\nconst order = {\n  \"address-type-to\": \"DEFAULT\",\n  \"surname\": d.surname,\n  \"given-name\": d.given_name,\n  \"middle-name\": d.middle_name || \"\",\n  \"index-to\": Number(d.index_to),\n  \"region-to\": d.region_to || \"\",\n  \"place-to\": d.place_to,\n  \"street-to\": d.street_to,\n  \"house-to\": d.house_to,\n  \"mail-direct\": 643,\n  \"mail-type\": TYPES[d.mail_type] || \"BANDEROL\",\n  \"mail-category\": CATS[d.mail_category] || \"ORDERED\",\n  \"mass\": Number(d.mass),\n  \"order-num\": String(d.lead_id),\n  \"payment-method\": PAY[d.payment] || \"CASHLESS\",\n  \"transport-type\": \"SURFACE\",\n  \"postoffice-code\": String(d.postoffice_code || \"191036\")\n};\n\nreturn [order];   // массив без обёртки - как в рабочем примере!"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -267,8 +267,8 @@
   },
   "staticData": null,
   "meta": null,
-  "versionId": "e5079fcb-621d-4750-aaf8-d2fadf589a79",
-  "activeVersionId": "e5079fcb-621d-4750-aaf8-d2fadf589a79",
+  "versionId": "51245de8-e630-4628-8cc3-b6f991ad47aa",
+  "activeVersionId": "51245de8-e630-4628-8cc3-b6f991ad47aa",
   "triggerCount": 1,
   "shared": [
     {
@@ -280,9 +280,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-10-08T10:20:07.835Z",
-    "createdAt": "2026-10-08T10:19:42.148Z",
-    "versionId": "e5079fcb-621d-4750-aaf8-d2fadf589a79",
+    "updatedAt": "2026-10-09T12:59:26.953Z",
+    "createdAt": "2026-10-09T12:56:13.536Z",
+    "versionId": "51245de8-e630-4628-8cc3-b6f991ad47aa",
     "workflowId": "MY0Mu7gjyyuGhiDC",
     "nodes": [
       {
@@ -304,7 +304,7 @@
       },
       {
         "parameters": {
-          "jsCode": "const d = $input.first().json.body || {};\n\nconst TYPES = { \"Бандероль\": \"BANDEROL\", \"Посылка\": \"POSTAL_PARCEL\" };\nconst CATS  = { \"Заказное\": \"ORDERED\", \"Простое\": \"SIMPLE\",\n                \"С объявленной ценностью\": \"DECLARED\" };\nconst PAY   = { \"Знак онлайн оплаты\": \"ONLINE_PAYMENT_MARK\",\n                \"Безналичный расчет\": \"CASHLESS\" };\n\n// проверка обязательных полей - пусть узел говорит, чего не хватает\nconst need = [\"surname\", \"given_name\", \"index_to\", \"place_to\", \"street_to\", \"house_to\", \"mass\"];\nfor (const k of need) {\n  if (!d[k]) throw new Error(\"Нет поля \" + k + \". Пришло: \" + JSON.stringify(d));\n}\n\nconst order = {\n  \"address-type-to\": \"DEFAULT\",\n  \"surname\": d.surname,\n  \"given-name\": d.given_name,\n  \"middle-name\": d.middle_name || \"\",\n  \"index-to\": Number(d.index_to),\n  \"region-to\": d.region_to || \"\",\n  \"place-to\": d.place_to,\n  \"street-to\": d.street_to,\n  \"house-to\": d.house_to,\n  \"mail-direct\": 643,\n  \"mail-type\": TYPES[d.mail_type] || \"BANDEROL\",\n  \"mail-category\": CATS[d.mail_category] || \"ORDERED\",\n  \"mass\": Number(d.mass),\n  \"order-num\": String(d.lead_id),\n  \"payment-method\": PAY[d.payment] || \"CASHLESS\",\n  \"transport-type\": \"SURFACE\",\n  \"postoffice-code\": String(d.postoffice_code || \"191036\")\n};\n\nreturn [order];   // массив без обёртки - как в рабочем примере!"
+          "jsCode": "const d = $input.first().json.body || {};\n\nconst TYPES = {\n  \"Бандероль\": \"BANDEROL\",\n  \"Письмо\": \"LETTER\",\n  \"Бандероль 1 класса\": \"BANDEROL_CLASS_1\",\n  \"Письмо 1 класса\": \"LETTER_CLASS_1\",\n  \"Посылка\": \"POSTAL_PARCEL\"\n};\nconst CATS  = { \"Заказное\": \"ORDERED\", \"Простое\": \"SIMPLE\",\n                \"С объявленной ценностью\": \"DECLARED\" };\nconst PAY   = { \"Знак онлайн оплаты\": \"ONLINE_PAYMENT_MARK\",\n                \"Безналичный расчет\": \"CASHLESS\" };\n\n// проверка обязательных полей - пусть узел говорит, чего не хватает\nconst need = [\"surname\", \"given_name\", \"index_to\", \"place_to\", \"street_to\", \"house_to\", \"mass\"];\nfor (const k of need) {\n  if (!d[k]) throw new Error(\"Нет поля \" + k + \". Пришло: \" + JSON.stringify(d));\n}\n\nconst order = {\n  \"address-type-to\": \"DEFAULT\",\n  \"surname\": d.surname,\n  \"given-name\": d.given_name,\n  \"middle-name\": d.middle_name || \"\",\n  \"index-to\": Number(d.index_to),\n  \"region-to\": d.region_to || \"\",\n  \"place-to\": d.place_to,\n  \"street-to\": d.street_to,\n  \"house-to\": d.house_to,\n  \"mail-direct\": 643,\n  \"mail-type\": TYPES[d.mail_type] || \"BANDEROL\",\n  \"mail-category\": CATS[d.mail_category] || \"ORDERED\",\n  \"mass\": Number(d.mass),\n  \"order-num\": String(d.lead_id),\n  \"payment-method\": PAY[d.payment] || \"CASHLESS\",\n  \"transport-type\": \"SURFACE\",\n  \"postoffice-code\": String(d.postoffice_code || \"191036\")\n};\n\nreturn [order];   // массив без обёртки - как в рабочем примере!"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
@@ -540,7 +540,7 @@
       }
     },
     "authors": "Active User",
-    "name": "Version e5079fcb-081026",
+    "name": "Version 51245de8 091026",
     "description": "",
     "autosaved": true
   },
