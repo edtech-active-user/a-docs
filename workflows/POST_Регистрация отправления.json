@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-09T14:46:16.020Z",
+  "updatedAt": "2026-10-12T08:35:11.181Z",
   "createdAt": "2026-10-01T13:28:41.807Z",
   "id": "MY0Mu7gjyyuGhiDC",
   "name": "POST_Регистрация отправления",
@@ -25,7 +25,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const d = $input.first().json.body || {};\n\nconst TYPES = {\n  \"Бандероль\": \"BANDEROL\",\n  \"Письмо\": \"LETTER\",\n  \"Бандероль 1 класса\": \"BANDEROL_CLASS_1\",\n  \"Письмо 1 класса\": \"LETTER_CLASS_1\",\n  \"Посылка\": \"POSTAL_PARCEL\"\n};\nconst CATS  = { \"Заказное\": \"ORDERED\", \"Простое\": \"SIMPLE\",\n                \"С объявленной ценностью\": \"DECLARED\" };\nconst PAY   = { \"Знак онлайн оплаты\": \"ONLINE_PAYMENT_MARK\",\n                \"Безналичный расчет\": \"CASHLESS\" };\n\n// проверка обязательных полей - пусть узел говорит, чего не хватает\nconst need = [\"surname\", \"given_name\", \"index_to\", \"place_to\", \"street_to\", \"house_to\", \"mass\"];\nfor (const k of need) {\n  if (!d[k]) throw new Error(\"Нет поля \" + k + \". Пришло: \" + JSON.stringify(d));\n}\n\nconst order = {\n  \"address-type-to\": \"DEFAULT\",\n  \"surname\": d.surname,\n  \"given-name\": d.given_name,\n  \"middle-name\": d.middle_name || \"\",\n  \"index-to\": Number(d.index_to),\n  \"region-to\": d.region_to || \"\",\n  \"place-to\": d.place_to,\n  \"street-to\": d.street_to,\n  \"house-to\": d.house_to,\n  \"mail-direct\": 643,\n  \"mail-type\": TYPES[d.mail_type] || \"BANDEROL\",\n  \"mail-category\": CATS[d.mail_category] || \"ORDERED\",\n  \"mass\": Number(d.mass),\n  \"order-num\": String(d.lead_id),\n  \"payment-method\": PAY[d.payment] || \"CASHLESS\",\n  \"transport-type\": \"SURFACE\",\n  \"postoffice-code\": String(d.postoffice_code || \"191036\")\n};\n\nreturn [order];   // массив без обёртки - как в рабочем примере!"
+        "jsCode": "const d = $input.first().json.body || {};\n\nconst TYPES = {\n  \"Бандероль\": \"BANDEROL\",\n  \"Письмо\": \"LETTER\",\n  \"Бандероль 1 класса\": \"BANDEROL_CLASS_1\",\n  \"Письмо 1 класса\": \"LETTER_CLASS_1\",\n  \"Посылка\": \"POSTAL_PARCEL\"\n};\nconst CATS  = { \"Заказное\": \"ORDERED\", \"Простое\": \"SIMPLE\", \"С объявленной ценностью\": \"DECLARED\" };\nconst PAY   = { \"Знак онлайн оплаты\": \"ONLINE_PAYMENT_MARK\", \"Безналичный расчет\": \"CASHLESS\" };\n\nconst need = [\"surname\", \"given_name\", \"index_to\", \"place_to\", \"street_to\", \"house_to\", \"mass\"];\nfor (const k of need) {\n  if (!d[k]) throw new Error(\"Нет поля \" + k + \". Пришло: \" + JSON.stringify(d));\n}\n\nconst mailType = TYPES[d.mail_type] || \"BANDEROL\";\nconst isParcel = mailType === \"POSTAL_PARCEL\";\n\n// посылки: категория ORDINARY + оплата CASHLESS (Почта не принимает\n// ONLINE_PAYMENT_MARK и ORDERED для посылок - см. ILLEGAL_* ошибки)\nconst mailCategory = isParcel ? \"ORDINARY\" : (CATS[d.mail_category] || \"ORDERED\");\nconst paymentMethod = isParcel ? \"CASHLESS\" : (PAY[d.payment] || \"CASHLESS\");\n\nconst order = {\n  \"address-type-to\": \"DEFAULT\",\n  \"surname\": d.surname,\n  \"given-name\": d.given_name,\n  \"middle-name\": d.middle_name || \"\",\n  \"index-to\": Number(d.index_to),\n  \"region-to\": d.region_to || \"\",\n  \"place-to\": d.place_to,\n  \"street-to\": d.street_to,\n  \"house-to\": d.house_to,\n  \"mail-direct\": 643,\n  \"mail-type\": mailType,\n  \"mail-category\": mailCategory,\n  \"mass\": Number(d.mass),\n  \"order-num\": String(d.lead_id),\n  \"payment-method\": paymentMethod,\n  \"transport-type\": \"SURFACE\",\n  \"postoffice-code\": String(d.postoffice_code || \"191036\")\n};\n\nreturn [order];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -221,8 +221,6 @@
     },
     {
       "parameters": {
-        "respondWith": "json",
-        "responseBody": "{{ JSON.stringify($json.errors) }}",
         "options": {
           "responseCode": 400
         }
@@ -337,8 +335,8 @@
   },
   "staticData": null,
   "meta": null,
-  "versionId": "2a6c82b3-2045-4fa3-a825-a4b3fe9c6ea0",
-  "activeVersionId": "2a6c82b3-2045-4fa3-a825-a4b3fe9c6ea0",
+  "versionId": "f812080d-7a25-43ee-816a-c6dd07e87ba4",
+  "activeVersionId": "f812080d-7a25-43ee-816a-c6dd07e87ba4",
   "triggerCount": 1,
   "shared": [
     {
@@ -350,9 +348,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-10-09T14:46:29.542Z",
-    "createdAt": "2026-10-09T14:46:16.021Z",
-    "versionId": "2a6c82b3-2045-4fa3-a825-a4b3fe9c6ea0",
+    "updatedAt": "2026-10-12T08:35:43.617Z",
+    "createdAt": "2026-10-12T08:35:11.182Z",
+    "versionId": "f812080d-7a25-43ee-816a-c6dd07e87ba4",
     "workflowId": "MY0Mu7gjyyuGhiDC",
     "nodes": [
       {
@@ -374,7 +372,7 @@
       },
       {
         "parameters": {
-          "jsCode": "const d = $input.first().json.body || {};\n\nconst TYPES = {\n  \"Бандероль\": \"BANDEROL\",\n  \"Письмо\": \"LETTER\",\n  \"Бандероль 1 класса\": \"BANDEROL_CLASS_1\",\n  \"Письмо 1 класса\": \"LETTER_CLASS_1\",\n  \"Посылка\": \"POSTAL_PARCEL\"\n};\nconst CATS  = { \"Заказное\": \"ORDERED\", \"Простое\": \"SIMPLE\",\n                \"С объявленной ценностью\": \"DECLARED\" };\nconst PAY   = { \"Знак онлайн оплаты\": \"ONLINE_PAYMENT_MARK\",\n                \"Безналичный расчет\": \"CASHLESS\" };\n\n// проверка обязательных полей - пусть узел говорит, чего не хватает\nconst need = [\"surname\", \"given_name\", \"index_to\", \"place_to\", \"street_to\", \"house_to\", \"mass\"];\nfor (const k of need) {\n  if (!d[k]) throw new Error(\"Нет поля \" + k + \". Пришло: \" + JSON.stringify(d));\n}\n\nconst order = {\n  \"address-type-to\": \"DEFAULT\",\n  \"surname\": d.surname,\n  \"given-name\": d.given_name,\n  \"middle-name\": d.middle_name || \"\",\n  \"index-to\": Number(d.index_to),\n  \"region-to\": d.region_to || \"\",\n  \"place-to\": d.place_to,\n  \"street-to\": d.street_to,\n  \"house-to\": d.house_to,\n  \"mail-direct\": 643,\n  \"mail-type\": TYPES[d.mail_type] || \"BANDEROL\",\n  \"mail-category\": CATS[d.mail_category] || \"ORDERED\",\n  \"mass\": Number(d.mass),\n  \"order-num\": String(d.lead_id),\n  \"payment-method\": PAY[d.payment] || \"CASHLESS\",\n  \"transport-type\": \"SURFACE\",\n  \"postoffice-code\": String(d.postoffice_code || \"191036\")\n};\n\nreturn [order];   // массив без обёртки - как в рабочем примере!"
+          "jsCode": "const d = $input.first().json.body || {};\n\nconst TYPES = {\n  \"Бандероль\": \"BANDEROL\",\n  \"Письмо\": \"LETTER\",\n  \"Бандероль 1 класса\": \"BANDEROL_CLASS_1\",\n  \"Письмо 1 класса\": \"LETTER_CLASS_1\",\n  \"Посылка\": \"POSTAL_PARCEL\"\n};\nconst CATS  = { \"Заказное\": \"ORDERED\", \"Простое\": \"SIMPLE\", \"С объявленной ценностью\": \"DECLARED\" };\nconst PAY   = { \"Знак онлайн оплаты\": \"ONLINE_PAYMENT_MARK\", \"Безналичный расчет\": \"CASHLESS\" };\n\nconst need = [\"surname\", \"given_name\", \"index_to\", \"place_to\", \"street_to\", \"house_to\", \"mass\"];\nfor (const k of need) {\n  if (!d[k]) throw new Error(\"Нет поля \" + k + \". Пришло: \" + JSON.stringify(d));\n}\n\nconst mailType = TYPES[d.mail_type] || \"BANDEROL\";\nconst isParcel = mailType === \"POSTAL_PARCEL\";\n\n// посылки: категория ORDINARY + оплата CASHLESS (Почта не принимает\n// ONLINE_PAYMENT_MARK и ORDERED для посылок - см. ILLEGAL_* ошибки)\nconst mailCategory = isParcel ? \"ORDINARY\" : (CATS[d.mail_category] || \"ORDERED\");\nconst paymentMethod = isParcel ? \"CASHLESS\" : (PAY[d.payment] || \"CASHLESS\");\n\nconst order = {\n  \"address-type-to\": \"DEFAULT\",\n  \"surname\": d.surname,\n  \"given-name\": d.given_name,\n  \"middle-name\": d.middle_name || \"\",\n  \"index-to\": Number(d.index_to),\n  \"region-to\": d.region_to || \"\",\n  \"place-to\": d.place_to,\n  \"street-to\": d.street_to,\n  \"house-to\": d.house_to,\n  \"mail-direct\": 643,\n  \"mail-type\": mailType,\n  \"mail-category\": mailCategory,\n  \"mass\": Number(d.mass),\n  \"order-num\": String(d.lead_id),\n  \"payment-method\": paymentMethod,\n  \"transport-type\": \"SURFACE\",\n  \"postoffice-code\": String(d.postoffice_code || \"191036\")\n};\n\nreturn [order];"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
@@ -570,8 +568,6 @@
       },
       {
         "parameters": {
-          "respondWith": "json",
-          "responseBody": "{{ JSON.stringify($json.errors) }}",
           "options": {
             "responseCode": 400
           }
@@ -680,7 +676,7 @@
       }
     },
     "authors": "Active User",
-    "name": "Version 2a6c82b3 0910261746",
+    "name": "Version f812080d 1210261135",
     "description": "",
     "autosaved": true
   },
