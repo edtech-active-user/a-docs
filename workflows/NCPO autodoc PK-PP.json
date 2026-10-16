@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-28T10:54:58.184Z",
+  "updatedAt": "2026-10-15T13:23:53.365Z",
   "createdAt": "2025-10-23T04:12:51.205Z",
   "id": "bW5C7J4327CR8Kkq",
   "name": "NCPO autodoc PK-PP",
@@ -9606,6 +9606,9 @@
       ],
       "id": "29f74ca5-ce76-411f-a7b9-a06cb3d1f73c",
       "name": "GetEmployee",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "Xpp4ndWQ84MtD53m",
@@ -10609,8 +10612,8 @@
   "meta": {
     "templateCredsSetupCompleted": true
   },
-  "versionId": "ddc94542-a1f3-4c6f-b3e3-6a5e8a315474",
-  "activeVersionId": "ddc94542-a1f3-4c6f-b3e3-6a5e8a315474",
+  "versionId": "1d2448d3-f71d-402e-9a81-f3172d59a0ad",
+  "activeVersionId": "1d2448d3-f71d-402e-9a81-f3172d59a0ad",
   "triggerCount": 1,
   "shared": [
     {
@@ -10622,9 +10625,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-09-28T10:55:11.899Z",
-    "createdAt": "2026-09-28T10:54:58.190Z",
-    "versionId": "ddc94542-a1f3-4c6f-b3e3-6a5e8a315474",
+    "updatedAt": "2026-10-15T13:23:57.025Z",
+    "createdAt": "2026-10-15T13:23:53.369Z",
+    "versionId": "1d2448d3-f71d-402e-9a81-f3172d59a0ad",
     "workflowId": "bW5C7J4327CR8Kkq",
     "nodes": [
       {
@@ -20227,6 +20230,9 @@
         ],
         "id": "29f74ca5-ce76-411f-a7b9-a06cb3d1f73c",
         "name": "GetEmployee",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "Xpp4ndWQ84MtD53m",
@@ -21219,7 +21225,7 @@
       }
     },
     "authors": "Active User",
-    "name": "Version ddc94542",
+    "name": "Version 1d2448d3",
     "description": "",
     "autosaved": true
   },
