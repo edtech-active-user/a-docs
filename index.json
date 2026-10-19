@@ -166,5 +166,9 @@
   "MY0Mu7gjyyuGhiDC": {
     "name": "POST_Регистрация отправления",
     "file_path": "workflows/POST_Регистрация отправления.json"
+  },
+  "1pZIAEgDuSPQ1hMw": {
+    "name": "Логирование справок в налоговую",
+    "file_path": "workflows/Логирование справок в налоговую.json"
   }
 }
