@@ -1,0 +1,908 @@
+{
+  "updatedAt": "2026-10-19T04:53:54.212Z",
+  "createdAt": "2026-10-19T04:27:31.454Z",
+  "id": "1pZIAEgDuSPQ1hMw",
+  "name": "Логирование справок в налоговую",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "f1383bf8-4584-4702-be60-3343776fa4cb",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -448,
+        80
+      ],
+      "id": "364e670a-644b-4feb-867b-3b6b5fa6a936",
+      "name": "Webhook",
+      "webhookId": "f1383bf8-4584-4702-be60-3343776fa4cb"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "0VSPIbDB3o6TLbcf",
+          "mode": "list",
+          "cachedResultName": "spravka_queue",
+          "cachedResultUrl": "/projects/OC8FWCQSkQb0Erkk/datatables/0VSPIbDB3o6TLbcf"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "status",
+              "keyValue": "Free"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -176,
+        80
+      ],
+      "id": "f2d5dbed-1656-41c4-97aa-bc4324027e0e",
+      "name": "Get row(s)",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "1db9ee0c-f5f9-48f3-8da6-82a8d67492b2",
+              "leftValue": "={{$json}}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -96,
+        -64
+      ],
+      "id": "f2b68e79-86ae-4af9-a2c7-9b23cb3bd80b",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "0VSPIbDB3o6TLbcf",
+          "mode": "list",
+          "cachedResultName": "spravka_queue",
+          "cachedResultUrl": "/projects/OC8FWCQSkQb0Erkk/datatables/0VSPIbDB3o6TLbcf"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "status",
+              "keyValue": "Free"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "Busy"
+          },
+          "matchingColumns": [
+            "status"
+          ],
+          "schema": [
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        160,
+        -224
+      ],
+      "id": "ad21b7eb-33e1-4a44-b631-64088017ce33",
+      "name": "Update row(s)",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "0VSPIbDB3o6TLbcf",
+          "mode": "list",
+          "cachedResultName": "spravka_queue",
+          "cachedResultUrl": "/projects/OC8FWCQSkQb0Erkk/datatables/0VSPIbDB3o6TLbcf"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "status",
+              "keyValue": "Busy"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "Free"
+          },
+          "matchingColumns": [
+            "status"
+          ],
+          "schema": [
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        176,
+        -16
+      ],
+      "id": "d5ee7b93-055d-41fe-ab89-a9eebcaf28c9",
+      "name": "Update row(s)1",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "amount": 2
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        176,
+        320
+      ],
+      "id": "ffe5cc83-7cfd-4124-89fd-998c68eba2a4",
+      "name": "Wait",
+      "webhookId": "82bb0697-02a1-4138-b6da-840c6a4024fe"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1649c_eqTFGoPavO2bhw3UY4iOMEAVqdzjarhB1mg78g",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Лист1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1649c_eqTFGoPavO2bhw3UY4iOMEAVqdzjarhB1mg78g/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Дата создания": "={{ $('Webhook').item.json.body.created_date }}",
+            "Номер справки": "={{ $('Webhook').item.json.body.certificate_number }}",
+            "Номер договора": "={{ $('Webhook').item.json.body.contract_number }}",
+            "URL сделки": "={{ $('Webhook').item.json.body.lead_url }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Дата создания",
+              "displayName": "Дата создания",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "URL сделки",
+              "displayName": "URL сделки",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Номер договора",
+              "displayName": "Номер договора",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Номер справки",
+              "displayName": "Номер справки",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        368,
+        -224
+      ],
+      "id": "56966d81-58d1-4e01-96f7-61a6818edfc3",
+      "name": "Update Counter",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Xpp4ndWQ84MtD53m",
+          "name": "with.edtech@gmail.com"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "0VSPIbDB3o6TLbcf",
+          "mode": "list",
+          "cachedResultName": "spravka_queue",
+          "cachedResultUrl": "/projects/OC8FWCQSkQb0Erkk/datatables/0VSPIbDB3o6TLbcf"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "status",
+              "keyValue": "Busy"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "Free"
+          },
+          "matchingColumns": [
+            "status"
+          ],
+          "schema": [
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        768,
+        -16
+      ],
+      "id": "170b033c-b420-40e3-820d-712a8330e2bf",
+      "name": "Update row(s)2",
+      "retryOnFail": true
+    }
+  ],
+  "connections": {
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Update row(s)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Update row(s)1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row(s)": {
+      "main": [
+        [
+          {
+            "node": "Update Counter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Counter": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Update row(s)2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "versionId": "8182afbd-df8f-4384-819f-9da62c83908f",
+  "activeVersionId": "8182afbd-df8f-4384-819f-9da62c83908f",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-10-19T04:27:31.454Z",
+      "createdAt": "2026-10-19T04:27:31.454Z",
+      "role": "workflow:owner",
+      "workflowId": "1pZIAEgDuSPQ1hMw",
+      "projectId": "OC8FWCQSkQb0Erkk"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-10-19T04:57:49.039Z",
+    "createdAt": "2026-10-19T04:53:54.214Z",
+    "versionId": "8182afbd-df8f-4384-819f-9da62c83908f",
+    "workflowId": "1pZIAEgDuSPQ1hMw",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "f1383bf8-4584-4702-be60-3343776fa4cb",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -448,
+          80
+        ],
+        "id": "364e670a-644b-4feb-867b-3b6b5fa6a936",
+        "name": "Webhook",
+        "webhookId": "f1383bf8-4584-4702-be60-3343776fa4cb"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "0VSPIbDB3o6TLbcf",
+            "mode": "list",
+            "cachedResultName": "spravka_queue",
+            "cachedResultUrl": "/projects/OC8FWCQSkQb0Erkk/datatables/0VSPIbDB3o6TLbcf"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "status",
+                "keyValue": "Free"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          -176,
+          80
+        ],
+        "id": "f2d5dbed-1656-41c4-97aa-bc4324027e0e",
+        "name": "Get row(s)",
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "1db9ee0c-f5f9-48f3-8da6-82a8d67492b2",
+                "leftValue": "={{$json}}",
+                "rightValue": "",
+                "operator": {
+                  "type": "object",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -96,
+          -64
+        ],
+        "id": "f2b68e79-86ae-4af9-a2c7-9b23cb3bd80b",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "dataTableId": {
+            "__rl": true,
+            "value": "0VSPIbDB3o6TLbcf",
+            "mode": "list",
+            "cachedResultName": "spravka_queue",
+            "cachedResultUrl": "/projects/OC8FWCQSkQb0Erkk/datatables/0VSPIbDB3o6TLbcf"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "status",
+                "keyValue": "Free"
+              }
+            ]
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "status": "Busy"
+            },
+            "matchingColumns": [
+              "status"
+            ],
+            "schema": [
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          160,
+          -224
+        ],
+        "id": "ad21b7eb-33e1-4a44-b631-64088017ce33",
+        "name": "Update row(s)",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "dataTableId": {
+            "__rl": true,
+            "value": "0VSPIbDB3o6TLbcf",
+            "mode": "list",
+            "cachedResultName": "spravka_queue",
+            "cachedResultUrl": "/projects/OC8FWCQSkQb0Erkk/datatables/0VSPIbDB3o6TLbcf"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "status",
+                "keyValue": "Busy"
+              }
+            ]
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "status": "Free"
+            },
+            "matchingColumns": [
+              "status"
+            ],
+            "schema": [
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          176,
+          -16
+        ],
+        "id": "d5ee7b93-055d-41fe-ab89-a9eebcaf28c9",
+        "name": "Update row(s)1",
+        "retryOnFail": true
+      },
+      {
+        "parameters": {
+          "amount": 2
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          176,
+          320
+        ],
+        "id": "ffe5cc83-7cfd-4124-89fd-998c68eba2a4",
+        "name": "Wait",
+        "webhookId": "82bb0697-02a1-4138-b6da-840c6a4024fe"
+      },
+      {
+        "parameters": {
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "1649c_eqTFGoPavO2bhw3UY4iOMEAVqdzjarhB1mg78g",
+            "mode": "id"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Лист1",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1649c_eqTFGoPavO2bhw3UY4iOMEAVqdzjarhB1mg78g/edit#gid=0"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "Дата создания": "={{ $('Webhook').item.json.body.created_date }}",
+              "Номер справки": "={{ $('Webhook').item.json.body.certificate_number }}",
+              "Номер договора": "={{ $('Webhook').item.json.body.contract_number }}",
+              "URL сделки": "={{ $('Webhook').item.json.body.lead_url }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "Дата создания",
+                "displayName": "Дата создания",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "URL сделки",
+                "displayName": "URL сделки",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Номер договора",
+                "displayName": "Номер договора",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Номер справки",
+                "displayName": "Номер справки",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "row_number",
+                "displayName": "row_number",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "readOnly": true,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          368,
+          -224
+        ],
+        "id": "56966d81-58d1-4e01-96f7-61a6818edfc3",
+        "name": "Update Counter",
+        "retryOnFail": true,
+        "maxTries": 5,
+        "waitBetweenTries": 5000,
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "Xpp4ndWQ84MtD53m",
+            "name": "with.edtech@gmail.com"
+          }
+        },
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "dataTableId": {
+            "__rl": true,
+            "value": "0VSPIbDB3o6TLbcf",
+            "mode": "list",
+            "cachedResultName": "spravka_queue",
+            "cachedResultUrl": "/projects/OC8FWCQSkQb0Erkk/datatables/0VSPIbDB3o6TLbcf"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "status",
+                "keyValue": "Busy"
+              }
+            ]
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "status": "Free"
+            },
+            "matchingColumns": [
+              "status"
+            ],
+            "schema": [
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          768,
+          -16
+        ],
+        "id": "170b033c-b420-40e3-820d-712a8330e2bf",
+        "name": "Update row(s)2",
+        "retryOnFail": true
+      }
+    ],
+    "connections": {
+      "Get row(s)": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Update row(s)",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Update row(s)1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Get row(s)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Get row(s)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update row(s)": {
+        "main": [
+          [
+            {
+              "node": "Update Counter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update Counter": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Update row(s)2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Active User",
+    "name": "Version 8182afbd",
+    "description": "",
+    "autosaved": true
+  },
+  "tags": []
+}
