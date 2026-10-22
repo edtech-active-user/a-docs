@@ -1,0 +1,246 @@
+{
+  "updatedAt": "2026-10-22T12:50:46.025Z",
+  "createdAt": "2026-10-22T06:55:50.531Z",
+  "id": "TYImNsXGB4JoQNtz",
+  "name": "POST_Опрос статусов",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://ncpoedu.amocrm.ru/api/v4/leads?limit=200&filter[closed][]=0&filter[pipeline_id][]=8011014&filter[pipeline_id][]=8219486&filter[pipeline_id][]=8219494&filter[pipeline_id][]=8011002&filter[pipeline_id][]=11079717&page={{ $json.page }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        160,
+        -16
+      ],
+      "id": "84684f08-c4c6-4ccc-98d4-5ed7f3fab62a",
+      "name": "выбрать сделки",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "YayaDNqJs4eqegB6",
+          "name": "AMO CRM LONG TOKEN"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $input.item.json;\nconst body = typeof raw.data === 'string' ? JSON.parse(raw.data) : raw;\nconst leads = body?._embedded?.leads ?? [];\nreturn [{\n  json: {\n    count: leads.length,\n    has_next: !!body?._links?.next,\n    pipelines_in_response: [...new Set(leads.map(l => l.pipeline_id))]\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        96,
+        -288
+      ],
+      "id": "ddcdb07f-26b4-4862-8313-f08ea8fc0de1",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: { page: 1 } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -48,
+        -16
+      ],
+      "id": "0d2de1fe-9a2e-4ef3-a4ec-798c0dde2ed2",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "e2525d4a-1317-4363-a4cf-a3e3e79b30ad",
+              "leftValue": "={{ !!$json._links.next }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        384,
+        -16
+      ],
+      "id": "aee35a4e-780c-4370-b2ff-0af4fdea5bb5",
+      "name": "есть next?"
+    },
+    {
+      "parameters": {
+        "jsCode": "const p = $input.item.json._page ?? 1;\nif (p >= 50) return []; // страховка от бесконечного цикла\nreturn [{ json: { page: p + 1 } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        624,
+        -32
+      ],
+      "id": "d93e1dcc-a4ef-49d9-ba9c-8eacb07c9cb7",
+      "name": "след. страница"
+    },
+    {
+      "parameters": {
+        "amount": 0.2
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        816,
+        -32
+      ],
+      "id": "cc1a6cce-cb8c-4ffb-aa87-2f3d046a5833",
+      "name": "Wait",
+      "webhookId": "9093df74-c21f-4a6e-a36b-d2a41ccfa1a4"
+    },
+    {
+      "parameters": {
+        "jsCode": "const pages = $('выбрать сделки').all(); // ВСЕ ответы HTTP-узла за этот запуск\nconst leads = [];\nfor (const p of pages) {\n  if (p.json._embedded?.leads) leads.push(...p.json._embedded.leads);\n}\n\nconst FINAL_ENUMS = ['659828', '659834']; // Вручено, Возвращено\nconst getVal = (cf, fid) => cf?.find(f => f.field_id === fid)?.values?.[0]?.value;\n\nconst active = leads\n  .map(l => ({\n    lead_id: l.id,\n    name: l.name,\n    track: getVal(l.custom_fields_values, 396813),\n    postal_status: getVal(l.custom_fields_values, 1029790),\n    responsible_user_id: l.responsible_user_id\n  }))\n  .filter(x => x.track && !FINAL_ENUMS.includes(String(x.postal_status)));\n\nreturn active.map(x => ({ json: x }));;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        496,
+        224
+      ],
+      "id": "4c97da2e-972a-41c9-a07a-3d878e6eff78",
+      "name": "фильтр треков"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        -16
+      ],
+      "id": "cf7e4d29-e387-4bf7-9832-4e84ce3932a5",
+      "name": "When clicking ‘Execute workflow’"
+    }
+  ],
+  "connections": {
+    "выбрать сделки": {
+      "main": [
+        [
+          {
+            "node": "есть next?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "выбрать сделки",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "есть next?": {
+      "main": [
+        [
+          {
+            "node": "след. страница",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "фильтр треков",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "след. страница": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "выбрать сделки",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": null,
+  "versionId": "8d8ad78e-2a34-4d2a-8dcd-f63bd2a0bfbf",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-10-22T06:55:50.531Z",
+      "createdAt": "2026-10-22T06:55:50.531Z",
+      "role": "workflow:owner",
+      "workflowId": "TYImNsXGB4JoQNtz",
+      "projectId": "OC8FWCQSkQb0Erkk"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
